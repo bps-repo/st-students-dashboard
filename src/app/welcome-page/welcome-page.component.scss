@@ -1,0 +1,121 @@
+.welcome-page {
+  padding: 20px;
+
+  .header {
+    h1 {
+      font-size: 2rem;
+      span.user-name {
+        color: #7e57c2;
+        font-weight: bold;
+      }
+    }
+
+    p {
+      font-size: 1rem;
+      color: #666;
+    }
+  }
+
+  .level-info {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+
+    .level-select {
+      display: flex;
+      align-items: center;
+      margin-right: 20px;
+
+      label {
+        margin-right: 10px;
+        font-weight: bold;
+        color: #7e57c2;
+      }
+
+      select {
+        padding: 5px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+      }
+    }
+
+    .progress-bar {
+      flex-grow: 1;
+      background-color: #eee;
+      border-radius: 5px;
+      overflow: hidden;
+
+      .progress {
+        height: 10px;
+        background-color: #7e57c2;
+      }
+    }
+  }
+
+  .promo-banner {
+    background-color: #7e57c2;
+    color: white;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 10px;
+
+    .promo-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .premium-link {
+        font-weight: bold;
+        color: #ffca28;
+        cursor: pointer;
+      }
+    }
+  }
+
+  .units {
+    margin-top: 30px;
+
+    h3 {
+      font-weight: bold;
+      color: #7e57c2;
+    }
+
+    .unit-list {
+      margin-top: 10px;
+
+      .unit {
+        background-color: white;
+        padding: 20px;
+        margin-bottom: 10px;
+        border-radius: 10px;
+        border-left: 5px solid #7e57c2;
+
+        .unit-header {
+          display: flex;
+          align-items: center;
+
+          .unit-icon {
+            margin-right: 20px;
+          }
+
+          .unit-title {
+            h4 {
+              margin: 0;
+              font-weight: bold;
+            }
+
+            p {
+              margin: 5px 0;
+              color: #666;
+            }
+
+            span {
+              color: green;
+              font-weight: bold;
+            }
+          }
+        }
+      }
+    }
+  }
+}
