@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-card-slider',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, NgbCarouselModule],
   templateUrl: './card-slider.component.html',
   styleUrls: ['./card-slider.component.scss'],
 })
