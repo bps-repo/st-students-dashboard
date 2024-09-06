@@ -1,15 +1,18 @@
 <div class="slider">
   <div class="cards">
-     <div class="card" *ngFor="let card of cards">
-        <img [src]="card.image" alt="{{card.title}}">
-        <div class="card-content">
-           <h4>{{card.title}}</h4>
-           <p>{{card.description}}</p>
-           <div class="progress-bar">
-              <div class="progress" [style.width]="card.progress + '%'"></div>
-           </div>
-           <button>Conhecer módulo</button>
+    <div class="card" *ngFor="let card of cards">
+      <div class="flex justify-start gap-2 pb-3">
+        <img [src]="card.image" alt="{{ card.title }}" />
+        <h4 class="text-white font-semibold text-[15px]">{{ card.title }}</h4>
+      </div>
+      <div class="card-content">
+        <p class="p-5">{{ card.description }}</p>
+        <div class="progress-bar">
+          <div class="progress" [style.width]="card.progress + '%'"></div>
         </div>
-     </div>
+        <div class="bg-violet-400 w-full h-[0.29px] mt-2"></div>
+        <button>Conhecer módulo</button>
+      </div>
+    </div>
   </div>
 </div>

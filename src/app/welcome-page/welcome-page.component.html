@@ -1,36 +1,66 @@
 <div class="welcome-page">
   <div class="header">
-    <h1>Oi, <span class="user-name">Helder</span></h1>
+    <h1>Oi, <span class="user-name">Santiago</span></h1>
     <p>Bem-vindo ao seu Dashboard!</p>
   </div>
 
   <div class="level-info">
     <div class="level-select">
       <label>Nível</label>
-      <select>
-        <option>C2 - Advanced</option>
-      </select>
+      <div class="custom-select-wrapper">
+        <app-custom-select
+          (selectionChange)="handleSelection($event)"
+        ></app-custom-select>
+      </div>
     </div>
-    <br>
+    <br />
     <div class="progress-bar">
-      <div class="progress" style="width: 13%;"></div>
+      <div class="progress" style="width: 13%"></div>
     </div>
   </div>
 
   <div class="promo-banner">
     <div class="promo-content">
-      <span>Grupos de conversaçãO ILIMITADO</span>
-      <span class="premium-link">assine o premium</span>
+      <span>Nivel Avançado - 3 testes feitos</span>
     </div>
   </div>
 
   <div class="units">
-    <h3>Unidades</h3>
+    <div class="flex justify-between">
+      <h3>Unidades</h3>
+      <h3>3/10</h3>
+    </div>
     <div class="unit-list">
       <div class="unit">
         <div class="unit-header">
           <div class="unit-icon">
-          <i class="pi pi-check"></i>
+            <i class="pi pi-check"></i>
+          </div>
+          <div class="unit-title">
+            <h4>Unidade 1</h4>
+            <p>Revisão de aulas passadas</p>
+            <span>Concluída</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="unit">
+        <div class="unit-header">
+          <div class="unit-icon">
+            <i class="pi pi-check"></i>
+          </div>
+          <div class="unit-title">
+            <h4>Unidade 1</h4>
+            <p>Revisão de aulas passadas</p>
+            <span>Concluída</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="unit">
+        <div class="unit-header">
+          <div class="unit-icon">
+            <i class="pi pi-check"></i>
           </div>
           <div class="unit-title">
             <h4>Unidade 1</h4>
@@ -41,7 +71,6 @@
       </div>
 
       <!-- Repeat similar blocks for other units -->
-
     </div>
   </div>
 </div>

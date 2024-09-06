@@ -1,0 +1,49 @@
+/* custom-select.component.css */
+.custom-select-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 200px;
+}
+
+.custom-select {
+  position: relative;
+  display: block;
+  background-color: #5807b8;
+  border: 2px solid #5807b8;
+  border-radius: 5px;
+  cursor: pointer;
+  color: #fff;
+  padding: 5px;
+}
+
+.custom-select-trigger {
+  display: block;
+  font-size: 16px;
+  color: #fff;
+  font-weight: 900;
+}
+
+.custom-options {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: #ffffff;
+  border: 2px solid #5807b8;
+  border-radius: 5px;
+  z-index: 1000;
+}
+
+.custom-option {
+  padding: 10px;
+  font-size: 16px;
+  color: #000;
+  cursor: pointer;
+  width: 100%;
+  display: block;
+}
+
+.custom-option:hover {
+  background-color: #5807b8;
+  color: #ffffff;
+}

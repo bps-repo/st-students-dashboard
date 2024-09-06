@@ -1,0 +1,16 @@
+<!-- custom-select.component.html -->
+<div class="custom-select-wrapper">
+  <div class="custom-select" (click)="toggleDropdown()">
+    <span class="custom-select-trigger">{{ selectedOption }}</span>
+    <div class="custom-options" *ngIf="isOpen">
+      <span
+        class="custom-option"
+        *ngFor="let option of options"
+        (click)="selectOption(option)"
+      >
+        {{ option }}
+      </span>
+      <br />
+    </div>
+  </div>
+</div>
