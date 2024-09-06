@@ -1,0 +1,79 @@
+<div class="profile-settings">
+  <div class="sidebar">
+    <h2>Minha Conta</h2>
+    <ul>
+      <li>Altere as configurações e confira suas notificações</li>
+      <li>
+        <a routerLink="/profile-settings">Configurações do Perfil</a>
+      </li>
+      <li>
+        <a routerLink="/change-password">Alterar senha</a>
+      </li>
+      <li>
+        <a routerLink="/notifications">Notificações</a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="profile-content">
+    <h3>Configurações do perfil</h3>
+    <p>Você pode alterar as informações básicas da sua conta</p>
+
+    <div class="profile-header">
+      <div class="profile-info">
+        <img src="path-to-profile-image" alt="Profile Image" />
+        <h4>Helder Santiago</h4>
+        <p>heldersantiago273&#64;gmail.com</p>
+      </div>
+      <div class="profile-actions">
+        <div class="action">
+          <h5>Alterar imagem de perfil</h5>
+          <p>Ao fazer o upload da sua foto...</p>
+        </div>
+        <div class="action">
+          <h5>Alterar imagem de capa</h5>
+          <p>Ao fazer o upload da sua foto...</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="profile-details">
+      <h4>Sobre você</h4>
+      <form>
+        <div class="form-group">
+          <label>Nome Completo</label>
+          <input type="text" value="Helder Santiago" />
+        </div>
+        <div class="form-group">
+          <label>Data de nascimento</label>
+          <input type="text" placeholder="mm/dd/yyyy" />
+        </div>
+        <div class="form-group">
+          <label>Telefone</label>
+          <input type="text" value="+244 927 871 797" />
+        </div>
+        <div class="form-group">
+          <label>Fuso Horário</label>
+          <select>
+            <option>(GMT-03:00) Brasília</option>
+            <!-- Other options -->
+          </select>
+        </div>
+        <div class="form-group">
+          <label>ID Skype</label>
+          <input type="text" placeholder="ID SKYPE" />
+        </div>
+        <div class="form-group">
+          <label>E-mail</label>
+          <input type="email" value="heldersantiago273@gmail.com" />
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="save">Salvar alterações</button>
+          <button type="button" class="discard">Descartar alterações</button>
+          <button type="button" class="delete">Deletar conta</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
