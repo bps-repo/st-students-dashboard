@@ -1,0 +1,6 @@
+.main-content {
+  padding: 20px;
+  background: #f5f5f5;
+  overflow: hidden;
+  height: calc(100vh - 100px); /* Subtract header and footer height */
+}

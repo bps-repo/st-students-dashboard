@@ -1,0 +1,16 @@
+<div class="slider">
+  <h3>Materiais Complementares</h3>
+  <div class="cards">
+     <div class="card" *ngFor="let card of cards">
+        <img [src]="card.image" alt="{{card.title}}">
+        <div class="card-content">
+           <h4>{{card.title}}</h4>
+           <p>{{card.description}}</p>
+           <div class="progress-bar">
+              <div class="progress" [style.width]="card.progress + '%'"></div>
+           </div>
+           <button>Conhecer módulo</button>
+        </div>
+     </div>
+  </div>
+</div>

@@ -1,0 +1,52 @@
+.slider {
+  h3 {
+    font-size: 18px;
+    margin-bottom: 15px;
+  }
+  .cards {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    .card {
+      width: 300px;
+      background-color: #6a51b2;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      img {
+        width: 50%;
+        height: auto;
+        border-radius: 5px;
+      }
+      .card-content {
+        h4 {
+          margin: 15px 0;
+          color: #FFF;
+        }
+        p {
+          color: #FFFFFF;
+        }
+        .progress-bar {
+          background-color: #e0e0e0;
+          border-radius: 10px;
+          overflow: hidden;
+          height: 8px;
+          margin: 10px 0;
+          .progress {
+            background-color: #7e57c2;
+            height: 100%;
+          }
+        }
+        button {
+          background-color: #7e57c2;
+          color: #fff;
+          padding: 10px 20px;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+          margin-top: 10px;
+        }
+      }
+    }
+  }
+}
