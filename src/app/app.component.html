@@ -1,1 +1,114 @@
-<div class="bg-zinc-950 text-3xl"></div>
+<div class="w-full h-screen flex">
+  <!-- Add group here to the parent div -->
+  <div class="relative flex w-full h-screen">
+    <aside
+      [ngClass]="{
+        'w-[250px]': (showSidebar$ | async) === true,
+        'w-[100px]': (showSidebar$ | async) === false
+      }"
+      class="h-screen transition-all duration-200 bg-light p-8 z-40 shadow-md flex flex-col items-center gap-16"
+    >
+      <section class="flex flex-col justify-center items-center gap-5">
+        <img
+          src="https://media.englishbay.com.br/default.jpg"
+          [ngClass]="{
+            'w-28 h-28': (showSidebar$ | async) === true,
+            'w-20 h-[3rem]': (showSidebar$ | async) === false
+          }"
+          class="rounded-full"
+          alt="photo"
+        />
+        <h1
+          *ngIf="showSidebar$ | async"
+          class="flex flex-row gap-2 items-center text-sm text-secondary text-opacity-[0.8] bg-primary bg-opacity-5 px-6 py-1 rounded-md"
+        >
+          <span class="w-4 h-4 bg-primary bg-opacity-[0.8] rounded-full"></span>
+          C1 - Advanced
+        </h1>
+      </section>
+      <nav
+        class="flex flex-col gap-6 font-semibold text-primary text-[16px] cursor-pointer"
+      >
+        <div
+          class="hover:text-secondary transition-all flex flex-row gap-4 items-center justify-start"
+        >
+          <i class="pi pi-th-large text-[20px]"></i>
+          <span *ngIf="showSidebar$ | async">Inicio</span>
+        </div>
+        <div
+          class="hover:text-secondary transition-all flex flex-row gap-4 items-center justify-start"
+        >
+          <i class="pi pi-tablet text-[20px]"></i>
+          <span *ngIf="showSidebar$ | async">Cursos</span>
+        </div>
+        <div
+          class="hover:text-secondary transition-all flex flex-row gap-4 items-center justify-start"
+        >
+          <i class="pi pi-folder-open text-[20px]"></i>
+          <span *ngIf="showSidebar$ | async">Minhas Aulas</span>
+        </div>
+        <div
+          class="hover:text-secondary transition-all flex flex-row gap-4 items-center justify-start"
+        >
+          <i class="pi pi-users text-[20px]"></i>
+          <span *ngIf="showSidebar$ | async">Professores</span>
+        </div>
+        <div
+          class="hover:text-secondary transition-all flex flex-row gap-4 items-center justify-start"
+        >
+          <i class="pi pi-calendar text-[20px]"></i>
+          <span *ngIf="showSidebar$ | async">Eventos</span>
+        </div>
+        <div
+          class="hover:text-secondary transition-all flex flex-row gap-4 items-center justify-start"
+        >
+          <i class="pi pi-graduation-cap text-[20px]"></i>
+          <span *ngIf="showSidebar$ | async">Certificados</span>
+        </div>
+      </nav>
+
+      <div
+        (click)="toggleSidebar()"
+        [ngClass]="{
+          'left-[15.5rem]': (showSidebar$ | async) === true,
+          'left-[6.5rem]': (showSidebar$ | async) === false,
+        }"
+        class="flex justify-center items-center absolute top-32 transition-all transform -translate-x-1/2 bg-primary rounded-full w-8 h-8 text-light p-1 cursor-pointer"
+      >
+        <i class="pi pi-chevron-left"></i>
+      </div>
+    </aside>
+
+    <div class="flex-1 flex flex-col bg-secondary z-10">
+      <header class="flex justify-between bg-secondary shadow-md z-30 p-6">
+        <nav class="flex flex-row gap-4 items-center">
+          <i
+            class="group pi pi-arrow-left text-secondary bg-primary bg-opacity-[0.1] text-opacity-[0.5] p-3 rounded-md"
+          ></i>
+          <div>Voltar</div>
+          <div class="w-[0.5px] h-full bg-primary bg-opacity-[0.1]"></div>
+          <div class="flex flex-row gap-2 font-semibold items-center">
+            <div>Inicio</div>
+            <i
+              class="pi pi-chevron-right text-xs text-secondary group-hover:text-primary"
+            ></i>
+            <div>Cursos</div>
+          </div>
+        </nav>
+        <div class="flex flex-row justify-between items-center gap-16">
+          <div class="flex flex-row items-center gap-2">
+            <img
+              src="https://media.englishbay.com.br/default.jpg"
+              class="w-14 h-[3rem] rounded-full"
+              alt="user-photo"
+            />
+            <span class="font-semibold">Helder</span>
+          </div>
+          <i class="pi pi-sign-out"></i>
+        </div>
+      </header>
+
+      <main class="p-10">main content</main>
+    </div>
+  </div>
+</div>
