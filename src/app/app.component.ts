@@ -23,11 +23,4 @@ import { BehaviorSubject, Observable, of } from 'rxjs';
 export class AppComponent {
   title = 'students-dashboard';
   // Use BehaviorSubject to track sidebar state
-  private sidebarState = new BehaviorSubject<boolean>(true);
-  showSidebar$ = this.sidebarState.asObservable();
-
-  toggleSidebar() {
-    const currentState = this.sidebarState.getValue(); // Get current value
-    this.sidebarState.next(!currentState); // Toggle value
-  }
 }
