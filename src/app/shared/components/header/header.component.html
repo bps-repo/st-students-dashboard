@@ -1,9 +1,9 @@
-<header class="flex justify-between bg-secondary shadow-md z-30 p-6">
+<header class="flex justify-between bg-secondary shadow-md z-10 p-6">
   <nav class="flex flex-row gap-4 items-center">
     <i
       class="group pi pi-arrow-left text-secondary bg-primary bg-opacity-[0.1] text-opacity-[0.5] p-3 rounded-md"
     ></i>
-    <div>Voltar</div>
+    <span>Voltar</span>
     <div class="w-[0.5px] h-full bg-primary bg-opacity-[0.1]"></div>
     <div class="flex flex-row gap-2 font-semibold items-center">
       <div>Inicio</div>
@@ -14,13 +14,23 @@
     </div>
   </nav>
   <div class="flex flex-row justify-between items-center gap-16">
-    <div class="flex flex-row items-center gap-2">
+    <div
+      (click)="toggleOverlay()"
+      class="flex flex-row relative items-center gap-2 cursor-pointer"
+    >
       <img
         src="https://media.englishbay.com.br/default.jpg"
-        class="w-14 h-[3rem] rounded-full"
+        class="w-10 h-[2rem] rounded-full"
         alt="user-photo"
       />
       <span class="font-semibold">Helder</span>
+      <i class="pi pi-chevron-down"></i>
+      @if (showOverlay$|async) {
+      <div
+        class="fixed inset-0 backdrop-blur-sm transition-all bg-opacity-50 z-50"
+      ></div>
+      <app-overlay></app-overlay>
+      }
     </div>
     <i class="pi pi-sign-out"></i>
   </div>
