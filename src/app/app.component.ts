@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { SidebarComponent } from './shared/components/sidebar/sidebar.component';
 import { MainContentComponent } from './main-content/main-content.component';
 import { HeaderComponent } from './shared/components/header/header.component';
@@ -16,6 +16,7 @@ import { BehaviorSubject, Observable, of } from 'rxjs';
     HeaderComponent,
     RouterLink,
     CommonModule,
+    RouterLinkActive,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',

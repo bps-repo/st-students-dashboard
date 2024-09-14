@@ -26,44 +26,17 @@
   <nav
     class="flex flex-col gap-6 font-semibold text-primary text-[16px] cursor-pointer"
   >
-    <div
-      class="hover:text-secondary transition-all flex flex-row gap-4 items-center justify-start"
+    @for (navLink of navLinks; track $index) {
+    <a
+      [routerLink]="[navLink.path]"
+      [routerLinkActive]="['active']"
+      class="hover:text-secondary active:text-secondary transition-all flex flex-row gap-4 items-center justify-start"
     >
-      <i class="pi pi-th-large text-[20px]"></i>
-      <span *ngIf="showSidebar$ | async">Inicio</span>
-    </div>
-    <div
-      class="hover:text-secondary transition-all flex flex-row gap-4 items-center justify-start"
-    >
-      <i class="pi pi-tablet text-[20px]"></i>
-      <span *ngIf="showSidebar$ | async">Cursos</span>
-    </div>
-    <div
-      class="hover:text-secondary transition-all flex flex-row gap-4 items-center justify-start"
-    >
-      <i class="pi pi-folder-open text-[20px]"></i>
-      <span *ngIf="showSidebar$ | async">Minhas Aulas</span>
-    </div>
-    <div
-      class="hover:text-secondary transition-all flex flex-row gap-4 items-center justify-start"
-    >
-      <i class="pi pi-users text-[20px]"></i>
-      <span *ngIf="showSidebar$ | async">Professores</span>
-    </div>
-    <div
-      class="hover:text-secondary transition-all flex flex-row gap-4 items-center justify-start"
-    >
-      <i class="pi pi-calendar text-[20px]"></i>
-      <span *ngIf="showSidebar$ | async">Eventos</span>
-    </div>
-    <div
-      class="hover:text-secondary transition-all flex flex-row gap-4 items-center justify-start"
-    >
-      <i class="pi pi-graduation-cap text-[20px]"></i>
-      <span *ngIf="showSidebar$ | async">Certificados</span>
-    </div>
+      <i class="{{ navLink.icon }} text-[23px]"></i>
+      <span *ngIf="showSidebar$ | async">{{ navLink.label }}</span>
+    </a>
+    }
   </nav>
-
   <div
     (click)="toggleSidebar()"
     [ngClass]="{
