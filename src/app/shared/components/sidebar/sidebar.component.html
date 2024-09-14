@@ -3,7 +3,7 @@
     'w-[250px]': (showSidebar$ | async) === true,
     'w-[100px]': (showSidebar$ | async) === false
   }"
-  class="h-screen transition-all duration-200 bg-light p-8 shadow-md flex flex-col items-center gap-16 z-auto"
+  class="h-screen transition-all duration-500 bg-light p-8 shadow-md flex flex-col items-center gap-16 z-auto"
 >
   <section class="flex flex-col justify-center items-center gap-5">
     <img
@@ -17,7 +17,7 @@
     />
     <h1
       *ngIf="showSidebar$ | async"
-      class="flex flex-row gap-2 items-center text-sm text-secondary text-opacity-[0.8] bg-primary bg-opacity-5 px-6 py-1 rounded-md"
+      class="flex flex-row gap-2 items-center text-sm text-secondary text-opacity-[0.8] bg-primary bg-opacity-5 px-6 py-1 rounded-md transition-all duration-500"
     >
       <span class="w-4 h-4 bg-primary bg-opacity-[0.8] rounded-full"></span>
       C1 - Advanced
@@ -43,7 +43,7 @@
           'left-[15.5rem]': (showSidebar$ | async) === true,
           'left-[6.5rem]': (showSidebar$ | async) === false,
         }"
-    class="flex justify-center items-center absolute top-32 transition-all transform -translate-x-1/2 bg-primary rounded-full w-8 h-8 text-light p-1 cursor-pointer"
+    class="flex justify-center items-center absolute top-32 transition-all duration-500 transform -translate-x-1/2 bg-primary rounded-full w-8 h-8 text-light p-1 cursor-pointer"
   >
     <i class="pi pi-chevron-left"></i>
   </div>
