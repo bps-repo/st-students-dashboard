@@ -5,15 +5,15 @@ import { ProfileSettingsComponent } from './profile-settings/profile-settings.co
 
 export const routes: Routes = [
   {
-    path:'',
-    component:WelcomePageComponent
+    path: '',
+    component: WelcomePageComponent,
   },
   {
-    path:"courses",
-    component:MainContentComponent
+    path: 'courses',
+    component: MainContentComponent,
   },
   {
-    path:"profile",
-    component:ProfileSettingsComponent
-  }
+    path: 'profile',
+    component: ProfileSettingsComponent,
+  },
 ];

@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
-import { RouterLink, RouterOutlet } from '@angular/router';
-import { SidebarComponent } from './sidebar/sidebar.component';
+import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { SidebarComponent } from './shared/components/sidebar/sidebar.component';
 import { MainContentComponent } from './main-content/main-content.component';
-import { HeaderComponent } from './header/header.component';
+import { HeaderComponent } from './shared/components/header/header.component';
 import { CommonModule } from '@angular/common';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -14,11 +15,13 @@ import { CommonModule } from '@angular/common';
     MainContentComponent,
     HeaderComponent,
     RouterLink,
-    CommonModule
+    CommonModule,
+    RouterLinkActive,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
   title = 'students-dashboard';
+  // Use BehaviorSubject to track sidebar state
 }

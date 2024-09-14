@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CustomSelectComponent } from '../custom-select/custom-select.component';
+import { CustomSelectComponent } from '../shared/components/custom-select/custom-select.component';
 
 @Component({
   selector: 'app-welcome-page',
