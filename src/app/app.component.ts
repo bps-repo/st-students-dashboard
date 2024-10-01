@@ -5,6 +5,7 @@ import { MainContentComponent } from './main-content/main-content.component';
 import { HeaderComponent } from './shared/components/header/header.component';
 import { CommonModule } from '@angular/common';
 import { BehaviorSubject, Observable, of } from 'rxjs';
+import { HeaderOnSmallComponent } from './shared/components/header-on-small/header-on-small.component';
 
 @Component({
   selector: 'app-root',
@@ -14,6 +15,7 @@ import { BehaviorSubject, Observable, of } from 'rxjs';
     SidebarComponent,
     MainContentComponent,
     HeaderComponent,
+    HeaderOnSmallComponent,
     RouterLink,
     CommonModule,
     RouterLinkActive,
