@@ -1,1 +1,50 @@
-<p>courses works!</p>
+<div class="m-10 flex flex-col gap-5 font-semibold">
+  <div>
+    <i class="pi pi-search bg-light p-5 rounded-md text-lg cur"></i>
+  </div>
+  <h1>Materiais complementares</h1>
+  <section class="grid grid-cols-2 gap-1">
+    <div
+      *ngFor="let item of cards"
+      class="card flex flex-col gap-2 bg-accent rounded-lg w-11/12 h-60 text-light p-2"
+    >
+      <div class="card-header flex flex-row items-center gap-2">
+        <img
+          class="rounded-sm w-12 h-12"
+          src="https://media.englishbay.com.br/f3727f34-c54b-46fa-a5d3-122eb03d4afc.jpg"
+          alt="course"
+        />
+        <span>Video Curso Completo</span>
+      </div>
+      <div class="card-body text-[14px] text-light text-opacity-50 py-3 px-6">
+        Curso de Ingles Elementary com 72 aulas em videos aulas e muito mais
+      </div>
+      <div class="card-level flex flex-row items-center gap-2 px-1">
+        <span>0/72</span>
+        <span class="bg-secondary bg-opacity-70 h-2 w-5/6 rounded-md"></span>
+        <span>0%</span>
+      </div>
+      <span
+        class="bg-secondary bg-opacity-30 h-[0.3px] w-full rounded-md px-10 my-3"
+      ></span>
+      <div class="card-next flex items-center justify-center">
+        <a class="flex gap-4 items-center cursor-pointer">
+          <span class="text-sm">Ir para o módulo</span>
+          <i class="pi pi-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+  <div class="dots flex flex-row items-center justify-center gap-2">
+    <span
+      *ngFor="let item of dots"
+      [ngClass]="{
+        'bg-primary': item % 2 == 0,
+        'bg-light border-primary': item % 2 != 0
+      }"
+      class="border-[1.5px] border-dark bg-opacity-60 rounded-full w-4 h-4 cursor-pointer"
+    ></span>
+  </div>
+  <h1>Cursos</h1>
+  <section></section>
+</div>
