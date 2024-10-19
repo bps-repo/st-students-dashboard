@@ -5,7 +5,7 @@
   <h1>Materiais complementares</h1>
   <section class="grid grid-cols-2 gap-1">
     <div
-      *ngFor="let item of cards"
+      *ngFor="let cardIndex of visibleCourseCardsIndex"
       class="card flex flex-col gap-2 bg-accent rounded-lg w-11/12 h-60 text-light p-2"
     >
       <div class="card-header flex flex-row items-center gap-2">
@@ -14,7 +14,7 @@
           src="https://media.englishbay.com.br/f3727f34-c54b-46fa-a5d3-122eb03d4afc.jpg"
           alt="course"
         />
-        <span>Video Curso Completo</span>
+        <span>{{ cards[cardIndex].label }}</span>
       </div>
       <div class="card-body text-[14px] text-light text-opacity-50 py-3 px-6">
         Curso de Ingles Elementary com 72 aulas em videos aulas e muito mais
@@ -37,7 +37,8 @@
   </section>
   <div class="dots flex flex-row items-center justify-center gap-2">
     <span
-      *ngFor="let item of dots"
+      *ngFor="let item of [].constructor(dotsButtonLenght | async); track by $index"
+      (click)="toggleVisibleCourseCards(item)"
       [ngClass]="{
         'bg-primary': item % 2 == 0,
         'bg-light border-primary': item % 2 != 0
