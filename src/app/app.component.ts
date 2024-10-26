@@ -1,3 +1,4 @@
+import { TuiRoot } from "@taiga-ui/core";
 import { Component } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { SidebarComponent } from './shared/components/sidebar/sidebar.component';
@@ -16,7 +17,8 @@ import { HeaderOnSmallComponent } from './shared/components/header-on-small/head
     RouterLink,
     CommonModule,
     RouterLinkActive,
-  ],
+      TuiRoot
+],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })

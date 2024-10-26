@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { CardSliderComponent } from '../../shared/components/card-slider/card-slider.component';
 
 @Component({
   selector: 'app-courses',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, CardSliderComponent],
   templateUrl: './courses.component.html',
   styleUrl: './courses.component.scss',
 })
