@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { WelcomePageComponent } from './welcome-page/welcome-page.component';
 import { ProfileSettingsComponent } from './profile-settings/profile-settings.component';
 import { CoursesComponent } from './features/courses/courses.component';
+import { LessonsComponent } from './features/lessons/lessons.component';
 
 export const routes: Routes = [
   {
@@ -15,5 +16,9 @@ export const routes: Routes = [
   {
     path: 'profile',
     component: ProfileSettingsComponent,
+  },
+  {
+    path: 'lessons',
+    component: LessonsComponent,
   },
 ];

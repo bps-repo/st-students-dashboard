@@ -27,7 +27,7 @@ export class SidebarComponent {
     },
     {
       label: 'Minhas Aulas',
-      path: '/profile',
+      path: '/lessons',
       icon: 'pi pi-folder-open',
     },
     {
