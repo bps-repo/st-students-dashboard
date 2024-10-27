@@ -42,7 +42,7 @@ export class SidebarComponent {
     },
     {
       label: 'Certificados',
-      path: '/courses',
+      path: '/certificates',
       icon: 'pi pi-graduation-cap',
     },
   ];
