@@ -3,7 +3,7 @@
     'w-[250px]': (showSidebar$ | async) === true,
     'w-[100px]': (showSidebar$ | async) === false
   }"
-  class="h-screen transition-all duration-500 bg-light p-8 shadow-md flex flex-col items-center gap-16"
+  class="h-screen transition-all duration-500 bg-light p-8 shadow-md flex flex-col gap-16"
 >
   <section class="flex flex-col justify-center items-center gap-5">
     <img
@@ -17,7 +17,7 @@
     />
     <h1
       *ngIf="showSidebar$ | async"
-      class="flex flex-row gap-2 items-center text-sm text-secondary text-opacity-[0.8] bg-primary bg-opacity-5 px-6 py-1 rounded-md transition-all duration-500"
+      class="flex flex-row gap-2 items-center font-heading text-sm text-secondary text-opacity-[0.8] bg-primary bg-opacity-5 px-6 py-1 rounded-md transition-all duration-500"
     >
       <span class="w-4 h-4 bg-primary bg-opacity-[0.8] rounded-full"></span>
       C1 - Advanced
@@ -30,10 +30,12 @@
     <a
       [routerLink]="[navLink.path]"
       [routerLinkActive]="['active']"
-      class="hover:text-secondary active:text-secondary transition-all flex flex-row gap-4 items-center justify-start"
+      class="hover:text-secondary active:text-secondary transition-all flex flex-row gap-4"
     >
       <i class="{{ navLink.icon }} text-[23px]"></i>
-      <span *ngIf="showSidebar$ | async">{{ navLink.label }}</span>
+      <span *ngIf="showSidebar$ | async" class="font-heading text-[15px] font-bold">{{
+        navLink.label
+      }}</span>
     </a>
     }
   </nav>

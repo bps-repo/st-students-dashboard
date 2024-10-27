@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { TuiButton } from '@taiga-ui/core';
 import { TuiCarousel, TuiPagination } from '@taiga-ui/kit';
+import { Course } from '../../../features/types/course';
 @Component({
   selector: 'app-card-slider',
   standalone: true,
@@ -20,5 +21,7 @@ import { TuiCarousel, TuiPagination } from '@taiga-ui/kit';
 export class CardSliderComponent {
   protected duration = isPlatformBrowser(inject(PLATFORM_ID)) ? 10_000 : 0;
   @Input() index = 0;
-  @Input() items: any[] = [];
+  @Input() items: Course[] = [];
+  protected textColor: string = '';
+  protected bgColor: string = '';
 }

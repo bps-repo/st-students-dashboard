@@ -6,31 +6,63 @@
   <ng-container *ngFor="let item of items">
     <div
       *tuiItem
-      class="card flex flex-col gap-2 bg-accent rounded-lg w-80 h-60 text-light p-2"
+      [ngClass]="item.color ? item.color : 'bg-accent'"
+      class="card flex flex-col gap-2 rounded-lg w-80 h-60 text-light p-2"
     >
       <div class="card-header flex flex-row items-center gap-2">
         <img
-          class="rounded-sm w-12 h-12"
+          class="rounded-md w-12 h-12"
           src="https://media.englishbay.com.br/f3727f34-c54b-46fa-a5d3-122eb03d4afc.jpg"
           alt="course"
         />
-        <span class="font-extrabold text-[15.5px]">{{ item.label }}</span>
+        <span
+          [ngClass]="
+            item.color && item.type == 'c' ? 'text-secondary' : 'text-light'
+          "
+          class="text-[15.5px] font-heading font-extrabold"
+          >{{ item.label }}</span
+        >
       </div>
-      <div class="card-body text-[14px] text-light text-opacity-50 py-3 px-6">
+      <div
+        [ngClass]="item.color && item.type == 'c' ? 'text-dark' : 'text-light'"
+        class="card-body text-[14px] text-opacity-50 py-3 px-6 font-heading"
+      >
         Curso de Ingles Elementary com 72 aulas em videos aulas e muito mais
       </div>
       <div class="card-level flex flex-row items-center gap-2 px-1">
-        <span>0/72</span>
+        <span
+          [ngClass]="
+            item.color && item.type == 'c' ? 'text-secondary' : 'text-light'
+          "
+          >0/72</span
+        >
         <span class="bg-secondary bg-opacity-70 h-2 w-5/6 rounded-md"></span>
-        <span>0%</span>
+        <span
+          [ngClass]="
+            item.color && item.type == 'c' ? 'text-secondary' : 'text-light'
+          "
+          >0%</span
+        >
       </div>
       <span
         class="bg-secondary bg-opacity-30 h-[0.3px] w-full rounded-md px-10 my-3"
       ></span>
       <div class="card-next flex items-center justify-center">
         <a class="flex gap-4 items-center cursor-pointer">
-          <span class="text-sm">Ir para o módulo</span>
-          <i class="pi pi-arrow-right"></i>
+          <span
+            [ngClass]="item.color ? 'text-secondary' : 'bg-accent'"
+            [ngClass]="
+              item.color && item.type == 'c' ? 'text-secondary' : 'text-light'
+            "
+            class="text-sm font-heading text-opacity-80"
+            >Conhecer o módulo</span
+          >
+          <i
+            [ngClass]="
+              item.color && item.type == 'c' ? 'text-secondary' : 'text-light'
+            "
+            class="pi pi-arrow-right"
+          ></i>
         </a>
       </div>
     </div>
