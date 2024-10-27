@@ -99,6 +99,9 @@ module.exports = {
               letterSpacing: "-0.025em",
               lineHeight: "1.1",
             },
+            div: {
+              fontFamily: -"-var(heading)",
+            },
           },
         },
       },
