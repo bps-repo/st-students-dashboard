@@ -3,6 +3,7 @@ import { WelcomePageComponent } from './welcome-page/welcome-page.component';
 import { ProfileSettingsComponent } from './profile-settings/profile-settings.component';
 import { CoursesComponent } from './features/courses/courses.component';
 import { LessonsComponent } from './features/lessons/lessons.component';
+import { EventsComponent } from './features/events/events.component';
 
 export const routes: Routes = [
   {
@@ -20,5 +21,9 @@ export const routes: Routes = [
   {
     path: 'lessons',
     component: LessonsComponent,
+  },
+  {
+    path: 'events',
+    component: EventsComponent,
   },
 ];

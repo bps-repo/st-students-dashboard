@@ -37,7 +37,7 @@ export class SidebarComponent {
     },
     {
       label: 'Eventos',
-      path: '/courses',
+      path: '/events',
       icon: 'pi pi-calendar',
     },
     {
