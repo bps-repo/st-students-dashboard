@@ -1,37 +1,30 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { CardSliderComponent } from '../../shared/components/card-slider/card-slider.component';
+import { Course } from '../types/course';
 
 @Component({
   selector: 'app-courses',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, CardSliderComponent],
   templateUrl: './courses.component.html',
   styleUrl: './courses.component.scss',
 })
 export class CoursesComponent {
-  visibleCourseCardsIndex: number[] = [0, 1];
+  protected readonly cards: Course[] = [
+    { label: 'Video curso completo' },
+    { label: 'Conversação', color: 'bg-card_yellow' },
+    { label: 'Pronuncia' },
+    { label: 'Leitura e Escrita', color: 'bg-card_yellow' },
+    { label: 'Reading and Writing' },
+    { label: 'listening' },
+  ];
 
-  dotsButtonLenght: Observable<number> = of(0);
-
-  cards: any[] = [
-    { label: 'Curso de Ingles' },
-    { label: 'Curso de Matematica' },
-    { label: 'Curso de Fisica' },
-    { label: 'Curso de Quimica' },
-    { label: 'Curso de Quimica' },
-  ]
-
-  constructor() {
-    this.calculateDotsButtonLength();
-    this.dotsButtonLenght.subscribe((v) => console.log(v));
-  }
-
-  calculateDotsButtonLength(): void {
-    this.dotsButtonLenght = of(Math.ceil(this.cards.length / 2));
-  }
-
-  toggleVisibleCourseCards(buttonIndex: any): void {
-    console.log(buttonIndex)
-  }
+  protected readonly modules: Course[] = [
+    { label: 'Beginner', color: 'bg-card_white', type: 'c' },
+    { label: 'Elementary', color: 'bg-card_white', type: 'c' },
+    { label: 'Intermediate', color: 'bg-card_white', type: 'c' },
+    { label: 'Upper Intermedidate', color: 'bg-card_white', type: 'c' },
+    { label: 'Advanced', color: 'bg-card_white', type: 'c' },
+  ];
 }

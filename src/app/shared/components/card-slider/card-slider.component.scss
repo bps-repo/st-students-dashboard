@@ -1,55 +1,7 @@
-.slider {
-  h3 {
-    font-size: 18px;
-    margin-bottom: 15px;
-  }
-  .cards {
-    display: flex;
-    gap: 20px;
-    overflow-x: auto;
-    .card {
-      width: 300px;
-      background-color: #5807b8;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-      padding: 20px;
-      img {
-        width: 30%;
-        height: auto;
-        border-radius: 10px 10px 10px 10px;
-      }
-      .card-content {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        h4 {
-          margin: 15px 0;
-          color: #fff;
-        }
-        p {
-          color: #d3d1d1;
-        }
-        .progress-bar {
-          background-color: #e0e0e0;
-          border-radius: 10px;
-          overflow: hidden;
-          height: 8px;
-          margin: 10px 0;
-          .progress {
-            background-color: #5807b8;
-            height: 100%;
-          }
-        }
-        button {
-          background-color: #5807b8;
-          color: #fff;
-          padding: 10px 20px;
-          border: none;
-          border-radius: 5px;
-          cursor: pointer;
-          margin-top: 10px;
-        }
-      }
-    }
-  }
+.t-button.t-button.t-button_small[_ngcontent-ng-c3649363113] {
+  background-color: #000 !important;
+}
+.t-button,
+.t-button_small {
+  background-color: #000 !important;
 }
