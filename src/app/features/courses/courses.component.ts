@@ -10,7 +10,18 @@ import { CardSliderComponent } from '../../shared/components/card-slider/card-sl
   styleUrl: './courses.component.scss',
 })
 export class CoursesComponent {
-  cards: any[] = [{ label: 'Curso de Ingles' }, { label: 'Curso de Ingles' }];
+  protected readonly cards: any[] = [
+    { label: 'Video curso completo' },
+    { label: 'Conversação' },
+    { label: 'Pronuncia' },
+    { label: 'Leitura e Escrita' },
+  ];
 
-  dots: any[] = [1, 3, 4, 5, 6, 7];
+  protected readonly modules: any[] = [
+    { label: 'Beginner' },
+    { label: 'Elementary' },
+    { label: 'Intermediate' },
+    { label: 'Upper Intermedidate' },
+    { label: 'Advanced' },
+  ];
 }
