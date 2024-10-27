@@ -15,6 +15,8 @@ export class CoursesComponent {
     { label: 'Conversação' },
     { label: 'Pronuncia' },
     { label: 'Leitura e Escrita' },
+    { label: 'Reading and Writing' },
+    { label: 'listening' },
   ];
 
   protected readonly modules: any[] = [
