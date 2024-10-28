@@ -1,0 +1,50 @@
+<div class="p-5 m-5 font-heading">
+  <section class="flex justify-between w-full shadow-md px-5">
+    <p
+      class="text-[16px] border-primary text-secondary border-b-[3px] cursor-pointer"
+    >
+      Todas os eventos
+    </p>
+    <div class="flex justify-between gap-4 p-2 cursor-pointer">
+      <i
+        class="pi pi-search border-[1px] border-dark p-3 border-opacity-20 rounded-md"
+      ></i>
+      <i
+        class="pi pi-filter border-[1px] border-dark p-3 border-opacity-20 rounded-md"
+      ></i>
+    </div>
+  </section>
+  <section class="mt-10">
+    <div
+      *ngFor="let item of events"
+      class="flex flex-row justify-between items-center border-primary shadow-lg rounded-2xl p-10"
+    >
+      <div
+        class="flex flex-col justify-center items-center text-[14px] font-bold text-secondary"
+      >
+        <span>OUT</span>
+        <span class="font-extrabold">27</span>
+        <span>2024</span>
+      </div>
+      <div class="flex flex-col gap-1">
+        <h1 class="text-[18px] font-bold">Meeting with Foreigner Speakers</h1>
+        <span>Nivel: Iniciante</span>
+        <div class="flex justify-between gap-2 text-[13px]">
+          <div class="flex justify-center items-center gap-2">
+            <i class="pi pi-map-marker"></i>
+            <span>Local: Mutamba</span>
+          </div>
+          <div class="flex justify-center items-center gap-2">
+            <i class="pi pi-clock"></i>
+            <span>Hora: 19:00</span>
+          </div>
+        </div>
+      </div>
+      <div
+        class="border-[1px] rounded-md border-primary px-12 py-3 text-secondary cursor-pointer"
+      >
+        <span>Ver o evento</span>
+      </div>
+    </div>
+  </section>
+</div>

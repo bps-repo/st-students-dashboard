@@ -27,7 +27,7 @@ export class SidebarComponent {
     },
     {
       label: 'Minhas Aulas',
-      path: '/profile',
+      path: '/lessons',
       icon: 'pi pi-folder-open',
     },
     {
@@ -37,12 +37,12 @@ export class SidebarComponent {
     },
     {
       label: 'Eventos',
-      path: '/courses',
+      path: '/events',
       icon: 'pi pi-calendar',
     },
     {
       label: 'Certificados',
-      path: '/courses',
+      path: '/certificates',
       icon: 'pi pi-graduation-cap',
     },
   ];

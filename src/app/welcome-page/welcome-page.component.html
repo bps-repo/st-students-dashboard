@@ -1,76 +1,52 @@
-<div class="welcome-page">
-  <div class="header">
-    <h1>Oi, <span class="user-name">Santiago</span></h1>
-    <p>Bem-vindo ao seu Dashboard!</p>
+<div class="p-6">
+  <!-- Welcome Message -->
+  <div class="text-2xl flex items-center">
+    Seja Bem-Vindo, <span class="text-purple-600 font-bold ml-2">Aluno</span>
+    <span class="ml-2">👋</span>
   </div>
 
-  <div class="level-info">
-    <div class="level-select">
-      <label>Nível</label>
-      <div class="custom-select-wrapper">
-        <app-custom-select
-          (selectionChange)="handleSelection($event)"
-        ></app-custom-select>
-      </div>
+  <!-- Notification Banner -->
+  <div
+    class="mt-10 bg-gradient-to-r from-accent to-primary p-10 rounded-lg flex items-center justify-between"
+  >
+    <div class="text-light font-bold text-[16px] font-heading">
+      Uma nova aula foi disponibilizada
     </div>
-    <br />
-    <div class="progress-bar">
-      <div class="progress" style="width: 13%"></div>
-    </div>
+    <button
+      class="flex justify-center items-center gap-3 bg-light text-secondary font-bold px-4 py-1 rounded-lg"
+    >
+      <span> Ver aula</span>
+      <i class="pi pi-arrow-right"></i>
+    </button>
   </div>
 
-  <div class="promo-banner">
-    <div class="promo-content">
-      <span>Nivel Avançado - 3 testes feitos</span>
-    </div>
-  </div>
-
-  <div class="units">
+  <!-- Units List -->
+  <div class="mt-10 font-heading">
     <div class="flex justify-between">
-      <h3>Unidades</h3>
-      <h3>3/10</h3>
+      <h2 class="text-dark text-md font-bold mb-4">Unidades</h2>
+      <h2 class="text-dark text-md font-bold mb-4">1/{{ unities.length }}</h2>
     </div>
-    <div class="unit-list">
-      <div class="unit">
-        <div class="unit-header">
-          <div class="unit-icon">
-            <i class="pi pi-check"></i>
-          </div>
-          <div class="unit-title">
-            <h4>Unidade 1</h4>
-            <p>Revisão de aulas passadas</p>
-            <span>Concluída</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="unit">
-        <div class="unit-header">
-          <div class="unit-icon">
-            <i class="pi pi-check"></i>
-          </div>
-          <div class="unit-title">
-            <h4>Unidade 1</h4>
-            <p>Revisão de aulas passadas</p>
-            <span>Concluída</span>
+    <div
+      class="flex flex-col gap-2 bg-light border-dark border-opacity-20 border-solid border-[1px] rounded-2xl p-3 shadow-md"
+    >
+      <div
+        *ngFor="let item of unities; let i = index"
+        class="flex flex-row items-center gap-3 text-[14px] hover:bg-accent hover:bg-opacity-10 p-2 transition-all rounded-3xl cursor-pointer"
+      >
+        <div class="rounded-full border-4 border-primary h-20 w-20 p-1">
+          <div
+            class="flex items-center justify-center bg-primary border-light w-full h-full rounded-full"
+          >
+            <div>
+              <i class="pi pi-calendar text-light text-[30px]"></i>
+            </div>
           </div>
         </div>
-      </div>
-
-      <div class="unit">
-        <div class="unit-header">
-          <div class="unit-icon">
-            <i class="pi pi-check"></i>
-          </div>
-          <div class="unit-title">
-            <h4>Unidade 1</h4>
-            <p>Revisão de aulas passadas</p>
-            <span>Concluída</span>
-          </div>
+        <div class="flex flex-col">
+          <h1 class="text-secondary font-bold">{{ item.title }}</h1>
+          <p>{{ item.description }}</p>
         </div>
       </div>
-
-      <!-- Repeat similar blocks for other units -->
     </div>
   </div>
 </div>

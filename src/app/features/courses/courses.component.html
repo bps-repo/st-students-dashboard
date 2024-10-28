@@ -1,1 +1,17 @@
-<p>courses works!</p>
+<div class="m-10 flex flex-col gap-5 font-semibold">
+  <div>
+    <i class="pi pi-search bg-light p-5 rounded-md text-lg cur"></i>
+  </div>
+  <h1 class="font-bold text-[15.5px] font-heading">Materiais complementares</h1>
+  <section>
+    <ng-container>
+      <app-card-slider [items]="cards" [index]="0" />
+    </ng-container>
+  </section>
+
+  <h1 class="font-bold text-[15.5px] font-heading">Cursos</h1>
+
+  <ng-container>
+    <app-card-slider [items]="modules" [index]="0" />
+  </ng-container>
+</div>

@@ -1,38 +1,27 @@
-import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
-
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  input,
+  Input,
+  PLATFORM_ID,
+} from '@angular/core';
+import { TuiButton } from '@taiga-ui/core';
+import { TuiCarousel, TuiPagination } from '@taiga-ui/kit';
+import { Course } from '../../../features/types/course';
 @Component({
   selector: 'app-card-slider',
   standalone: true,
-  imports: [CommonModule, NgbCarouselModule],
+  imports: [CommonModule, TuiButton, TuiPagination, TuiCarousel, TuiPagination],
   templateUrl: './card-slider.component.html',
   styleUrls: ['./card-slider.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CardSliderComponent {
-  cards = [
-    {
-      image:
-        'https://media.englishbay.com.br/f3727f34-c54b-46fa-a5d3-122eb03d4afc.jpg',
-      title: 'Video Curso Completo',
-      description:
-        'Curso Aprenda Falando com 72 video aulas + material e exercícios para você aprender',
-      progress: 0,
-    },
-    {
-      image:
-        'https://media.englishbay.com.br/f3727f34-c54b-46fa-a5d3-122eb03d4afc.jpg',
-      title: 'Conversação',
-      description: 'Materiais do Curso de Conversação para aulas particulares',
-      progress: 0,
-    },
-    {
-      image:
-        'https://media.englishbay.com.br/f3727f34-c54b-46fa-a5d3-122eb03d4afc.jpg',
-      title: 'Business',
-      description:
-        'Aprimore o seu inglês para receber aquela promoção ou conseguir um emprego no exterior.',
-      progress: 0,
-    },
-  ];
+  protected duration = isPlatformBrowser(inject(PLATFORM_ID)) ? 10_000 : 0;
+  @Input() index = 0;
+  @Input() items: Course[] = [];
+  protected textColor: string = '';
+  protected bgColor: string = '';
 }
