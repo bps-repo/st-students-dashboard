@@ -30,7 +30,7 @@
   }
 
   .profile-content {
-    width: 80%;
+    width: 100%;
 
     h3 {
       font-size: 1.5rem;
@@ -45,7 +45,7 @@
 
     .profile-header {
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
       align-items: center;
       margin-bottom: 20px;
 
@@ -94,7 +94,7 @@
 
     .profile-details {
       background-color: #fff;
-      padding: 20px;
+      padding: 10px;
       border-radius: 10px;
 
       h4 {
