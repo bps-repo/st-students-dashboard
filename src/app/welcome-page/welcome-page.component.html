@@ -1,17 +1,29 @@
-<div class="p-6 font-heading">
+<div class="px-12 py-8 font-heading">
   <!-- Welcome Message -->
   <div class="text-2xl flex items-center">
     Seja Bem-Vindo, <span class="text-purple-600 font-bold ml-2">Aluno</span>
     <span class="ml-2">👋</span>
   </div>
 
-  <!-- Notification Banner -->
+  <!-- Level  dropdown -->
   <div class="flex justify-start items-center gap-2 mt-5 text-[16px]">
     <span class="text-[20px]">Nivel</span>
     <div
       class="flex gap-5 bg-primary rounded-2xl px-5 py-2 text-light font-bold"
     >
       <span>C1 - Advanced </span> <i class="pi pi-chevron-down"></i>
+    </div>
+  </div>
+
+  <!-- level slider progress -->
+  <div
+    class="flex justify-start items-center gap-0 bg-dark bg-opacity-20 h-2 w-7/12 border-dark rounded-lg mt-6"
+  >
+    <div class="bg-success w-6/12 h-2"></div>
+    <div
+      class="flex items-center justify-center p-4 text-light font-bold bg-success h-7 w-7 rounded-full"
+    >
+      75%
     </div>
   </div>
 
@@ -27,15 +39,41 @@
         class="flex flex-col gap-2 bg-light border-dark border-opacity-20 border-solid border-[1px] rounded-2xl p-3 shadow-md"
       >
         <div
+          [ngClass]="item.status == 'reading' ? 'bg-accent bg-opacity-10' : ''"
           *ngFor="let item of unities; let i = index"
           class="flex flex-row items-center gap-3 text-[14px] hover:bg-accent hover:bg-opacity-10 p-2 transition-all rounded-3xl cursor-pointer"
         >
-          <div class="rounded-full border-4 border-success h-20 w-20 p-1">
+          <div
+            [ngClass]="
+              item.status == 'done'
+                ? 'border-success'
+                : item.status == 'lock'
+                ? 'border-dark border-opacity-25'
+                : 'border-primary'
+            "
+            class="rounded-full border-4 h-20 w-20 p-1"
+          >
             <div
-              class="flex items-center justify-center bg-success border-light w-full h-full rounded-full"
+              [ngClass]="
+                item.status == 'done'
+                  ? 'bg-success'
+                  : item.status == 'lock'
+                  ? 'bg-dark bg-opacity-25'
+                  : 'bg-primary'
+              "
+              class="flex items-center justify-center border-light w-full h-full rounded-full"
             >
               <div>
-                <i class="pi pi-check text-light text-[30px]"></i>
+                <i
+                  [ngClass]="
+                    item.status == 'done'
+                      ? 'pi pi-check'
+                      : item.status == 'lock'
+                      ? 'pi pi-lock'
+                      : 'pi pi-book'
+                  "
+                  class="text-light text-[30px]"
+                ></i>
               </div>
             </div>
           </div>
