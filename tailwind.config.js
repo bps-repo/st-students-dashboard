@@ -5,10 +5,10 @@ module.exports = {
     colors: {
       primary: "#004182",
       secondary: "#F9F9F9",
-      accent: "#6A51B2",
+      accent: "#118DF0",
       danger: "#E94560",
-      warning: "#FFB90F",
-      success: "#58C18E",
+      warning: "#FFEB00",
+      success: "#6EC207",
       info: "#2D9CDB",
       light: "#FFFFFF",
       dark: "#212121",
