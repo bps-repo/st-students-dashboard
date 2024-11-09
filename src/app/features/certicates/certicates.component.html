@@ -1,0 +1,44 @@
+<div class="p-5 font-heading">
+  <section class="w-8/12 mt-5">
+    <div class="flex justify-between items-center gap-2 shadow-md p-5">
+      <img src="" alt="certificate_image" />
+      <div>
+        <span>Seu nivel actual</span>
+        <br />
+        <span class="text-secondary">C2 - Advanced</span>
+      </div>
+      <div class="border-[1px] border-primary rounded-md px-8 py-2">
+        <span class="font-bold text-secondary text-[16px]"
+          >Fazer teste de nivel</span
+        >
+      </div>
+    </div>
+  </section>
+  <section class="grid grid-cols-3 gap-5 mt-10">
+    <div
+      *ngFor="let certificate of certificates"
+      class="flex flex-col justify-between shadow-md"
+    >
+      <div class="flex flex-col justify-center items-center gap-4 p-5">
+        <img src="" alt="certifate_img" />
+        <h1
+          [ngClass]="
+            certificate.color ? 'text-' + certificate.color : 'text-secondary'
+          "
+          class=" font-bold text-[18px]"
+        >
+          {{ certificate.title }}
+        </h1>
+        <p class="text-center font-bold">
+          Ideal para quem quer ter o primeiro contato com o idioma
+        </p>
+      </div>
+      <div
+        [ngClass]="certificate.color ? 'bg-' + certificate.color : 'bg-primary'"
+        class="p-2 flex items-center justify-center"
+      >
+        <span class="text-light font-bold">Baixar Certificado</span>
+      </div>
+    </div>
+  </section>
+</div>
