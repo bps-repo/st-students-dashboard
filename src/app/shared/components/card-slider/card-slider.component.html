@@ -1,5 +1,5 @@
 <tui-carousel
-  [itemsCount]="items.length > 2 ? 2 : items.length"
+  [itemsCount]="items.length > 3 ? 3 : items.length"
   [(index)]="index"
   [draggable]="true"
 >
@@ -7,7 +7,7 @@
     <div
       *tuiItem
       [ngClass]="item.color ? item.color : 'bg-accent'"
-      class="card flex flex-col gap-2 rounded-lg w-80 h-60 text-light p-2"
+      class="card flex flex-col gap-2 rounded-lg w-12/12 h-60 text-light p-2"
     >
       <div class="card-header flex flex-row items-center gap-2">
         <img
