@@ -12,19 +12,74 @@ import { Course } from '../types/course';
 })
 export class CoursesComponent {
   protected readonly contents: Course[] = [
-    { label: 'Video curso completo', color: 'primary', type: 'content' },
-    { label: 'Conversação', color: 'success', type: 'content' },
-    { label: 'Pronuncia', color: 'primary', type: 'content' },
-    { label: 'Leitura e Escrita', color: 'primary', type: 'content' },
-    { label: 'Reading and Writing', color: 'success', type: 'content' },
-    { label: 'listening', color: 'primary', type: 'content' },
+    {
+      label: 'Video curso completo',
+      image: '/courses/course_blue.png',
+      color: 'primary',
+      type: 'content',
+    },
+    {
+      label: 'Conversação',
+      image: '/courses/course_green.png',
+      color: 'success',
+      type: 'content',
+    },
+    {
+      label: 'Pronuncia',
+      image: '/courses/course_blue.png',
+      color: 'primary',
+      type: 'content',
+    },
+    {
+      label: 'Leitura e Escrita',
+      image: '/courses/course_blue.png',
+      color: 'primary',
+      type: 'content',
+    },
+    {
+      label: 'Reading and Writing',
+      image: '/courses/course_green.png',
+      color: 'success',
+      type: 'content',
+    },
+    {
+      label: 'listening',
+      image: '/courses/course_blue.png',
+      color: 'primary',
+      type: 'content',
+    },
   ];
 
   protected readonly modules: Course[] = [
-    { label: 'Beginner', color: 'primary', type: 'course' },
-    { label: 'Elementary', color: 'warning', type: 'course' },
-    { label: 'Intermediate', color: 'success', type: 'course' },
-    { label: 'Upper Intermedidate', color: 'warning', type: 'course' },
-    { label: 'Advanced', color: 'primary', type: 'course' },
+    {
+      label: 'Beginner',
+      image: '/courses/course_blue.png',
+      color: 'primary',
+      type: 'course',
+    },
+    {
+      label: 'Elementary',
+      image: '/courses/course_white.png',
+      color: 'warning',
+      type: 'course',
+    },
+    {
+      label: 'Intermediate',
+      image: '/courses/course_green.png',
+      color: 'success',
+      type: 'course',
+    },
+    {
+      label: 'Upper Intermedidate',
+      image: '/courses/course_orange.png',
+      color: 'warning',
+      type: 'course',
+    },
+    {
+      label: 'Advanced',
+      image: '/courses/course_blue.png',
+      color: 'primary',
+      type: 'course',
+    },
   ];
 }
