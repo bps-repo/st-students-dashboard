@@ -45,6 +45,11 @@ export class SidebarComponent {
       path: '/certificates',
       icon: 'pi pi-graduation-cap',
     },
+    {
+      label: 'Ajuda',
+      path: '/support',
+      icon: 'pi pi-question',
+    },
   ];
   toggleSidebar() {
     const currentState = this.sidebarState.getValue(); // Get current value

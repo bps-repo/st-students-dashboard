@@ -1,1 +1,80 @@
-<p>support works!</p>
+<div class="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+  <!-- Card Container -->
+  <div class="w-80 bg-blue-700 rounded-t-lg text-white p-6 text-center">
+    <p class="text-sm">
+      Por favor, preencha abaixo e retornaremos seu contato assim que possível.
+    </p>
+  </div>
+
+  <!-- Form Container -->
+  <div class="w-80 bg-white p-6 rounded-b-lg shadow-md">
+    <!-- Form Fields -->
+    <form>
+      <div class="mb-4">
+        <input
+          class="border border-gray-300 w-full p-3 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-500"
+          type="text"
+          placeholder="Nome completo"
+          value="Helder Santiago"
+        />
+      </div>
+
+      <div class="mb-4">
+        <input
+          class="border border-gray-300 w-full p-3 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-500"
+          type="email"
+          placeholder="E-mail"
+          value="heldersantiago23@gmail.com"
+        />
+      </div>
+
+      <div class="mb-4">
+        <textarea
+          class="border border-gray-300 w-full p-3 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-500"
+          placeholder="Como podemos ajudar?"
+          rows="3"
+        ></textarea>
+      </div>
+
+      <!-- Submit Button -->
+      <button
+        type="submit"
+        class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded w-full flex items-center justify-center"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5 mr-2"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+        >
+          <path
+            d="M2.94 2.94a1.5 1.5 0 012.12 0L15.44 13.32a1.5 1.5 0 01-2.12 2.12L2.94 5.06a1.5 1.5 0 010-2.12z"
+          />
+        </svg>
+        Enviar
+      </button>
+    </form>
+  </div>
+
+  <!-- Social Media Icons -->
+  <div class="flex space-x-4 mt-6 text-gray-600">
+    <a href="#" aria-label="Facebook" class="hover:text-blue-600">
+      <i class="fab fa-facebook fa-lg"></i>
+    </a>
+    <a href="#" aria-label="TikTok" class="hover:text-blue-600">
+      <i class="fab fa-tiktok fa-lg"></i>
+    </a>
+    <a href="#" aria-label="Instagram" class="hover:text-pink-600">
+      <i class="fab fa-instagram fa-lg"></i>
+    </a>
+    <a href="#" aria-label="YouTube" class="hover:text-red-600">
+      <i class="fab fa-youtube fa-lg"></i>
+    </a>
+    <a href="#" aria-label="LinkedIn" class="hover:text-blue-700">
+      <i class="fab fa-linkedin fa-lg"></i>
+    </a>
+    <a href="#" aria-label="WhatsApp" class="hover:text-green-600">
+      <i class="fab fa-whatsapp fa-lg"></i>
+    </a>
+  </div>
+</div>
