@@ -8,6 +8,9 @@ import { CerticatesComponent } from './features/certicates/certicates.component'
 import { ProfileComponent } from './features/profile/profile.component';
 import { TeachersComponent } from './features/teachers/teachers.component';
 import { ChangePasswordComponent } from './features/change-password/change-password.component';
+import { TimetablesComponent } from './features/timetables/timetables.component';
+import { SupportComponent } from './features/support/support.component';
+import { TestsComponent } from './features/tests/tests.component';
 
 export const routes: Routes = [
   {
@@ -41,5 +44,17 @@ export const routes: Routes = [
   {
     path: 'change-password',
     component: ChangePasswordComponent,
+  },
+  {
+    path: 'timetables',
+    component: TimetablesComponent,
+  },
+  {
+    path: 'support',
+    component: SupportComponent,
+  },
+  {
+    path: 'tests',
+    component: TestsComponent,
   },
 ];

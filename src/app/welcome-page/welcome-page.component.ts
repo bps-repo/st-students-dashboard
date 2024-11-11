@@ -62,7 +62,7 @@ export class WelcomePageComponent {
       label: 'A1',
       title: 'Beginner',
       description: 'Conclua as unidades anteriores',
-      status: 'unlock',
+      status: 'lock',
     },
     {
       label: 'A2',

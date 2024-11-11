@@ -27,13 +27,13 @@
     </h1>
   </section>
   <nav
-    class="flex flex-col gap-6 font-medium text-primary text-[16px] cursor-pointer"
+    class="flex flex-col gap-6 font-medium text-secondary text-[16px] cursor-pointer"
   >
     @for (navLink of navLinks; track $index) {
     <a
       [routerLink]="[navLink.path]"
       [routerLinkActive]="['active']"
-      class="hover:text-secondary active:text-secondary transition-all flex flex-row gap-4"
+      class="hover:text-primary active:text-primary transition-all flex flex-row gap-4"
     >
       <i class="{{ navLink.icon }} text-[23px]"></i>
       <span
