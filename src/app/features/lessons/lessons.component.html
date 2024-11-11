@@ -1,7 +1,7 @@
 <div class="p-5 m-5 font-heading">
   <section class="flex justify-between w-full shadow-md px-5">
     <p
-      class="text-[16px] border-primary text-secondary border-b-[3px] cursor-pointer"
+      class="text-[16px] border-primary text-lesson border-b-[3px] cursor-pointer"
     >
       Todas as aulas
     </p>
@@ -19,27 +19,44 @@
     <h1 class="text-[20px]">Você possui 0 aulas agendadas</h1>
     <div class="flex justify-between gap-2 text-[16px]">
       <i class="pi pi-chevron-left"></i>
-      <i class="pi pi-chevron-right text-secondary"></i>
+      <i class="pi pi-chevron-right text-lesson"></i>
     </div>
   </section>
   <section>
-    <div
-      class="flex flex-row mt-10 relative border-dashed border-2 border-dark border-opacity-70 w-60 h-60 rounded-3xl cursor-pointer hover:bg-accent hover:bg-opacity-5 transition-all"
+    <tui-carousel
+      [itemsCount]="items.length > 3 ? 3 : items.length"
+      [(index)]="index"
+      [draggable]="true"
     >
-      <div class="flex flex-col justify-center items-start w-full gap-3 p-2">
-        <i class="pi pi-youtube text-[60px] ml-2 text-secondary"></i>
-        <p class="text-[18px] break-words whitespace-normal p-2">
-          Agenda Aqui <br />
-          A Sua Próxima Aula
-        </p>
+      <ng-container *ngFor="let item of items">
         <div
-          class="flex justify-between mt-10 items-center gap-20 font-bold text-secondary text-[14px]"
+          *tuiItem
+          class="flex flex-row mt-10 relative w-65 h-65 rounded-xl cursor-pointer bg-lesson hover:bg-primary hover:bg-opacity-80 transition-all"
         >
-          <span>Agendar agora</span>
-          <i class="pi pi-arrow-right"></i>
+          <div
+            class="flex flex-col justify-center items-start w-full gap-3 p-4 text-light"
+          >
+            <img src="/lessons/books.png" alt="" />
+            <p class="text-[20px] break-words whitespace-normal p-2 font-bold">
+              Agenda Aqui <br />
+              A Sua Próxima Aula
+            </p>
+            <div
+              class="flex justify-between mt-10 items-center gap-20 font-bold text-light text-[14px]"
+            >
+              <span>Agendar agora</span>
+              <i class="pi pi-arrow-right text-[23px]"></i>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      </ng-container>
+    </tui-carousel>
+    <tui-pagination
+      size="s"
+      class="tui-space_top-4 mt-3 text-primary"
+      [length]="items.length"
+      [(index)]="index"
+    />
   </section>
 
   <h1 class="text-[20px] mt-20">Histórico de Aulas</h1>

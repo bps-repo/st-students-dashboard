@@ -3,7 +3,6 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
-  input,
   Input,
   PLATFORM_ID,
 } from '@angular/core';

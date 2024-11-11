@@ -1,5 +1,6 @@
-<div class="p-5 font-heading">
+<div class="p-8 font-heading">
   <section class="w-8/12 mt-5">
+    <h1 class="text-[22px] font-bold">Certificados</h1>
     <div class="flex justify-between items-center gap-2 shadow-md p-5">
       <img src="" alt="certificate_image" />
       <div>
@@ -16,20 +17,28 @@
   </section>
   <section class="grid grid-cols-3 gap-5 mt-10">
     <div
+      [ngClass]="certificate.color ? 'bg-' + certificate.color : 'bg-primary'"
       *ngFor="let certificate of certificates"
-      class="flex flex-col justify-between shadow-md"
+      class="flex flex-col justify-between shadow-md rounded-md bg-opacity-60"
     >
       <div class="flex flex-col justify-center items-center gap-4 p-5">
-        <img src="" alt="certifate_img" />
-        <h1
-          [ngClass]="
-            certificate.color ? 'text-' + certificate.color : 'text-secondary'
-          "
-          class=" font-bold text-[18px]"
+        <div
+          [ngClass]="certificate.color ? 'bg-' + certificate.color : ''"
+          class="rounded-full border-4 h-20 w-20 p-1"
         >
+          <div
+            [ngClass]="certificate.color ? 'bg-' + certificate.color : ''"
+            class="flex items-center justify-center border-light w-full h-full rounded-full"
+          >
+            <div>
+              <span class="text-[24px] font-bold text-light">A1</span>
+            </div>
+          </div>
+        </div>
+        <h1 class="text-light font-bold text-[18px]">
           {{ certificate.title }}
         </h1>
-        <p class="text-center font-bold">
+        <p class="text-center text-light font-bold">
           Ideal para quem quer ter o primeiro contato com o idioma
         </p>
       </div>

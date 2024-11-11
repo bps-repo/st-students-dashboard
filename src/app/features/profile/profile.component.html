@@ -1,1 +1,120 @@
-<p>profile works!</p>
+<div class="font-heading m-8 text-[15px]">
+  <h1 class="font-bold text-[22px]">Configurações do perfil</h1>
+  <span class="mt-4"
+    >Você pode alterar as informações básicas da sua conta</span
+  >
+  <!-- background and profile photo section -->
+  <div class="flex flex-row gap-6 mt-5">
+    <div
+      class="w-6/12 flex flex-col items-center h-[20rem] shadow-sm rounded-lg overflow-hidden relative"
+    >
+      <!-- Top Section (Cover Image) -->
+      <div class="bg-[url('/bg_st.png')] bg-cover bg-center h-1/2 w-full"></div>
+
+      <!-- Profile Image (Floating in Center) -->
+      <div class="absolute top-[6.5rem] w-full flex justify-center">
+        <img
+          class="w-28 h-28 rounded-full border-4 border-primary shadow-lg"
+          src="/users/4.png"
+          alt="user_ex"
+        />
+      </div>
+
+      <!-- Bottom Section (Profile Info) -->
+      <div
+        class="bg-primary h-1/2 w-full text-center text-light font-bold pt-20"
+      >
+        <span class="text-[17px]">Helder Santiago</span>
+        <br />
+        <span class="font-normal">heldersantiago273gmail.com</span>
+      </div>
+    </div>
+
+    <div class="w-6/12 h-[20rem] flex flex-row gap-6">
+      <div
+        class="h-full w-6/12 flex flex-col gap-3 items-center bg-secondary p-2 shadow-sm rounded-lg"
+      >
+        <img class="w-16 h-16" src="/icons/no_user.png" alt="" />
+        <h1 class="font-semibold">Alterar Imagem de perfil</h1>
+        <div class="text-[11px] text-center">
+          Ao fazer o upload da sua foto está ciente que dá seu consentimento
+          para o St. Andrews English School tratar essa informação para poder
+          personalizar o perfil do Usuário.
+        </div>
+        <span
+          class="mt-14 bg-dark bg-opacity-20 px-8 py-1 rounded-md cursor-pointer"
+          >Alterar</span
+        >
+      </div>
+      <div
+        class="h-full w-6/12 flex flex-col gap-3 items-center bg-secondary p-2 shadow-sm rounded-lg"
+      >
+        <img class="w-16 h-16" src="/icons/gallery.png" alt="" />
+        <h1 class="font-semibold">Alterar Imagem de capa</h1>
+        <div class="text-[11px] text-center">
+          Ao fazer o upload da sua foto está ciente que dá seu consentimento
+          para o St. Andrews English School tratar essa informação para poder
+          personalizar o perfil do Usuário.
+        </div>
+        <span
+          class="mt-14 bg-dark bg-opacity-20 px-8 py-1 rounded-md cursor-pointer"
+          >Alterar</span
+        >
+      </div>
+    </div>
+  </div>
+  <div class="space-y-10 mt-10"></div>
+  <!-- profile  description  section -->
+  <div class="bg-light shadow-sm rounded-sm p-7">
+    <h1 class="pl-5 text-[22px]">Sobre você</h1>
+    <div class="grid grid-cols-3 gap-2 m-4 transition-all">
+      <input
+        class="border-2 border-dark border-opacity-20 p-4 rounded-md focus:border-primary focus:outline-none"
+        type="text"
+        placeholder="Helder Santiago"
+      />
+
+      <input
+        class="border-2 border-dark border-opacity-20 p-4 rounded-md focus:border-primary focus:outline-none"
+        type="text"
+        placeholder="Helder Santiago"
+      />
+      <input
+        class="border-2 border-dark border-opacity-20 p-4 rounded-md focus:border-primary focus:outline-none"
+        type="text"
+        placeholder="Helder Santiago"
+      />
+      <input
+        class="border-2 border-dark border-opacity-20 p-4 rounded-md focus:border-primary focus:outline-none"
+        type="text"
+        placeholder="Helder Santiago"
+      />
+      <input
+        class="border-2 border-dark border-opacity-20 p-4 rounded-md focus:border-primary focus:outline-none"
+        type="text"
+        placeholder="Helder Santiago"
+      />
+      <input
+        class="border-2 border-dark border-opacity-20 p-4 rounded-md focus:border-primary focus:outline-none"
+        type="text"
+        placeholder="Helder Santiago"
+      />
+    </div>
+    <div class="flex justify-center gap-10 mt-10 transition-all">
+      <a
+        class="bg-primary rounded-lg px-5 py-2 text-light cursor-pointer hover:bg-light hover:text-primary hover:border-primary hover:border-2"
+        >Salvar alterações</a
+      >
+      <a
+        class="bg-light border-2 rounded-lg px-5 py-2 text-primary cursor-pointer hover:bg-primary hover:text-light hover:border-light hover:border-2"
+        >Descartar alterações</a
+      >
+    </div>
+    <div
+      class="flex justify-start gap-2 mt-10 text-dark text-opacity-60 transition-all"
+    >
+      <a class="hover:text-primary cursor-pointer">Termos de uso</a>
+      <a class="hover:text-primary cursor-pointer">Politicas de privacidade</a>
+    </div>
+  </div>
+</div>

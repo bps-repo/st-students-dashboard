@@ -7,7 +7,7 @@
 >
   <section class="flex flex-col justify-center items-center gap-5">
     <img
-      src="https://media.englishbay.com.br/default.jpg"
+      src="/user.png"
       [ngClass]="{
         'w-28 h-28': (showSidebar$ | async) === true,
         'w-20 h-[2.5rem]': (showSidebar$ | async) === false
@@ -17,9 +17,12 @@
     />
     <h1
       *ngIf="showSidebar$ | async"
-      class="flex flex-row gap-2 items-center font-heading text-sm text-secondary text-opacity-[0.8] bg-primary bg-opacity-5 px-6 py-1 rounded-md transition-all duration-500"
+      class="flex flex-row gap-2 items-center font-heading text-sm text-primary text-opacity-[0.8] bg-primary bg-opacity-5 px-6 py-1 rounded-md transition-all duration-500"
     >
-      <span class="w-4 h-4 bg-primary bg-opacity-[0.8] rounded-full"></span>
+      <span
+        class="flex justify-center text-light font-bold items-center w-4 h-4 bg-primary bg-opacity-[0.8] rounded-full p-4"
+        >C1</span
+      >
       C1 - Advanced
     </h1>
   </section>
@@ -33,9 +36,11 @@
       class="hover:text-secondary active:text-secondary transition-all flex flex-row gap-4"
     >
       <i class="{{ navLink.icon }} text-[23px]"></i>
-      <span *ngIf="showSidebar$ | async" class="font-heading text-[15px] font-bold">{{
-        navLink.label
-      }}</span>
+      <span
+        *ngIf="showSidebar$ | async"
+        class="font-heading text-[15px] font-bold"
+        >{{ navLink.label }}</span
+      >
     </a>
     }
   </nav>
@@ -45,8 +50,8 @@
           'left-[15.5rem]': (showSidebar$ | async) === true,
           'left-[6.5rem]': (showSidebar$ | async) === false,
         }"
-    class="flex justify-center items-center absolute top-32 transition-all duration-500 transform -translate-x-1/2 bg-primary rounded-full w-8 h-8 text-light p-1 cursor-pointer"
+    class="flex justify-center items-center absolute top-[10.5rem] transition-all duration-500 transform -translate-x-1/2 bg-primary rounded-full w-8 h-8 text-light p-1 cursor-pointer"
   >
-    <i class="pi pi-chevron-left"></i>
+    <i class="font-bold text-[16px] pi pi-chevron-left"></i>
   </div>
 </aside>
