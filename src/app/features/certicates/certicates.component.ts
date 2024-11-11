@@ -29,17 +29,17 @@ export class CerticatesComponent {
     {
       title: 'Intermediate',
       description: 'deal para quem quer ter o primeiro contato com o idioma',
-      color: 'primary',
+      color: 'dark_blue',
     },
     {
       title: 'Upper-Intermediate',
       description: 'deal para quem quer ter o primeiro contato com o idioma',
-      color: 'primary',
+      color: 'success',
     },
     {
       title: 'Advanced',
       description: 'deal para quem quer ter o primeiro contato com o idioma',
-      color: 'primary',
+      color: 'dark_blue',
     },
   ];
 }

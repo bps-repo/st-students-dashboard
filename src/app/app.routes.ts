@@ -6,6 +6,7 @@ import { LessonsComponent } from './features/lessons/lessons.component';
 import { EventsComponent } from './features/events/events.component';
 import { CerticatesComponent } from './features/certicates/certicates.component';
 import { ProfileComponent } from './features/profile/profile.component';
+import { TeachersComponent } from './features/teachers/teachers.component';
 
 export const routes: Routes = [
   {
@@ -19,6 +20,10 @@ export const routes: Routes = [
   {
     path: 'profile',
     component: ProfileComponent,
+  },
+  {
+    path: 'teachers',
+    component: TeachersComponent,
   },
   {
     path: 'lessons',
