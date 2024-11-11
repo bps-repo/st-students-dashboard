@@ -39,6 +39,7 @@
         class="flex flex-col gap-2 bg-light border-dark border-opacity-20 border-solid border-[1px] rounded-2xl p-3 shadow-md"
       >
         <div
+          (click)="onClick(modalContent, 'm')"
           [ngClass]="item.status == 'reading' ? 'bg-accent bg-opacity-10' : ''"
           *ngFor="let item of unities; let i = index"
           class="flex flex-row items-center gap-3 text-[14px] hover:bg-accent hover:bg-opacity-10 p-2 transition-all rounded-3xl cursor-pointer"
@@ -173,3 +174,84 @@
     </div>
   </section>
 </div>
+
+<!-- Modal Component -->
+<ng-template
+  class="bg-light rounded-lg border-2 border-primary shadow-sm w-[30rem] max-w-full relative"
+  #modalContent
+  let-observer
+>
+  <!-- Header -->
+  <div class="flex items-center space-x-3 mb-4">
+    <div
+      class="flex items-center justify-center w-14 h-14 rounded-full bg-blue-500 text-white font-bold text-3xl"
+    >
+      A1
+    </div>
+    <div>
+      <p class="font-semibold text-lg">Beginner</p>
+      <p class="text-gray-600">52 unidades neste módulo</p>
+    </div>
+  </div>
+
+  <!-- Progress Bar -->
+  <div class="w-full bg-gray-200 rounded-full h-2 mb-4">
+    <div class="bg-green-500 h-2 rounded-full" style="width: 50%"></div>
+  </div>
+
+  <!-- Levels Grid -->
+  <div class="grid grid-cols-2 gap-4 text-center">
+    <!-- Level Items -->
+    <div class="flex flex-col items-center">
+      <div
+        class="w-14 h-14 rounded-full bg-gray-200 text-gray-500 font-semibold flex items-center justify-center"
+      >
+        A2
+      </div>
+      <p class="font-medium text-gray-800 mt-2">Elementary</p>
+      <p class="text-sm text-gray-500">Conclua as unidades anteriores</p>
+    </div>
+
+    <div class="flex flex-col items-center">
+      <div
+        class="w-14 h-14 rounded-full bg-gray-200 text-gray-500 font-semibold flex items-center justify-center"
+      >
+        B1
+      </div>
+      <p class="font-medium text-gray-800 mt-2">Pre-Intermediate</p>
+      <p class="text-sm text-gray-500">Conclua as unidades anteriores</p>
+    </div>
+
+    <div class="flex flex-col items-center">
+      <div
+        class="w-14 h-14 rounded-full bg-gray-200 text-gray-500 font-semibold flex items-center justify-center"
+      >
+        B2
+      </div>
+      <p class="font-medium text-gray-800 mt-2">Intermediate</p>
+      <p class="text-sm text-gray-500">Conclua as unidades anteriores</p>
+    </div>
+
+    <div class="flex flex-col items-center">
+      <div
+        class="w-14 h-14 rounded-full bg-gray-200 text-gray-500 font-semibold flex items-center justify-center"
+      >
+        C1
+      </div>
+      <p class="font-medium text-gray-800 mt-2">Upper-Intermediate</p>
+      <p class="text-sm text-gray-500">Conclua as unidades anteriores</p>
+    </div>
+
+    <div class="flex flex-col items-center">
+      <div
+        class="w-14 h-14 rounded-full bg-gray-200 text-gray-500 font-semibold flex items-center justify-center"
+      >
+        C2
+      </div>
+      <p class="font-medium text-gray-800 mt-2">Advanced</p>
+      <p class="text-sm text-gray-500">Conclua as unidades anteriores</p>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Optional Header Template -->

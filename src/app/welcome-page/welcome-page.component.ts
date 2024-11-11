@@ -1,6 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CustomSelectComponent } from '../shared/components/custom-select/custom-select.component';
 import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy } from '@angular/core';
+import { TuiDialogService } from '@taiga-ui/core';
+import type { TuiDialogContext, TuiDialogSize } from '@taiga-ui/core';
+import { TuiButton } from '@taiga-ui/core';
+import type { PolymorpheusContent } from '@taiga-ui/polymorpheus';
 
 interface Unit {
   title: string;
@@ -11,9 +16,10 @@ interface Unit {
 @Component({
   selector: 'app-welcome-page',
   standalone: true,
-  imports: [CommonModule, CustomSelectComponent],
+  imports: [CommonModule, CustomSelectComponent, TuiButton],
   templateUrl: './welcome-page.component.html',
   styleUrl: './welcome-page.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WelcomePageComponent {
   selectedValue: string = '';
@@ -44,6 +50,20 @@ export class WelcomePageComponent {
       status: 'lock',
     },
   ];
+
+  private readonly dialogs = inject(TuiDialogService);
+
+  protected onClick(
+    modalContent: PolymorpheusContent<TuiDialogContext>,
+    size: TuiDialogSize
+  ): void {
+    this.dialogs
+      .open(modalContent, {
+        size,
+      })
+      .subscribe();
+  }
+
   handleSelection(event: string) {
     this.selectedValue = event;
   }
