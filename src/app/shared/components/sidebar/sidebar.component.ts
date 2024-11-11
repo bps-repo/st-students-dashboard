@@ -48,7 +48,7 @@ export class SidebarComponent {
     {
       label: 'Ajuda',
       path: '/support',
-      icon: 'pi pi-question',
+      icon: 'pi pi-question-circle',
     },
   ];
   toggleSidebar() {
