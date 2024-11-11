@@ -1,0 +1,49 @@
+<div class="p-10">
+  <div class="flex justify-between">
+    <div class="flex flex-col gap-1">
+      <h1 class="font-bold text-[22px]">Professores de Inglês</h1>
+      <span class="mt-1 text-[18px]">14 professores encontrados</span>
+    </div>
+    <i
+      class="flex justify-center items-center text-[19px] pi pi-search bg-light rounded-lg px-5 py-3"
+    ></i>
+  </div>
+  <div class="space-y-20 mt-10"></div>
+
+  <div class="grid grid-cols-3">
+    <div
+      *ngFor="let teacher of teachers"
+      class="w-72 bg-white rounded-lg shadow-lg overflow-hidden m-2"
+    >
+      <!-- Cover Image -->
+      <div
+        class="bg-[url('/bg_st.png')] bg-cover bg-center h-24 w-full relative"
+      >
+        <!-- Profile Image -->
+        <img
+          src="{{ teacher.image }}"
+          alt="Profile Picture"
+          class="w-16 h-16 rounded-full border-4 border-primary absolute -bottom-8 left-1/2 transform -translate-x-1/2"
+        />
+      </div>
+
+      <!-- Content -->
+      <div class="pt-10 pb-4 px-4 text-center bg-primary text-light">
+        <h2 class="text-lg font-semibold">{{ teacher.name }}</h2>
+        <p class="text-sm mt-2">
+          Hello! I am Peter. I know that learning a new language is not easy. It
+          could be full of struggles. You'll need a lot of practice too...
+        </p>
+      </div>
+
+      <!-- Button -->
+      <div class="px-4 py-2 bg-primary text-center">
+        <button
+          class="w-full bg-dark_blue text-light py-2 font-bold rounded-lg hover:bg-primary transition-colors"
+        >
+          Agendar aula
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

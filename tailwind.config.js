@@ -8,13 +8,15 @@ module.exports = {
       accent: "#118DF0",
       danger: "#E94560",
       warning: "#FF8846",
-      orange:"#FF8846",
+      orange: "#FF8846",
       success: "#15741F",
+      dark_blue: "#00396D",
+      dark_pink: "#FF3364",
       info: "#2D9CDB",
       light: "#FFFFFF",
       dark: "#212121",
       background: "#DFDFDF",
-      lesson:"#00396D"
+      lesson: "#00396D",
     },
     textColor: {
       primary: "#004182",

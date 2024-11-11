@@ -30,11 +30,11 @@ export class SidebarComponent {
       path: '/lessons',
       icon: 'pi pi-folder-open',
     },
-    // {
-    //   label: 'Professores',
-    //   path: '/courses',
-    //   icon: 'pi pi-users',
-    // },
+    {
+      label: 'Professores',
+      path: '/teachers',
+      icon: 'pi pi-users',
+    },
     {
       label: 'Eventos',
       path: '/events',

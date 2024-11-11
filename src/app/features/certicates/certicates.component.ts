@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { Certificate } from '../types/certificate';
+import { CircularLevelComponent } from '../../shared/components/circular-level/circular-level.component';
 
 @Component({
   selector: 'app-certicates',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, CircularLevelComponent],
   templateUrl: './certicates.component.html',
   styleUrl: './certicates.component.scss',
 })
@@ -29,17 +30,17 @@ export class CerticatesComponent {
     {
       title: 'Intermediate',
       description: 'deal para quem quer ter o primeiro contato com o idioma',
-      color: 'primary',
+      color: 'dark_blue',
     },
     {
       title: 'Upper-Intermediate',
       description: 'deal para quem quer ter o primeiro contato com o idioma',
-      color: 'primary',
+      color: 'success',
     },
     {
       title: 'Advanced',
       description: 'deal para quem quer ter o primeiro contato com o idioma',
-      color: 'primary',
+      color: 'dark_blue',
     },
   ];
 }
