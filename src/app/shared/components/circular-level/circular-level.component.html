@@ -1,9 +1,18 @@
-<div class="rounded-full border-4 bg-primary h-20 w-20 p-1">
+<div
+  [ngClass]="[
+    status == 'lock' ? 'bg-dark bg-opacity-25 border-none' : 'bg-primary',
+    size ? 'h-' + size + ' w-' + size : 'h-20 w-20',
+    'rounded-full border-4 border-accent p-1'
+  ]"
+>
   <div
-    class="flex items-center justify-center bg-primary border-light w-full h-full rounded-full"
+    [ngClass]="[
+      status == 'lock' ? 'bg-dark bg-opacity-25' : 'bg-primary',
+      'flex items-center justify-center border-light w-full h-full rounded-full'
+    ]"
   >
     <div>
-      <span class="text-[24px] font-bold text-light">C1</span>
+      <span class="text-[24px] font-bold text-light">{{ label }}</span>
     </div>
   </div>
 </div>

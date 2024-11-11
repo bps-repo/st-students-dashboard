@@ -6,6 +6,7 @@ import { TuiDialogService } from '@taiga-ui/core';
 import type { TuiDialogContext, TuiDialogSize } from '@taiga-ui/core';
 import { TuiButton } from '@taiga-ui/core';
 import type { PolymorpheusContent } from '@taiga-ui/polymorpheus';
+import { CircularLevelComponent } from '../shared/components/circular-level/circular-level.component';
 
 interface Unit {
   title: string;
@@ -16,7 +17,12 @@ interface Unit {
 @Component({
   selector: 'app-welcome-page',
   standalone: true,
-  imports: [CommonModule, CustomSelectComponent, TuiButton],
+  imports: [
+    CommonModule,
+    CustomSelectComponent,
+    TuiButton,
+    CircularLevelComponent,
+  ],
   templateUrl: './welcome-page.component.html',
   styleUrl: './welcome-page.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -47,6 +53,45 @@ export class WelcomePageComponent {
     {
       title: 'Unidade 6',
       description: 'Modal Verbs- Could, would, might, ougth + to',
+      status: 'lock',
+    },
+  ];
+
+  items: any[] = [
+    {
+      label: 'A1',
+      title: 'Beginner',
+      description: 'Conclua as unidades anteriores',
+      status: 'unlock',
+    },
+    {
+      label: 'A2',
+      title: 'Elementary',
+      description: 'Conclua as unidades anteriores',
+      status: 'lock',
+    },
+    {
+      label: 'B1',
+      title: 'Intermediate',
+      description: 'Conclua as unidades anteriores',
+      status: 'lock',
+    },
+    {
+      label: 'B2',
+      title: 'Upper Intermediate',
+      description: 'Conclua as unidades anteriores',
+      status: 'lock',
+    },
+    {
+      label: 'C1',
+      title: 'Advanced',
+      description: 'Conclua as unidades anteriores',
+      status: 'lock',
+    },
+    {
+      label: 'C2',
+      title: 'Proficiency',
+      description: 'Conclua as unidades anteriores',
       status: 'lock',
     },
   ];
