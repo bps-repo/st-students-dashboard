@@ -5,6 +5,7 @@ import { CoursesComponent } from './features/courses/courses.component';
 import { LessonsComponent } from './features/lessons/lessons.component';
 import { EventsComponent } from './features/events/events.component';
 import { CerticatesComponent } from './features/certicates/certicates.component';
+import { ProfileComponent } from './features/profile/profile.component';
 
 export const routes: Routes = [
   {
@@ -17,7 +18,7 @@ export const routes: Routes = [
   },
   {
     path: 'profile',
-    component: ProfileSettingsComponent,
+    component: ProfileComponent,
   },
   {
     path: 'lessons',
