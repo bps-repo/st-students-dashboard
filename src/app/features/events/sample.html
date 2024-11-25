@@ -1,0 +1,68 @@
+<section>
+  <tui-drawer *tuiPopup="open()">
+    <div class="max-w-sm mx-auto p-6 bg-white rounded-lg">
+      <div class="flex justify-between text-[16px]">
+        <h1>Detalhes do Evento</h1>
+        <i
+          (click)="open.set(false)"
+          class="pi pi-times text-secondary cursor-pointer transform transition-transform duration-300 hover:rotate-90"
+        >
+        </i>
+      </div>
+      <h2 class="text-xl font-bold mb-2 mt-10">
+        Meeting with Foreigner Speakers
+      </h2>
+      <p class="text-gray-600 mb-4">Nível: Beginner</p>
+
+      <!-- Data e horário -->
+      <div class="flex items-center mb-4 text-[16px]">
+        <i class="pi pi-calendar text-[25px] mr-4"></i>
+        <div>
+          <p class="font-bold">Quarta-feira, 27 de outubro</p>
+          <p class="text-gray-500">Início às 19:00</p>
+        </div>
+      </div>
+
+      <!-- Público destinado -->
+      <div class="flex items-center mb-4 text-[16px]">
+        <i class="pi pi-users text-[25px] text-gray-500 mr-4"></i>
+        <div>
+          <p class="font-bold">Público destinado</p>
+          <p class="text-gray-500">Para Estudantes</p>
+        </div>
+      </div>
+
+      <!-- Participantes -->
+      <div class="flex items-center mb-4 text-[16px]">
+        <i class="pi pi-user text-[25px] text-gray-500 mr-4"></i>
+        <div>
+          <p class="font-bold">Participantes</p>
+          <p class="text-gray-500">8 confirmaram presença</p>
+        </div>
+      </div>
+
+      <!-- Organizador -->
+      <div class="border-t pt-4 mt-4">
+        <p class="font-medium">Organizador</p>
+        <div class="flex items-center mt-2">
+          <div
+            class="w-8 h-8 bg-primary text-light rounded-full flex items-center justify-center mr-2"
+          >
+            A
+          </div>
+          <div>
+            <p class="font-medium">ST ANDREWS</p>
+            <p class="text-gray-500">Educação</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Botão de participação -->
+      <button
+        class="w-full mt-6 bg-primary text-light font-bold py-4 rounded-lg hover:bg-purple-700"
+      >
+        Quero Participar
+      </button>
+    </div>
+  </tui-drawer>
+</section>

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, signal } from '@angular/core';
-import { FalshCard } from '../../features/@types/flash-card';
+import { FlashCard } from '../../features/@types/flash-card';
 
 @Component({
   selector: 'app-flash-card',
@@ -10,6 +10,6 @@ import { FalshCard } from '../../features/@types/flash-card';
   styleUrl: './flash-card.component.scss',
 })
 export class FlashCardComponent {
-  @Input() dataInput!: FalshCard;
+  @Input() dataInput!: FlashCard;
   protected readonly open = signal(false);
 }
