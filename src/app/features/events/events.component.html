@@ -1,21 +1,5 @@
 <div class="p-5 m-5 font-heading">
-  <section
-    class="flex justify-between w-full shadow-md px-5 pt-8 bg-accent rounded-md"
-  >
-    <p
-      class="text-[16px] border-dark text-dark border-b-[10px] rounded-lg cursor-pointer px-10"
-    >
-      Todas os eventos
-    </p>
-    <p class="text-[16px] text-light font-bold rounded-lg cursor-pointer px-10">
-      Os meus eventos
-    </p>
-    <div class="flex justify-between gap-4 p-2 cursor-pointer">
-      <i
-        class="pi pi-search border-[1px] text-[20px] bg-secondary border-dark p-3 border-opacity-20 rounded-md"
-      ></i>
-    </div>
-  </section>
+  <app-tab-menu [tabConfig]="tabConfig"></app-tab-menu>
   <section class="mt-10">
     <app-flash-card
       *ngFor="let event of events"

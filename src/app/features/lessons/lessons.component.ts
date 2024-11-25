@@ -4,6 +4,8 @@ import { TuiButton } from '@taiga-ui/core';
 import { TuiCarousel, TuiPagination } from '@taiga-ui/kit';
 import { FlashCardComponent } from '../../shared/flash-card/flash-card.component';
 import { FlashCard } from '../@types/flash-card';
+import { TabMenuComponent } from '../../shared/components/tab-menu/tab-menu.component';
+import { TabMenuConfig } from '../@types/tab-menu';
 @Component({
   selector: 'app-lessons',
   standalone: true,
@@ -13,6 +15,7 @@ import { FlashCard } from '../@types/flash-card';
     CommonModule,
     TuiButton,
     FlashCardComponent,
+    TabMenuComponent,
   ],
   templateUrl: './lessons.component.html',
   styleUrl: './lessons.component.scss',
@@ -25,6 +28,12 @@ export class LessonsComponent {
     image: '/courses/course_blue.png',
     color: 'primary',
   }));
+
+  protected tabConfig: TabMenuConfig = {
+    mainTab: 'Todas as aulas',
+    tabs: ["Favoritos","Histórico das aulas"],
+    actionButtons: [],
+  };
 
   protected lessons: FlashCard[] = [
     { color: 'primary', image: '/users/1.png' },
