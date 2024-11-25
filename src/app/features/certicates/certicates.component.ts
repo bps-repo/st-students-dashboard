@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { Certificate } from '../types/certificate';
+import { Certificate } from '../@types/certificate';
 import { CircularLevelComponent } from '../../shared/components/circular-level/circular-level.component';
 
 @Component({

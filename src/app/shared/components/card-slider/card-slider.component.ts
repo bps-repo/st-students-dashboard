@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { TuiButton } from '@taiga-ui/core';
 import { TuiCarousel, TuiPagination } from '@taiga-ui/kit';
-import { Course } from '../../../features/types/course';
+import { Course } from '../../../features/@types/course';
 @Component({
   selector: 'app-card-slider',
   standalone: true,
