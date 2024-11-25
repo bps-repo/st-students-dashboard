@@ -22,5 +22,4 @@ export class EventsComponent {
     { color: 'primary', image: '/users/1.png' },
     { color: 'success', image: '/users/3.png' },
   ];
-  protected readonly open = signal(false);
 }
