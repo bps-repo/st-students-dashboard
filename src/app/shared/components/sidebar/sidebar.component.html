@@ -3,7 +3,7 @@
     'w-[250px]': (showSidebar$ | async) === true,
     'w-[100px]': (showSidebar$ | async) === false
   }"
-  class="h-screen transition-all duration-500 bg-light p-8 shadow-md flex flex-col gap-16"
+  class="h-screen transition-all duration-500 bg-light p-8 shadow-2xl flex flex-col gap-16"
 >
   <section class="flex flex-col justify-center items-center gap-5">
     <img
@@ -35,10 +35,10 @@
       [routerLinkActive]="['active']"
       class="hover:text-primary active:text-primary transition-all flex flex-row gap-4"
     >
-      <i class="{{ navLink.icon }} text-[23px]"></i>
+      <i class="{{ navLink.icon }} text-[28px]"></i>
       <span
         *ngIf="showSidebar$ | async"
-        class="font-heading text-[15px] font-bold"
+        class="font-heading text-[17px] font-bold"
         >{{ navLink.label }}</span
       >
     </a>

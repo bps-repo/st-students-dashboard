@@ -1,0 +1,59 @@
+<div
+  [ngClass]="dataInput.color ? 'bg-' + dataInput.color : ''"
+  class="flex justify-between m-5 items-center shadow-lg rounded-2xl p-10 text-light"
+>
+  <div class="flex justify-start gap-10">
+    <div
+      class="flex flex-col justify-center items-center text-[25px] gap-2 font-bold"
+    >
+      <span>OUT</span>
+      <span class="font-extrabold">27</span>
+      <span>2024</span>
+    </div>
+    <div class="flex flex-col gap-3">
+      <h1 class="text-[25px] font-bold">Meeting with Foreigner Speakers</h1>
+      <span>Nivel: Iniciante</span>
+      <div class="flex gap-10 text-[13px]">
+        <div class="flex items-center">
+          <!-- Each image with a negative margin to overlap -->
+          <img
+            src="/users/1.png"
+            class="w-12 h-12 rounded-full border-2 border-light -ml-2"
+            alt="User 1"
+          />
+          <img
+            src="/users/2.png"
+            class="w-12 h-12 rounded-full border-2 border-light -ml-2"
+            alt="User 2"
+          />
+          <img
+            src="/users/3.png"
+            class="w-12 h-12 rounded-full border-2 border-light -ml-2"
+            alt="User 3"
+          />
+          <img
+            src="/users/1.png"
+            class="w-12 h-12 rounded-full border-2 border-light -ml-2"
+            alt="User 4"
+          />
+
+          <!-- Number of additional users -->
+          <span class="ml-2">+17</span>
+        </div>
+        <div class="flex justify-center items-center gap-2 text-[16px]">
+          <i class="pi pi-clock"></i>
+          <span>Hora: 19:00</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="flex flex-col gap-16 justify-between">
+    <div></div>
+    <div
+      (click)="open.set(!open())"
+      class="bg-accent bg-opacity-90 rounded-lg px-12 py-2 cursor-pointer"
+    >
+      <span class="font-bold">Tenho Interesse</span>
+    </div>
+  </div>
+</div>

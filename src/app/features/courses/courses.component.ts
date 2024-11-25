@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { CardSliderComponent } from '../../shared/components/card-slider/card-slider.component';
-import { Course } from '../types/course';
+import { Course } from '../@types/course';
 
 @Component({
   selector: 'app-courses',

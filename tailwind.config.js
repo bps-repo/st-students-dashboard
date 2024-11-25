@@ -15,7 +15,7 @@ module.exports = {
       info: "#2D9CDB",
       light: "#FFFFFF",
       dark: "#212121",
-      background: "#DFDFDF",
+      background: "#F9F9F9",
       lesson: "#00396D",
     },
     textColor: {
