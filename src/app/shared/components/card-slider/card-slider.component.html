@@ -1,0 +1,111 @@
+<tui-carousel
+  [itemsCount]="items.length > 3 ? 3 : items.length"
+  [(index)]="index"
+  [draggable]="true"
+>
+  <ng-container *ngFor="let item of items">
+    <div
+      *tuiItem
+      [ngClass]="
+        item.color
+          ? item.type == 'course'
+            ? 'bg-light'
+            : 'bg-' + item.color
+          : ''
+      "
+      class="card flex flex-col gap-2 rounded-lg w-12/12 h-60 text-light p-2"
+    >
+      <div class="card-header flex flex-row items-center gap-3">
+        <img class="rounded-lg w-20 h-12" src="{{ item.image }}" alt="course" />
+        <span
+          [ngClass]="
+            item.color
+              ? item.type == 'course'
+                ? 'text-' + item.color
+                : 'text-light'
+              : ''
+          "
+          class="text-[15.5px] font-heading font-extrabold"
+          >{{ item.label }}</span
+        >
+      </div>
+      <div
+        [ngClass]="
+          item.color && item.type == 'course'
+            ? 'text-dark text-opacity-50'
+            : 'text-light text-opacity-90'
+        "
+        class="card-body text-[14px] py-3 px-6 font-heading"
+      >
+        Curso de Ingles Elementary com 72 aulas em videos aulas e muito mais
+      </div>
+      <div class="card-level flex flex-row items-center gap-2 px-1">
+        <span
+          [ngClass]="
+            item.color
+              ? item.type == 'course'
+                ? 'text-' + item.color
+                : 'text-light'
+              : ''
+          "
+          >0/72</span
+        >
+        <span
+          [ngClass]="
+            item.color
+              ? item.type == 'content'
+                ? 'bg-light'
+                : 'bg-' + item.color
+              : ''
+          "
+          class="bg-opacity-70 h-2 w-5/6 rounded-md"
+        ></span>
+        <span
+          [ngClass]="
+            item.color
+              ? item.type == 'course'
+                ? 'text-' + item.color
+                : 'text-light'
+              : ''
+          "
+          >0%</span
+        >
+      </div>
+      <span
+        class="bg-secondary bg-opacity-30 h-[0.3px] w-full rounded-md px-10 my-3"
+      ></span>
+      <div class="card-next flex items-center justify-center">
+        <a class="flex gap-4 items-center cursor-pointer">
+          <span
+            [ngClass]="
+              item.color
+                ? item.type == 'course'
+                  ? 'text-' + item.color
+                  : 'text-light'
+                : ''
+            "
+            class="text-sm font-heading text-opacity-80"
+            >Conhecer o módulo</span
+          >
+          <i
+            [ngClass]="
+              item.color
+                ? item.type == 'course'
+                  ? 'text-' + item.color
+                  : 'text-light'
+                : ''
+            "
+            class="pi pi-arrow-right"
+          ></i>
+        </a>
+      </div>
+    </div>
+  </ng-container>
+</tui-carousel>
+
+<tui-pagination
+  size="s"
+  class="tui-space_top-4 mt-3 text-primary"
+  [length]="items.length"
+  [(index)]="index"
+/>
