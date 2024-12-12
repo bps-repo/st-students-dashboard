@@ -1,10 +1,8 @@
 <div class="shadow-lg m-3 p-5 flex gap-4 rounded-lg font-heading bg-light">
   <section class="flex flex-col w-5/12 h-auto bg-light">
-    <div class="h-80 bg-primary bg-opacity-60 p-2 rounded-t-lg">
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores,
-      provident nulla illum nobis officia quidem autem quo enim ullam atque
-      nihil illo tempora incidunt cupiditate eveniet, aperiam ab ipsa quam!
-    </div>
+    <section class="h-96 relative bg-primary bg-opacity-60 p-2 rounded-t-lg">
+      <app-youtube-player class="block w-10"></app-youtube-player>
+    </section>
     <div class="flex shadow-lg text-light font-bold w-auto">
       <div
         class="flex-1 bg-primary bg-opacity-90 px-5 py-5 flex gap-2 items-center"
@@ -26,7 +24,7 @@
     <h1 class="font-bold text-center text-[20px]">Ordinal Numbers</h1>
     <div class="grid grid-cols-3">
       @for (item of listNumbers; track $index) {
-        <span class="font-bold">{{$index}} Number</span>
+      <span class="font-bold">{{ $index }} Number</span>
       }
     </div>
   </section>
