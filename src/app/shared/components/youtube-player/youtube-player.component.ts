@@ -4,7 +4,7 @@ import { YouTubePlayer } from '@angular/youtube-player';
 @Component({
   standalone: true,
   imports: [YouTubePlayer],
-  template: '<youtube-player disablePlaceholder="false" placeholderButtonLabel="Helder" videoId="mVjYG9TSN88"/>',
+  template: '<youtube-player [width]="600"  placeholderButtonLabel="Afspil video"  videoId="mVjYG9TSN88"/>',
   selector: 'app-youtube-player',
 })
 export class YoutubePlayerComponent {}
