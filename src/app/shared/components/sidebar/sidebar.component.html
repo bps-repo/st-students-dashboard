@@ -1,23 +1,23 @@
 <aside
   [ngClass]="{
-    'w-[250px]': (showSidebar$ | async) === true,
-    'w-[100px]': (showSidebar$ | async) === false
+    'w-[250px]': !isNavBarOpened(),
+    'w-[100px]': isNavBarOpened(),
   }"
-  class="h-screen transition-all duration-500 bg-light p-8 shadow-2xl flex flex-col gap-16"
+  class="h-screen transition-all duration-200 bg-light p-8 shadow-2xl flex flex-col gap-16"
 >
   <section class="flex flex-col justify-center items-center gap-5">
     <img
       src="/user.png"
       [ngClass]="{
-        'w-28 h-28': (showSidebar$ | async) === true,
-        'w-20 h-[2.5rem]': (showSidebar$ | async) === false
+        'w-28 h-28': !isNavBarOpened(),
+        'w-20 h-[2.5rem]': isNavBarOpened(),
       }"
       class="rounded-full"
       alt="photo"
     />
     <h1
-      *ngIf="showSidebar$ | async"
-      class="flex flex-row gap-2 items-center font-heading text-sm text-primary text-opacity-[0.8] bg-primary bg-opacity-5 px-6 py-1 rounded-md transition-all duration-500"
+      *ngIf="!isNavBarOpened()"
+      class="flex flex-row gap-2 items-center font-heading text-sm text-primary text-opacity-[0.8] bg-primary bg-opacity-5 px-6 py-1 rounded-md transition-all duration-200"
     >
       <span
         class="flex justify-center text-light font-bold items-center w-4 h-4 bg-primary bg-opacity-[0.8] clip-hexagon2 rounded-full p-4"
@@ -31,13 +31,18 @@
   >
     @for (navLink of navLinks; track $index) {
     <a
+      (click)="setActiveTab(navLink)"
       [routerLink]="[navLink.path]"
       [routerLinkActive]="['active']"
+      [ngClass]="{
+        'text-primary ': navLink.active,
+        'text-secondary': !navLink.active
+      }"
       class="hover:text-primary active:text-primary transition-all flex flex-row gap-4"
     >
       <i class="{{ navLink.icon }} text-[28px]"></i>
       <span
-        *ngIf="showSidebar$ | async"
+        *ngIf="!isNavBarOpened()"
         class="font-heading text-[17px] font-bold"
         >{{ navLink.label }}</span
       >
@@ -45,13 +50,16 @@
     }
   </nav>
   <div
-    (click)="toggleSidebar()"
     [ngClass]="{
-          'left-[15.5rem]': (showSidebar$ | async) === true,
-          'left-[6.5rem]': (showSidebar$ | async) === false,
-        }"
-    class="flex justify-center items-center absolute top-[10.5rem] transition-all duration-500 transform -translate-x-1/2 bg-primary clip-hexagon2 rounded-full w-8 h-8 text-light p-5 cursor-pointer"
+      'left-[6.5rem] ': isNavBarOpened(),
+      'left-[15.5rem] ': !isNavBarOpened(),
+    }"
+    (click)="toggleSidebar()"
+    class="flex justify-center items-center absolute top-[10.5rem] transition-all duration-200 transform -translate-x-1/2 bg-primary clip-hexagon2 rounded-full w-8 h-8 text-light p-5 cursor-pointer"
   >
-    <i class="font-bold text-[16px] pi pi-chevron-left"></i>
+    <i
+      [ngClass]="getSideBarIcon()"
+      class="font-bold text-[16px] transition-all"
+    ></i>
   </div>
 </aside>
