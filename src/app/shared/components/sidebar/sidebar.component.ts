@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { LocalstorageService } from '../../services/localstorage.service';
 
 interface navLink {
   label: string;
@@ -17,6 +18,8 @@ interface navLink {
 })
 export class SidebarComponent implements OnInit {
   isNavBarOpened = signal(false);
+
+  constructor(private localStorageService: LocalstorageService) {}
 
   navLinks: navLink[] = [
     {
@@ -70,6 +73,11 @@ export class SidebarComponent implements OnInit {
     },
   ];
 
+  get activeTab(): boolean {
+    const activeTab = this.localStorageService.getItem('activeTab');
+    return activeTab ?? this.navLinks[0].active;
+  }
+
   ngOnInit(): void {
     this.navLinks[0].active = true;
   }
@@ -83,7 +91,12 @@ export class SidebarComponent implements OnInit {
   }
 
   setActiveTab(tab: navLink) {
+    // Reset all active tabs to false before setting the new active tab to true.
     this.navLinks.forEach((link) => (link.active = false));
+    // Set the active tab to the clicked tab.
     tab.active = true;
+
+    // Save the active tab in local storage.
+    this.localStorageService.setItem('activeTab', tab);
   }
 }
