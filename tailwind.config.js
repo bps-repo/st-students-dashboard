@@ -15,7 +15,7 @@ module.exports = {
       info: "#2D9CDB",
       light: "#FFFFFF",
       dark: "#212121",
-      background: "#F9F9F9",
+      background: "#F5F5F5",
       lesson: "#00396D",
     },
     textColor: {
@@ -104,6 +104,9 @@ module.exports = {
             },
             div: {
               fontFamily: -"-var(heading)",
+              fontSize: "body",
+              lineHeight: "1.6",
+              color: "textColor.primary",
             },
           },
         },

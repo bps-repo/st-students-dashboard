@@ -1,0 +1,33 @@
+<div class="shadow-lg m-3 p-5 flex gap-4 rounded-lg font-heading bg-light">
+  <section class="flex flex-col w-5/12 h-auto bg-light">
+    <section
+      class="h-96 relative bg-primary bg-opacity-60 rounded-t-lg overflow-hidden"
+    >
+      <app-youtube-player></app-youtube-player>
+    </section>
+    <div class="flex shadow-lg text-light font-bold w-auto">
+      <div
+        class="flex-1 bg-primary bg-opacity-90 px-5 py-5 flex gap-2 items-center"
+      >
+        <span>Baixar Video</span><i class="pi pi-download"></i>
+      </div>
+      <div class="flex-1 bg-primary px-2 py-5 flex gap-2 items-center">
+        <span>Proximo Video</span><i class="pi pi-arrow-right"></i>
+      </div>
+      <div class="bg-primary px-2 py-5 flex gap-2 items-center">
+        <span>Concluir</span><i class="pi pi-check"></i>
+      </div>
+    </div>
+  </section>
+
+  <section
+    class="shadow-md w-7/12 flex flex-col gap-3 p-4 text-[16px] bg-light"
+  >
+    <h1 class="font-bold text-center text-[23px]">Ordinal Numbers</h1>
+    <div class="grid grid-cols-3">
+      @for (item of listNumbers; track $index) {
+      <span class="font-bolds">Nu{{ $index }}mber</span>
+      }
+    </div>
+  </section>
+</div>

@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { WelcomePageComponent } from './welcome-page/welcome-page.component';
+import { WelcomePageComponent } from './features/welcome-page/welcome-page.component';
 import { ProfileSettingsComponent } from './profile-settings/profile-settings.component';
 import { CoursesComponent } from './features/courses/courses.component';
 import { LessonsComponent } from './features/lessons/lessons.component';
@@ -11,6 +11,8 @@ import { ChangePasswordComponent } from './features/change-password/change-passw
 import { TimetablesComponent } from './features/timetables/timetables.component';
 import { SupportComponent } from './features/support/support.component';
 import { TestsComponent } from './features/tests/tests.component';
+import { MaterialsComponent } from './features/lessons/materials/materials.component';
+import { MaterialDetailComponent } from './features/lessons/material-detail/material-detail.component';
 
 export const routes: Routes = [
   {
@@ -56,5 +58,13 @@ export const routes: Routes = [
   {
     path: 'tests',
     component: TestsComponent,
+  },
+  {
+    path: 'lessons/materials',
+    component: MaterialsComponent,
+  },
+  {
+    path: 'lessons/materials/:id',
+    component: MaterialDetailComponent,
   },
 ];

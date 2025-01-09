@@ -1,25 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { TuiPopup } from '@taiga-ui/core';
-import { TuiBadge, TuiDrawer } from '@taiga-ui/kit';
-import { FlashCardComponent } from '../../shared/flash-card/flash-card.component';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FlashCard } from '../@types/flash-card';
 import { TabMenuComponent } from '../../shared/components/tab-menu/tab-menu.component';
 import { TabMenuConfig } from '../@types/tab-menu';
+import { FlashCardComponent } from '../../shared/components/flash-card/flash-card.component';
 
 @Component({
   selector: 'app-events',
   standalone: true,
-  imports: [
-    CommonModule,
-    TuiDrawer,
-    TuiPopup,
-    TuiBadge,
-    FlashCardComponent,
-    TabMenuComponent,
-  ],
+  imports: [CommonModule, FlashCardComponent, TabMenuComponent],
   templateUrl: './events.component.html',
-  styleUrl: './events.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EventsComponent {

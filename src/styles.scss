@@ -3,6 +3,16 @@
 @tailwind utilities;
 @import "primeicons/primeicons.css";
 
+@layer utilities {
+  .clip-hexagon {
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  }
+
+  .clip-hexagon2 {
+    clip-path: polygon(50% 0%, 95% 25%, 95% 75%, 50% 100%, 5% 75%, 0% 25%);
+  }
+}
+
 html,
 body {
   height: 100%;
