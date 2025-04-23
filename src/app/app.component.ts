@@ -7,20 +7,19 @@ import { CommonModule } from '@angular/common';
 import { HeaderOnSmallComponent } from './shared/components/header-on-small/header-on-small.component';
 
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [
-    RouterOutlet,
-    SidebarComponent,
-    HeaderComponent,
-    HeaderOnSmallComponent,
-    RouterLink,
-    CommonModule,
-    RouterLinkActive,
-      TuiRoot
-],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss',
+    selector: 'app-root',
+    imports: [
+        RouterOutlet,
+        SidebarComponent,
+        HeaderComponent,
+        HeaderOnSmallComponent,
+        RouterLink,
+        CommonModule,
+        RouterLinkActive,
+        TuiRoot
+    ],
+    templateUrl: './app.component.html',
+    styleUrl: './app.component.scss'
 })
 export class AppComponent {
   title = 'students-dashboard';

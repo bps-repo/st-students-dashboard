@@ -4,10 +4,9 @@ import { BehaviorSubject } from 'rxjs';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-header',
-  standalone: true,
-  imports: [OverlayComponent, CommonModule],
-  templateUrl: './header.component.html',
+    selector: 'app-header',
+    imports: [OverlayComponent, CommonModule],
+    templateUrl: './header.component.html'
 })
 export class HeaderComponent {
   private overlayState = new BehaviorSubject<boolean>(false);

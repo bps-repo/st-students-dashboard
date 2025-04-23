@@ -2,11 +2,10 @@ import { Component } from '@angular/core';
 import { YoutubePlayerComponent } from '../../../shared/components/youtube-player/youtube-player.component';
 
 @Component({
-  selector: 'app-material-detail',
-  standalone: true,
-  imports: [YoutubePlayerComponent],
-  templateUrl: './material-detail.component.html',
-  styleUrl: './material-detail.component.scss',
+    selector: 'app-material-detail',
+    imports: [YoutubePlayerComponent],
+    templateUrl: './material-detail.component.html',
+    styleUrl: './material-detail.component.scss'
 })
 export class MaterialDetailComponent {
   protected listNumbers = new Array<number>(

@@ -15,17 +15,16 @@ interface Unit {
 }
 
 @Component({
-  selector: 'app-welcome-page',
-  standalone: true,
-  imports: [
-    CommonModule,
-    CustomSelectComponent,
-    TuiButton,
-    CircularLevelComponent,
-  ],
-  templateUrl: './welcome-page.component.html',
-  styleUrl: './welcome-page.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-welcome-page',
+    imports: [
+        CommonModule,
+        CustomSelectComponent,
+        TuiButton,
+        CircularLevelComponent,
+    ],
+    templateUrl: './welcome-page.component.html',
+    styleUrl: './welcome-page.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WelcomePageComponent {
   selectedValue: string = '';

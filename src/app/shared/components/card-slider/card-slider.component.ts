@@ -10,12 +10,11 @@ import { TuiButton } from '@taiga-ui/core';
 import { TuiCarousel, TuiPagination } from '@taiga-ui/kit';
 import { Course } from '../../../features/@types/course';
 @Component({
-  selector: 'app-card-slider',
-  standalone: true,
-  imports: [CommonModule, TuiButton, TuiPagination, TuiCarousel, TuiPagination],
-  templateUrl: './card-slider.component.html',
-  styleUrls: ['./card-slider.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-card-slider',
+    imports: [CommonModule, TuiButton, TuiPagination, TuiCarousel, TuiPagination],
+    templateUrl: './card-slider.component.html',
+    styleUrls: ['./card-slider.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CardSliderComponent {
   protected duration = isPlatformBrowser(inject(PLATFORM_ID)) ? 10_000 : 0;

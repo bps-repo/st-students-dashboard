@@ -2,11 +2,10 @@ import { CommonModule } from '@angular/common';
 import { Component, Output, EventEmitter } from '@angular/core';
 
 @Component({
-  selector: 'app-custom-select',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './custom-select.component.html',
-  styleUrls: ['./custom-select.component.scss'],
+    selector: 'app-custom-select',
+    imports: [CommonModule],
+    templateUrl: './custom-select.component.html',
+    styleUrls: ['./custom-select.component.scss']
 })
 export class CustomSelectComponent {
   public selectedOption: string = 'C2 - Advanced';

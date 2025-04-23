@@ -7,12 +7,11 @@ import { MaterialService } from '../../../core/material.service';
 import { RouterModule } from '@angular/router';
 
 @Component({
-  selector: 'app-materials',
-  standalone: true,
-  imports: [CommonModule, RouterModule],
-  templateUrl: './materials.component.html',
-  styleUrl: './materials.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-materials',
+    imports: [CommonModule, RouterModule],
+    templateUrl: './materials.component.html',
+    styleUrl: './materials.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MaterialsComponent {
   protected readonly materials$!: Observable<Material[]>;

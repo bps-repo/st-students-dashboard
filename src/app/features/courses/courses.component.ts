@@ -4,11 +4,10 @@ import { CardSliderComponent } from '../../shared/components/card-slider/card-sl
 import { Course } from '../@types/course';
 
 @Component({
-  selector: 'app-courses',
-  standalone: true,
-  imports: [CommonModule, CardSliderComponent],
-  templateUrl: './courses.component.html',
-  styleUrl: './courses.component.scss',
+    selector: 'app-courses',
+    imports: [CommonModule, CardSliderComponent],
+    templateUrl: './courses.component.html',
+    styleUrl: './courses.component.scss'
 })
 export class CoursesComponent {
   protected readonly contents: Course[] = [
