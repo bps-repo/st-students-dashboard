@@ -34,7 +34,7 @@ export const routes: Routes = [
   },
   {
     path: 'lessons',
-    component: LessonsComponent,
+    component: SchoolScheduleComponent,
   },
   {
     path: 'events',
@@ -49,7 +49,7 @@ export const routes: Routes = [
     component: ChangePasswordComponent,
   },
   {
-    path: 'timetables',
+    path: 'schedules',
     component: SchoolScheduleComponent,
   },
   {

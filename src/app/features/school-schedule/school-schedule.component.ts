@@ -35,6 +35,12 @@ export class SchoolScheduleComponent implements OnInit {
   currentDate: Date = new Date();
   currentMonth: number;
   currentYear: number;
+  weekStartDate!: Date;
+
+  // Time range for the schedule (8:00 AM to 9:00 PM)
+  startHour: number = 8;
+  endHour: number = 21;
+  hourHeight: number = 60; // Height in pixels for each hour block
 
   // Events data
   events: CalendarEvent[] = [];
@@ -42,6 +48,25 @@ export class SchoolScheduleComponent implements OnInit {
   constructor() {
     this.currentMonth = this.currentDate.getMonth();
     this.currentYear = this.currentDate.getFullYear();
+    this.initializeWeekStartDate();
+  }
+
+  // Initialize the week start date to the Monday of the current week
+  initializeWeekStartDate(): void {
+    const today = new Date();
+    const dayOfWeek = today.getDay(); // 0 = Sunday, 1 = Monday, etc.
+
+    // Calculate days to subtract to get to Monday (or keep today if it's Monday)
+    const daysToSubtract = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+
+    // Set to Monday of current week
+    this.weekStartDate = new Date(today);
+    this.weekStartDate.setDate(today.getDate() - daysToSubtract);
+    this.weekStartDate.setHours(0, 0, 0, 0);
+
+    // Update month and year based on the week start date
+    this.currentMonth = this.weekStartDate.getMonth();
+    this.currentYear = this.weekStartDate.getFullYear();
   }
 
   ngOnInit(): void {
@@ -49,84 +74,25 @@ export class SchoolScheduleComponent implements OnInit {
     this.loadEvents();
   }
 
-  // Generate the calendar days for the current month
+  // Generate the calendar days for the current week
   generateCalendarDays(): void {
     this.calendarDays = [];
 
-    // Get the first day of the month
-    const firstDayOfMonth = new Date(this.currentYear, this.currentMonth, 1);
+    // Generate weekdays (Monday to Friday) for the current week
+    for (let i = 0; i < 5; i++) {
+      const date = new Date(this.weekStartDate);
+      date.setDate(this.weekStartDate.getDate() + i);
 
-    // Get the last day of the month
-    const lastDayOfMonth = new Date(this.currentYear, this.currentMonth + 1, 0);
+      // Check if the day is in the current month
+      const isCurrentMonth = date.getMonth() === this.currentMonth;
 
-    // Get the day of the week for the first day (0 = Sunday, 1 = Monday, etc.)
-    const firstDayOfWeek = firstDayOfMonth.getDay();
-
-    // Calculate days from previous month to show
-    // Adjust for weekdays only (1 = Monday, 5 = Friday)
-    let daysFromPrevMonth = 0;
-    if (firstDayOfWeek === 0) { // Sunday
-      daysFromPrevMonth = 5; // Show previous Friday
-    } else if (firstDayOfWeek === 6) { // Saturday
-      daysFromPrevMonth = 4; // Show previous Friday
-    } else if (firstDayOfWeek > 1) {
-      daysFromPrevMonth = firstDayOfWeek - 1; // Show from Monday
-    }
-
-    const prevMonth = this.currentMonth === 0 ? 11 : this.currentMonth - 1;
-    const prevMonthYear = this.currentMonth === 0 ? this.currentYear - 1 : this.currentYear;
-    const lastDayOfPrevMonth = new Date(prevMonthYear, prevMonth + 1, 0).getDate();
-
-    // Add weekdays from previous month
-    for (let i = daysFromPrevMonth - 1; i >= 0; i--) {
-      const date = new Date(prevMonthYear, prevMonth, lastDayOfPrevMonth - i);
-      // Only add weekdays (1-5)
-      if (date.getDay() >= 1 && date.getDay() <= 5) {
-        this.calendarDays.push({
-          date,
-          dayNumber: date.getDate(),
-          isCurrentMonth: false,
-          isToday: this.isToday(date),
-          events: []
-        });
-      }
-    }
-
-    // Add weekdays from current month
-    for (let i = 1; i <= lastDayOfMonth.getDate(); i++) {
-      const date = new Date(this.currentYear, this.currentMonth, i);
-      // Only add weekdays (1-5)
-      if (date.getDay() >= 1 && date.getDay() <= 5) {
-        this.calendarDays.push({
-          date,
-          dayNumber: i,
-          isCurrentMonth: true,
-          isToday: this.isToday(date),
-          events: []
-        });
-      }
-    }
-
-    // Calculate days from next month to show to complete the grid
-    // For weekdays only, we need approximately 5 columns x 6 rows = 30 cells max
-    const totalDaysToShow = 30;
-    const daysFromNextMonth = Math.max(0, totalDaysToShow - this.calendarDays.length);
-    const nextMonth = this.currentMonth === 11 ? 0 : this.currentMonth + 1;
-    const nextMonthYear = this.currentMonth === 11 ? this.currentYear + 1 : this.currentYear;
-
-    // Add weekdays from next month
-    for (let i = 1; i <= daysFromNextMonth + 7; i++) { // Add extra days to ensure we have enough weekdays
-      const date = new Date(nextMonthYear, nextMonth, i);
-      // Only add weekdays (1-5) and stop when we have enough days
-      if (date.getDay() >= 1 && date.getDay() <= 5 && this.calendarDays.length < totalDaysToShow) {
-        this.calendarDays.push({
-          date,
-          dayNumber: i,
-          isCurrentMonth: false,
-          isToday: this.isToday(date),
-          events: []
-        });
-      }
+      this.calendarDays.push({
+        date,
+        dayNumber: date.getDate(),
+        isCurrentMonth,
+        isToday: this.isToday(date),
+        events: []
+      });
     }
   }
 
@@ -138,82 +104,113 @@ export class SchoolScheduleComponent implements OnInit {
       date.getFullYear() === today.getFullYear();
   }
 
-  // Navigate to the previous month
-  navigateToPreviousMonth(): void {
-    if (this.currentMonth === 0) {
-      this.currentMonth = 11;
-      this.currentYear--;
-    } else {
-      this.currentMonth--;
-    }
+  // Navigate to the previous week
+  navigateToPreviousWeek(): void {
+    // Update weekStartDate to the previous week
+    this.weekStartDate.setDate(this.weekStartDate.getDate() - 7);
+
+    // Update month and year based on the week start date
+    this.currentMonth = this.weekStartDate.getMonth();
+    this.currentYear = this.weekStartDate.getFullYear();
+
     this.generateCalendarDays();
     this.loadEvents();
   }
 
-  // Navigate to the next month
-  navigateToNextMonth(): void {
-    if (this.currentMonth === 11) {
-      this.currentMonth = 0;
-      this.currentYear++;
-    } else {
-      this.currentMonth++;
-    }
+  // Navigate to the next week
+  navigateToNextWeek(): void {
+    // Update weekStartDate to the next week
+    this.weekStartDate.setDate(this.weekStartDate.getDate() + 7);
+
+    // Update month and year based on the week start date
+    this.currentMonth = this.weekStartDate.getMonth();
+    this.currentYear = this.weekStartDate.getFullYear();
+
     this.generateCalendarDays();
     this.loadEvents();
   }
 
-  // Get the month and year label (e.g., "April 2023")
-  getMonthYearLabel(): string {
+  // Get the week range label (e.g., "10-14 April 2023")
+  getWeekLabel(): string {
     const monthNames = [
       'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
       'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
     ];
 
-    return `${monthNames[this.currentMonth]} ${this.currentYear}`;
+    // Get the end date of the week (Friday)
+    const weekEndDate = new Date(this.weekStartDate);
+    weekEndDate.setDate(this.weekStartDate.getDate() + 4); // Friday is 4 days after Monday
+
+    // Format the date range
+    const startDay = this.weekStartDate.getDate();
+    const endDay = weekEndDate.getDate();
+    const startMonth = this.weekStartDate.getMonth();
+    const endMonth = weekEndDate.getMonth();
+    const startYear = this.weekStartDate.getFullYear();
+    const endYear = weekEndDate.getFullYear();
+
+    // If the week spans two months
+    if (startMonth !== endMonth) {
+      return `${startDay} ${monthNames[startMonth]} - ${endDay} ${monthNames[endMonth]} ${endYear}`;
+    }
+
+    // If the week spans two years
+    if (startYear !== endYear) {
+      return `${startDay} ${monthNames[startMonth]} ${startYear} - ${endDay} ${monthNames[endMonth]} ${endYear}`;
+    }
+
+    // If the week is within the same month and year
+    return `${startDay}-${endDay} ${monthNames[startMonth]} ${startYear}`;
   }
 
-  // Load events for the current month
+  // Load events for the current week
   loadEvents(): void {
     // In a real application, this data would come from a service
-    // For now, we'll use mock data
+    // For now, we'll use mock data based on the current week
+
+    // Get the end date of the week (Friday)
+    const weekEndDate = new Date(this.weekStartDate);
+    weekEndDate.setDate(this.weekStartDate.getDate() + 4); // Friday is 4 days after Monday
+
+    // Create events for the current week
     const mockEvents: CalendarEvent[] = [
       {
         id: 1,
         title: 'Gramática Avançada',
-        startDate: new Date(this.currentYear, this.currentMonth, 10, 9, 0),
-        endDate: new Date(this.currentYear, this.currentMonth, 10, 10, 30),
+        startDate: new Date(this.weekStartDate.getFullYear(), this.weekStartDate.getMonth(), this.weekStartDate.getDate(), 9, 0), // Monday at 9:00
+        endDate: new Date(this.weekStartDate.getFullYear(), this.weekStartDate.getMonth(), this.weekStartDate.getDate(), 10, 30), // Monday at 10:30
         teacher: 'Prof. Silva',
         color: 'bg-blue-100'
       },
       {
         id: 2,
         title: 'Conversação',
-        startDate: new Date(this.currentYear, this.currentMonth, 15, 14, 0),
-        endDate: new Date(this.currentYear, this.currentMonth, 15, 15, 30),
+        startDate: new Date(this.weekStartDate.getFullYear(), this.weekStartDate.getMonth(), this.weekStartDate.getDate() + 1, 14, 0), // Tuesday at 14:00
+        endDate: new Date(this.weekStartDate.getFullYear(), this.weekStartDate.getMonth(), this.weekStartDate.getDate() + 1, 15, 30), // Tuesday at 15:30
         teacher: 'Prof. Santos',
         color: 'bg-green-100'
       },
       {
         id: 3,
         title: 'Listening Comprehension',
-        startDate: new Date(this.currentYear, this.currentMonth, 20, 19, 0),
-        endDate: new Date(this.currentYear, this.currentMonth, 20, 20, 30),
+        startDate: new Date(this.weekStartDate.getFullYear(), this.weekStartDate.getMonth(), this.weekStartDate.getDate() + 2, 19, 0), // Wednesday at 19:00
+        endDate: new Date(this.weekStartDate.getFullYear(), this.weekStartDate.getMonth(), this.weekStartDate.getDate() + 2, 20, 30), // Wednesday at 20:30
         teacher: 'Prof. Johnson',
         color: 'bg-purple-100'
       },
       {
         id: 4,
         title: 'Business English',
-        startDate: new Date(this.currentYear, this.currentMonth, 25, 10, 0),
-        endDate: new Date(this.currentYear, this.currentMonth, 25, 11, 30),
+        startDate: new Date(this.weekStartDate.getFullYear(), this.weekStartDate.getMonth(), this.weekStartDate.getDate() + 3, 10, 0), // Thursday at 10:00
+        endDate: new Date(this.weekStartDate.getFullYear(), this.weekStartDate.getMonth(), this.weekStartDate.getDate() + 3, 11, 30), // Thursday at 11:30
         teacher: 'Prof. Oliveira',
         color: 'bg-yellow-100'
       },
       {
         id: 5,
         title: 'Preparação para TOEFL',
-        startDate: new Date(this.currentYear, this.currentMonth, 5, 16, 0),
-        endDate: new Date(this.currentYear, this.currentMonth, 7, 17, 30),
+        startDate: new Date(this.weekStartDate.getFullYear(), this.weekStartDate.getMonth(), this.weekStartDate.getDate() + 4, 16, 0), // Friday at 16:00
+        endDate: new Date(this.weekStartDate.getFullYear(), this.weekStartDate.getMonth(), this.weekStartDate.getDate() + 4, 17, 30), // Friday at 17:30
         teacher: 'Prof. Garcia',
         room: 'Sala 302',
         color: 'bg-red-100'
@@ -318,5 +315,57 @@ export class SchoolScheduleComponent implements OnInit {
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
     return diffDays + 1; // +1 because it's inclusive
+  }
+
+  // Get an array of hours for the time grid
+  getHoursArray(): number[] {
+    const hours: number[] = [];
+    for (let i = this.startHour; i <= this.endHour; i++) {
+      hours.push(i);
+    }
+    return hours;
+  }
+
+  // Format hour for display (e.g., "08:00")
+  formatHour(hour: number): string {
+    return `${hour.toString().padStart(2, '0')}:00`;
+  }
+
+  // Check if the current week includes today
+  hasToday(): boolean {
+    return this.calendarDays.some(day => day.isToday);
+  }
+
+  // Get the position of the current time indicator
+  getCurrentTimePosition(): number {
+    const now = new Date();
+    const hours = now.getHours();
+    const minutes = now.getMinutes();
+
+    // Calculate position based on hours and minutes
+    return (hours - this.startHour + minutes / 60) * this.hourHeight;
+  }
+
+  // Calculate the top position of an event based on its start time
+  calculateEventTop(event: CalendarEvent): number {
+    const startHour = event.startDate.getHours();
+    const startMinutes = event.startDate.getMinutes();
+
+    // Calculate position based on start time
+    return (startHour - this.startHour + startMinutes / 60) * this.hourHeight;
+  }
+
+  // Calculate the height of an event based on its duration
+  calculateEventHeight(event: CalendarEvent): number {
+    const startTime = event.startDate.getHours() + event.startDate.getMinutes() / 60;
+    const endTime = event.endDate.getHours() + event.endDate.getMinutes() / 60;
+
+    // Calculate height based on duration
+    return (endTime - startTime) * this.hourHeight;
+  }
+
+  // Get the total height of the schedule grid
+  getScheduleHeight(): number {
+    return (this.endHour - this.startHour) * this.hourHeight;
   }
 }
