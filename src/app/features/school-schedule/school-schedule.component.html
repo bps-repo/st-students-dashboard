@@ -1,0 +1,94 @@
+<section class="font-heading">
+  <div class="bg-white rounded-xl shadow-md p-4 mb-4">
+    <!-- Calendar Header -->
+    <div
+      class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 pb-3">
+      <div class="mb-3 md:mb-0">
+        <h2 class="text-2xl font-bold text-primary">Meu Horário Escolar</h2>
+      </div>
+      <div class="flex items-center">
+        <div class="bg-gray-50 rounded-lg px-4 py-2 mr-3 border border-gray-200">
+          <span class="font-medium text-primary">{{ getMonthYearLabel() }}</span>
+        </div>
+        <div class="flex space-x-1">
+          <button class="p-2 rounded-full hover:bg-gray-100 border border-gray-200" (click)="navigateToPreviousMonth()">
+            <i class="pi pi-chevron-left text-primary"></i>
+          </button>
+          <button class="p-2 rounded-full hover:bg-gray-100 border border-gray-200" (click)="navigateToNextMonth()">
+            <i class="pi pi-chevron-right text-primary"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Calendar Grid -->
+    <div class="calendar-grid">
+      <!-- Days of Week Header -->
+      <div class="grid grid-cols-7 gap-2 mb-3">
+        <div *ngFor="let dayName of weekDayNames"
+             class="text-center py-2 font-medium text-primary bg-gray-50 rounded-md border border-gray-200">
+          {{ dayName.substring(0, 3) }}
+        </div>
+      </div>
+
+      <!-- Calendar Days Grid -->
+      <div class="grid grid-cols-7 gap-2">
+        <!-- Calendar Day Cells -->
+        <div *ngFor="let day of calendarDays"
+             class="relative aspect-square p-2 rounded-lg border transition-all shadow-sm"
+             [ngClass]="{
+             'bg-gray-50 border-gray-200': day.isCurrentMonth && !day.isToday,
+             'bg-blue-50 border-blue-200': day.isToday,
+             'bg-gray-100 border-gray-100 opacity-60': !day.isCurrentMonth
+           }">
+          <!-- Day Number -->
+          <div class="text-sm font-medium p-1 rounded-full w-7 h-7 flex items-center justify-center mb-1"
+               [ngClass]="{'bg-primary text-white': day.isToday, 'text-gray-400': !day.isCurrentMonth, 'text-primary': day.isCurrentMonth && !day.isToday}">
+            {{ day.dayNumber }}
+          </div>
+
+          <!-- Events for this day -->
+          <div class="space-y-1 overflow-y-auto max-h-[calc(100%-2rem)]">
+            <div *ngFor="let event of getEventsForDay(day)"
+                 class="text-xs p-1.5 rounded-md cursor-pointer transition-all hover:shadow-md"
+                 [ngClass]="[
+                 event.color || 'bg-blue-100',
+                 isMultiDayEvent(event) ? 'border-l-4 border-primary' : '',
+                 isFirstDayOfEvent(day, event) && isMultiDayEvent(event) ? 'rounded-l-md rounded-r-none' : '',
+                 isLastDayOfEvent(day, event) && isMultiDayEvent(event) ? 'rounded-r-md rounded-l-none' : '',
+                 !isFirstDayOfEvent(day, event) && !isLastDayOfEvent(day, event) && isMultiDayEvent(event) ? 'rounded-none' : ''
+               ]">
+
+              <!-- Single day event or first day of multi-day event -->
+              <ng-container *ngIf="!isMultiDayEvent(event) || isFirstDayOfEvent(day, event)">
+                <div class="font-bold truncate">{{ event.title }}</div>
+                <div class="text-xs text-secondary">{{ getEventTimeString(event) }}</div>
+                <div class="text-xs text-secondary flex items-center">
+                  <i class="pi pi-user mr-1 text-primary text-[10px]"></i>
+                  {{ event.teacher }}
+                </div>
+                <div *ngIf="event.room" class="text-xs text-secondary flex items-center">
+                  <i class="pi pi-home mr-1 text-primary text-[10px]"></i>
+                  {{ event.room }}
+                </div>
+              </ng-container>
+
+              <!-- Middle or last day of multi-day event -->
+              <ng-container *ngIf="isMultiDayEvent(event) && !isFirstDayOfEvent(day, event)">
+                <div class="font-bold truncate">{{ event.title }} (cont.)</div>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="flex justify-end pt-3 mt-4 border-t border-gray-200">
+      <a href="/timetables" class="flex items-center text-primary font-medium hover:underline">
+        Ver horário completo <i class="pi pi-arrow-right ml-2"></i>
+      </a>
+    </div>
+  </div>
+
+</section>

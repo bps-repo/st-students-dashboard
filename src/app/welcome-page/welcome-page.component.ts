@@ -7,6 +7,7 @@ import type { TuiDialogContext, TuiDialogSize } from '@taiga-ui/core';
 import { TuiButton } from '@taiga-ui/core';
 import type { PolymorpheusContent } from '@taiga-ui/polymorpheus';
 import { CircularLevelComponent } from '../shared/components/circular-level/circular-level.component';
+import { SchoolScheduleComponent } from '../features/school-schedule/school-schedule.component';
 
 interface Unit {
   title: string;
@@ -21,6 +22,7 @@ interface Unit {
         CustomSelectComponent,
         TuiButton,
         CircularLevelComponent,
+        SchoolScheduleComponent,
     ],
     templateUrl: './welcome-page.component.html',
     styleUrl: './welcome-page.component.scss',
