@@ -4,11 +4,10 @@ import { Certificate } from '../@types/certificate';
 import { CircularLevelComponent } from '../../shared/components/circular-level/circular-level.component';
 
 @Component({
-  selector: 'app-certicates',
-  standalone: true,
-  imports: [CommonModule, CircularLevelComponent],
-  templateUrl: './certicates.component.html',
-  styleUrl: './certicates.component.scss',
+    selector: 'app-certicates',
+    imports: [CommonModule, CircularLevelComponent],
+    templateUrl: './certicates.component.html',
+    styleUrl: './certicates.component.scss'
 })
 export class CerticatesComponent {
   certificates: Certificate[] = [

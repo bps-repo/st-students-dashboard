@@ -6,11 +6,10 @@ interface Teacher {
   image: string;
 }
 @Component({
-  selector: 'app-teachers',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './teachers.component.html',
-  styleUrl: './teachers.component.scss',
+    selector: 'app-teachers',
+    imports: [CommonModule],
+    templateUrl: './teachers.component.html',
+    styleUrl: './teachers.component.scss'
 })
 export class TeachersComponent {
   protected teachers: Array<Teacher> = [

@@ -12,12 +12,11 @@ import { UnityService } from '../../core/services/unity.service';
 import { Observable } from 'rxjs';
 
 @Component({
-  selector: 'app-welcome-page',
-  standalone: true,
-  imports: [CommonModule, CircularLevelComponent],
-  templateUrl: './welcome-page.component.html',
-  styleUrl: './welcome-page.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-welcome-page',
+    imports: [CommonModule, CircularLevelComponent],
+    templateUrl: './welcome-page.component.html',
+    styleUrl: './welcome-page.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WelcomePageComponent {
   selectedValue: string = '';

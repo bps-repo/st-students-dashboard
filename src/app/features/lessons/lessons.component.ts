@@ -6,11 +6,10 @@ import { TabMenuComponent } from '../../shared/components/tab-menu/tab-menu.comp
 import { TabMenuConfig } from '../@types/tab-menu';
 import { FlashCardComponent } from '../../shared/components/flash-card/flash-card.component';
 @Component({
-  selector: 'app-lessons',
-  standalone: true,
-  imports: [TuiCarousel, CommonModule, FlashCardComponent, TabMenuComponent],
-  templateUrl: './lessons.component.html',
-  styleUrl: './lessons.component.scss',
+    selector: 'app-lessons',
+    imports: [TuiCarousel, CommonModule, FlashCardComponent, TabMenuComponent],
+    templateUrl: './lessons.component.html',
+    styleUrl: './lessons.component.scss'
 })
 export class LessonsComponent {
   protected duration = 10_000;

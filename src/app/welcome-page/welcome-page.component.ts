@@ -7,6 +7,7 @@ import type { TuiDialogContext, TuiDialogSize } from '@taiga-ui/core';
 import { TuiButton } from '@taiga-ui/core';
 import type { PolymorpheusContent } from '@taiga-ui/polymorpheus';
 import { CircularLevelComponent } from '../shared/components/circular-level/circular-level.component';
+import { SchoolScheduleComponent } from '../features/school-schedule/school-schedule.component';
 
 interface Unit {
   title: string;
@@ -15,17 +16,17 @@ interface Unit {
 }
 
 @Component({
-  selector: 'app-welcome-page',
-  standalone: true,
-  imports: [
-    CommonModule,
-    CustomSelectComponent,
-    TuiButton,
-    CircularLevelComponent,
-  ],
-  templateUrl: './welcome-page.component.html',
-  styleUrl: './welcome-page.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-welcome-page',
+    imports: [
+        CommonModule,
+        CustomSelectComponent,
+        TuiButton,
+        CircularLevelComponent,
+        SchoolScheduleComponent,
+    ],
+    templateUrl: './welcome-page.component.html',
+    styleUrl: './welcome-page.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WelcomePageComponent {
   selectedValue: string = '';

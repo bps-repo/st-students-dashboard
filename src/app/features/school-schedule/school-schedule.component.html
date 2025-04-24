@@ -1,0 +1,94 @@
+<section class="font-heading">
+  <div class="bg-white rounded-xl shadow-md p-4 mb-4">
+    <!-- Calendar Header -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 pb-3">
+      <div class="mb-3 md:mb-0">
+        <h2 class="text-2xl font-bold text-primary">Meu Horário Escolar</h2>
+      </div>
+      <div class="flex items-center">
+        <div class="bg-gray-50 rounded-lg px-4 py-2 mr-3 border border-gray-200">
+          <span class="font-bold text-primary">{{ getWeekLabel() }}</span>
+        </div>
+        <div class="bg-gray-50 rounded-lg px-4 py-2 mr-3 border border-gray-200 cursor-pointer">
+          <span class="font-bold text-primary">Ver Histórico de Aulas</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Weekly Schedule Grid -->
+    <div class="weekly-schedule">
+      <!-- Days of Week Header with Dates -->
+      <div class="grid grid-cols-[60px_1fr_1fr_1fr_1fr_1fr] gap-0">
+        <!-- Narrower empty cell for time column -->
+        <div class="text-center py-2"></div>
+
+        <!-- Day headers -->
+        <div *ngFor="let day of calendarDays"
+             class="text-center p-6 font-bold border-l border-gray-200"
+             [ngClass]="{
+               'bg-green-400 text-info border-green-400 font-extrabold': day.isToday,
+               'bg-gray-50 text-primary': !day.isToday
+             }">
+            <div>{{ weekDayNames[day.date.getDay() - 1].substring(0, 3) }}</div>
+            <div class="text-sm">{{ day.dayNumber }}</div>
+        </div>
+      </div>
+
+      <!-- Schedule Grid with Hours -->
+      <div class="grid grid-cols-[60px_1fr_1fr_1fr_1fr_1fr] gap-0">
+        <!-- Narrower Time Column -->
+        <div class="relative" [style.height.px]="getScheduleHeight()">
+          <!-- Hour Labels -->
+          <div *ngFor="let hour of getHoursArray()"
+               class="absolute text-[0.80rem] text-gray-500 font-medium border-b border-primary w-full"
+               [style.top.px]="(hour - startHour) * hourHeight - 20">
+            {{ formatHour(hour) }}
+          </div>
+        </div>
+
+        <!-- Day Columns -->
+        <div *ngFor="let day of calendarDays"
+             class="relative border-l rounded-xs"
+             [ngClass]="{
+               'bg-blue-50 border-blue-200': day.isToday,
+               'bg-gray-50 border-gray-200': !day.isToday
+             }"
+             [style.height.px]="getScheduleHeight()">
+
+          <!-- Hour Grid Lines -->
+          <div *ngFor="let hour of getHoursArray()"
+               class="absolute w-full border-b rounded-xl border-dark_blue"
+               [style.top.px]="(hour - startHour) * hourHeight">
+          </div>
+
+          <!-- Current Time Indicator (only for today) -->
+          <div *ngIf="day.isToday"
+               class="absolute w-full h-0.5 bg-red-500 z-10"
+               [style.top.px]="getCurrentTimePosition()">
+            <div class="absolute -left-1 -top-1.5 w-3 h-3 rounded-full bg-red-500"></div>
+          </div>
+
+          <!-- Events -->
+          <div *ngFor="let event of getEventsForDay(day)"
+               class="absolute rounded-md p-1.5 text-xs text-light font-bold cursor-pointer bg-primary transition-all hover:shadow-lg overflow-hidden"
+               [ngClass]="event.color || 'bg-blue-100'"
+               [style.top.px]="calculateEventTop(event)"
+               [style.height.px]="calculateEventHeight(event)"
+               [style.width.calc]="'100% - 8px'">
+
+            <div class="font-bold truncate">{{ event.title }}</div>
+            <div class="text-xs text-light font-medium">{{ getEventTimeString(event) }}</div>
+            <div class="text-xs text-light font-medium flex items-center">
+              <i class="pi pi-user mr-1  text-[10px]"></i>
+              {{ event.teacher }}
+            </div>
+            <div *ngIf="event.room" class="text-xs text-light flex items-center">
+              <i class="pi pi-home mr-1 text-primary text-[10px]"></i>
+              {{ event.room }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

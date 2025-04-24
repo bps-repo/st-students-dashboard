@@ -6,11 +6,10 @@ import { TabMenuConfig } from '../@types/tab-menu';
 import { FlashCardComponent } from '../../shared/components/flash-card/flash-card.component';
 
 @Component({
-  selector: 'app-events',
-  standalone: true,
-  imports: [CommonModule, FlashCardComponent, TabMenuComponent],
-  templateUrl: './events.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-events',
+    imports: [CommonModule, FlashCardComponent, TabMenuComponent],
+    templateUrl: './events.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EventsComponent {
   protected events: FlashCard[] = [

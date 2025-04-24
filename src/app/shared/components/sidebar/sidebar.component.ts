@@ -11,10 +11,9 @@ interface navLink {
   active: boolean;
 }
 @Component({
-  selector: 'app-sidebar',
-  standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive],
-  templateUrl: './sidebar.component.html',
+    selector: 'app-sidebar',
+    imports: [CommonModule, RouterLink, RouterLinkActive],
+    templateUrl: './sidebar.component.html'
 })
 export class SidebarComponent implements OnInit {
   isNavBarOpened = signal(false);

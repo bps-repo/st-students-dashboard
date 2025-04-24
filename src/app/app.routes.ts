@@ -13,6 +13,7 @@ import { SupportComponent } from './features/support/support.component';
 import { TestsComponent } from './features/tests/tests.component';
 import { MaterialsComponent } from './features/lessons/materials/materials.component';
 import { MaterialDetailComponent } from './features/lessons/material-detail/material-detail.component';
+import {SchoolScheduleComponent} from "./features/school-schedule/school-schedule.component";
 
 export const routes: Routes = [
   {
@@ -33,7 +34,7 @@ export const routes: Routes = [
   },
   {
     path: 'lessons',
-    component: LessonsComponent,
+    component: SchoolScheduleComponent,
   },
   {
     path: 'events',
@@ -48,8 +49,8 @@ export const routes: Routes = [
     component: ChangePasswordComponent,
   },
   {
-    path: 'timetables',
-    component: TimetablesComponent,
+    path: 'schedules',
+    component: SchoolScheduleComponent,
   },
   {
     path: 'support',
