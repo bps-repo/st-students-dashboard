@@ -1,39 +1,49 @@
 <header
-  class="flex justify-between bg-secondary shadow-md z-10 p-6 text-[18px] font-heading"
+  class="flex justify-between items-center bg-gradient-to-r from-primary-600 to-primary-500 text-white shadow-lg z-10 px-8 py-4 text-[16px] font-heading"
 >
-  <nav class="flex flex-row gap-4 items-center">
-    <i
-      class="group pi pi-arrow-left text-primary bg-primary bg-opacity-[0.1] text-opacity-[0.5] p-3 rounded-md"
-    ></i>
-    <span>Voltar</span>
-    <div class="w-[0.5px] h-full bg-primary bg-opacity-[0.1]"></div>
-    <div class="flex flex-row gap-2 font-semibold items-center">
-      <div>Inicio</div>
-      <i
-        class="pi pi-chevron-right text-xs text-secondary group-hover:text-primary"
-      ></i>
-      <div>Cursos</div>
+  <!-- Left side navigation -->
+  <nav class="flex items-center space-x-6">
+    <!-- Back button with improved hover effect -->
+    <button class="group flex items-center space-x-2 bg-white bg-opacity-10 hover:bg-opacity-20 px-4 py-2 rounded-lg transition-all duration-200 shadow-sm">
+      <i class="pi pi-arrow-left text-white"></i>
+      <span class="font-medium">Voltar</span>
+    </button>
+
+    <!-- Breadcrumb navigation with improved styling -->
+    <div class="flex items-center space-x-2 bg-white bg-opacity-5 px-4 py-2 rounded-lg">
+      <a href="/" class="text-white hover:text-white hover:underline transition-all">Inicio</a>
+      <i class="pi pi-chevron-right text-xs text-white opacity-70"></i>
+      <a href="/courses" class="text-white font-semibold hover:text-white hover:underline transition-all">Cursos</a>
     </div>
   </nav>
-  <div class="flex flex-row justify-between items-center gap-16">
+
+  <!-- Right side user controls -->
+  <div class="flex items-center space-x-6">
+    <!-- User profile with improved styling -->
     <div
       (click)="toggleOverlay()"
-      class="flex flex-row relative items-center gap-2 cursor-pointer"
+      class="flex items-center space-x-3 bg-white bg-opacity-10 hover:bg-opacity-20 px-4 py-2 rounded-lg cursor-pointer transition-all duration-200 shadow-sm relative"
     >
       <img
         src="/user.png"
-        class="w-10 h-[2rem] rounded-full"
+        class="w-8 h-8 rounded-full border-2 border-white border-opacity-30 object-cover"
         alt="user-photo"
       />
-      <span class="font-semibold">Helder</span>
-      <i class="pi pi-chevron-down"></i>
+      <span class="font-medium">Helder</span>
+      <i class="pi pi-chevron-down text-sm"></i>
+
+      <!-- Overlay for user menu -->
       @if (showOverlay$|async) {
       <div
-        class="fixed inset-0 backdrop-blur-sm transition-all bg-opacity-50 z-50"
+        class="fixed inset-0 backdrop-blur-sm transition-all bg-black bg-opacity-50 z-50"
       ></div>
       <app-overlay></app-overlay>
       }
     </div>
-    <i class="pi pi-sign-out"></i>
+
+    <!-- Sign out button with improved styling -->
+    <button class="flex items-center justify-center bg-white bg-opacity-10 hover:bg-opacity-20 p-3 rounded-full cursor-pointer transition-all duration-200 shadow-sm">
+      <i class="pi pi-sign-out text-white"></i>
+    </button>
   </div>
 </header>

@@ -1,111 +1,165 @@
+<!-- Modern Card Slider Component with Car Design -->
 <tui-carousel
   [itemsCount]="items.length > 3 ? 3 : items.length"
   [(index)]="index"
   [draggable]="true"
 >
   <ng-container *ngFor="let item of items">
+    <!-- Course Card with Car Design -->
     <div
       *tuiItem
       [ngClass]="
-        item.color
-          ? item.type == 'course'
-            ? 'bg-light'
-            : 'bg-' + item.color
-          : ''
+        item.type == 'course'
+          ? 'bg-white border border-neutral-200'
+          : 'bg-gradient-to-r ' + getGradientClass(item.color)
       "
-      class="card flex flex-col gap-2 rounded-lg w-12/12 h-60 text-light p-2"
+      class="car-card flex flex-col rounded-xl w-full h-72 shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden relative"
     >
-      <div class="card-header flex flex-row items-center gap-3">
-        <img class="rounded-lg w-20 h-12" src="{{ item.image }}" alt="course" />
-        <span
-          [ngClass]="
-            item.color
-              ? item.type == 'course'
-                ? 'text-' + item.color
-                : 'text-light'
-              : ''
-          "
-          class="text-[15.5px] font-heading font-extrabold"
-          >{{ item.label }}</span
-        >
-      </div>
+      <!-- Car Top/Roof -->
       <div
-        [ngClass]="
-          item.color && item.type == 'course'
-            ? 'text-dark text-opacity-50'
-            : 'text-light text-opacity-90'
-        "
-        class="card-body text-[14px] py-3 px-6 font-heading"
-      >
-        Curso de Ingles Elementary com 72 aulas em videos aulas e muito mais
-      </div>
-      <div class="card-level flex flex-row items-center gap-2 px-1">
-        <span
-          [ngClass]="
-            item.color
-              ? item.type == 'course'
-                ? 'text-' + item.color
-                : 'text-light'
-              : ''
-          "
-          >0/72</span
-        >
-        <span
-          [ngClass]="
-            item.color
-              ? item.type == 'content'
-                ? 'bg-light'
-                : 'bg-' + item.color
-              : ''
-          "
-          class="bg-opacity-70 h-2 w-5/6 rounded-md"
-        ></span>
-        <span
-          [ngClass]="
-            item.color
-              ? item.type == 'course'
-                ? 'text-' + item.color
-                : 'text-light'
-              : ''
-          "
-          >0%</span
-        >
-      </div>
-      <span
-        class="bg-secondary bg-opacity-30 h-[0.3px] w-full rounded-md px-10 my-3"
-      ></span>
-      <div class="card-next flex items-center justify-center">
-        <a class="flex gap-4 items-center cursor-pointer">
-          <span
+        [ngClass]="item.type == 'course' ? 'bg-' + item.color + '-200' : 'bg-white bg-opacity-20'"
+        class="absolute top-0 left-0 right-0 h-2 rounded-t-xl"
+      ></div>
+      <!-- Car Front with Headlights and License Plate -->
+      <div class="p-4 flex items-center justify-between relative">
+        <!-- Car Windows (Windshield) -->
+        <div
+          [ngClass]="item.type == 'course' ? 'bg-' + item.color + '-50 border-' + item.color + '-200' : 'bg-white bg-opacity-10 border-white border-opacity-20'"
+          class="absolute top-0 left-1/4 right-1/4 h-2 border-b rounded-t-lg"
+        ></div>
+
+        <div class="flex items-center space-x-3">
+          <!-- Car Logo/Badge (Course Image) -->
+          <div
             [ngClass]="
-              item.color
-                ? item.type == 'course'
-                  ? 'text-' + item.color
-                  : 'text-light'
-                : ''
+              item.type == 'course'
+                ? 'bg-' + item.color + '-100'
+                : 'bg-white bg-opacity-20'
             "
-            class="text-sm font-heading text-opacity-80"
-            >Conhecer o módulo</span
+            class="rounded-lg p-2 flex items-center justify-center"
           >
+            <img class="w-10 h-10 object-cover" src="{{ item.image }}" alt="{{ item.label }}" />
+          </div>
+
+          <!-- Course Info (License Plate) -->
+          <div>
+            <span
+              [ngClass]="
+                item.type == 'course'
+                  ? 'text-' + item.color + '-700'
+                  : 'text-white'
+              "
+              class="text-lg font-bold block"
+            >{{ item.label }}</span>
+
+            <!-- Course Type Badge -->
+            <span
+              [ngClass]="
+                item.type == 'course'
+                  ? 'bg-' + item.color + '-100 text-' + item.color + '-700'
+                  : 'bg-white bg-opacity-20 text-white'
+              "
+              class="text-xs px-2 py-1 rounded-full inline-block mt-1"
+            >
+              {{ item.type == 'course' ? 'Módulo' : 'Material' }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Status Indicator (Car Dashboard) -->
+        <div
+          [ngClass]="
+            item.type == 'course'
+              ? 'bg-neutral-100'
+              : 'bg-white bg-opacity-10'
+          "
+          class="w-8 h-8 rounded-full flex items-center justify-center"
+        >
           <i
             [ngClass]="
-              item.color
-                ? item.type == 'course'
-                  ? 'text-' + item.color
-                  : 'text-light'
-                : ''
+              item.type == 'course'
+                ? 'text-' + item.color + '-500'
+                : 'text-white'
             "
-            class="pi pi-arrow-right"
+            class="pi pi-book"
           ></i>
+        </div>
+      </div>
+
+      <!-- Card Body -->
+      <div
+        [ngClass]="
+          item.type == 'course'
+            ? 'text-neutral-600'
+            : 'text-white text-opacity-90'
+        "
+        class="px-4 py-2 flex-grow"
+      >
+        <p class="text-sm">Curso de Ingles {{ item.label }} com 72 aulas em videos aulas e muito mais</p>
+
+        <!-- Progress Section -->
+        <div class="mt-4">
+          <div class="flex justify-between items-center text-sm mb-2">
+            <span>Progresso</span>
+            <span>0%</span>
+          </div>
+
+          <!-- Progress Bar -->
+          <div
+            [ngClass]="
+              item.type == 'course'
+                ? 'bg-neutral-200'
+                : 'bg-white bg-opacity-20'
+            "
+            class="h-2 w-full rounded-full overflow-hidden"
+          >
+            <div
+              [ngClass]="
+                item.type == 'course'
+                  ? 'bg-' + item.color + '-500'
+                  : 'bg-white'
+              "
+              class="h-full rounded-full"
+              style="width: 0%"
+            ></div>
+          </div>
+
+          <!-- Lessons Count -->
+          <div class="text-xs mt-1 opacity-80">0/72 aulas completas</div>
+        </div>
+      </div>
+
+      <!-- Card Footer with Car Elements -->
+      <div
+        [ngClass]="
+          item.type == 'course'
+            ? 'border-t border-neutral-200'
+            : 'border-t border-white border-opacity-20'
+        "
+        class="p-4 relative"
+      >
+        <a
+          [ngClass]="
+            item.type == 'course'
+              ? 'bg-' + item.color + '-500 hover:bg-' + item.color + '-600 text-white'
+              : 'bg-white bg-opacity-20 hover:bg-opacity-30 text-white'
+          "
+          class="flex items-center justify-center space-x-2 py-2 px-4 rounded-lg transition-all duration-200 cursor-pointer"
+        >
+          <span class="text-sm font-medium">Conhecer o módulo</span>
+          <i class="pi pi-arrow-right"></i>
         </a>
       </div>
     </div>
   </ng-container>
 </tui-carousel>
 
-<tui-pagination
-  size="s"
-  class="tui-space_top-4 mt-3 text-primary"
-  [length]="items.length"
-  [(index)]="index"
-/>
+<!-- Modern Pagination -->
+<div class="flex justify-center mt-6">
+  <tui-pagination
+    size="s"
+    class="text-primary-500"
+    [length]="items.length"
+    [(index)]="index"
+  />
+</div>

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+  import {Component, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 
 interface CalendarDay {
@@ -180,7 +180,7 @@ export class SchoolScheduleComponent implements OnInit {
         startDate: new Date(this.weekStartDate.getFullYear(), this.weekStartDate.getMonth(), this.weekStartDate.getDate(), 9, 0), // Monday at 9:00
         endDate: new Date(this.weekStartDate.getFullYear(), this.weekStartDate.getMonth(), this.weekStartDate.getDate(), 10, 30), // Monday at 10:30
         teacher: 'Prof. Silva',
-        color: 'bg-blue-100'
+        color: 'bg-accent-100'
       },
       {
         id: 2,
@@ -188,7 +188,7 @@ export class SchoolScheduleComponent implements OnInit {
         startDate: new Date(this.weekStartDate.getFullYear(), this.weekStartDate.getMonth(), this.weekStartDate.getDate() + 1, 14, 0), // Tuesday at 14:00
         endDate: new Date(this.weekStartDate.getFullYear(), this.weekStartDate.getMonth(), this.weekStartDate.getDate() + 1, 15, 30), // Tuesday at 15:30
         teacher: 'Prof. Santos',
-        color: 'bg-green-100'
+        color: 'bg-success-100'
       },
       {
         id: 3,
@@ -196,7 +196,7 @@ export class SchoolScheduleComponent implements OnInit {
         startDate: new Date(this.weekStartDate.getFullYear(), this.weekStartDate.getMonth(), this.weekStartDate.getDate() + 2, 19, 0), // Wednesday at 19:00
         endDate: new Date(this.weekStartDate.getFullYear(), this.weekStartDate.getMonth(), this.weekStartDate.getDate() + 2, 20, 30), // Wednesday at 20:30
         teacher: 'Prof. Johnson',
-        color: 'bg-purple-100'
+        color: 'bg-primary-100'
       },
       {
         id: 4,
@@ -204,7 +204,7 @@ export class SchoolScheduleComponent implements OnInit {
         startDate: new Date(this.weekStartDate.getFullYear(), this.weekStartDate.getMonth(), this.weekStartDate.getDate() + 3, 10, 0), // Thursday at 10:00
         endDate: new Date(this.weekStartDate.getFullYear(), this.weekStartDate.getMonth(), this.weekStartDate.getDate() + 3, 11, 30), // Thursday at 11:30
         teacher: 'Prof. Oliveira',
-        color: 'bg-yellow-100'
+        color: 'bg-warning-100'
       },
       {
         id: 5,
@@ -213,7 +213,7 @@ export class SchoolScheduleComponent implements OnInit {
         endDate: new Date(this.weekStartDate.getFullYear(), this.weekStartDate.getMonth(), this.weekStartDate.getDate() + 4, 17, 30), // Friday at 17:30
         teacher: 'Prof. Garcia',
         room: 'Sala 302',
-        color: 'bg-red-100'
+        color: 'bg-secondary-100'
       }
     ];
 

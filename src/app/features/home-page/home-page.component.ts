@@ -1,64 +1,32 @@
 import { Component, inject } from '@angular/core';
-import { CustomSelectComponent } from '../shared/components/custom-select/custom-select.component';
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { TuiDialogService } from '@taiga-ui/core';
 import type { TuiDialogContext, TuiDialogSize } from '@taiga-ui/core';
-import { TuiButton } from '@taiga-ui/core';
 import type { PolymorpheusContent } from '@taiga-ui/polymorpheus';
-import { CircularLevelComponent } from '../shared/components/circular-level/circular-level.component';
-import { SchoolScheduleComponent } from '../features/school-schedule/school-schedule.component';
-
-interface Unit {
-  title: string;
-  description?: string;
-  status?: string;
-}
+import { CircularLevelComponent } from '../../shared/components/circular-level/circular-level.component';
+import { Unit } from '../@types/unit';
+import { UnityService } from '../../core/services/unity.service';
+import { Observable } from 'rxjs';
 
 @Component({
-    selector: 'app-welcome-page',
-    imports: [
-        CommonModule,
-        CustomSelectComponent,
-        TuiButton,
-        CircularLevelComponent,
-        SchoolScheduleComponent,
-    ],
-    templateUrl: './welcome-page.component.html',
-    styleUrl: './welcome-page.component.scss',
+    selector: 'app-home-page',
+    imports: [CommonModule, CircularLevelComponent],
+    templateUrl: './home-page.component.html',
+    styleUrl: './home-page.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class WelcomePageComponent {
+export class HomePageComponent {
   selectedValue: string = '';
-  unities: Unit[] = [
-    {
-      title: 'Unidade 1',
-      description: 'Present Simple - Verb To Do',
-      status: 'done',
-    },
-    {
-      title: 'Unidade 2',
-      description: 'Phrasel Verbs + Infinitive Verbs',
-      status: 'done',
-    },
-    {
-      title: 'Unidade 4',
-      description: 'Past Simple - Regular Verbs',
-      status: 'reading',
-    },
-    {
-      title: 'Unidade 5',
-      description: 'Perfect Tense - Verb to have + main verb',
-      status: 'lock',
-    },
-    {
-      title: 'Unidade 6',
-      description: 'Modal Verbs- Could, would, might, ougth + to',
-      status: 'lock',
-    },
-  ];
+  protected unities$: Observable<Unit[]>;
 
-  items: any[] = [
+  private readonly dialogs = inject(TuiDialogService);
+
+  constructor(private readonly UnityService: UnityService) {
+    this.unities$ = this.UnityService.getUnities();
+  }
+
+  protected items: any[] = [
     {
       label: 'A1',
       title: 'Beginner',
@@ -96,8 +64,6 @@ export class WelcomePageComponent {
       status: 'lock',
     },
   ];
-
-  private readonly dialogs = inject(TuiDialogService);
 
   protected onClick(
     modalContent: PolymorpheusContent<TuiDialogContext>,
