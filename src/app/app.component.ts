@@ -13,9 +13,7 @@ import { HeaderOnSmallComponent } from './shared/components/header-on-small/head
         SidebarComponent,
         HeaderComponent,
         HeaderOnSmallComponent,
-        RouterLink,
         CommonModule,
-        RouterLinkActive,
         TuiRoot
     ],
     templateUrl: './app.component.html',
@@ -23,5 +21,4 @@ import { HeaderOnSmallComponent } from './shared/components/header-on-small/head
 })
 export class AppComponent {
   title = 'students-dashboard';
-  // Use BehaviorSubject to track sidebar state
 }
