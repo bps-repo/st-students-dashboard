@@ -1,5 +1,5 @@
 import {Routes} from '@angular/router';
-import {WelcomePageComponent} from './features/welcome-page/welcome-page.component';
+import {HomePageComponent} from './features/home-page/home-page.component';
 import {CoursesComponent} from './features/courses/courses.component';
 import {EventsComponent} from './features/events/events.component';
 import {CerticatesComponent} from './features/certicates/certicates.component';
@@ -27,7 +27,7 @@ export const routes: Routes = [
     children: [
       {
         path: 'home',
-        component: WelcomePageComponent,
+        component: HomePageComponent,
       },
       {
         path: 'courses',

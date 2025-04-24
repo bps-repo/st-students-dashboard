@@ -10,13 +10,13 @@ import { UnityService } from '../../core/services/unity.service';
 import { Observable } from 'rxjs';
 
 @Component({
-    selector: 'app-welcome-page',
+    selector: 'app-home-page',
     imports: [CommonModule, CircularLevelComponent],
-    templateUrl: './welcome-page.component.html',
-    styleUrl: './welcome-page.component.scss',
+    templateUrl: './home-page.component.html',
+    styleUrl: './home-page.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class WelcomePageComponent {
+export class HomePageComponent {
   selectedValue: string = '';
   protected unities$: Observable<Unit[]>;
 
