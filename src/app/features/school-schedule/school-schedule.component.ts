@@ -63,51 +63,70 @@ export class SchoolScheduleComponent implements OnInit {
     const firstDayOfWeek = firstDayOfMonth.getDay();
 
     // Calculate days from previous month to show
-    const daysFromPrevMonth = firstDayOfWeek;
+    // Adjust for weekdays only (1 = Monday, 5 = Friday)
+    let daysFromPrevMonth = 0;
+    if (firstDayOfWeek === 0) { // Sunday
+      daysFromPrevMonth = 5; // Show previous Friday
+    } else if (firstDayOfWeek === 6) { // Saturday
+      daysFromPrevMonth = 4; // Show previous Friday
+    } else if (firstDayOfWeek > 1) {
+      daysFromPrevMonth = firstDayOfWeek - 1; // Show from Monday
+    }
+
     const prevMonth = this.currentMonth === 0 ? 11 : this.currentMonth - 1;
     const prevMonthYear = this.currentMonth === 0 ? this.currentYear - 1 : this.currentYear;
     const lastDayOfPrevMonth = new Date(prevMonthYear, prevMonth + 1, 0).getDate();
 
-    // Add days from previous month
+    // Add weekdays from previous month
     for (let i = daysFromPrevMonth - 1; i >= 0; i--) {
       const date = new Date(prevMonthYear, prevMonth, lastDayOfPrevMonth - i);
-      this.calendarDays.push({
-        date,
-        dayNumber: date.getDate(),
-        isCurrentMonth: false,
-        isToday: this.isToday(date),
-        events: []
-      });
+      // Only add weekdays (1-5)
+      if (date.getDay() >= 1 && date.getDay() <= 5) {
+        this.calendarDays.push({
+          date,
+          dayNumber: date.getDate(),
+          isCurrentMonth: false,
+          isToday: this.isToday(date),
+          events: []
+        });
+      }
     }
 
-    // Add days from current month
+    // Add weekdays from current month
     for (let i = 1; i <= lastDayOfMonth.getDate(); i++) {
       const date = new Date(this.currentYear, this.currentMonth, i);
-      this.calendarDays.push({
-        date,
-        dayNumber: i,
-        isCurrentMonth: true,
-        isToday: this.isToday(date),
-        events: []
-      });
+      // Only add weekdays (1-5)
+      if (date.getDay() >= 1 && date.getDay() <= 5) {
+        this.calendarDays.push({
+          date,
+          dayNumber: i,
+          isCurrentMonth: true,
+          isToday: this.isToday(date),
+          events: []
+        });
+      }
     }
 
-    // Calculate days from next month to show to complete the grid (6 rows x 7 columns = 42 cells)
-    const totalDaysToShow = 42;
-    const daysFromNextMonth = totalDaysToShow - this.calendarDays.length;
+    // Calculate days from next month to show to complete the grid
+    // For weekdays only, we need approximately 5 columns x 6 rows = 30 cells max
+    const totalDaysToShow = 30;
+    const daysFromNextMonth = Math.max(0, totalDaysToShow - this.calendarDays.length);
     const nextMonth = this.currentMonth === 11 ? 0 : this.currentMonth + 1;
     const nextMonthYear = this.currentMonth === 11 ? this.currentYear + 1 : this.currentYear;
 
-    // Add days from next month
-    for (let i = 1; i <= daysFromNextMonth; i++) {
+    // Add weekdays from next month
+    for (let i = 1; i <= daysFromNextMonth + 7; i++) { // Add extra days to ensure we have enough weekdays
       const date = new Date(nextMonthYear, nextMonth, i);
-      this.calendarDays.push({
-        date,
-        dayNumber: i,
-        isCurrentMonth: false,
-        isToday: this.isToday(date),
-        events: []
-      });
+      // Only add weekdays (1-5) and stop when we have enough days
+      if (date.getDay() >= 1 && date.getDay() <= 5 && this.calendarDays.length < totalDaysToShow) {
+        this.calendarDays.push({
+          date,
+          dayNumber: i,
+          isCurrentMonth: false,
+          isToday: this.isToday(date),
+          events: []
+        });
+      }
     }
   }
 
