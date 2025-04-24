@@ -7,5 +7,4 @@ import { Component } from '@angular/core';
     styleUrl: './change-password.component.scss'
 })
 export class ChangePasswordComponent {
-
 }
