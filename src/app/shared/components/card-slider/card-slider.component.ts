@@ -7,6 +7,12 @@ import {
 import { TuiCarousel, TuiPagination } from '@taiga-ui/kit';
 import { Course } from '../../../features/@types/course';
 import {AnimationFrameService} from "../../../core/animation-frame.service";
+
+/**
+ * Modern Card Slider Component
+ *
+ * Displays a carousel of course or content cards with a modern design.
+ */
 @Component({
     selector: 'app-card-slider',
     imports: [CommonModule, TuiPagination, TuiCarousel, TuiPagination],
@@ -17,13 +23,38 @@ import {AnimationFrameService} from "../../../core/animation-frame.service";
 export class CardSliderComponent implements OnInit {
   @Input() index = 0;
   @Input() items: Course[] = [];
-  protected textColor: string = '';
-  protected bgColor: string = '';
 
   constructor(private animationService: AnimationFrameService) {
   }
 
   ngOnInit() {
     this.animationService.request(() => {})
+  }
+
+  /**
+   * Returns the appropriate gradient class based on the color.
+   *
+   * @param color The color name (primary, secondary, accent, success, warning) or undefined
+   * @returns The gradient class for the specified color
+   */
+  getGradientClass(color: string | undefined): string {
+    if (!color) {
+      return 'from-primary-600 to-primary-500'; // Default gradient if color is undefined
+    }
+
+    switch (color) {
+      case 'primary':
+        return 'from-primary-600 to-primary-500';
+      case 'secondary':
+        return 'from-secondary-600 to-secondary-500';
+      case 'accent':
+        return 'from-accent-600 to-accent-500';
+      case 'success':
+        return 'from-success-700 to-success-500';
+      case 'warning':
+        return 'from-warning-700 to-warning-500';
+      default:
+        return 'from-primary-600 to-primary-500';
+    }
   }
 }

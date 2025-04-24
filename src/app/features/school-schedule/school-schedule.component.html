@@ -26,7 +26,7 @@
         <div *ngFor="let day of calendarDays"
              class="text-center p-6 font-bold border-l border-neutral-200"
              [ngClass]="{
-               'bg-secondary-500 text-info border-secondary-500 font-extrabold': day.isToday,
+               'bg-primary-500 text-info border-primary-500 text-neutral-50 font-extrabold': day.isToday,
                'bg-neutral-50 text-primary': !day.isToday
              }">
             <div>{{ weekDayNames[day.date.getDay() - 1].substring(0, 3) }}</div>

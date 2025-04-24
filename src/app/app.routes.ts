@@ -18,12 +18,17 @@ import {ResetPasswordComponent} from "./features/auth/reset-password/reset-passw
 export const routes: Routes = [
   {
     path: '',
-    component: WelcomePageComponent,
+    redirectTo: '/home',
+    pathMatch: 'full',
   },
   {
     path: '',
     component: LayoutContentComponent,
     children: [
+      {
+        path: 'home',
+        component: WelcomePageComponent,
+      },
       {
         path: 'courses',
         component: CoursesComponent,
