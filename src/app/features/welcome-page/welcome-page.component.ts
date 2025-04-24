@@ -1,10 +1,8 @@
 import { Component, inject } from '@angular/core';
-import { CustomSelectComponent } from '../../shared/components/custom-select/custom-select.component';
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { TuiDialogService } from '@taiga-ui/core';
 import type { TuiDialogContext, TuiDialogSize } from '@taiga-ui/core';
-import { TuiButton } from '@taiga-ui/core';
 import type { PolymorpheusContent } from '@taiga-ui/polymorpheus';
 import { CircularLevelComponent } from '../../shared/components/circular-level/circular-level.component';
 import { Unit } from '../@types/unit';
