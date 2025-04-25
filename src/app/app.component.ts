@@ -1,4 +1,3 @@
-import {TuiRoot} from "@taiga-ui/core";
 import {Component} from '@angular/core';
 import {RouterLink, RouterLinkActive, RouterOutlet} from '@angular/router';
 import {SidebarComponent} from './shared/components/sidebar/sidebar.component';

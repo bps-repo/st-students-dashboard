@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
 import { catchError, exhaustMap, map, tap } from 'rxjs/operators';
@@ -13,14 +14,26 @@ export class AuthEffects {
     private actions$: Actions,
     private authService: AuthService,
     private alertService: AlertService,
-    private router: Router
+    private router: Router,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
   /**
    * Login effect
    */
-  login$ = createEffect(() =>
-    this.actions$.pipe(
+  login$ = createEffect(() => {
+    // Skip effects on server side
+    if (!isPlatformBrowser(this.platformId)) {
+      return of({ type: '[Auth] SSR Skip' });
+    }
+
+    // Ensure actions$ is defined before accessing pipe
+    if (!this.actions$) {
+      console.error('Actions$ is undefined in AuthEffects');
+      return of({ type: '[Auth] Login Error', error: 'Actions$ is undefined' });
+    }
+
+    return this.actions$.pipe(
       ofType(AuthActions.login),
       exhaustMap(({ email, password }) =>
         this.authService.login(email, password).pipe(
@@ -34,28 +47,51 @@ export class AuthEffects {
           })
         )
       )
-    )
-  );
+    );
+  });
 
   /**
    * Login success effect - Navigate to home page
    */
   loginSuccess$ = createEffect(
-    () =>
-      this.actions$.pipe(
+    () => {
+      // Skip effects on server side
+      if (!isPlatformBrowser(this.platformId)) {
+        return of({ type: '[Auth] SSR Skip' });
+      }
+
+      // Ensure actions$ is defined before accessing pipe
+      if (!this.actions$) {
+        console.error('Actions$ is undefined in AuthEffects');
+        return of({ type: '[Auth] Login Success Error', error: 'Actions$ is undefined' });
+      }
+
+      return this.actions$.pipe(
         ofType(AuthActions.loginSuccess),
         tap(() => {
           this.router.navigate(['/home']);
         })
-      ),
+      );
+    },
     { dispatch: false }
   );
 
   /**
    * Logout effect
    */
-  logout$ = createEffect(() =>
-    this.actions$.pipe(
+  logout$ = createEffect(() => {
+    // Skip effects on server side
+    if (!isPlatformBrowser(this.platformId)) {
+      return of({ type: '[Auth] SSR Skip' });
+    }
+
+    // Ensure actions$ is defined before accessing pipe
+    if (!this.actions$) {
+      console.error('Actions$ is undefined in AuthEffects');
+      return of({ type: '[Auth] Logout Error', error: 'Actions$ is undefined' });
+    }
+
+    return this.actions$.pipe(
       ofType(AuthActions.logout),
       exhaustMap(() =>
         this.authService.logout().pipe(
@@ -69,28 +105,51 @@ export class AuthEffects {
           })
         )
       )
-    )
-  );
+    );
+  });
 
   /**
    * Logout success effect - Navigate to login page
    */
   logoutSuccess$ = createEffect(
-    () =>
-      this.actions$.pipe(
+    () => {
+      // Skip effects on server side
+      if (!isPlatformBrowser(this.platformId)) {
+        return of({ type: '[Auth] SSR Skip' });
+      }
+
+      // Ensure actions$ is defined before accessing pipe
+      if (!this.actions$) {
+        console.error('Actions$ is undefined in AuthEffects');
+        return of({ type: '[Auth] Logout Success Error', error: 'Actions$ is undefined' });
+      }
+
+      return this.actions$.pipe(
         ofType(AuthActions.logoutSuccess),
         tap(() => {
           this.router.navigate(['/auth/login']);
         })
-      ),
+      );
+    },
     { dispatch: false }
   );
 
   /**
    * Reset password effect
    */
-  resetPassword$ = createEffect(() =>
-    this.actions$.pipe(
+  resetPassword$ = createEffect(() => {
+    // Skip effects on server side
+    if (!isPlatformBrowser(this.platformId)) {
+      return of({ type: '[Auth] SSR Skip' });
+    }
+
+    // Ensure actions$ is defined before accessing pipe
+    if (!this.actions$) {
+      console.error('Actions$ is undefined in AuthEffects');
+      return of({ type: '[Auth] Reset Password Error', error: 'Actions$ is undefined' });
+    }
+
+    return this.actions$.pipe(
       ofType(AuthActions.resetPassword),
       exhaustMap(({ email }) =>
         this.authService.resetPassword(email).pipe(
@@ -104,14 +163,25 @@ export class AuthEffects {
           })
         )
       )
-    )
-  );
+    );
+  });
 
   /**
    * Verify OTP effect
    */
-  verifyOtp$ = createEffect(() =>
-    this.actions$.pipe(
+  verifyOtp$ = createEffect(() => {
+    // Skip effects on server side
+    if (!isPlatformBrowser(this.platformId)) {
+      return of({ type: '[Auth] SSR Skip' });
+    }
+
+    // Ensure actions$ is defined before accessing pipe
+    if (!this.actions$) {
+      console.error('Actions$ is undefined in AuthEffects');
+      return of({ type: '[Auth] Verify OTP Error', error: 'Actions$ is undefined' });
+    }
+
+    return this.actions$.pipe(
       ofType(AuthActions.verifyOtp),
       exhaustMap(({ email, otp }) =>
         this.authService.verifyOtp(email, otp).pipe(
@@ -125,14 +195,25 @@ export class AuthEffects {
           })
         )
       )
-    )
-  );
+    );
+  });
 
   /**
    * Get current user effect
    */
-  getUser$ = createEffect(() =>
-    this.actions$.pipe(
+  getUser$ = createEffect(() => {
+    // Skip effects on server side
+    if (!isPlatformBrowser(this.platformId)) {
+      return of({ type: '[Auth] SSR Skip' });
+    }
+
+    // Ensure actions$ is defined before accessing pipe
+    if (!this.actions$) {
+      console.error('Actions$ is undefined in AuthEffects');
+      return of({ type: '[Auth] Get User Error', error: 'Actions$ is undefined' });
+    }
+
+    return this.actions$.pipe(
       ofType(AuthActions.getUser),
       exhaustMap(() =>
         this.authService.getCurrentUser().pipe(
@@ -147,6 +228,6 @@ export class AuthEffects {
           })
         )
       )
-    )
-  );
+    );
+  });
 }

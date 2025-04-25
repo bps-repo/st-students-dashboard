@@ -32,7 +32,6 @@ export const effects = [
   AuthEffects,
   UnitsEffects,
   CoursesEffects,
-  // Other feature effects will be added here
 ];
 
 /**

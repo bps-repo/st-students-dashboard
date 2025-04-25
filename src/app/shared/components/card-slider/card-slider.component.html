@@ -1,13 +1,8 @@
 <!-- Modern Card Slider Component with Car Design -->
-<tui-carousel
-  [itemsCount]="items.length > 3 ? 3 : items.length"
-  [(index)]="index"
-  [draggable]="true"
->
-  <ng-container *ngFor="let item of items">
+<ngb-carousel #carousel [interval]="0">
+  <ng-template ngbSlide *ngFor="let item of items">
     <!-- Course Card with Car Design -->
     <div
-      *tuiItem
       [ngClass]="
         item.type == 'course'
           ? 'bg-white border border-neutral-200'
@@ -151,15 +146,17 @@
         </a>
       </div>
     </div>
-  </ng-container>
-</tui-carousel>
+  </ng-template>
+</ngb-carousel>
 
 <!-- Modern Pagination -->
 <div class="flex justify-center mt-6">
-  <tui-pagination
-    size="s"
-    class="text-primary-500"
+  <mat-paginator
     [length]="items.length"
-    [(index)]="index"
-  />
+    [pageSize]="1"
+    [pageIndex]="index"
+    (page)="index = $event.pageIndex"
+    hidePageSize="true"
+    class="bg-transparent"
+  ></mat-paginator>
 </div>

@@ -1,13 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { TuiCarousel } from '@taiga-ui/kit';
+import { NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
 import { FlashCard } from '../@types/flash-card';
 import { TabMenuComponent } from '../../shared/components/tab-menu/tab-menu.component';
 import { TabMenuConfig } from '../@types/tab-menu';
 import { FlashCardComponent } from '../../shared/components/flash-card/flash-card.component';
 @Component({
     selector: 'app-lessons',
-    imports: [TuiCarousel, CommonModule, FlashCardComponent, TabMenuComponent],
+    imports: [NgbCarouselModule, CommonModule, FlashCardComponent, TabMenuComponent],
     templateUrl: './lessons.component.html',
     styleUrl: './lessons.component.scss'
 })

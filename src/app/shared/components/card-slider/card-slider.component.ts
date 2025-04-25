@@ -4,7 +4,8 @@ import {
   Component,
   Input, OnInit,
 } from '@angular/core';
-import { TuiCarousel, TuiPagination } from '@taiga-ui/kit';
+import { NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { Course } from '../../../features/@types/course';
 import {AnimationFrameService} from "../../../core/animation-frame.service";
 
@@ -15,7 +16,7 @@ import {AnimationFrameService} from "../../../core/animation-frame.service";
  */
 @Component({
     selector: 'app-card-slider',
-    imports: [CommonModule, TuiPagination, TuiCarousel, TuiPagination],
+    imports: [CommonModule, NgbCarouselModule, MatPaginatorModule],
     templateUrl: './card-slider.component.html',
     styleUrls: ['./card-slider.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush

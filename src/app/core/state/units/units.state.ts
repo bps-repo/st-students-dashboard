@@ -25,6 +25,6 @@ export const unitsAdapter: EntityAdapter<Unit> = createEntityAdapter<Unit>({
  */
 export const initialUnitsState: UnitsState = unitsAdapter.getInitialState({
   selectedUnitId: null,
-  isLoading: false,
+  isLoading: true,
   error: null,
 });

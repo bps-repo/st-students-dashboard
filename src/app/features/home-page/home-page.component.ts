@@ -1,9 +1,7 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, TemplateRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy } from '@angular/core';
-import { TuiDialogService } from '@taiga-ui/core';
-import type { TuiDialogContext, TuiDialogSize } from '@taiga-ui/core';
-import type { PolymorpheusContent } from '@taiga-ui/polymorpheus';
+import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { CircularLevelComponent } from '../../shared/components/circular-level/circular-level.component';
 import { Unit } from '../@types/unit';
 import { Observable } from 'rxjs';
@@ -14,7 +12,7 @@ import { loadUnits } from '../../core/state/units/units.actions';
 
 @Component({
     selector: 'app-home-page',
-    imports: [CommonModule, CircularLevelComponent],
+    imports: [CommonModule, CircularLevelComponent, MatDialogModule],
     templateUrl: './home-page.component.html',
     styleUrl: './home-page.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -25,7 +23,7 @@ export class HomePageComponent implements OnInit {
   protected loading$: Observable<boolean>;
   protected error$: Observable<string | null>;
 
-  private readonly dialogs = inject(TuiDialogService);
+  private readonly dialog = inject(MatDialog);
 
   constructor(public store: Store<AppState>) {
     this.unities$ = this.store.select(selectAllUnits);
@@ -78,17 +76,19 @@ export class HomePageComponent implements OnInit {
   ];
 
   protected onClick(
-    modalContent: PolymorpheusContent<TuiDialogContext>,
-    size: TuiDialogSize
+    modalContent: TemplateRef<any>,
+    width?: string
   ): void {
-    this.dialogs
-      .open(modalContent, {
-        size,
-      })
-      .subscribe();
+    this.dialog.open(modalContent, {
+      width: width || '500px',
+    });
   }
 
   handleSelection(event: string) {
     this.selectedValue = event;
   }
+
+
+
+  protected loadUnits = loadUnits
 }

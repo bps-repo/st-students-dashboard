@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
 import { catchError, exhaustMap, map } from 'rxjs/operators';
@@ -11,14 +12,26 @@ export class UnitsEffects {
   constructor(
     private actions$: Actions,
     private unityService: UnityService,
-    private alertService: AlertService
+    private alertService: AlertService,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
   /**
    * Load units effect
    */
-  loadUnits$ = createEffect(() =>
-    this.actions$.pipe(
+  loadUnits$ = createEffect(() => {
+    // Skip effects on server side
+    if (!isPlatformBrowser(this.platformId)) {
+      return of({ type: '[Units] SSR Skip' });
+    }
+
+    // Ensure actions$ is defined before accessing pipe
+    if (!this.actions$) {
+      console.error('Actions$ is undefined in UnitsEffects');
+      return of(UnitsActions.loadUnitsFailure({ error: 'Actions$ is undefined' }));
+    }
+
+    return this.actions$.pipe(
       ofType(UnitsActions.loadUnits),
       exhaustMap(() =>
         this.unityService.getUnities().pipe(
@@ -31,15 +44,26 @@ export class UnitsEffects {
           })
         )
       )
-    )
-  );
+    );
+  });
 
   /**
    * Update unit status effect
    * Note: This is a mock implementation since we don't have a real API for this
    */
-  updateUnitStatus$ = createEffect(() =>
-    this.actions$.pipe(
+  updateUnitStatus$ = createEffect(() => {
+    // Skip effects on server side
+    if (!isPlatformBrowser(this.platformId)) {
+      return of({ type: '[Units] SSR Skip' });
+    }
+
+    // Ensure actions$ is defined before accessing pipe
+    if (!this.actions$) {
+      console.error('Actions$ is undefined in UnitsEffects');
+      return of(UnitsActions.updateUnitStatusFailure({ error: 'Actions$ is undefined' }));
+    }
+
+    return this.actions$.pipe(
       ofType(UnitsActions.updateUnitStatus),
       exhaustMap(({ unitId, status }) =>
         // This would normally call a service method to update the unit status
@@ -55,6 +79,6 @@ export class UnitsEffects {
           })
         )
       )
-    )
-  );
+    );
+  });
 }
