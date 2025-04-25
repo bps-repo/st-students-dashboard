@@ -22,7 +22,7 @@ export class LessonsComponent {
 
   protected tabConfig: TabMenuConfig = {
     mainTab: 'Todas as aulas',
-    tabs: ['Favoritos', 'Histórico das aulas'],
+    tabs: ['Favoritos'],
     actionButtons: [],
   };
 

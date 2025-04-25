@@ -13,7 +13,9 @@ import { SupportComponent } from './features/support/support.component';
 import { TestsComponent } from './features/tests/tests.component';
 import { MaterialsComponent } from './features/lessons/materials/materials.component';
 import { MaterialDetailComponent } from './features/lessons/material-detail/material-detail.component';
-import {SchoolScheduleComponent} from "./features/school-schedule/school-schedule.component";
+import {LessonScheduleComponent} from "./features/school-schedule/lesson-schedule.component";
+import {LayoutContentComponent} from "./layout/layout-content/layout-content.component";
+import {LoginComponent} from "./features/auth/login/login.component";
 
 export const routes: Routes = [
   {
@@ -21,51 +23,65 @@ export const routes: Routes = [
     component: WelcomePageComponent,
   },
   {
-    path: 'courses',
-    component: CoursesComponent,
+    path: '',
+    component: LayoutContentComponent,
+    children:[
+      {
+        path: 'courses',
+        component: CoursesComponent,
+      },
+      {
+        path: 'profile',
+        component: ProfileComponent,
+      },
+      {
+        path: 'teachers',
+        component: TeachersComponent,
+      },
+      {
+        path: 'lessons',
+        component: LessonScheduleComponent,
+      },
+      {
+        path: 'lessons-history',
+        component: LessonsComponent,
+      },
+      {
+        path: 'events',
+        component: EventsComponent,
+      },
+      {
+        path: 'certificates',
+        component: CerticatesComponent,
+      },
+      {
+        path: 'change-password',
+        component: ChangePasswordComponent,
+      },
+      {
+        path: 'schedules',
+        component: LessonScheduleComponent,
+      },
+      {
+        path: 'support',
+        component: SupportComponent,
+      },
+      {
+        path: 'tests',
+        component: TestsComponent,
+      },
+      {
+        path: 'lessons/materials',
+        component: MaterialsComponent,
+      },
+      {
+        path: 'lessons/materials/:id',
+        component: MaterialDetailComponent,
+      },
+    ]
   },
   {
-    path: 'profile',
-    component: ProfileComponent,
-  },
-  {
-    path: 'teachers',
-    component: TeachersComponent,
-  },
-  {
-    path: 'lessons',
-    component: SchoolScheduleComponent,
-  },
-  {
-    path: 'events',
-    component: EventsComponent,
-  },
-  {
-    path: 'certificates',
-    component: CerticatesComponent,
-  },
-  {
-    path: 'change-password',
-    component: ChangePasswordComponent,
-  },
-  {
-    path: 'schedules',
-    component: SchoolScheduleComponent,
-  },
-  {
-    path: 'support',
-    component: SupportComponent,
-  },
-  {
-    path: 'tests',
-    component: TestsComponent,
-  },
-  {
-    path: 'lessons/materials',
-    component: MaterialsComponent,
-  },
-  {
-    path: 'lessons/materials/:id',
-    component: MaterialDetailComponent,
-  },
+    path:"auth/login",
+    component:LoginComponent
+  }
 ];

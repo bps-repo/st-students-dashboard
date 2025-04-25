@@ -10,11 +10,7 @@ import { HeaderOnSmallComponent } from './shared/components/header-on-small/head
     selector: 'app-root',
     imports: [
         RouterOutlet,
-        SidebarComponent,
-        HeaderComponent,
-        HeaderOnSmallComponent,
         CommonModule,
-        TuiRoot
     ],
     templateUrl: './app.component.html',
     styleUrl: './app.component.scss'
