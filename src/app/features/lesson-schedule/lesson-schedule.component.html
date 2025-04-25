@@ -62,7 +62,7 @@
           </div>
 
           <!-- Events -->
-          <div *ngFor="let event of getEventsForDay(day)"
+          <a routerLink="/lessons/materials" *ngFor="let event of getEventsForDay(day)"
                class="absolute rounded-md p-1.5 text-xs text-light font-bold cursor-pointer bg-primary transition-all hover:shadow-lg overflow-hidden"
                [ngClass]="event.color || 'bg-accent-100'"
                [style.top.px]="calculateEventTop(event)"
@@ -79,7 +79,7 @@
               <i class="pi pi-home mr-1 text-primary text-[10px]"></i>
               {{ event.room }}
             </div>
-          </div>
+          </a>
         </div>
       </div>
     </div>

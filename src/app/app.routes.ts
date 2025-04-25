@@ -10,7 +10,7 @@ import {SupportComponent} from './features/support/support.component';
 import {TestsComponent} from './features/tests/tests.component';
 import {MaterialsComponent} from './features/lessons/materials/materials.component';
 import {MaterialDetailComponent} from './features/lessons/material-detail/material-detail.component';
-import {SchoolScheduleComponent} from "./features/school-schedule/school-schedule.component";
+import {LessonScheduleComponent} from "./features/lesson-schedule/lesson-schedule.component";
 import {LayoutContentComponent} from "./layout/layout-content/layout-content.component";
 import {LoginComponent} from "./features/auth/login/login.component";
 import {ResetPasswordComponent} from "./features/auth/reset-password/reset-password.component";
@@ -43,7 +43,7 @@ export const routes: Routes = [
       },
       {
         path: 'lessons',
-        component: SchoolScheduleComponent,
+        component: LessonScheduleComponent,
       },
       {
         path: 'events',
@@ -59,7 +59,7 @@ export const routes: Routes = [
       },
       {
         path: 'schedules',
-        component: SchoolScheduleComponent,
+        component: LessonScheduleComponent,
       },
       {
         path: 'support',

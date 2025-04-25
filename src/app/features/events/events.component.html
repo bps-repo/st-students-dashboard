@@ -1,9 +1,255 @@
-<div class="p-5 m-5 font-heading">
-  <app-tab-menu [tabConfig]="tabConfig"></app-tab-menu>
-  <section class="mt-10">
-    <app-flash-card
-      *ngFor="let event of events"
-      [dataInput]="event"
-    ></app-flash-card>
-  </section>
+<!-- Modern Events Component -->
+<div class="px-8 py-6 bg-background-light font-heading">
+  <!-- Header Section with Search -->
+  <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+    <div class="mb-4 md:mb-0">
+      <h1 class="text-2xl font-bold text-primary-700">Eventos e Atividades</h1>
+      <p class="text-neutral-600 mt-1">Participe de eventos para praticar seu inglês</p>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="relative w-full md:w-64">
+      <input
+        type="text"
+        placeholder="Pesquisar eventos..."
+        [(ngModel)]="searchQuery"
+        class="w-full pl-10 pr-4 py-2 bg-white border border-neutral-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all"
+      >
+      <i class="pi pi-search absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400"></i>
+    </div>
+  </div>
+
+  <!-- Tab Menu -->
+  <app-tab-menu [tabConfig]="tabConfig" class="mb-6"></app-tab-menu>
+
+  <!-- Filter Section -->
+  <div class="bg-white rounded-xl p-4 shadow-md mb-8">
+    <div class="flex flex-wrap gap-3">
+      <div
+        (click)="setFilter('all')"
+        [ngClass]="activeFilter === 'all' ? 'bg-primary-50 text-primary-700' : 'bg-neutral-50 text-neutral-700'"
+        class="px-3 py-1.5 rounded-lg font-medium text-sm flex items-center hover:bg-primary-100 transition-all cursor-pointer"
+      >
+        <span>Todos</span>
+      </div>
+      <div
+        (click)="setFilter('workshop')"
+        [ngClass]="activeFilter === 'workshop' ? 'bg-primary-50 text-primary-700' : 'bg-neutral-50 text-neutral-700'"
+        class="px-3 py-1.5 rounded-lg font-medium text-sm flex items-center hover:bg-primary-100 transition-all cursor-pointer"
+      >
+        <i class="pi pi-briefcase mr-2"></i>
+        <span>Workshops</span>
+      </div>
+      <div
+        (click)="setFilter('conversation')"
+        [ngClass]="activeFilter === 'conversation' ? 'bg-primary-50 text-primary-700' : 'bg-neutral-50 text-neutral-700'"
+        class="px-3 py-1.5 rounded-lg font-medium text-sm flex items-center hover:bg-primary-100 transition-all cursor-pointer"
+      >
+        <i class="pi pi-comments mr-2"></i>
+        <span>Conversação</span>
+      </div>
+      <div
+        (click)="setFilter('lecture')"
+        [ngClass]="activeFilter === 'lecture' ? 'bg-primary-50 text-primary-700' : 'bg-neutral-50 text-neutral-700'"
+        class="px-3 py-1.5 rounded-lg font-medium text-sm flex items-center hover:bg-primary-100 transition-all cursor-pointer"
+      >
+        <i class="pi pi-book mr-2"></i>
+        <span>Palestras</span>
+      </div>
+      <div
+        (click)="setFilter('meeting')"
+        [ngClass]="activeFilter === 'meeting' ? 'bg-primary-50 text-primary-700' : 'bg-neutral-50 text-neutral-700'"
+        class="px-3 py-1.5 rounded-lg font-medium text-sm flex items-center hover:bg-primary-100 transition-all cursor-pointer"
+      >
+        <i class="pi pi-users mr-2"></i>
+        <span>Encontros</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Events Grid -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <!-- Event Card -->
+    <div
+      *ngFor="let event of getFilteredEvents()"
+      class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-all duration-300"
+    >
+      <!-- Event Header with Gradient Background -->
+      <div class="relative h-32 bg-gradient-to-r" [ngClass]="'from-' + event.color + '-600 to-' + event.color + '-500'">
+        <div class="absolute inset-0 bg-[url('/bg_st.png')] bg-cover bg-center opacity-20"></div>
+
+        <!-- Event Type Badge -->
+        <div class="absolute top-3 right-3 bg-white bg-opacity-20 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium text-white">
+          <span *ngIf="event.type === 'workshop'">Workshop</span>
+          <span *ngIf="event.type === 'conversation'">Conversação</span>
+          <span *ngIf="event.type === 'lecture'">Palestra</span>
+          <span *ngIf="event.type === 'meeting'">Encontro</span>
+          <span *ngIf="event.type === 'other'">Evento</span>
+        </div>
+
+        <!-- Event Date -->
+        <div class="absolute bottom-3 left-3 bg-white bg-opacity-20 backdrop-blur-sm px-3 py-2 rounded-lg text-white">
+          <div class="flex items-center">
+            <i class="pi pi-calendar mr-2"></i>
+            <span>{{ event.date }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Event Content -->
+      <div class="p-4">
+        <h2 class="text-lg font-bold text-neutral-800 mb-2">{{ event.title }}</h2>
+
+        <!-- Event Details -->
+        <div class="flex items-center text-neutral-600 mb-3">
+          <i class="pi pi-clock text-accent-500 mr-2"></i>
+          <span>{{ event.time }}</span>
+          <span class="mx-2">•</span>
+          <span class="bg-primary-50 text-primary-700 px-2 py-0.5 rounded-full text-xs">{{ event.level }}</span>
+        </div>
+
+        <!-- Event Location -->
+        <div class="flex items-center text-neutral-600 mb-3">
+          <i class="pi pi-map-marker text-accent-500 mr-2"></i>
+          <span>{{ event.location }}</span>
+        </div>
+
+        <!-- Event Description -->
+        <p class="text-sm text-neutral-600 mb-4 line-clamp-2">{{ event.description }}</p>
+
+        <!-- Participants -->
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center">
+            <div class="flex -space-x-2">
+              <div class="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center text-primary-700 text-xs font-bold border-2 border-white">
+                {{ event.participants }}+
+              </div>
+              <div class="w-8 h-8 rounded-full bg-accent-500 flex items-center justify-center text-white text-xs border-2 border-white">
+                ST
+              </div>
+            </div>
+            <span class="ml-2 text-sm text-neutral-600">participantes</span>
+          </div>
+
+          <!-- Event Status -->
+          <div class="flex items-center">
+            <span *ngIf="event.status === 'upcoming'" class="flex items-center text-success-600 text-xs">
+              <i class="pi pi-check-circle mr-1"></i> Aberto
+            </span>
+            <span *ngIf="event.status === 'ongoing'" class="flex items-center text-warning-600 text-xs">
+              <i class="pi pi-clock mr-1"></i> Em andamento
+            </span>
+            <span *ngIf="event.status === 'past'" class="flex items-center text-neutral-500 text-xs">
+              <i class="pi pi-calendar-times mr-1"></i> Encerrado
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Event Actions -->
+      <div class="px-4 py-3 bg-neutral-50 border-t border-neutral-100">
+        <div class="flex justify-between">
+          <button
+            (click)="openEventDetails(event)"
+            class="px-4 py-2 bg-white border border-neutral-200 rounded-lg text-neutral-700 text-sm font-medium hover:bg-neutral-100 transition-all"
+          >
+            <i class="pi pi-info-circle mr-1"></i> Detalhes
+          </button>
+          <button
+            class="px-4 py-2 bg-gradient-to-r from-accent-600 to-accent-500 rounded-lg text-white text-sm font-medium hover:from-accent-700 hover:to-accent-600 transition-all shadow-sm"
+          >
+            <i class="pi pi-check mr-1"></i> Participar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="getFilteredEvents().length === 0" class="bg-white rounded-xl p-8 shadow-md text-center">
+    <div class="w-16 h-16 bg-neutral-100 rounded-full flex items-center justify-center mx-auto mb-4">
+      <i class="pi pi-calendar-times text-neutral-400 text-2xl"></i>
+    </div>
+    <h3 class="text-lg font-bold text-neutral-800 mb-2">Nenhum evento encontrado</h3>
+    <p class="text-neutral-600">Não encontramos eventos com os filtros selecionados. Tente outros filtros ou volte mais tarde.</p>
+  </div>
+
+  <!-- Event Details Modal -->
+  <div *ngIf="showEventDetails()" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div class="bg-white rounded-xl shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+      <!-- Modal Header -->
+      <div class="p-4 border-b border-neutral-200 flex justify-between items-center">
+        <h2 class="text-lg font-bold text-neutral-800">Detalhes do Evento</h2>
+        <button
+          (click)="showEventDetails.set(false)"
+          class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-neutral-100 text-neutral-500 transition-all"
+        >
+          <i class="pi pi-times"></i>
+        </button>
+      </div>
+
+      <!-- Modal Content -->
+      <div class="p-4" *ngIf="selectedEvent">
+        <!-- Event Title -->
+        <h3 class="text-xl font-bold text-neutral-800 mb-2">{{ selectedEvent.title }}</h3>
+        <p class="text-neutral-600 mb-4">Nível: {{ selectedEvent.level }}</p>
+
+        <!-- Date and Time -->
+        <div class="flex items-center mb-4">
+          <i class="pi pi-calendar text-2xl text-accent-500 mr-4"></i>
+          <div>
+            <p class="font-bold text-neutral-800">{{ selectedEvent.date }}</p>
+            <p class="text-neutral-500">Início às {{ selectedEvent.time }}</p>
+          </div>
+        </div>
+
+        <!-- Location -->
+        <div class="flex items-center mb-4">
+          <i class="pi pi-map-marker text-2xl text-accent-500 mr-4"></i>
+          <div>
+            <p class="font-bold text-neutral-800">Local</p>
+            <p class="text-neutral-500">{{ selectedEvent.location }}</p>
+          </div>
+        </div>
+
+        <!-- Participants -->
+        <div class="flex items-center mb-4">
+          <i class="pi pi-users text-2xl text-accent-500 mr-4"></i>
+          <div>
+            <p class="font-bold text-neutral-800">Participantes</p>
+            <p class="text-neutral-500">{{ selectedEvent.participants }} confirmaram presença</p>
+          </div>
+        </div>
+
+        <!-- Description -->
+        <div class="mb-4">
+          <p class="font-bold text-neutral-800 mb-2">Descrição</p>
+          <p class="text-neutral-600">{{ selectedEvent.description }}</p>
+        </div>
+
+        <!-- Organizer -->
+        <div class="border-t pt-4 mt-4">
+          <p class="font-medium text-neutral-800 mb-2">Organizador</p>
+          <div class="flex items-center">
+            <div class="w-10 h-10 rounded-full bg-primary-500 text-white flex items-center justify-center mr-3">
+              <span>ST</span>
+            </div>
+            <div>
+              <p class="font-medium text-neutral-800">{{ selectedEvent.organizer }}</p>
+              <p class="text-neutral-500 text-sm">Educação</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="p-4 border-t border-neutral-200">
+        <button
+          class="w-full py-3 bg-gradient-to-r from-primary-600 to-primary-500 text-white font-medium rounded-lg hover:from-primary-700 hover:to-primary-600 transition-all shadow-sm"
+        >
+          Quero Participar
+        </button>
+      </div>
+    </div>
+  </div>
 </div>

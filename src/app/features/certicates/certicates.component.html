@@ -1,52 +1,116 @@
-<div class="p-8 font-heading">
-  <section class="w-8/12 mt-5">
-    <h1 class="text-[22px] font-bold">Certificados</h1>
-    <div
-      class="flex flex-row justify-between w-[47%] mt-3 bg-primary shadow-md rounded-md bg-opacity-60"
-    >
-      <div class="flex flex-row justify-center items-center gap-4 p-5">
-        <app-circular-level></app-circular-level>
-        <div class="text-[15px] text-light">
-          <span>Seu nível actual</span>
-          <h1 class="text-light font-bold">Advanced</h1>
-          <span class="text-primary font-bold">Em progresso</span>
-        </div>
+<!-- Modern Certificates Component -->
+<div class="px-8 py-6 bg-background-light font-heading">
+  <!-- Header Section with Title -->
+  <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+    <div class="mb-4 md:mb-0">
+      <h1 class="text-2xl font-bold text-primary-700">Meus Certificados</h1>
+      <p class="text-neutral-600 mt-1">Visualize e baixe seus certificados de conclusão</p>
+    </div>
+
+    <!-- Filter Dropdown (Optional) -->
+    <div class="relative w-full md:w-64">
+      <div class="flex items-center bg-white border border-neutral-200 rounded-lg shadow-sm px-4 py-2 cursor-pointer hover:border-primary-300 transition-all">
+        <span class="text-neutral-700 flex-grow">Todos os certificados</span>
+        <i class="pi pi-chevron-down text-neutral-400"></i>
       </div>
     </div>
-  </section>
-  <section class="grid grid-cols-3 gap-5 mt-10">
-    <div
-      [ngClass]="certificate.color ? 'bg-' + certificate.color : 'bg-primary'"
-      *ngFor="let certificate of certificates"
-      class="flex flex-col justify-between shadow-md rounded-md bg-opacity-60"
-    >
-      <div class="flex flex-col justify-center items-center gap-4 p-5">
-        <div
-          [ngClass]="certificate.color ? 'bg-' + certificate.color : ''"
-          class="rounded-full border-4 h-20 w-20 p-1"
-        >
-          <div
-            [ngClass]="certificate.color ? 'bg-' + certificate.color : ''"
-            class="flex items-center justify-center border-light w-full h-full rounded-full"
-          >
-            <div>
-              <span class="text-[24px] font-bold text-light">A1</span>
+  </div>
+
+  <!-- Current Level Card -->
+  <div class="bg-white rounded-xl shadow-md overflow-hidden mb-8">
+    <div class="bg-gradient-to-r from-primary-600 to-primary-500 px-6 py-4 text-white">
+      <h2 class="text-lg font-bold">Seu Nível Atual</h2>
+    </div>
+
+    <div class="p-6">
+      <div class="flex flex-col md:flex-row items-center">
+        <div class="mb-6 md:mb-0 md:mr-8">
+          <app-circular-level [label]="'C1'" [color]="'primary'"></app-circular-level>
+        </div>
+
+        <div class="flex-grow">
+          <h3 class="text-xl font-bold text-primary-700 mb-2">{{ currentLevel }}</h3>
+          <p class="text-neutral-600 mb-4">Parabéns por alcançar este nível! Continue aprimorando suas habilidades.</p>
+
+          <!-- Progress Bar -->
+          <div class="mb-2 flex justify-between items-center">
+            <span class="text-sm font-medium text-neutral-700">Progresso do nível</span>
+            <span class="text-sm font-bold text-primary-600">{{ levelProgress }}%</span>
+          </div>
+          <div class="w-full bg-neutral-200 rounded-full h-2.5">
+            <div class="bg-gradient-to-r from-primary-500 to-primary-600 h-2.5 rounded-full relative" [style.width.%]="levelProgress">
+              <div class="absolute -right-1 -top-1 bg-white w-4 h-4 rounded-full border-2 border-primary-500 shadow-sm"></div>
             </div>
           </div>
         </div>
-        <h1 class="text-light font-bold text-[18px]">
-          {{ certificate.title }}
-        </h1>
-        <p class="text-center text-light font-bold">
-          Ideal para quem quer ter o primeiro contato com o idioma
-        </p>
-      </div>
-      <div
-        [ngClass]="certificate.color ? 'bg-' + certificate.color : 'bg-primary'"
-        class="p-2 flex items-center justify-center"
-      >
-        <span class="text-light font-bold">Baixar Certificado</span>
+
+        <div class="mt-6 md:mt-0 md:ml-8">
+          <button
+            (click)="downloadCertificate(currentLevel)"
+            class="bg-primary-50 hover:bg-primary-100 text-primary-700 font-medium py-2 px-4 rounded-lg transition-all flex items-center"
+          >
+            <i class="pi pi-download mr-2"></i>
+            Baixar Certificado
+          </button>
+        </div>
       </div>
     </div>
-  </section>
+  </div>
+
+  <!-- Certificates Grid -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <!-- Certificate Card -->
+    <div
+      *ngFor="let certificate of certificates"
+      class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-all duration-300"
+    >
+      <!-- Certificate Header with Gradient Background -->
+      <div class="relative h-32 bg-gradient-to-r" [ngClass]="'from-' + certificate.color + '-600 to-' + certificate.color + '-500'">
+        <div class="absolute inset-0 bg-[url('/bg_st.png')] bg-cover bg-center opacity-20"></div>
+
+        <!-- Certificate Badge -->
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          <div class="relative">
+            <div class="w-20 h-20 rounded-full bg-white bg-opacity-20 backdrop-blur-sm flex items-center justify-center border-2 border-white">
+              <span class="text-2xl font-bold text-white">
+                {{ certificate.title.substring(0, 1) }}{{ certificate.title.includes('-') ? certificate.title.split('-')[1].substring(0, 1) : '' }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Certificate Content -->
+      <div class="p-6 text-center">
+        <h2 class="text-lg font-bold text-neutral-800 mb-2">{{ certificate.title }}</h2>
+        <div class="bg-neutral-50 rounded-lg px-3 py-1.5 inline-block mb-4">
+          <span class="text-sm text-neutral-700">Nível de Inglês</span>
+        </div>
+
+        <p class="text-neutral-600 text-sm mb-6">
+          {{ certificate.description }}
+        </p>
+
+        <!-- Certificate Status -->
+        <div class="flex justify-center items-center mb-4">
+          <div class="flex items-center bg-success-50 text-success-700 px-3 py-1 rounded-full text-sm">
+            <i class="pi pi-check-circle mr-1"></i>
+            <span>Concluído</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Certificate Actions -->
+      <div class="px-6 py-4 bg-neutral-50 border-t border-neutral-200">
+        <button
+          (click)="downloadCertificate(certificate.title)"
+          [ngClass]="'bg-' + certificate.color + '-500 hover:bg-' + certificate.color + '-600'"
+          class="w-full py-2.5 rounded-lg text-white font-medium transition-all flex items-center justify-center"
+        >
+          <i class="pi pi-download mr-2"></i>
+          Baixar Certificado
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
