@@ -2,10 +2,11 @@ import { Component } from '@angular/core';
 import { OverlayComponent } from '../overlay/overlay.component';
 import { BehaviorSubject } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import {RouterLink} from "@angular/router";
 
 @Component({
     selector: 'app-header',
-    imports: [OverlayComponent, CommonModule],
+  imports: [OverlayComponent, CommonModule, RouterLink],
     templateUrl: './header.component.html'
 })
 export class HeaderComponent {
