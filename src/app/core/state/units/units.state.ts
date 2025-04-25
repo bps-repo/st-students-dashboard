@@ -21,10 +21,39 @@ export const unitsAdapter: EntityAdapter<Unit> = createEntityAdapter<Unit>({
 });
 
 /**
+ * Mock units for initial state
+ */
+const mockUnits: Unit[] = [
+  {
+    title: 'Unit 1',
+    description: 'Introduction to basics',
+    status: 'available'
+  },
+  {
+    title: 'Unit 2',
+    description: 'Fundamental concepts',
+    status: 'available'
+  },
+  {
+    title: 'Unit 3',
+    description: 'Intermediate topics',
+    status: 'available'
+  },
+  {
+    title: 'Unit 4',
+    description: 'Advanced material',
+    status: 'available'
+  }
+];
+
+/**
  * Initial units state
  */
-export const initialUnitsState: UnitsState = unitsAdapter.getInitialState({
-  selectedUnitId: null,
-  isLoading: true,
-  error: null,
-});
+export const initialUnitsState: UnitsState = unitsAdapter.addMany(
+  mockUnits,
+  unitsAdapter.getInitialState({
+    selectedUnitId: null,
+    isLoading: false,
+    error: null,
+  })
+);

@@ -96,7 +96,7 @@
       </div>
 
       <!-- Units Cards -->
-      <div *ngIf="(unities$ | async)?.length && !(loading$ | async) && !(error$ | async)" class="bg-white rounded-xl shadow-md overflow-hidden">
+      <div *ngIf="!(loading$ | async) && !(error$ | async)" class="bg-white rounded-xl shadow-md overflow-hidden">
         <div class="divide-y divide-neutral-100">
           <div
             *ngFor="let item of unities$ | async; let i = index"
@@ -290,21 +290,27 @@
 
 <!-- Modern Modal Component -->
 <ng-template #modalContent let-observer>
-  <div class="p-6 max-w-3xl mx-auto bg-white rounded-xl">
+  <div class="p-4 sm:p-6 w-full bg-white rounded-xl overflow-y-auto max-h-[90vh]">
     <!-- Modal Header with Close Button -->
-    <div class="flex justify-between items-center mb-6">
-      <h2 class="text-2xl font-bold text-primary-700">Detalhes do Nível</h2>
+    <div class="flex justify-between items-center mb-4 sm:mb-6">
+      <h2 class="text-xl sm:text-2xl font-bold text-primary-700">Detalhes do Nível</h2>
+      <button
+        class="text-neutral-500 hover:text-neutral-700 p-2 rounded-full hover:bg-neutral-100 transition-all"
+        (click)="observer.complete()"
+      >
+        <i class="pi pi-times"></i>
+      </button>
     </div>
 
     <!-- Level Header -->
-    <div class="bg-gradient-to-r from-primary-600 to-primary-500 text-white p-5 rounded-xl mb-6">
-      <div class="flex items-center">
-        <div class="bg-white bg-opacity-20 rounded-xl p-4 mr-4">
+    <div class="bg-gradient-to-r from-primary-600 to-primary-500 text-white p-4 sm:p-5 rounded-xl mb-4 sm:mb-6">
+      <div class="flex flex-col sm:flex-row items-start sm:items-center">
+        <div class="bg-white bg-opacity-20 rounded-xl p-3 sm:p-4 mb-3 sm:mb-0 sm:mr-4">
           <app-circular-level label="C1" size="20" />
         </div>
-        <div>
-          <h3 class="text-xl font-medium mb-1">Advanced</h3>
-          <p class="text-2xl font-bold">14 aulas, 3 exercícios nesta unidade</p>
+        <div class="w-full">
+          <h3 class="text-lg sm:text-xl font-medium mb-1">Advanced</h3>
+          <p class="text-xl sm:text-2xl font-bold">14 aulas, 3 exercícios nesta unidade</p>
 
           <!-- Progress Bar -->
           <div class="w-full bg-white bg-opacity-20 rounded-full h-2 mt-3">
@@ -316,14 +322,14 @@
       </div>
     </div>
 
-    <!-- Levels Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- Levels Grid - Responsive grid that adapts to screen size -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
       <!-- Level Items -->
       <div
         *ngFor="let item of items"
-        class="bg-white border border-neutral-200 rounded-xl p-4 hover:shadow-md transition-all"
+        class="bg-white border border-neutral-200 rounded-xl p-3 sm:p-4 hover:shadow-md transition-all"
       >
-        <div class="flex items-center">
+        <div class="flex flex-col sm:flex-row sm:items-center">
           <!-- Level Icon -->
           <div
             [ngClass]="
@@ -333,7 +339,7 @@
                 ? 'bg-neutral-300'
                 : 'bg-gradient-to-r from-primary-600 to-primary-500'
             "
-            class="rounded-lg p-3 text-white mr-4"
+            class="rounded-lg p-3 text-white mb-3 sm:mb-0 sm:mr-4 self-start"
           >
             <app-circular-level
               label="{{ item.label }}"
@@ -344,8 +350,8 @@
 
           <!-- Level Content -->
           <div class="flex-grow">
-            <div class="flex justify-between items-center">
-              <h4 class="font-bold text-lg text-neutral-800">{{ item.title }}</h4>
+            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center">
+              <h4 class="font-bold text-base sm:text-lg text-neutral-800 mb-1 sm:mb-0">{{ item.title }}</h4>
               <span
                 [ngClass]="
                   item.status == 'done'
@@ -354,12 +360,12 @@
                     ? 'bg-neutral-100 text-neutral-500'
                     : 'bg-primary-100 text-primary-700'
                 "
-                class="text-xs px-2 py-1 rounded-full font-medium"
+                class="text-xs px-2 py-1 rounded-full font-medium self-start sm:self-auto"
               >
                 {{ item.status == 'done' ? 'Concluído' : item.status == 'lock' ? 'Bloqueado' : 'Em andamento' }}
               </span>
             </div>
-            <p class="text-neutral-600 mt-1">{{ item.description }}</p>
+            <p class="text-neutral-600 mt-1 text-sm sm:text-base">{{ item.description }}</p>
 
             <!-- Progress Bar -->
             <div class="w-full bg-neutral-200 rounded-full h-1.5 mt-3">
@@ -381,11 +387,16 @@
     </div>
 
     <!-- Action Buttons -->
-    <div class="flex justify-end mt-6 space-x-4">
-      <button class="px-4 py-2 border border-neutral-300 rounded-lg text-neutral-700 hover:bg-neutral-50 transition-all" (click)="observer.complete()">
+    <div class="flex flex-col sm:flex-row sm:justify-end mt-6 space-y-2 sm:space-y-0 sm:space-x-4">
+      <button
+        class="w-full sm:w-auto px-4 py-2 border border-neutral-300 rounded-lg text-neutral-700 hover:bg-neutral-50 transition-all order-2 sm:order-1"
+        (click)="observer.complete()"
+      >
         Fechar
       </button>
-      <button class="px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-all">
+      <button
+        class="w-full sm:w-auto px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-all order-1 sm:order-2"
+      >
         Ver Detalhes
       </button>
     </div>

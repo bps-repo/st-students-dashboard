@@ -4,7 +4,7 @@ import { ChangeDetectionStrategy } from '@angular/core';
 import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { CircularLevelComponent } from '../../shared/components/circular-level/circular-level.component';
 import { Unit } from '../@types/unit';
-import { Observable } from 'rxjs';
+import {Observable, of} from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../core/state';
 import { selectAllUnits, selectUnitsLoading, selectUnitsError } from '../../core/state/units/units.selectors';
@@ -27,8 +27,11 @@ export class HomePageComponent implements OnInit {
 
   constructor(public store: Store<AppState>) {
     this.unities$ = this.store.select(selectAllUnits);
-    this.loading$ = this.store.select(selectUnitsLoading);
-    this.error$ = this.store.select(selectUnitsError);
+    this.loading$ = of(false);
+    this.error$ = of(null);
+
+    //this.loading$ = this.store.select(selectUnitsLoading);
+    //this.error$ = this.store.select(selectUnitsError);
   }
 
   ngOnInit(): void {
@@ -79,16 +82,35 @@ export class HomePageComponent implements OnInit {
     modalContent: TemplateRef<any>,
     width?: string
   ): void {
-    this.dialog.open(modalContent, {
-      width: width || '500px',
-    });
+    let modalWidth: string;
+
+    // Convert size codes to responsive widths
+    if (width === 'l') {
+      modalWidth = '90vw';
+      // Set a max-width to prevent the modal from becoming too wide on large screens
+      const dialogRef = this.dialog.open(modalContent, {
+        width: modalWidth,
+        maxWidth: '800px',
+        // Add responsive settings
+        autoFocus: false,
+        restoreFocus: false,
+        panelClass: 'responsive-dialog'
+      });
+    } else {
+      // Default size with responsive behavior
+      modalWidth = width || '90vw';
+      const dialogRef = this.dialog.open(modalContent, {
+        width: modalWidth,
+        maxWidth: '500px',
+        autoFocus: false,
+        restoreFocus: false,
+        panelClass: 'responsive-dialog'
+      });
+    }
   }
 
   handleSelection(event: string) {
     this.selectedValue = event;
   }
-
-
-
   protected loadUnits = loadUnits
 }
