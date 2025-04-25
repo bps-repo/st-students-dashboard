@@ -20,18 +20,13 @@ export class UnityService {
         status: 'done',
       },
       {
-        title: 'Unidade 4',
+        title: 'Unidade 3',
         description: 'Past Simple - Regular Verbs',
         status: 'reading',
       },
       {
-        title: 'Unidade 5',
+        title: 'Unidade 4',
         description: 'Perfect Tense - Verb to have + main verb',
-        status: 'lock',
-      },
-      {
-        title: 'Unidade 6',
-        description: 'Modal Verbs- Could, would, might, ougth + to',
         status: 'lock',
       },
     ]);

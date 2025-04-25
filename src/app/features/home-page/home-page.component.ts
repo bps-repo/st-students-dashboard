@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { TuiDialogService } from '@taiga-ui/core';
@@ -6,8 +6,11 @@ import type { TuiDialogContext, TuiDialogSize } from '@taiga-ui/core';
 import type { PolymorpheusContent } from '@taiga-ui/polymorpheus';
 import { CircularLevelComponent } from '../../shared/components/circular-level/circular-level.component';
 import { Unit } from '../@types/unit';
-import { UnityService } from '../../core/services/unity.service';
 import { Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../core/state';
+import { selectAllUnits, selectUnitsLoading, selectUnitsError } from '../../core/state/units/units.selectors';
+import { loadUnits } from '../../core/state/units/units.actions';
 
 @Component({
     selector: 'app-home-page',
@@ -16,14 +19,23 @@ import { Observable } from 'rxjs';
     styleUrl: './home-page.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HomePageComponent {
+export class HomePageComponent implements OnInit {
   selectedValue: string = '';
   protected unities$: Observable<Unit[]>;
+  protected loading$: Observable<boolean>;
+  protected error$: Observable<string | null>;
 
   private readonly dialogs = inject(TuiDialogService);
 
-  constructor(private readonly UnityService: UnityService) {
-    this.unities$ = this.UnityService.getUnities();
+  constructor(public store: Store<AppState>) {
+    this.unities$ = this.store.select(selectAllUnits);
+    this.loading$ = this.store.select(selectUnitsLoading);
+    this.error$ = this.store.select(selectUnitsError);
+  }
+
+  ngOnInit(): void {
+    // Dispatch action to load units when component initializes
+    this.store.dispatch(loadUnits());
   }
 
   protected items: any[] = [

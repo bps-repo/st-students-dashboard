@@ -66,22 +66,42 @@
     <div class="lg:col-span-7">
       <div class="flex items-center justify-between mb-4">
         <h2 class="text-xl font-bold text-neutral-800">Unidades</h2>
-        <div class="flex items-center text-neutral-600">
-          <span class="font-medium">1/{{ (unities$ | async)!.length }}</span>
-          <a href="#" class="ml-4 text-accent-600 hover:text-accent-700 flex items-center text-sm font-medium">
-            Ver todas
-            <i class="pi pi-arrow-right ml-1"></i>
-          </a>
+      </div>
+
+      <!-- Loading State -->
+      <div *ngIf="loading$ | async" class="bg-white rounded-xl shadow-md p-6 text-center">
+        <div class="animate-pulse flex flex-col items-center">
+          <div class="rounded-full bg-neutral-200 h-12 w-12 mb-4"></div>
+          <div class="h-4 bg-neutral-200 rounded w-1/2 mb-2"></div>
+          <div class="h-4 bg-neutral-200 rounded w-1/3"></div>
+        </div>
+        <p class="text-neutral-600 mt-4">Carregando unidades...</p>
+      </div>
+
+      <!-- Error State -->
+      <div *ngIf="(error$ | async) && !(loading$ | async)" class="bg-white rounded-xl shadow-md p-6">
+        <div class="flex flex-col items-center text-center">
+          <div class="rounded-full bg-red-100 p-4 mb-4">
+            <i class="pi pi-exclamation-triangle text-red-500 text-2xl"></i>
+          </div>
+          <h3 class="text-lg font-bold text-neutral-800 mb-2">Erro ao carregar unidades</h3>
+          <p class="text-neutral-600 mb-4">{{ error$ | async }}</p>
+          <button
+            (click)="store.dispatch(loadUnits())"
+            class="px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-all"
+          >
+            Tentar novamente
+          </button>
         </div>
       </div>
 
       <!-- Units Cards -->
-      <div class="bg-white rounded-xl shadow-md overflow-hidden">
+      <div *ngIf="(unities$ | async)?.length && !(loading$ | async) && !(error$ | async)" class="bg-white rounded-xl shadow-md overflow-hidden">
         <div class="divide-y divide-neutral-100">
           <div
             *ngFor="let item of unities$ | async; let i = index"
             (click)="onClick(modalContent, 'l')"
-            class="p-4 hover:bg-neutral-50 transition-all cursor-pointer"
+            class="p-6 hover:bg-neutral-50 transition-all cursor-pointer"
           >
             <div class="flex items-center">
               <!-- Status Circle -->
@@ -98,7 +118,7 @@
                 <i
                   [ngClass]="
                     item.status == 'done'
-                      ? 'pi pi-check'
+                      ? 'pi pi-check text-success-500'
                       : item.status == 'lock'
                       ? 'pi pi-lock'
                       : 'pi pi-book'
@@ -112,11 +132,6 @@
                 <div class="flex items-center justify-between">
                   <h3 class="font-bold text-lg text-neutral-800">{{ item.title }}</h3>
                   <div class="flex items-center">
-                    <div class="flex">
-                      <i class="pi pi-star-fill text-warning-500 text-sm"></i>
-                      <i class="pi pi-star-fill text-warning-500 text-sm"></i>
-                      <i class="pi pi-star-fill text-warning-500 text-sm"></i>
-                    </div>
                     <span
                       [ngClass]="
                         item.status == 'done'
@@ -157,10 +172,10 @@
       </div>
     </div>
 
-    <!-- Agenda Section -->
+    <!-- Notification Section -->
     <div class="lg:col-span-5">
       <div class="flex items-center justify-between mb-4">
-        <h2 class="text-xl font-bold text-neutral-800">Agenda</h2>
+        <h2 class="text-xl font-bold text-neutral-800">Notificações</h2>
         <a href="#" class="text-accent-600 hover:text-accent-700 flex items-center text-sm font-medium">
           Ver tudo
           <i class="pi pi-arrow-right ml-1"></i>
@@ -275,13 +290,10 @@
 
 <!-- Modern Modal Component -->
 <ng-template #modalContent let-observer>
-  <div class="p-6 max-w-3xl mx-auto bg-white rounded-xl shadow-lg">
+  <div class="p-6 max-w-3xl mx-auto bg-white rounded-xl">
     <!-- Modal Header with Close Button -->
     <div class="flex justify-between items-center mb-6">
       <h2 class="text-2xl font-bold text-primary-700">Detalhes do Nível</h2>
-      <button class="p-2 rounded-full hover:bg-neutral-100 transition-all" (click)="observer.complete()">
-        <i class="pi pi-times text-neutral-500"></i>
-      </button>
     </div>
 
     <!-- Level Header -->
@@ -292,7 +304,7 @@
         </div>
         <div>
           <h3 class="text-xl font-medium mb-1">Advanced</h3>
-          <p class="text-2xl font-bold">52 unidades neste módulo</p>
+          <p class="text-2xl font-bold">14 aulas, 3 exercícios nesta unidade</p>
 
           <!-- Progress Bar -->
           <div class="w-full bg-white bg-opacity-20 rounded-full h-2 mt-3">
