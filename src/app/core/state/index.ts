@@ -5,6 +5,8 @@ import { authReducer } from './auth/auth.reducer';
 import { AuthEffects } from './auth/auth.effects';
 import { unitsReducer } from './units/units.reducer';
 import { UnitsEffects } from './units/units.effects';
+import { coursesReducer } from './courses/courses.reducer';
+import { CoursesEffects } from './courses/courses.effects';
 
 /**
  * Root reducer map for the application
@@ -13,6 +15,7 @@ export const reducers: ActionReducerMap<AppState> = {
   router: routerReducer,
   auth: authReducer,
   units: unitsReducer,
+  courses: coursesReducer,
   // Other feature reducers will be added here
 };
 
@@ -28,6 +31,7 @@ export const metaReducers: MetaReducer<AppState>[] = [];
 export const effects = [
   AuthEffects,
   UnitsEffects,
+  CoursesEffects,
   // Other feature effects will be added here
 ];
 
