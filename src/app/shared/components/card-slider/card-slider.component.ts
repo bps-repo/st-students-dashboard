@@ -2,17 +2,22 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
-  Input, OnInit,
+  ElementRef,
+  Input,
+  OnInit,
+  ViewChild,
+  ChangeDetectorRef,
+  AfterViewInit
 } from '@angular/core';
 import { NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { Course } from '../../../features/@types/course';
-import {AnimationFrameService} from "../../../core/animation-frame.service";
+import { AnimationFrameService } from "../../../core/animation-frame.service";
 
 /**
  * Modern Card Slider Component
  *
- * Displays a carousel of course or content cards with a modern design.
+ * Displays a horizontal scrollable carousel of course or content cards with a modern design.
  */
 @Component({
     selector: 'app-card-slider',
@@ -21,15 +26,73 @@ import {AnimationFrameService} from "../../../core/animation-frame.service";
     styleUrls: ['./card-slider.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CardSliderComponent implements OnInit {
+export class CardSliderComponent implements OnInit, AfterViewInit {
   @Input() index = 0;
   @Input() items: Course[] = [];
+  @ViewChild('scrollContainer') scrollContainer!: ElementRef<HTMLDivElement>;
 
-  constructor(private animationService: AnimationFrameService) {
-  }
+  canScrollLeft = false;
+  canScrollRight = true;
+
+  private scrollAmount = 300; // Amount to scroll on button click
+
+  constructor(
+    private animationService: AnimationFrameService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit() {
     this.animationService.request(() => {})
+  }
+
+  ngAfterViewInit() {
+    // Initial check for scroll buttons visibility
+    setTimeout(() => this.checkScrollPosition(), 100);
+  }
+
+  /**
+   * Scroll the container to the left
+   */
+  scrollLeft() {
+    if (this.scrollContainer) {
+      const container = this.scrollContainer.nativeElement;
+      container.scrollLeft -= this.scrollAmount;
+    }
+  }
+
+  /**
+   * Scroll the container to the right
+   */
+  scrollRight() {
+    if (this.scrollContainer) {
+      const container = this.scrollContainer.nativeElement;
+      container.scrollLeft += this.scrollAmount;
+    }
+  }
+
+  /**
+   * Handle scroll events to update navigation button visibility
+   */
+  onScroll() {
+    this.checkScrollPosition();
+  }
+
+  /**
+   * Check if we can scroll in either direction and update button visibility
+   */
+  private checkScrollPosition() {
+    if (this.scrollContainer) {
+      const container = this.scrollContainer.nativeElement;
+
+      // Can scroll left if we're not at the start
+      this.canScrollLeft = container.scrollLeft > 0;
+
+      // Can scroll right if we haven't reached the end
+      this.canScrollRight = container.scrollLeft < (container.scrollWidth - container.clientWidth - 5);
+
+      // Force change detection to update button visibility
+      this.cdr.detectChanges();
+    }
   }
 
   /**
