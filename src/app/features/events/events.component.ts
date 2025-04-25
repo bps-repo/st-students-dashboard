@@ -13,7 +13,7 @@ import { FormsModule } from '@angular/forms';
  */
 @Component({
     selector: 'app-events',
-    imports: [CommonModule, FlashCardComponent, TabMenuComponent, FormsModule],
+    imports: [CommonModule, TabMenuComponent, FormsModule],
     templateUrl: './events.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
