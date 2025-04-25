@@ -1,77 +1,160 @@
-<div class="p-4">
-  <h1 class="font-bold text-[25px] ml-10 mt-10 mb-0">Posso ajudar?</h1>
-  <div
-    class="flex flex-col items-center mt-16 min-h-screen bg-background font-heading"
-  >
-    <!-- Card Container -->
-    <div class="w-6/12 bg-primary rounded-t-lg text-light p-8 text-center">
-      <p class="text-lg">
-        Por favor, preencha abaixo e retornaremos seu contato assim que
-        possível.
-      </p>
+<!-- Modern Support Component -->
+<div class="px-8 py-6 bg-background-light font-heading">
+  <!-- Header Section -->
+  <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+    <div class="mb-4 md:mb-0">
+      <h1 class="text-2xl font-bold text-primary-700">Central de Suporte</h1>
+      <p class="text-neutral-600 mt-1">Como podemos ajudar você hoje?</p>
+    </div>
+  </div>
+
+  <!-- Support Categories Section -->
+  <div class="bg-white rounded-xl shadow-md overflow-hidden mb-8">
+    <div class="bg-gradient-to-r from-secondary-600 to-secondary-500 px-6 py-4 text-white">
+      <h2 class="text-lg font-bold">Categorias de Suporte</h2>
+      <p class="text-sm mt-1">Selecione a categoria relacionada à sua dúvida</p>
     </div>
 
-    <!-- Form Container -->
-    <div class="w-6/12 bg-light p-6 rounded-b-lg shadow-md">
-      <!-- Form Fields -->
-      <form>
-        <div class="mb-4">
-          <input
-            class="border border-background w-full p-3 rounded focus:outline-none focus:ring-2 focus:accent-primary placeholder-gray-500"
-            type="text"
-            placeholder="Nome completo"
-            value="Helder Santiago"
-          />
-        </div>
-
-        <div class="mb-4">
-          <input
-            class="border border-background w-full p-3 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-500"
-            type="email"
-            placeholder="E-mail"
-            value="heldersantiago23@gmail.com"
-          />
-        </div>
-
-        <div class="mb-4">
-          <textarea
-            class="border border-background w-full p-3 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-500"
-            placeholder="Como podemos ajudar?"
-            rows="3"
-          ></textarea>
-        </div>
-
-        <!-- Submit Button -->
-        <button
-          type="submit"
-          class="bg-primary hover:bg-primary text-light text-[17px] font-bold py-3 rounded w-full flex items-center justify-center gap-3"
+    <div class="p-4">
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+        <div
+          *ngFor="let category of supportCategories"
+          (click)="setActiveCategory(category.id)"
+          [ngClass]="category.active ? 'bg-primary-50 border-primary-200 text-primary-700' : 'bg-neutral-50 border-neutral-200 text-neutral-700'"
+          class="flex flex-col items-center justify-center p-4 rounded-lg border cursor-pointer hover:shadow-md transition-all text-center"
         >
-          <i class="pi pi-send"></i>
-          <span>Enviar</span>
-        </button>
-      </form>
+          <i [class]="category.icon + ' text-2xl mb-2'" [ngClass]="category.active ? 'text-primary-600' : 'text-neutral-500'"></i>
+          <span class="text-sm font-medium">{{ category.label }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content Grid -->
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <!-- Contact Form Section -->
+    <div class="lg:col-span-7">
+      <div class="bg-white rounded-xl shadow-md overflow-hidden">
+        <!-- Form Header -->
+        <div class="bg-gradient-to-r from-primary-600 to-primary-500 px-6 py-4 text-white">
+          <h2 class="text-lg font-bold">Entre em Contato</h2>
+          <p class="text-sm mt-1">Preencha o formulário abaixo e retornaremos seu contato em breve.</p>
+        </div>
+
+        <!-- Form Container -->
+        <div class="p-6">
+          <form (ngSubmit)="submitForm()">
+            <!-- Name Field -->
+            <div class="mb-4">
+              <label for="name" class="block text-sm font-medium text-neutral-700 mb-1">Nome completo</label>
+              <input
+                id="name"
+                name="name"
+                [(ngModel)]="formData.name"
+                class="w-full px-4 py-2 bg-white border border-neutral-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                type="text"
+                placeholder="Seu nome completo"
+              />
+            </div>
+
+            <!-- Email Field -->
+            <div class="mb-4">
+              <label for="email" class="block text-sm font-medium text-neutral-700 mb-1">E-mail</label>
+              <input
+                id="email"
+                name="email"
+                [(ngModel)]="formData.email"
+                class="w-full px-4 py-2 bg-white border border-neutral-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                type="email"
+                placeholder="Seu e-mail"
+              />
+            </div>
+
+            <!-- Message Field -->
+            <div class="mb-6">
+              <label for="message" class="block text-sm font-medium text-neutral-700 mb-1">Mensagem</label>
+              <textarea
+                id="message"
+                name="message"
+                [(ngModel)]="formData.message"
+                class="w-full px-4 py-2 bg-white border border-neutral-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                rows="5"
+                placeholder="Como podemos ajudar você?"
+              ></textarea>
+            </div>
+
+            <!-- Submit Button -->
+            <button
+              type="submit"
+              class="w-full py-3 px-4 bg-gradient-to-r from-primary-600 to-primary-500 text-white font-medium rounded-lg hover:from-primary-700 hover:to-primary-600 transition-all shadow-sm flex items-center justify-center"
+            >
+              <i class="pi pi-send mr-2"></i>
+              Enviar Mensagem
+            </button>
+          </form>
+        </div>
+      </div>
     </div>
 
-    <!-- Social Media Icons -->
-    <div class="flex space-x-4 mt-6 text-primary text-[30px]">
-      <a href="#" aria-label="Facebook" class="hover:text-primary">
-        <i class="pi pi-facebook"></i>
-      </a>
-      <a href="#" aria-label="TikTok" class="hover:text-dark">
-        <i class="pi pi-tiktok"></i>
-      </a>
-      <a href="#" aria-label="Instagram" class="hover:text-danger">
-        <i class="pi pi-instagram"></i>
-      </a>
-      <a href="#" aria-label="YouTube" class="hover:text-orange">
-        <i class="pi pi-youtube"></i>
-      </a>
-      <a href="#" aria-label="LinkedIn" class="hover:text-primary">
-        <i class="pi pi-linkedin"></i>
-      </a>
-      <a href="#" aria-label="WhatsApp" class="hover:text-success">
-        <i class="pi pi-whatsapp"></i>
-      </a>
+    <!-- FAQ Section -->
+    <div class="lg:col-span-5">
+      <div class="bg-white rounded-xl shadow-md overflow-hidden">
+        <!-- FAQ Header -->
+        <div class="bg-gradient-to-r from-accent-600 to-accent-500 px-6 py-4 text-white">
+          <h2 class="text-lg font-bold">Perguntas Frequentes</h2>
+          <p class="text-sm mt-1">Encontre respostas rápidas para as dúvidas mais comuns.</p>
+        </div>
+
+        <!-- FAQ Items -->
+        <div class="p-4">
+          <div *ngFor="let item of faqItems" class="border-b border-neutral-200 last:border-b-0">
+            <div
+              (click)="toggleFaq(item)"
+              class="py-4 px-2 flex justify-between items-center cursor-pointer hover:bg-neutral-50 transition-all"
+            >
+              <h3 class="font-medium text-neutral-800">{{ item.question }}</h3>
+              <i class="pi pi-chevron-down text-neutral-500"></i>
+            </div>
+            <div
+              *ngIf="item.expanded"
+              class="px-2 pb-4 text-neutral-600 text-sm"
+            >
+              {{ item.answer }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Social Media Section -->
+  <div class="mt-8 bg-white rounded-xl shadow-md overflow-hidden">
+    <div class="bg-gradient-to-r from-primary-600 to-primary-500 px-6 py-4 text-white">
+      <h2 class="text-lg font-bold">Conecte-se Conosco</h2>
+      <p class="text-sm mt-1">Siga-nos nas redes sociais</p>
+    </div>
+
+    <div class="p-6">
+      <div class="flex flex-wrap gap-4 justify-center">
+        <a href="#" class="flex items-center justify-center w-12 h-12 bg-primary-50 text-primary-600 rounded-full hover:bg-primary-100 transition-all">
+          <i class="pi pi-facebook text-xl"></i>
+        </a>
+        <a href="#" class="flex items-center justify-center w-12 h-12 bg-neutral-50 text-neutral-800 rounded-full hover:bg-neutral-100 transition-all">
+          <i class="pi pi-tiktok text-xl"></i>
+        </a>
+        <a href="#" class="flex items-center justify-center w-12 h-12 bg-secondary-50 text-secondary-600 rounded-full hover:bg-secondary-100 transition-all">
+          <i class="pi pi-instagram text-xl"></i>
+        </a>
+        <a href="#" class="flex items-center justify-center w-12 h-12 bg-warning-50 text-warning-600 rounded-full hover:bg-warning-100 transition-all">
+          <i class="pi pi-youtube text-xl"></i>
+        </a>
+        <a href="#" class="flex items-center justify-center w-12 h-12 bg-accent-50 text-accent-600 rounded-full hover:bg-accent-100 transition-all">
+          <i class="pi pi-linkedin text-xl"></i>
+        </a>
+        <a href="#" class="flex items-center justify-center w-12 h-12 bg-success-50 text-success-600 rounded-full hover:bg-success-100 transition-all">
+          <i class="pi pi-whatsapp text-xl"></i>
+        </a>
+      </div>
     </div>
   </div>
 </div>

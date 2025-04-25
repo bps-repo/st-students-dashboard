@@ -11,6 +11,169 @@
   .clip-hexagon2 {
     clip-path: polygon(50% 0%, 95% 25%, 95% 75%, 50% 100%, 5% 75%, 0% 25%);
   }
+
+  /* English school animations */
+  .animate-pulse-slow {
+    animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-rotate {
+    animation: rotate 20s linear infinite;
+  }
+
+  .animate-glow {
+    animation: glow 8s ease-in-out infinite;
+  }
+
+  /* Book animations */
+  .animate-page-turn {
+    animation: pageTurn 8s ease-in-out infinite;
+  }
+
+  .animate-book-open {
+    animation: bookOpen 5s ease-in-out infinite;
+  }
+
+  /* Letter animations */
+  .animate-letter-bounce {
+    animation: letterBounce 2s ease-in-out infinite;
+  }
+
+  .animate-letter-fade {
+    animation: letterFade 3s ease-in-out infinite;
+  }
+
+  /* Particle animations */
+  .animate-particle {
+    animation: particle 10s linear infinite;
+  }
+
+  .animate-particle-delayed {
+    animation: particle 10s linear 2s infinite;
+  }
+
+  .animate-particle-slow {
+    animation: particle 15s linear 1s infinite;
+  }
+
+  /* Ripple animations */
+  .animate-ripple {
+    animation: ripple 4s ease-out infinite;
+  }
+
+  .animate-ripple-delayed {
+    animation: ripple 4s ease-out 2s infinite;
+  }
+}
+
+/* Animation keyframes */
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 30px rgba(0, 86, 179, 0.6);
+  }
+  50% {
+    box-shadow: 0 0 50px rgba(0, 86, 179, 0.9);
+  }
+}
+
+@keyframes particle {
+  0% {
+    transform: translateY(0) translateX(0) scale(1);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100px) translateX(100px) scale(0);
+    opacity: 0;
+  }
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  25% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+/* Book animation keyframes */
+@keyframes pageTurn {
+  0%, 100% {
+    transform: perspective(1200px) rotateY(0deg);
+  }
+  50% {
+    transform: perspective(1200px) rotateY(-15deg);
+  }
+}
+
+@keyframes bookOpen {
+  0%, 100% {
+    transform: perspective(1200px) rotateY(0deg);
+  }
+  50% {
+    transform: perspective(1200px) rotateY(-30deg);
+  }
+}
+
+/* Letter animation keyframes */
+@keyframes letterBounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes letterFade {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
 }
 
 html,
@@ -19,5 +182,5 @@ body {
 }
 body {
   margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-family: Poppins, Inter, Roboto, "Helvetica Neue", sans-serif;
 }

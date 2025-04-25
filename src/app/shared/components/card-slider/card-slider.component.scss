@@ -5,3 +5,41 @@
 .t-button_small {
   background-color: #000 !important;
 }
+
+/* Car Card Styles */
+.car-card {
+  position: relative;
+  transition: all 0.3s ease;
+
+  /* Car movement animation on hover */
+  &:hover {
+    transform: translateY(-5px);
+
+    /* Wheel rotation animation */
+    .car-wheel {
+      animation: wheel-rotation 2s linear infinite;
+    }
+
+    /* Headlight glow effect */
+    .car-headlight {
+      box-shadow: 0 0 10px rgba(255, 255, 0, 0.7);
+    }
+  }
+}
+
+/* Wheel rotation animation */
+@keyframes wheel-rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Carousel animation for car movement */
+tui-carousel {
+  .t-carousel__content {
+    transition: transform 0.5s ease-out;
+  }
+}

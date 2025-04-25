@@ -1,10 +1,11 @@
 // login.component.ts
 import { Component } from '@angular/core';
-import {FormBuilder, FormGroup, FormsModule, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import {CommonModule} from "@angular/common";
 
 @Component({
   selector: 'app-login',
-  imports:[FormsModule],
+  imports: [ReactiveFormsModule, FormsModule, CommonModule],
   templateUrl: './login.component.html',
 })
 export class LoginComponent {

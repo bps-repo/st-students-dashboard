@@ -1,33 +1,608 @@
-<div class="shadow-lg m-3 p-5 flex gap-4 rounded-lg font-heading bg-light">
-  <section class="flex flex-col w-5/12 h-auto bg-light">
-    <section
-      class="h-96 relative bg-primary bg-opacity-60 rounded-t-lg overflow-hidden"
-    >
-      <app-youtube-player></app-youtube-player>
-    </section>
-    <div class="flex shadow-lg text-light font-bold w-auto">
-      <div
-        class="flex-1 bg-primary bg-opacity-90 px-5 py-5 flex gap-2 items-center"
-      >
-        <span>Baixar Video</span><i class="pi pi-download"></i>
-      </div>
-      <div class="flex-1 bg-primary px-2 py-5 flex gap-2 items-center">
-        <span>Proximo Video</span><i class="pi pi-arrow-right"></i>
-      </div>
-      <div class="bg-primary px-2 py-5 flex gap-2 items-center">
-        <span>Concluir</span><i class="pi pi-check"></i>
-      </div>
+<!-- Modern Material Detail Component -->
+<div class="px-8 py-6 bg-background-light font-heading">
+  <!-- Loading State -->
+  <div *ngIf="loading()" class="flex justify-center items-center py-12">
+    <div class="bg-white rounded-xl shadow-md p-8 text-center">
+      <div class="w-16 h-16 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin mx-auto mb-4"></div>
+      <h2 class="text-xl font-bold text-neutral-800">Carregando material...</h2>
+      <p class="text-neutral-600 mt-2">Por favor, aguarde enquanto carregamos o conteúdo.</p>
     </div>
-  </section>
+  </div>
 
-  <section
-    class="shadow-md w-7/12 flex flex-col gap-3 p-4 text-[16px] bg-light"
-  >
-    <h1 class="font-bold text-center text-[23px]">Ordinal Numbers</h1>
-    <div class="grid grid-cols-3">
-      @for (item of listNumbers; track $index) {
-      <span class="font-bolds">Nu{{ $index }}mber</span>
-      }
+  <!-- Error State -->
+  <div *ngIf="error() && !loading()" class="flex justify-center items-center py-12">
+    <div class="bg-white rounded-xl shadow-md p-8 text-center max-w-md">
+      <div class="w-16 h-16 bg-error-100 rounded-full flex items-center justify-center mx-auto mb-4">
+        <i class="pi pi-exclamation-triangle text-error-500 text-2xl"></i>
+      </div>
+      <h2 class="text-xl font-bold text-neutral-800 mb-2">Erro ao carregar material</h2>
+      <p class="text-neutral-600">{{ error() }}</p>
+      <a routerLink="/lessons/materials"
+        class="mt-4 px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-all"
+      >
+        Voltar para materiais
+      </a>
     </div>
-  </section>
+  </div>
+
+  <!-- Content when material is loaded -->
+  <div *ngIf="!loading() && !error() && material">
+    <!-- Header Section -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+      <div class="mb-4 md:mb-0">
+        <div class="flex items-center">
+          <div class="w-10 h-10 rounded-lg bg-gradient-to-r"
+               [ngClass]="{
+                 'from-primary-600 to-primary-500': getMaterialCategory(materialType()) === 'document',
+                 'from-accent-600 to-accent-500': getMaterialCategory(materialType()) === 'video',
+                 'from-secondary-600 to-secondary-500': getMaterialCategory(materialType()) === 'exercise'
+               }"
+               class="flex items-center justify-center text-white mr-3">
+            <i [class]="getMaterialIcon(materialType()) + ' text-xl'"></i>
+          </div>
+          <div>
+            <h1 class="text-2xl font-bold text-primary-700">{{ material.title }}</h1>
+            <p class="text-neutral-600 mt-1">
+              <span class="bg-neutral-100 text-neutral-700 px-2 py-0.5 rounded-full text-xs mr-2">
+                {{ getMaterialTypeName(materialType()) }}
+              </span>
+              {{ material.description }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation Buttons -->
+      <div class="flex items-center space-x-3">
+        <button
+          (click)="navigateMaterial('prev')"
+          class="flex items-center space-x-2 bg-neutral-50 hover:bg-neutral-100 px-4 py-2 rounded-lg transition-all duration-200 shadow-sm border border-neutral-200 text-neutral-700">
+          <i class="pi pi-arrow-left"></i>
+          <span class="font-medium">Anterior</span>
+        </button>
+        <button
+          (click)="navigateMaterial('next')"
+          class="flex items-center space-x-2 bg-neutral-50 hover:bg-neutral-100 px-4 py-2 rounded-lg transition-all duration-200 shadow-sm border border-neutral-200 text-neutral-700">
+          <span class="font-medium">Próximo</span>
+          <i class="pi pi-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- VIDEO TYPE CONTENT -->
+    <div *ngIf="getMaterialCategory(materialType()) === 'video'" class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <!-- Video Section -->
+      <div class="lg:col-span-7">
+        <div class="bg-white rounded-xl shadow-md overflow-hidden">
+          <!-- Video Header with Gradient Background -->
+          <div class="relative bg-gradient-to-r from-accent-600 to-accent-500 px-6 py-4 text-white">
+            <div class="absolute inset-0 bg-[url('/bg_st.png')] bg-cover bg-center opacity-20"></div>
+            <div class="flex items-center relative">
+              <div class="p-3 bg-white bg-opacity-20 rounded-lg mr-4">
+                <i class="pi pi-play text-2xl"></i>
+              </div>
+              <div>
+                <h2 class="text-xl font-bold">{{ material.title }}</h2>
+                <p class="text-sm opacity-90 mt-1">Vídeo Explicativo</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Video Player -->
+          <div class="relative aspect-video bg-neutral-900 overflow-hidden">
+            <app-youtube-player></app-youtube-player>
+          </div>
+
+          <!-- Video Actions -->
+          <div class="grid grid-cols-3 border-t border-neutral-100">
+            <button class="flex items-center justify-center space-x-2 py-4 hover:bg-neutral-50 transition-all text-accent-700 font-medium">
+              <i class="pi pi-download"></i>
+              <span>Baixar Vídeo</span>
+            </button>
+            <button
+              (click)="navigateMaterial('next')"
+              class="flex items-center justify-center space-x-2 py-4 hover:bg-neutral-50 transition-all text-accent-700 font-medium border-l border-r border-neutral-100">
+              <i class="pi pi-arrow-right"></i>
+              <span>Próximo Vídeo</span>
+            </button>
+            <button class="flex items-center justify-center space-x-2 py-4 hover:bg-neutral-50 transition-all text-success-600 font-medium">
+              <i class="pi pi-check-circle"></i>
+              <span>Marcar Concluído</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Additional Resources Section -->
+        <div class="bg-white rounded-xl shadow-md overflow-hidden mt-6">
+          <div class="relative bg-gradient-to-r from-primary-600 to-primary-500 px-6 py-4 text-white">
+            <div class="absolute inset-0 bg-[url('/bg_st.png')] bg-cover bg-center opacity-20"></div>
+            <div class="flex items-center relative">
+              <div class="p-3 bg-white bg-opacity-20 rounded-lg mr-4">
+                <i class="pi pi-file-pdf text-2xl"></i>
+              </div>
+              <div>
+                <h2 class="text-xl font-bold">Recursos Adicionais</h2>
+                <p class="text-sm opacity-90 mt-1">Materiais complementares para estudo</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-4">
+            <div class="divide-y divide-neutral-100">
+              <div class="flex justify-between items-center py-3 px-2 hover:bg-neutral-50 transition-all rounded-lg cursor-pointer">
+                <div class="flex items-center">
+                  <div class="w-10 h-10 rounded-lg bg-primary-100 flex items-center justify-center mr-3">
+                    <i class="pi pi-file-pdf text-primary-600"></i>
+                  </div>
+                  <div>
+                    <h3 class="font-medium text-neutral-800">Guia de Estudo - {{ material.title }}</h3>
+                    <p class="text-xs text-neutral-500">PDF - 2.4 MB</p>
+                  </div>
+                </div>
+                <button class="w-8 h-8 rounded-full bg-neutral-100 flex items-center justify-center hover:bg-neutral-200 transition-all">
+                  <i class="pi pi-download text-neutral-700"></i>
+                </button>
+              </div>
+              <div class="flex justify-between items-center py-3 px-2 hover:bg-neutral-50 transition-all rounded-lg cursor-pointer">
+                <div class="flex items-center">
+                  <div class="w-10 h-10 rounded-lg bg-accent-100 flex items-center justify-center mr-3">
+                    <i class="pi pi-file-excel text-accent-600"></i>
+                  </div>
+                  <div>
+                    <h3 class="font-medium text-neutral-800">Exercícios Práticos</h3>
+                    <p class="text-xs text-neutral-500">XLSX - 1.1 MB</p>
+                  </div>
+                </div>
+                <button class="w-8 h-8 rounded-full bg-neutral-100 flex items-center justify-center hover:bg-neutral-200 transition-all">
+                  <i class="pi pi-download text-neutral-700"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Video Notes Section -->
+      <div class="lg:col-span-5">
+        <div class="bg-white rounded-xl shadow-md overflow-hidden">
+          <!-- Content Header -->
+          <div class="relative bg-gradient-to-r from-accent-600 to-accent-500 px-6 py-4 text-white">
+            <div class="absolute inset-0 bg-[url('/bg_st.png')] bg-cover bg-center opacity-20"></div>
+            <div class="flex items-center relative">
+              <div class="p-3 bg-white bg-opacity-20 rounded-lg mr-4">
+                <i class="pi pi-list text-2xl"></i>
+              </div>
+              <div>
+                <h2 class="text-xl font-bold">Notas da Aula</h2>
+                <p class="text-sm opacity-90 mt-1">Pontos importantes do vídeo</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Video Notes -->
+          <div class="p-6">
+            <div class="prose max-w-none">
+              <h3 class="text-lg font-bold text-neutral-800 mb-3">Resumo do Vídeo</h3>
+              <p class="text-neutral-700 mb-4">
+                Este vídeo explica os conceitos fundamentais de {{ material.title }}. Abaixo estão os pontos-chave abordados:
+              </p>
+
+              <ul class="list-disc pl-5 text-neutral-700 mb-6">
+                <li class="mb-2">Introdução aos conceitos básicos</li>
+                <li class="mb-2">Exemplos práticos de uso</li>
+                <li class="mb-2">Exercícios de fixação</li>
+                <li class="mb-2">Dicas para memorização</li>
+              </ul>
+
+              <h3 class="text-lg font-bold text-neutral-800 mb-3">Timestamps</h3>
+              <div class="space-y-2">
+                <div class="flex items-center bg-neutral-50 p-2 rounded-lg hover:bg-neutral-100 transition-all cursor-pointer">
+                  <div class="w-12 text-accent-600 font-medium">00:00</div>
+                  <div class="text-neutral-800">Introdução</div>
+                </div>
+                <div class="flex items-center bg-neutral-50 p-2 rounded-lg hover:bg-neutral-100 transition-all cursor-pointer">
+                  <div class="w-12 text-accent-600 font-medium">02:15</div>
+                  <div class="text-neutral-800">Conceitos básicos</div>
+                </div>
+                <div class="flex items-center bg-neutral-50 p-2 rounded-lg hover:bg-neutral-100 transition-all cursor-pointer">
+                  <div class="w-12 text-accent-600 font-medium">08:30</div>
+                  <div class="text-neutral-800">Exemplos práticos</div>
+                </div>
+                <div class="flex items-center bg-neutral-50 p-2 rounded-lg hover:bg-neutral-100 transition-all cursor-pointer">
+                  <div class="w-12 text-accent-600 font-medium">15:45</div>
+                  <div class="text-neutral-800">Exercícios</div>
+                </div>
+                <div class="flex items-center bg-neutral-50 p-2 rounded-lg hover:bg-neutral-100 transition-all cursor-pointer">
+                  <div class="w-12 text-accent-600 font-medium">22:10</div>
+                  <div class="text-neutral-800">Conclusão</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Progress Section -->
+          <div class="px-6 py-4 bg-neutral-50 border-t border-neutral-200">
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-sm font-medium text-neutral-700">Progresso do vídeo</span>
+              <span class="text-sm font-bold text-accent-600">45%</span>
+            </div>
+            <div class="w-full bg-neutral-200 rounded-full h-2.5">
+              <div class="bg-gradient-to-r from-accent-500 to-accent-600 h-2.5 rounded-full relative" style="width: 45%">
+                <div class="absolute -right-1 -top-1 bg-white w-4 h-4 rounded-full border-2 border-accent-500 shadow-sm"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DOCUMENT TYPE CONTENT -->
+    <div *ngIf="getMaterialCategory(materialType()) === 'document'" class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <!-- Document Viewer Section -->
+      <div class="lg:col-span-8">
+        <div class="bg-white rounded-xl shadow-md overflow-hidden">
+          <!-- Document Header with Gradient Background -->
+          <div class="relative bg-gradient-to-r from-primary-600 to-primary-500 px-6 py-4 text-white">
+            <div class="absolute inset-0 bg-[url('/bg_st.png')] bg-cover bg-center opacity-20"></div>
+            <div class="flex items-center relative">
+              <div class="p-3 bg-white bg-opacity-20 rounded-lg mr-4">
+                <i class="pi pi-file-pdf text-2xl"></i>
+              </div>
+              <div>
+                <h2 class="text-xl font-bold">{{ material.title }}</h2>
+                <p class="text-sm opacity-90 mt-1">{{ getMaterialTypeName(materialType()) }}</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Document Viewer -->
+          <div class="relative bg-neutral-100 p-4 min-h-[500px]">
+            <!-- Document Preview (mockup) -->
+            <div class="bg-white shadow-md rounded-lg p-8 mx-auto max-w-3xl">
+              <div class="text-center mb-8">
+                <h1 class="text-2xl font-bold text-neutral-800 mb-2">{{ material.title }}</h1>
+                <p class="text-neutral-600">Material de estudo complementar</p>
+              </div>
+
+              <div class="space-y-6 text-neutral-700">
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed erat molestie vehicula. Sed auctor neque eu tellus rhoncus ut eleifend nibh porttitor. Ut in nulla enim.
+                </p>
+
+                <h2 class="text-xl font-bold text-neutral-800 mt-6 mb-3">Seção 1: Introdução</h2>
+                <p>
+                  Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus.
+                </p>
+
+                <div class="bg-neutral-50 p-4 rounded-lg border-l-4 border-primary-500 my-4">
+                  <h3 class="font-bold text-neutral-800 mb-2">Nota importante</h3>
+                  <p class="text-neutral-600">
+                    Phasellus ultrices nulla quis nibh. Quisque a lectus. Donec consectetuer ligula vulputate sem tristique cursus.
+                  </p>
+                </div>
+
+                <h2 class="text-xl font-bold text-neutral-800 mt-6 mb-3">Seção 2: Exemplos</h2>
+                <p>
+                  Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Document Actions -->
+          <div class="grid grid-cols-3 border-t border-neutral-100">
+            <button class="flex items-center justify-center space-x-2 py-4 hover:bg-neutral-50 transition-all text-primary-700 font-medium">
+              <i class="pi pi-download"></i>
+              <span>Baixar PDF</span>
+            </button>
+            <button class="flex items-center justify-center space-x-2 py-4 hover:bg-neutral-50 transition-all text-primary-700 font-medium border-l border-r border-neutral-100">
+              <i class="pi pi-printer"></i>
+              <span>Imprimir</span>
+            </button>
+            <button class="flex items-center justify-center space-x-2 py-4 hover:bg-neutral-50 transition-all text-success-600 font-medium">
+              <i class="pi pi-check-circle"></i>
+              <span>Marcar Concluído</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Document Info Section -->
+      <div class="lg:col-span-4">
+        <div class="bg-white rounded-xl shadow-md overflow-hidden">
+          <!-- Info Header -->
+          <div class="relative bg-gradient-to-r from-primary-600 to-primary-500 px-6 py-4 text-white">
+            <div class="absolute inset-0 bg-[url('/bg_st.png')] bg-cover bg-center opacity-20"></div>
+            <div class="flex items-center relative">
+              <div class="p-3 bg-white bg-opacity-20 rounded-lg mr-4">
+                <i class="pi pi-info-circle text-2xl"></i>
+              </div>
+              <div>
+                <h2 class="text-xl font-bold">Informações do Documento</h2>
+                <p class="text-sm opacity-90 mt-1">Detalhes e metadados</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Document Info -->
+          <div class="p-6">
+            <div class="space-y-4">
+              <div>
+                <h3 class="text-sm font-medium text-neutral-500 mb-1">Título</h3>
+                <p class="text-neutral-800 font-medium">{{ material.title }}</p>
+              </div>
+
+              <div>
+                <h3 class="text-sm font-medium text-neutral-500 mb-1">Tipo</h3>
+                <p class="text-neutral-800 font-medium">{{ getMaterialTypeName(materialType()) }}</p>
+              </div>
+
+              <div>
+                <h3 class="text-sm font-medium text-neutral-500 mb-1">Tamanho</h3>
+                <p class="text-neutral-800 font-medium">2.4 MB</p>
+              </div>
+
+              <div>
+                <h3 class="text-sm font-medium text-neutral-500 mb-1">Data de publicação</h3>
+                <p class="text-neutral-800 font-medium">25/04/2024</p>
+              </div>
+
+              <div>
+                <h3 class="text-sm font-medium text-neutral-500 mb-1">Autor</h3>
+                <p class="text-neutral-800 font-medium">ST Andrews</p>
+              </div>
+
+              <div>
+                <h3 class="text-sm font-medium text-neutral-500 mb-1">Palavras-chave</h3>
+                <div class="flex flex-wrap gap-2 mt-2">
+                  <span class="bg-primary-50 text-primary-700 px-2 py-1 rounded-md text-xs">Inglês</span>
+                  <span class="bg-primary-50 text-primary-700 px-2 py-1 rounded-md text-xs">Gramática</span>
+                  <span class="bg-primary-50 text-primary-700 px-2 py-1 rounded-md text-xs">Estudo</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Progress Section -->
+          <div class="px-6 py-4 bg-neutral-50 border-t border-neutral-200">
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-sm font-medium text-neutral-700">Progresso de leitura</span>
+              <span class="text-sm font-bold text-primary-600">60%</span>
+            </div>
+            <div class="w-full bg-neutral-200 rounded-full h-2.5">
+              <div class="bg-gradient-to-r from-primary-500 to-primary-600 h-2.5 rounded-full relative" style="width: 60%">
+                <div class="absolute -right-1 -top-1 bg-white w-4 h-4 rounded-full border-2 border-primary-500 shadow-sm"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EXERCISE TYPE CONTENT -->
+    <div *ngIf="getMaterialCategory(materialType()) === 'exercise'" class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <!-- Exercise Section -->
+      <div class="lg:col-span-8">
+        <div class="bg-white rounded-xl shadow-md overflow-hidden">
+          <!-- Exercise Header with Gradient Background -->
+          <div class="relative bg-gradient-to-r from-secondary-600 to-secondary-500 px-6 py-4 text-white">
+            <div class="absolute inset-0 bg-[url('/bg_st.png')] bg-cover bg-center opacity-20"></div>
+            <div class="flex items-center relative">
+              <div class="p-3 bg-white bg-opacity-20 rounded-lg mr-4">
+                <i class="pi pi-file-edit text-2xl"></i>
+              </div>
+              <div>
+                <h2 class="text-xl font-bold">{{ material.title }}</h2>
+                <p class="text-sm opacity-90 mt-1">{{ getMaterialTypeName(materialType()) }}</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Exercise Tabs -->
+          <div class="bg-neutral-50 px-4 pt-4">
+            <div class="flex border-b">
+              <button
+                (click)="setActiveTab(0)"
+                [ngClass]="{'border-secondary-500 text-secondary-700': activeTab() === 0, 'border-transparent text-neutral-500 hover:text-neutral-700': activeTab() !== 0}"
+                class="px-4 py-2 font-medium text-sm border-b-2 transition-all"
+              >
+                Instruções
+              </button>
+              <button
+                (click)="setActiveTab(1)"
+                [ngClass]="{'border-secondary-500 text-secondary-700': activeTab() === 1, 'border-transparent text-neutral-500 hover:text-neutral-700': activeTab() !== 1}"
+                class="px-4 py-2 font-medium text-sm border-b-2 transition-all"
+              >
+                Exercícios
+              </button>
+              <button
+                (click)="setActiveTab(2)"
+                [ngClass]="{'border-secondary-500 text-secondary-700': activeTab() === 2, 'border-transparent text-neutral-500 hover:text-neutral-700': activeTab() !== 2}"
+                class="px-4 py-2 font-medium text-sm border-b-2 transition-all"
+              >
+                Respostas
+              </button>
+            </div>
+          </div>
+
+          <!-- Tab Content -->
+          <div class="p-6">
+            <!-- Instructions Tab -->
+            <div *ngIf="activeTab() === 0" class="prose max-w-none">
+              <h3 class="text-lg font-bold text-neutral-800 mb-3">Instruções</h3>
+              <p class="text-neutral-700 mb-4">
+                Este exercício foi desenvolvido para testar seu conhecimento sobre {{ material.title }}. Leia atentamente as instruções abaixo antes de começar:
+              </p>
+
+              <ul class="list-disc pl-5 text-neutral-700 mb-6">
+                <li class="mb-2">Complete todos os exercícios na ordem apresentada</li>
+                <li class="mb-2">Você pode verificar suas respostas na aba "Respostas" após concluir</li>
+                <li class="mb-2">Tempo estimado para conclusão: 30 minutos</li>
+                <li class="mb-2">Pontuação mínima para aprovação: 70%</li>
+              </ul>
+
+              <div class="bg-secondary-50 p-4 rounded-lg border-l-4 border-secondary-500 my-4">
+                <h3 class="font-bold text-neutral-800 mb-2">Dica importante</h3>
+                <p class="text-neutral-600">
+                  Revise o material teórico antes de iniciar os exercícios para melhor desempenho.
+                </p>
+              </div>
+            </div>
+
+            <!-- Exercises Tab -->
+            <div *ngIf="activeTab() === 1" class="space-y-6">
+              <div class="bg-neutral-50 p-4 rounded-lg">
+                <h3 class="font-bold text-neutral-800 mb-3">Exercício 1</h3>
+                <p class="text-neutral-700 mb-3">Complete as frases com a forma correta:</p>
+
+                <div class="space-y-4">
+                  <div>
+                    <p class="mb-2">1. She finished in ___ place in the competition.</p>
+                    <div class="flex gap-2">
+                      <button class="px-3 py-1 border border-neutral-300 rounded-md hover:bg-neutral-100 transition-all">first</button>
+                      <button class="px-3 py-1 border border-neutral-300 rounded-md hover:bg-neutral-100 transition-all">one</button>
+                      <button class="px-3 py-1 border border-neutral-300 rounded-md hover:bg-neutral-100 transition-all">1st</button>
+                    </div>
+                  </div>
+
+                  <div>
+                    <p class="mb-2">2. This is the ___ time I've visited this museum.</p>
+                    <div class="flex gap-2">
+                      <button class="px-3 py-1 border border-neutral-300 rounded-md hover:bg-neutral-100 transition-all">two</button>
+                      <button class="px-3 py-1 border border-neutral-300 rounded-md hover:bg-neutral-100 transition-all">second</button>
+                      <button class="px-3 py-1 border border-neutral-300 rounded-md hover:bg-neutral-100 transition-all">2nd</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bg-neutral-50 p-4 rounded-lg">
+                <h3 class="font-bold text-neutral-800 mb-3">Exercício 2</h3>
+                <p class="text-neutral-700 mb-3">Escreva os números por extenso:</p>
+
+                <div class="space-y-4">
+                  <div>
+                    <p class="mb-2">1. 21st</p>
+                    <input type="text" class="w-full p-2 border border-neutral-300 rounded-md" placeholder="Digite sua resposta...">
+                  </div>
+
+                  <div>
+                    <p class="mb-2">2. 33rd</p>
+                    <input type="text" class="w-full p-2 border border-neutral-300 rounded-md" placeholder="Digite sua resposta...">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Answers Tab -->
+            <div *ngIf="activeTab() === 2" class="space-y-6">
+              <div class="bg-success-50 p-4 rounded-lg border-l-4 border-success-500">
+                <h3 class="font-bold text-neutral-800 mb-3">Respostas do Exercício 1</h3>
+                <ol class="list-decimal pl-5 text-neutral-700">
+                  <li class="mb-2">She finished in <span class="font-bold text-success-700">first</span> place in the competition.</li>
+                  <li class="mb-2">This is the <span class="font-bold text-success-700">second</span> time I've visited this museum.</li>
+                </ol>
+              </div>
+
+              <div class="bg-success-50 p-4 rounded-lg border-l-4 border-success-500">
+                <h3 class="font-bold text-neutral-800 mb-3">Respostas do Exercício 2</h3>
+                <ol class="list-decimal pl-5 text-neutral-700">
+                  <li class="mb-2">21st = <span class="font-bold text-success-700">twenty-first</span></li>
+                  <li class="mb-2">33rd = <span class="font-bold text-success-700">thirty-third</span></li>
+                </ol>
+              </div>
+            </div>
+          </div>
+
+          <!-- Exercise Actions -->
+          <div class="grid grid-cols-2 border-t border-neutral-100">
+            <button class="flex items-center justify-center space-x-2 py-4 hover:bg-neutral-50 transition-all text-secondary-700 font-medium">
+              <i class="pi pi-download"></i>
+              <span>Baixar Exercícios</span>
+            </button>
+            <button class="flex items-center justify-center space-x-2 py-4 hover:bg-neutral-50 transition-all text-success-600 font-medium border-l border-neutral-100">
+              <i class="pi pi-check-circle"></i>
+              <span>Marcar Concluído</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Exercise Info Section -->
+      <div class="lg:col-span-4">
+        <div class="bg-white rounded-xl shadow-md overflow-hidden">
+          <!-- Info Header -->
+          <div class="relative bg-gradient-to-r from-secondary-600 to-secondary-500 px-6 py-4 text-white">
+            <div class="absolute inset-0 bg-[url('/bg_st.png')] bg-cover bg-center opacity-20"></div>
+            <div class="flex items-center relative">
+              <div class="p-3 bg-white bg-opacity-20 rounded-lg mr-4">
+                <i class="pi pi-info-circle text-2xl"></i>
+              </div>
+              <div>
+                <h2 class="text-xl font-bold">Informações do Exercício</h2>
+                <p class="text-sm opacity-90 mt-1">Detalhes e estatísticas</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Exercise Info -->
+          <div class="p-6">
+            <div class="space-y-4">
+              <div>
+                <h3 class="text-sm font-medium text-neutral-500 mb-1">Título</h3>
+                <p class="text-neutral-800 font-medium">{{ material.title }}</p>
+              </div>
+
+              <div>
+                <h3 class="text-sm font-medium text-neutral-500 mb-1">Tipo</h3>
+                <p class="text-neutral-800 font-medium">{{ getMaterialTypeName(materialType()) }}</p>
+              </div>
+
+              <div>
+                <h3 class="text-sm font-medium text-neutral-500 mb-1">Dificuldade</h3>
+                <div class="flex items-center">
+                  <div class="flex-1 h-2 bg-neutral-200 rounded-full overflow-hidden">
+                    <div class="h-full bg-secondary-500 rounded-full" style="width: 60%"></div>
+                  </div>
+                  <span class="ml-2 text-sm text-secondary-700 font-medium">Médio</span>
+                </div>
+              </div>
+
+              <div>
+                <h3 class="text-sm font-medium text-neutral-500 mb-1">Tempo estimado</h3>
+                <p class="text-neutral-800 font-medium">30 minutos</p>
+              </div>
+
+              <div>
+                <h3 class="text-sm font-medium text-neutral-500 mb-1">Pontuação</h3>
+                <p class="text-neutral-800 font-medium">10 pontos</p>
+              </div>
+
+              <div>
+                <h3 class="text-sm font-medium text-neutral-500 mb-1">Tópicos</h3>
+                <div class="flex flex-wrap gap-2 mt-2">
+                  <span class="bg-secondary-50 text-secondary-700 px-2 py-1 rounded-md text-xs">Gramática</span>
+                  <span class="bg-secondary-50 text-secondary-700 px-2 py-1 rounded-md text-xs">Números</span>
+                  <span class="bg-secondary-50 text-secondary-700 px-2 py-1 rounded-md text-xs">Vocabulário</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Progress Section -->
+          <div class="px-6 py-4 bg-neutral-50 border-t border-neutral-200">
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-sm font-medium text-neutral-700">Progresso do exercício</span>
+              <span class="text-sm font-bold text-secondary-600">30%</span>
+            </div>
+            <div class="w-full bg-neutral-200 rounded-full h-2.5">
+              <div class="bg-gradient-to-r from-secondary-500 to-secondary-600 h-2.5 rounded-full relative" style="width: 30%">
+                <div class="absolute -right-1 -top-1 bg-white w-4 h-4 rounded-full border-2 border-secondary-500 shadow-sm"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

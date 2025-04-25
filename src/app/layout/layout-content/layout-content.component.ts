@@ -15,6 +15,7 @@ import {TuiRoot} from "@taiga-ui/core";
     TuiRoot
   ],
   templateUrl: './layout-content.component.html',
+  styleUrl: './layout-content.component.scss'
 })
 export class LayoutContentComponent {
 }
