@@ -1,7 +1,7 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { YoutubePlayerComponent } from '../../../shared/components/youtube-player/youtube-player.component';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
+import {ActivatedRoute, Router, RouterModule} from '@angular/router';
 import { MaterialService } from '../../../core/material.service';
 import { Material } from '../../@types/material';
 import { MaterialType } from '../../@types/material-type';
@@ -15,7 +15,7 @@ import { Observable, map, of, switchMap } from 'rxjs';
  */
 @Component({
     selector: 'app-material-detail',
-    imports: [YoutubePlayerComponent, CommonModule],
+    imports: [YoutubePlayerComponent, CommonModule, RouterModule],
     templateUrl: './material-detail.component.html',
     styleUrl: './material-detail.component.scss'
 })
@@ -183,7 +183,7 @@ export class MaterialDetailComponent implements OnInit {
   }
 
   /**
-   * Navigates to the previous or next material
+   * Navigates to the previous or next material--
    * @param direction 'prev' or 'next'
    */
   protected navigateMaterial(direction: 'prev' | 'next'): void {
@@ -197,6 +197,9 @@ export class MaterialDetailComponent implements OnInit {
 
         return this.materialService.getMaterial().pipe(
           map(materials => {
+
+            if (materialId === 1 &&  direction == "prev" ) return of(null)
+
             const newId = direction === 'next'
               ? Math.min(materialId + 1, materials.length - 1)
               : Math.max(materialId - 1, 0);
