@@ -1,11 +1,11 @@
-import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
-import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { of } from 'rxjs';
-import { catchError, exhaustMap, map, tap } from 'rxjs/operators';
-import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
-import { AlertService } from '../../services/alert.service';
+import {Injectable, Inject, PLATFORM_ID} from '@angular/core';
+import {isPlatformBrowser} from '@angular/common';
+import {Actions, createEffect, ofType} from '@ngrx/effects';
+import {of} from 'rxjs';
+import {catchError, exhaustMap, map, tap} from 'rxjs/operators';
+import {Router} from '@angular/router';
+import {AuthService} from '../../services/auth.service';
+import {AlertService} from '../../services/alert.service';
 import * as AuthActions from './auth.actions';
 
 @Injectable()
@@ -16,7 +16,8 @@ export class AuthEffects {
     private alertService: AlertService,
     private router: Router,
     @Inject(PLATFORM_ID) private platformId: Object
-  ) {}
+  ) {
+  }
 
   /**
    * Login effect
@@ -24,26 +25,29 @@ export class AuthEffects {
   login$ = createEffect(() => {
     // Skip effects on server side
     if (!isPlatformBrowser(this.platformId)) {
-      return of({ type: '[Auth] SSR Skip' });
+      return of({type: '[Auth] SSR Skip'});
     }
 
     // Ensure actions$ is defined before accessing pipe
     if (!this.actions$) {
       console.error('Actions$ is undefined in AuthEffects');
-      return of({ type: '[Auth] Login Error', error: 'Actions$ is undefined' });
+      return of({type: '[Auth] Login Error', error: 'Actions$ is undefined'});
     }
 
     return this.actions$.pipe(
       ofType(AuthActions.login),
-      exhaustMap(({ email, password }) =>
+      exhaustMap(({email, password}) =>
         this.authService.login(email, password).pipe(
-          map((user) => {
-            this.alertService.success('Login successful');
-            return AuthActions.loginSuccess({ user });
+          map((authResponse) => {
+            // Store the auth response in local storage
+            localStorage.setItem('token', JSON.stringify(authResponse.accessToken));
+            localStorage.setItem('refreshToken', JSON.stringify(authResponse.refreshToken));
+            localStorage.setItem('accessTokenExpiresIn', JSON.stringify(authResponse.accessTokenExpiresIn));
+            return AuthActions.loginSuccess({authResponse});
           }),
           catchError((error) => {
             this.alertService.error(error.message || 'Login failed');
-            return of(AuthActions.loginFailure({ error: error.message }));
+            return of(AuthActions.loginFailure({error: error.message}));
           })
         )
       )
@@ -57,13 +61,13 @@ export class AuthEffects {
     () => {
       // Skip effects on server side
       if (!isPlatformBrowser(this.platformId)) {
-        return of({ type: '[Auth] SSR Skip' });
+        return of({type: '[Auth] SSR Skip'});
       }
 
       // Ensure actions$ is defined before accessing pipe
       if (!this.actions$) {
         console.error('Actions$ is undefined in AuthEffects');
-        return of({ type: '[Auth] Login Success Error', error: 'Actions$ is undefined' });
+        return of({type: '[Auth] Login Success Error', error: 'Actions$ is undefined'});
       }
 
       return this.actions$.pipe(
@@ -73,7 +77,7 @@ export class AuthEffects {
         })
       );
     },
-    { dispatch: false }
+    {dispatch: false}
   );
 
   /**
@@ -82,13 +86,13 @@ export class AuthEffects {
   logout$ = createEffect(() => {
     // Skip effects on server side
     if (!isPlatformBrowser(this.platformId)) {
-      return of({ type: '[Auth] SSR Skip' });
+      return of({type: '[Auth] SSR Skip'});
     }
 
     // Ensure actions$ is defined before accessing pipe
     if (!this.actions$) {
       console.error('Actions$ is undefined in AuthEffects');
-      return of({ type: '[Auth] Logout Error', error: 'Actions$ is undefined' });
+      return of({type: '[Auth] Logout Error', error: 'Actions$ is undefined'});
     }
 
     return this.actions$.pipe(
@@ -115,13 +119,13 @@ export class AuthEffects {
     () => {
       // Skip effects on server side
       if (!isPlatformBrowser(this.platformId)) {
-        return of({ type: '[Auth] SSR Skip' });
+        return of({type: '[Auth] SSR Skip'});
       }
 
       // Ensure actions$ is defined before accessing pipe
       if (!this.actions$) {
         console.error('Actions$ is undefined in AuthEffects');
-        return of({ type: '[Auth] Logout Success Error', error: 'Actions$ is undefined' });
+        return of({type: '[Auth] Logout Success Error', error: 'Actions$ is undefined'});
       }
 
       return this.actions$.pipe(
@@ -131,7 +135,7 @@ export class AuthEffects {
         })
       );
     },
-    { dispatch: false }
+    {dispatch: false}
   );
 
   /**
@@ -140,18 +144,18 @@ export class AuthEffects {
   resetPassword$ = createEffect(() => {
     // Skip effects on server side
     if (!isPlatformBrowser(this.platformId)) {
-      return of({ type: '[Auth] SSR Skip' });
+      return of({type: '[Auth] SSR Skip'});
     }
 
     // Ensure actions$ is defined before accessing pipe
     if (!this.actions$) {
       console.error('Actions$ is undefined in AuthEffects');
-      return of({ type: '[Auth] Reset Password Error', error: 'Actions$ is undefined' });
+      return of({type: '[Auth] Reset Password Error', error: 'Actions$ is undefined'});
     }
 
     return this.actions$.pipe(
       ofType(AuthActions.resetPassword),
-      exhaustMap(({ email }) =>
+      exhaustMap(({email}) =>
         this.authService.resetPassword(email).pipe(
           map(() => {
             this.alertService.success(`Verification code sent to ${email}`);
@@ -159,7 +163,7 @@ export class AuthEffects {
           }),
           catchError((error) => {
             this.alertService.error(error.message || 'Failed to send verification code');
-            return of(AuthActions.resetPasswordFailure({ error: error.message }));
+            return of(AuthActions.resetPasswordFailure({error: error.message}));
           })
         )
       )
@@ -172,18 +176,18 @@ export class AuthEffects {
   verifyOtp$ = createEffect(() => {
     // Skip effects on server side
     if (!isPlatformBrowser(this.platformId)) {
-      return of({ type: '[Auth] SSR Skip' });
+      return of({type: '[Auth] SSR Skip'});
     }
 
     // Ensure actions$ is defined before accessing pipe
     if (!this.actions$) {
       console.error('Actions$ is undefined in AuthEffects');
-      return of({ type: '[Auth] Verify OTP Error', error: 'Actions$ is undefined' });
+      return of({type: '[Auth] Verify OTP Error', error: 'Actions$ is undefined'});
     }
 
     return this.actions$.pipe(
       ofType(AuthActions.verifyOtp),
-      exhaustMap(({ email, otp }) =>
+      exhaustMap(({email, otp}) =>
         this.authService.verifyOtp(email, otp).pipe(
           map(() => {
             this.alertService.success('Verification successful');
@@ -191,7 +195,7 @@ export class AuthEffects {
           }),
           catchError((error) => {
             this.alertService.error(error.message || 'Verification failed');
-            return of(AuthActions.verifyOtpFailure({ error: error.message }));
+            return of(AuthActions.verifyOtpFailure({error: error.message}));
           })
         )
       )
@@ -204,13 +208,13 @@ export class AuthEffects {
   getUser$ = createEffect(() => {
     // Skip effects on server side
     if (!isPlatformBrowser(this.platformId)) {
-      return of({ type: '[Auth] SSR Skip' });
+      return of({type: '[Auth] SSR Skip'});
     }
 
     // Ensure actions$ is defined before accessing pipe
     if (!this.actions$) {
       console.error('Actions$ is undefined in AuthEffects');
-      return of({ type: '[Auth] Get User Error', error: 'Actions$ is undefined' });
+      return of({type: '[Auth] Get User Error', error: 'Actions$ is undefined'});
     }
 
     return this.actions$.pipe(
@@ -219,12 +223,12 @@ export class AuthEffects {
         this.authService.getCurrentUser().pipe(
           map((user) => {
             if (user) {
-              return AuthActions.getUserSuccess({ user });
+              return AuthActions.getUserSuccess({user});
             }
-            return AuthActions.getUserFailure({ error: 'User not found' });
+            return AuthActions.getUserFailure({error: 'User not found'});
           }),
           catchError((error) => {
-            return of(AuthActions.getUserFailure({ error: error.message }));
+            return of(AuthActions.getUserFailure({error: error.message}));
           })
         )
       )

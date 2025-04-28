@@ -1,5 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import { User } from './auth.state';
+import {AuthResponse} from "../../dtos/auth-response";
 
 /**
  * Login Actions
@@ -11,7 +12,7 @@ export const login = createAction(
 
 export const loginSuccess = createAction(
   '[Auth] Login Success',
-  props<{ user: User }>()
+  props<{ authResponse: AuthResponse }>()
 );
 
 export const loginFailure = createAction(

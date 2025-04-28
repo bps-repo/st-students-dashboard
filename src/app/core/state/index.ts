@@ -16,7 +16,6 @@ export const reducers: ActionReducerMap<AppState> = {
   auth: authReducer,
   units: unitsReducer,
   courses: coursesReducer,
-  // Other feature reducers will be added here
 };
 
 /**

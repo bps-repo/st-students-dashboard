@@ -1,5 +1,5 @@
-import { createReducer, on } from '@ngrx/store';
-import { initialAuthState } from './auth.state';
+import {createReducer, on} from '@ngrx/store';
+import {initialAuthState} from './auth.state';
 import * as AuthActions from './auth.actions';
 
 export const authReducer = createReducer(
@@ -12,15 +12,15 @@ export const authReducer = createReducer(
     error: null,
   })),
 
-  on(AuthActions.loginSuccess, (state, { user }) => ({
+  on(AuthActions.loginSuccess, (state, {authResponse}) => ({
     ...state,
-    user,
+    authResponse,
     isAuthenticated: true,
     isLoading: false,
     error: null,
   })),
 
-  on(AuthActions.loginFailure, (state, { error }) => ({
+  on(AuthActions.loginFailure, (state, {error}) => ({
     ...state,
     isLoading: false,
     error,
@@ -48,7 +48,7 @@ export const authReducer = createReducer(
     isLoading: false,
   })),
 
-  on(AuthActions.resetPasswordFailure, (state, { error }) => ({
+  on(AuthActions.resetPasswordFailure, (state, {error}) => ({
     ...state,
     isLoading: false,
     error,
@@ -66,7 +66,7 @@ export const authReducer = createReducer(
     isLoading: false,
   })),
 
-  on(AuthActions.verifyOtpFailure, (state, { error }) => ({
+  on(AuthActions.verifyOtpFailure, (state, {error}) => ({
     ...state,
     isLoading: false,
     error,
@@ -79,7 +79,7 @@ export const authReducer = createReducer(
     error: null,
   })),
 
-  on(AuthActions.getUserSuccess, (state, { user }) => ({
+  on(AuthActions.getUserSuccess, (state, {user}) => ({
     ...state,
     user,
     isAuthenticated: true,
@@ -87,7 +87,7 @@ export const authReducer = createReducer(
     error: null,
   })),
 
-  on(AuthActions.getUserFailure, (state, { error }) => ({
+  on(AuthActions.getUserFailure, (state, {error}) => ({
     ...state,
     isLoading: false,
     error,
