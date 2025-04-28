@@ -23,6 +23,7 @@ export class AuthEffects {
    * Login effect
    */
   login$ = createEffect(() => {
+    console.log('Login effect triggered');
     // Skip effects on server side
     if (!isPlatformBrowser(this.platformId)) {
       return of({type: '[Auth] SSR Skip'});

@@ -11,6 +11,7 @@ import {provideClientHydration} from '@angular/platform-browser';
 import {provideAnimationsAsync} from '@angular/platform-browser/animations/async';
 import {reducers, metaReducers, effects} from './core/state';
 import {provideHttpClient} from "@angular/common/http";
+import {AuthEffects} from "./core/state/auth/auth.effects";
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -23,7 +24,7 @@ export const appConfig: ApplicationConfig = {
 
     // NGRX
     provideStore(reducers, {metaReducers}),
-    provideEffects(effects),
+    provideEffects([AuthEffects, ...effects]),
     provideStoreDevtools({
       maxAge: 25,
       logOnly: !isDevMode(),
