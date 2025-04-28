@@ -1,4 +1,4 @@
-import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
+import {createEntityAdapter, EntityAdapter, EntityState} from '@ngrx/entity';
 
 /**
  * User interface
@@ -15,6 +15,7 @@ export interface User {
  */
 export interface AuthState {
   user: User | null;
+  authResponse: any;
   isAuthenticated: boolean;
   isLoading: boolean;
   error: string | null;
@@ -25,6 +26,7 @@ export interface AuthState {
  */
 export const initialAuthState: AuthState = {
   user: null,
+  authResponse: null,
   isAuthenticated: false,
   isLoading: false,
   error: null,
