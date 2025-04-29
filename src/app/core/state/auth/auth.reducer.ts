@@ -1,10 +1,10 @@
 import {createFeature, createReducer, on} from '@ngrx/store';
 import {initialAuthState} from './auth.state';
-import {authActions} from "./auth.actions";
+import {authActions, authFeatureKey} from "./auth.actions";
 
 export const authFeature = createFeature(
   {
-    name: "auth",
+    name: authFeatureKey,
     reducer: createReducer
     (initialAuthState,
       // Login
@@ -14,9 +14,10 @@ export const authFeature = createFeature(
         error: null,
       })),
 
-      on(authActions.loginSuccess, (state, {authResponse}) => ({
+      on(authActions.loginSuccess, (state, {authResponse, user}) => ({
         ...state,
         authResponse,
+        user,
         isAuthenticated: true,
         isLoading: false,
         error: null,

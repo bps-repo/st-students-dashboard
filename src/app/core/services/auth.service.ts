@@ -40,7 +40,7 @@ export class AuthService {
   logout(): Observable<void> {
     // Remove user from local storage
     localStorage.removeItem(this.storageKey);
-    localStorage.removeItem('token');
+    localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('expiresAt');
     return of(void 0)
@@ -84,5 +84,22 @@ export class AuthService {
     }
 
     return throwError(() => new Error('Invalid OTP code')).pipe(delay(1000));
+  }
+
+  getUserFromToken(token: string): User | null {
+    if (!token) {
+      return null;
+    }
+
+    try {
+      const parts = token.split('.');
+      if (parts.length !== 3) {
+        throw new Error('Invalid token format');
+      }
+      return JSON.parse(atob(parts[1])) as User;
+    } catch (error) {
+      console.error('Error parsing token:', error);
+      return null;
+    }
   }
 }

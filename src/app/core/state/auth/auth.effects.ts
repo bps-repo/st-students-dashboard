@@ -22,7 +22,18 @@ export class AuthEffects {
       exhaustMap(({email, password}) => {
         return this.authService.login(email, password).pipe(
           map((authResponse) => {
-            return authActions.loginSuccess({authResponse});
+            // Check if the response is empty
+            if (!authResponse) {
+              return authActions.loginFailure({error: 'Login failed'});
+            }
+            // Check if the response contains a token
+            if (!authResponse.accessToken) {
+              return authActions.loginFailure({error: 'Login failed'});
+            }
+
+            const user = this.authService.getUserFromToken(authResponse.accessToken)!;
+
+            return authActions.loginSuccess({authResponse, user});
           }),
           catchError((error) => {
             return of(authActions.loginFailure({error: error.error || 'Login failed'}));
@@ -41,8 +52,10 @@ export class AuthEffects {
       return this.actions$.pipe(
         ofType(authActions.loginSuccess),
         tap((action) => {
+          console.log('action.authResponse', action.user);
           // Store the token in local storage
-          localStorage.setItem('token', action.authResponse.accessToken);
+          localStorage.setItem("auth_response", JSON.stringify(action.authResponse));
+          localStorage.setItem('accessToken', action.authResponse.accessToken);
           localStorage.setItem('refreshToken', action.authResponse.refreshToken);
           this.router.navigate(['/home']);
         })
