@@ -6,8 +6,8 @@ import {CircularLevelComponent} from '../../shared/components/circular-level/cir
 import {Unit} from '../@types/unit';
 import {Observable, of} from 'rxjs';
 import {Store} from '@ngrx/store';
-import {selectAllUnits} from '../../core/state/units/units.selectors';
-import {loadUnits} from '../../core/state/units/units.actions';
+import {selectAllUnits, selectUnitsError, selectUnitsLoading} from '../../core/state/units/units.selectors';
+import {UnitsActions} from "../../core/state/units/units.actions";
 
 @Component({
   selector: 'app-home-page',
@@ -29,13 +29,12 @@ export class HomePageComponent implements OnInit {
     this.loading$ = of(false);
     this.error$ = of(null);
 
-    //this.loading$ = this.store.select(selectUnitsLoading);
-    //this.error$ = this.store.select(selectUnitsError);
+    this.loading$ = this.store.select(selectUnitsLoading);
+    this.error$ = this.store.select(selectUnitsError);
   }
 
   ngOnInit(): void {
-    // Dispatch action to load units when component initializes
-    this.store.dispatch(loadUnits());
+    this.store.dispatch(UnitsActions.loadUnits());
   }
 
   protected items: any[] = [
@@ -112,5 +111,5 @@ export class HomePageComponent implements OnInit {
     this.selectedValue = event;
   }
 
-  protected loadUnits = loadUnits
+  protected loadUnits = UnitsActions.loadUnits
 }

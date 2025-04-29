@@ -12,6 +12,8 @@ import {provideAnimationsAsync} from '@angular/platform-browser/animations/async
 import {provideHttpClient, withFetch} from "@angular/common/http";
 import {authFeature} from "./core/state/auth/auth.reducer";
 import {AuthEffects} from "./core/state/auth/auth.effects";
+import {unitsFeature} from "./core/state/units/unitsFeature";
+import {UnitsEffects} from "./core/state/units/units.effects";
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -27,7 +29,8 @@ export const appConfig: ApplicationConfig = {
       router: routerReducer,
     }),
     provideState(authFeature),
-    provideEffects(AuthEffects),
+    provideState(unitsFeature),
+    provideEffects([AuthEffects, UnitsEffects]),
     provideStoreDevtools({
       maxAge: 25,
       logOnly: !isDevMode(),

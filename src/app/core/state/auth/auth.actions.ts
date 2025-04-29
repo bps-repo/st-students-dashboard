@@ -5,10 +5,11 @@ import {AuthResponse} from "../../dtos/auth-response";
 /**
  * Login Actions
  */
+export const authFeatureKey = 'auth';
 
 export const authActions = createActionGroup(
   {
-    source: 'auth',
+    source: authFeatureKey,
     events: {
       login: props<{ email: string; password: string }>(),
       loginSuccess: props<{ authResponse: AuthResponse }>(),
