@@ -14,9 +14,10 @@ export const authFeature = createFeature(
         error: null,
       })),
 
-      on(authActions.loginSuccess, (state, {authResponse}) => ({
+      on(authActions.loginSuccess, (state, {authResponse, user}) => ({
         ...state,
         authResponse,
+        user,
         isAuthenticated: true,
         isLoading: false,
         error: null,

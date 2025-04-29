@@ -12,7 +12,7 @@ export const authActions = createActionGroup(
     source: authFeatureKey,
     events: {
       login: props<{ email: string; password: string }>(),
-      loginSuccess: props<{ authResponse: AuthResponse }>(),
+      loginSuccess: props<{ authResponse: AuthResponse, user: User }>(),
       loginFailure: props<{ error: string }>(),
       logout: emptyProps(),
       logoutSuccess: emptyProps(),
