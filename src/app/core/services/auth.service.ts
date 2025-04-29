@@ -42,6 +42,7 @@ export class AuthService {
     localStorage.removeItem(this.storageKey);
     localStorage.removeItem('token');
     localStorage.removeItem('refreshToken');
+    localStorage.removeItem('expiresAt');
     return of(void 0)
   }
 

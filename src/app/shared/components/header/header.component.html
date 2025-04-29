@@ -42,7 +42,7 @@
     </div>
 
     <!-- Sign out button with improved styling -->
-    <a routerLink="/auth/login" class="flex items-center justify-center bg-white bg-opacity-10 hover:bg-opacity-20 p-3 rounded-full cursor-pointer transition-all duration-200 shadow-sm">
+    <a (click)="onLogout()" class="flex items-center justify-center bg-white bg-opacity-10 hover:bg-opacity-20 p-3 rounded-full cursor-pointer transition-all duration-200 shadow-sm">
       <i class="pi pi-sign-out text-white"></i>
     </a>
   </div>
