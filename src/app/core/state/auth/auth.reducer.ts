@@ -1,95 +1,98 @@
-import {createReducer, on} from '@ngrx/store';
+import {createFeature, createReducer, on} from '@ngrx/store';
 import {initialAuthState} from './auth.state';
-import * as AuthActions from './auth.actions';
+import {authActions} from "./auth.actions";
 
-export const authReducer = createReducer(
-  initialAuthState,
+export const authFeature = createFeature(
+  {
+    name: "auth",
+    reducer: createReducer
+    (initialAuthState,
+      // Login
+      on(authActions.login, (state) => ({
+        ...state,
+        isLoading: true,
+        error: null,
+      })),
 
-  // Login
-  on(AuthActions.login, (state) => ({
-    ...state,
-    isLoading: true,
-    error: null,
-  })),
+      on(authActions.loginSuccess, (state, {authResponse}) => ({
+        ...state,
+        authResponse,
+        isAuthenticated: true,
+        isLoading: false,
+        error: null,
+      })),
 
-  on(AuthActions.loginSuccess, (state, {authResponse}) => ({
-    ...state,
-    authResponse,
-    isAuthenticated: true,
-    isLoading: false,
-    error: null,
-  })),
+      on(authActions.loginFailure, (state, {error}) => ({
+        ...state,
+        isLoading: false,
+        error,
+      })),
 
-  on(AuthActions.loginFailure, (state, {error}) => ({
-    ...state,
-    isLoading: false,
-    error,
-  })),
+      // Logout
+      on(authActions.logout, (state) => ({
+        ...state,
+        isLoading: true,
+      })),
 
-  // Logout
-  on(AuthActions.logout, (state) => ({
-    ...state,
-    isLoading: true,
-  })),
+      on(authActions.logoutSuccess, () => ({
+        ...initialAuthState,
+      })),
 
-  on(AuthActions.logoutSuccess, () => ({
-    ...initialAuthState,
-  })),
+      // Reset Password
+      on(authActions.resetPassword, (state) => ({
+        ...state,
+        isLoading: true,
+        error: null,
+      })),
 
-  // Reset Password
-  on(AuthActions.resetPassword, (state) => ({
-    ...state,
-    isLoading: true,
-    error: null,
-  })),
+      on(authActions.resetPasswordSuccess, (state) => ({
+        ...state,
+        isLoading: false,
+      })),
 
-  on(AuthActions.resetPasswordSuccess, (state) => ({
-    ...state,
-    isLoading: false,
-  })),
+      on(authActions.resetPasswordFailure, (state, {error}) => ({
+        ...state,
+        isLoading: false,
+        error,
+      })),
 
-  on(AuthActions.resetPasswordFailure, (state, {error}) => ({
-    ...state,
-    isLoading: false,
-    error,
-  })),
+      // Verify OTP
+      on(authActions.verifyOtp, (state) => ({
+        ...state,
+        isLoading: true,
+        error: null,
+      })),
 
-  // Verify OTP
-  on(AuthActions.verifyOtp, (state) => ({
-    ...state,
-    isLoading: true,
-    error: null,
-  })),
+      on(authActions.verifyOtpSuccess, (state) => ({
+        ...state,
+        isLoading: false,
+      })),
 
-  on(AuthActions.verifyOtpSuccess, (state) => ({
-    ...state,
-    isLoading: false,
-  })),
+      on(authActions.verifyOtpFailure, (state, {error}) => ({
+        ...state,
+        isLoading: false,
+        error,
+      })),
 
-  on(AuthActions.verifyOtpFailure, (state, {error}) => ({
-    ...state,
-    isLoading: false,
-    error,
-  })),
+      // Get User
+      on(authActions.getUser, (state) => ({
+        ...state,
+        isLoading: true,
+        error: null,
+      })),
 
-  // Get User
-  on(AuthActions.getUser, (state) => ({
-    ...state,
-    isLoading: true,
-    error: null,
-  })),
+      on(authActions.getUserSuccess, (state, {user}) => ({
+        ...state,
+        user,
+        isAuthenticated: true,
+        isLoading: false,
+        error: null,
+      })),
 
-  on(AuthActions.getUserSuccess, (state, {user}) => ({
-    ...state,
-    user,
-    isAuthenticated: true,
-    isLoading: false,
-    error: null,
-  })),
-
-  on(AuthActions.getUserFailure, (state, {error}) => ({
-    ...state,
-    isLoading: false,
-    error,
-  }))
+      on(authActions.getUserFailure, (state, {error}) => ({
+        ...state,
+        isLoading: false,
+        error,
+      })))
+  }
 );

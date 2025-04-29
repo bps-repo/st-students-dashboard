@@ -1,16 +1,16 @@
 import {provideAnimations} from "@angular/platform-browser/animations";
 import {ApplicationConfig, isDevMode, provideZoneChangeDetection} from '@angular/core';
 import {provideRouter} from '@angular/router';
-import {provideStore} from '@ngrx/store';
+import {provideState, provideStore} from '@ngrx/store';
 import {provideEffects} from '@ngrx/effects';
 import {provideStoreDevtools} from '@ngrx/store-devtools';
-import {provideRouterStore} from '@ngrx/router-store';
+import {provideRouterStore, routerReducer} from '@ngrx/router-store';
 
 import {routes} from './app.routes';
 import {provideClientHydration} from '@angular/platform-browser';
 import {provideAnimationsAsync} from '@angular/platform-browser/animations/async';
-import {reducers, metaReducers, effects} from './core/state';
-import {provideHttpClient} from "@angular/common/http";
+import {provideHttpClient, withFetch} from "@angular/common/http";
+import {authFeature} from "./core/state/auth/auth.reducer";
 import {AuthEffects} from "./core/state/auth/auth.effects";
 
 export const appConfig: ApplicationConfig = {
@@ -20,11 +20,14 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideClientHydration(),
     provideAnimationsAsync(),
-    provideHttpClient(),
+    provideHttpClient(withFetch()),
 
     // NGRX
-    provideStore(reducers, {metaReducers}),
-    provideEffects([AuthEffects, ...effects]),
+    provideStore({
+      router: routerReducer,
+    }),
+    provideState(authFeature),
+    provideEffects(AuthEffects),
     provideStoreDevtools({
       maxAge: 25,
       logOnly: !isDevMode(),

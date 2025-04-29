@@ -19,7 +19,6 @@
           "options": {
             "outputPath": "dist/students-dashboard",
             "index": "src/index.html",
-            "browser": "src/main.ts",
             "polyfills": [
               "zone.js",
               "@angular/localize/init"
@@ -37,11 +36,7 @@
               "src/styles.scss"
             ],
             "scripts": [],
-            "server": "src/main.server.ts",
-            "prerender": true,
-            "ssr": {
-              "entry": "server.ts"
-            }
+            "browser": "src/main.ts"
           },
           "configurations": {
             "production": {

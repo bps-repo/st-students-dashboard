@@ -7,7 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:students-dashboard": "node dist/students-dashboard/server/server.mjs"
+    "lint": "ng lint"
   },
   "private": true,
   "dependencies": {
@@ -34,7 +34,6 @@
     "@ngrx/store-devtools": "^19.1.0",
     "@popperjs/core": "^2.11.8",
     "bootstrap": "^5.3.3",
-    "express": "^4.18.2",
     "primeicons": "^7.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",

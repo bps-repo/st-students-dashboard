@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {map, Observable, of, throwError} from 'rxjs';
-import {delay, tap} from 'rxjs/operators';
+import {delay} from 'rxjs/operators';
 import {User} from '../state/auth/auth.state';
 import {environment} from "../../../environments/environment";
 import {HttpClient} from "@angular/common/http";
@@ -12,7 +12,7 @@ import {AuthResponse} from "../dtos/auth-response";
 })
 export class AuthService {
   private readonly storageKey = 'auth_user';
-  private readonly apiUrl = environment.apiUrl;
+  private readonly apiUrl = environment.apiUrl + "/auth";
 
   constructor(private http: HttpClient) {
   }
@@ -22,12 +22,15 @@ export class AuthService {
    */
   login(email: string, password: string): Observable<AuthResponse> {
     console.log(`Logging in with email: ${email} and password: ${password}`);
-    // In a real application, this would call an API
     return this.http.post<ApiResponse<AuthResponse>>(`${this.apiUrl}/login`, {email, password}).pipe(
-      tap((response) => {
-        localStorage.setItem(this.storageKey, JSON.stringify(response));
+      map((response) => {
+        if (response) {
+          console.log(`Login successful: ${JSON.stringify(response)}`);
+          return response.data as AuthResponse;
+        } else {
+          throw new Error(response);
+        }
       }),
-      map((response) => response.data as AuthResponse)
     )
   }
 
@@ -37,8 +40,9 @@ export class AuthService {
   logout(): Observable<void> {
     // Remove user from local storage
     localStorage.removeItem(this.storageKey);
-
-    return of(void 0).pipe(delay(500)); // Simulate API delay
+    localStorage.removeItem('token');
+    localStorage.removeItem('refreshToken');
+    return of(void 0)
   }
 
   /**
