@@ -1,21 +1,20 @@
-import { Component, inject, OnInit, TemplateRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy } from '@angular/core';
-import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { CircularLevelComponent } from '../../shared/components/circular-level/circular-level.component';
-import { Unit } from '../@types/unit';
+import {Component, inject, OnInit, TemplateRef} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {ChangeDetectionStrategy} from '@angular/core';
+import {MatDialog, MatDialogModule, MatDialogRef} from '@angular/material/dialog';
+import {CircularLevelComponent} from '../../shared/components/circular-level/circular-level.component';
+import {Unit} from '../@types/unit';
 import {Observable, of} from 'rxjs';
-import { Store } from '@ngrx/store';
-import { AppState } from '../../core/state';
-import { selectAllUnits, selectUnitsLoading, selectUnitsError } from '../../core/state/units/units.selectors';
-import { loadUnits } from '../../core/state/units/units.actions';
+import {Store} from '@ngrx/store';
+import {selectAllUnits} from '../../core/state/units/units.selectors';
+import {loadUnits} from '../../core/state/units/units.actions';
 
 @Component({
-    selector: 'app-home-page',
-    imports: [CommonModule, CircularLevelComponent, MatDialogModule],
-    templateUrl: './home-page.component.html',
-    styleUrl: './home-page.component.scss',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'app-home-page',
+  imports: [CommonModule, CircularLevelComponent, MatDialogModule],
+  templateUrl: './home-page.component.html',
+  styleUrl: './home-page.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HomePageComponent implements OnInit {
   selectedValue: string = '';
@@ -25,7 +24,7 @@ export class HomePageComponent implements OnInit {
 
   private readonly dialog = inject(MatDialog);
 
-  constructor(public store: Store<AppState>) {
+  constructor(public store: Store) {
     this.unities$ = this.store.select(selectAllUnits);
     this.loading$ = of(false);
     this.error$ = of(null);
@@ -112,5 +111,6 @@ export class HomePageComponent implements OnInit {
   handleSelection(event: string) {
     this.selectedValue = event;
   }
+
   protected loadUnits = loadUnits
 }

@@ -14,6 +14,7 @@ import {LessonScheduleComponent} from "./features/lesson-schedule/lesson-schedul
 import {LayoutContentComponent} from "./layout/layout-content/layout-content.component";
 import {LoginComponent} from "./features/auth/login/login.component";
 import {ResetPasswordComponent} from "./features/auth/reset-password/reset-password.component";
+import {authGuard} from "./core/guards/auth.guard";
 
 export const routes: Routes = [
   {
@@ -23,6 +24,7 @@ export const routes: Routes = [
   },
   {
     path: '',
+    canActivate: [authGuard],
     component: LayoutContentComponent,
     children: [
       {

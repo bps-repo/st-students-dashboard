@@ -1,5 +1,3 @@
-import {createEntityAdapter, EntityAdapter, EntityState} from '@ngrx/entity';
-
 /**
  * User interface
  */
@@ -7,7 +5,6 @@ export interface User {
   id: string;
   email: string;
   name: string;
-  token: string;
 }
 
 /**
@@ -18,7 +15,7 @@ export interface AuthState {
   authResponse: any;
   isAuthenticated: boolean;
   isLoading: boolean;
-  error: string | null;
+  error: any | null;
 }
 
 /**
