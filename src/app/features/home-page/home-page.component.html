@@ -4,7 +4,7 @@
   <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
     <div class="mb-4 md:mb-0">
       <h1 class="text-3xl font-bold text-primary-700 flex items-center">
-        Seja Bem-Vindo, <span class="text-primary-500 font-bold ml-2">Aluno</span>
+        Seja Bem-Vindo, <span class="text-primary-500 font-bold ml-2">{{ (user$ | async)?.name }}</span>
         <span class="ml-2 animate-pulse">👋</span>
       </h1>
       <p class="text-neutral-600 mt-1">Vamos continuar de onde paramos?</p>
@@ -31,7 +31,8 @@
         <div>
           <div class="flex items-center">
             <h2 class="text-xl font-bold text-neutral-800">Nível</h2>
-            <div class="ml-3 bg-primary-100 text-primary-700 px-4 py-1 rounded-lg font-semibold flex items-center cursor-pointer hover:bg-primary-200 transition-all">
+            <div
+              class="ml-3 bg-primary-100 text-primary-700 px-4 py-1 rounded-lg font-semibold flex items-center cursor-pointer hover:bg-primary-200 transition-all">
               <span>C1 - Advanced</span>
               <i class="pi pi-chevron-down ml-2"></i>
             </div>
@@ -54,7 +55,8 @@
       </div>
       <div class="w-full bg-neutral-200 rounded-full h-3">
         <div class="bg-gradient-to-r from-primary-500 to-primary-600 h-3 rounded-full relative" style="width: 75%">
-          <div class="absolute -right-1 -top-1 bg-white w-5 h-5 rounded-full border-2 border-primary-500 shadow-sm"></div>
+          <div
+            class="absolute -right-1 -top-1 bg-white w-5 h-5 rounded-full border-2 border-primary-500 shadow-sm"></div>
         </div>
       </div>
     </div>
@@ -206,7 +208,8 @@
           </h4>
 
           <div class="space-y-3">
-            <div *ngFor="let item of unities$ | async; let i = index" class="bg-neutral-50 rounded-lg p-3 hover:shadow-md transition-all">
+            <div *ngFor="let item of unities$ | async; let i = index"
+                 class="bg-neutral-50 rounded-lg p-3 hover:shadow-md transition-all">
               <div class="flex justify-between items-start">
                 <div>
                   <h5 class="font-bold text-primary-700">Live Class - Teacher Mr. beto</h5>
@@ -239,7 +242,8 @@
                   <span class="ml-2 text-sm text-neutral-600">+17 participantes</span>
                 </div>
 
-                <button class="bg-accent-500 hover:bg-accent-600 text-white px-3 py-1 rounded-lg text-sm transition-all flex items-center">
+                <button
+                  class="bg-accent-500 hover:bg-accent-600 text-white px-3 py-1 rounded-lg text-sm transition-all flex items-center">
                   <i class="pi pi-video mr-1"></i>
                   Entrar
                 </button>
@@ -253,9 +257,12 @@
               <i class="pi pi-chevron-left"></i>
             </button>
             <div class="flex space-x-1 mx-2">
-              <span class="w-6 h-6 flex items-center justify-center bg-primary-100 text-primary-700 rounded-full text-sm font-medium">1</span>
-              <span class="w-6 h-6 flex items-center justify-center text-neutral-600 hover:bg-neutral-100 rounded-full text-sm cursor-pointer">2</span>
-              <span class="w-6 h-6 flex items-center justify-center text-neutral-600 hover:bg-neutral-100 rounded-full text-sm cursor-pointer">3</span>
+              <span
+                class="w-6 h-6 flex items-center justify-center bg-primary-100 text-primary-700 rounded-full text-sm font-medium">1</span>
+              <span
+                class="w-6 h-6 flex items-center justify-center text-neutral-600 hover:bg-neutral-100 rounded-full text-sm cursor-pointer">2</span>
+              <span
+                class="w-6 h-6 flex items-center justify-center text-neutral-600 hover:bg-neutral-100 rounded-full text-sm cursor-pointer">3</span>
             </div>
             <button class="p-1 text-neutral-400 hover:text-neutral-700 transition-all">
               <i class="pi pi-chevron-right"></i>
@@ -306,7 +313,7 @@
     <div class="bg-gradient-to-r from-primary-600 to-primary-500 text-white p-4 sm:p-5 rounded-xl mb-4 sm:mb-6">
       <div class="flex flex-col sm:flex-row items-start sm:items-center">
         <div class="bg-white bg-opacity-20 rounded-xl p-3 sm:p-4 mb-3 sm:mb-0 sm:mr-4">
-          <app-circular-level label="C1" size="20" />
+          <app-circular-level label="C1" size="20"/>
         </div>
         <div class="w-full">
           <h3 class="text-lg sm:text-xl font-medium mb-1">Advanced</h3>

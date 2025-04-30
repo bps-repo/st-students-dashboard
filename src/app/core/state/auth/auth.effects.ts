@@ -1,17 +1,26 @@
-import {Injectable, Inject, PLATFORM_ID, inject} from '@angular/core';
+import {Injectable, PLATFORM_ID, inject} from '@angular/core';
 import {isPlatformBrowser} from '@angular/common';
-import {Actions, createEffect, ofType} from '@ngrx/effects';
-import {of, EMPTY} from 'rxjs'; // Import EMPTY
-import {catchError, exhaustMap, map, tap, switchMap} from 'rxjs/operators';
+import {Actions, createEffect, ofType, OnInitEffects} from '@ngrx/effects';
+import {of} from 'rxjs'; // Import EMPTY
+import {catchError, exhaustMap, map, tap} from 'rxjs/operators';
 import {Router} from '@angular/router';
 import {AuthService} from '../../services/auth.service';
 import {authActions} from "./auth.actions";
+import {Action} from '@ngrx/store';
 
 @Injectable()
-export class AuthEffects {
+export class AuthEffects implements OnInitEffects {
   actions$ = inject(Actions)
   authService = inject(AuthService)
   router = inject(Router)
+  platformId = inject(PLATFORM_ID)
+
+  /**
+   * This method is called when the effects are initialized
+   */
+  ngrxOnInitEffects(): Action {
+    return authActions.initAuth();
+  }
 
   /**
    * Login effect
@@ -52,11 +61,10 @@ export class AuthEffects {
       return this.actions$.pipe(
         ofType(authActions.loginSuccess),
         tap((action) => {
-          console.log('action.authResponse', action.user);
-          // Store the token in local storage
           localStorage.setItem("auth_response", JSON.stringify(action.authResponse));
           localStorage.setItem('accessToken', action.authResponse.accessToken);
           localStorage.setItem('refreshToken', action.authResponse.refreshToken);
+          this.authService.saveUser(action.user);
           this.router.navigate(['/home']);
         })
       );
@@ -91,8 +99,13 @@ export class AuthEffects {
 
       return this.actions$.pipe(
         ofType(authActions.logoutSuccess),
-        tap((action) => {
-          this.router.navigate(['/auth/login']);
+        tap(() => {
+          // Clear all auth-related items from localStorage
+          localStorage.removeItem('auth_response');
+          localStorage.removeItem('accessToken');
+          localStorage.removeItem('refreshToken');
+          localStorage.removeItem('auth_user');
+          this.router.navigate(['/auth/login']).then();
         })
       );
     },
@@ -158,6 +171,44 @@ export class AuthEffects {
             return of(authActions.getUserFailure({error: error.message || 'Failed to get user'}));
           })
         );
+      })
+    );
+  });
+
+  /**
+   * Get user success effect - Save user to localStorage
+   */
+  getUserSuccess$ = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(authActions.getUserSuccess),
+        tap((action) => {
+          // Store the user in local storage
+          this.authService.saveUser(action.user);
+        })
+      );
+    },
+    {dispatch: false}
+  );
+
+  /**
+   * Initialize auth state from localStorage
+   */
+  initAuth$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(authActions.initAuth),
+      map(() => {
+        const authResponse = this.authService.getAuthResponseFromStorage();
+        if (!authResponse || !authResponse.accessToken) {
+          return authActions.initAuthFailure();
+        }
+
+        const user = this.authService.getUserFromToken(authResponse.accessToken);
+        if (!user) {
+          return authActions.initAuthFailure();
+        }
+
+        return authActions.initAuthSuccess({authResponse, user});
       })
     );
   });

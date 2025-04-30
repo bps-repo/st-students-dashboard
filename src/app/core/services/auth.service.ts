@@ -1,17 +1,18 @@
 import {Injectable} from '@angular/core';
 import {map, Observable, of, throwError} from 'rxjs';
 import {delay} from 'rxjs/operators';
-import {User} from '../state/auth/auth.state';
 import {environment} from "../../../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {ApiResponse} from "../dtos/api-response";
 import {AuthResponse} from "../dtos/auth-response";
+import {UserToken} from "../models/userToken";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private readonly storageKey = 'auth_user';
+  private readonly authResponseKey = 'auth_response';
   private readonly apiUrl = environment.apiUrl + "/auth";
 
   constructor(private http: HttpClient) {
@@ -49,12 +50,12 @@ export class AuthService {
   /**
    * Get the current user from local storage
    */
-  getCurrentUser(): Observable<User | null> {
+  getCurrentUser(): Observable<UserToken | null> {
     const userJson = localStorage.getItem(this.storageKey);
 
     if (userJson) {
       try {
-        const user = JSON.parse(userJson) as User;
+        const user = JSON.parse(userJson) as UserToken;
         return of(user);
       } catch (error) {
         localStorage.removeItem(this.storageKey);
@@ -65,11 +66,33 @@ export class AuthService {
   }
 
   /**
+   * Save user to local storage
+   */
+  saveUser(user: UserToken): void {
+    localStorage.setItem(this.storageKey, JSON.stringify(user));
+  }
+
+  /**
+   * Get auth response from local storage
+   */
+  getAuthResponseFromStorage(): AuthResponse | null {
+    const authResponseJson = localStorage.getItem(this.authResponseKey);
+
+    if (authResponseJson) {
+      try {
+        return JSON.parse(authResponseJson) as AuthResponse;
+      } catch (error) {
+        localStorage.removeItem(this.authResponseKey);
+      }
+    }
+
+    return null;
+  }
+
+  /**
    * Request password reset
    */
   resetPassword(email: string): Observable<void> {
-    // This is a mock implementation
-    // In a real application, this would call an API
     return of(void 0).pipe(delay(1000)); // Simulate API delay
   }
 
@@ -86,7 +109,7 @@ export class AuthService {
     return throwError(() => new Error('Invalid OTP code')).pipe(delay(1000));
   }
 
-  getUserFromToken(token: string): User | null {
+  getUserFromToken(token: string): UserToken | null {
     if (!token) {
       return null;
     }
@@ -96,7 +119,7 @@ export class AuthService {
       if (parts.length !== 3) {
         throw new Error('Invalid token format');
       }
-      return JSON.parse(atob(parts[1])) as User;
+      return JSON.parse(atob(parts[1])) as UserToken;
     } catch (error) {
       console.error('Error parsing token:', error);
       return null;

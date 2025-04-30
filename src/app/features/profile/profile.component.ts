@@ -1,6 +1,11 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import {Component, OnInit} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {Observable} from "rxjs";
+import {UserToken} from "../../core/models/userToken";
+import {Store} from "@ngrx/store";
+import {authSelectors} from "../../core/state/auth/auth.selectors";
+import {User} from "../../core/models/User";
 
 /**
  * Modern Profile Component
@@ -9,12 +14,45 @@ import { FormsModule } from '@angular/forms';
  * with a modern, responsive design.
  */
 @Component({
-    selector: 'app-profile',
-    imports: [CommonModule, FormsModule],
-    templateUrl: './profile.component.html',
-    styleUrl: './profile.component.scss'
+  selector: 'app-profile',
+  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  templateUrl: './profile.component.html',
+  styleUrl: './profile.component.scss'
 })
-export class ProfileComponent {
+export class ProfileComponent implements OnInit {
+
+  protected user$!: Observable<User | null>
+
+  userProfileForm!: FormGroup
+
+  constructor(private store$: Store, private form: FormBuilder) {
+
+    // Initialize the form with default values
+    this.userProfileForm = this.form.group({
+      firstName: [''],
+      lastName: [''],
+      email: [''],
+      phone: [''],
+      location: [''],
+      country: ['']
+    });
+  }
+
+  ngOnInit() {
+    // Subscribe to the user observable from the store
+    this.user$ = this.store$.select(authSelectors.user);
+
+    // Initialize the form with user data
+    this.user$.subscribe(user => {
+      if (user) {
+        this.userProfileForm.patchValue({
+          firstName: user.name,
+          email: user.email,
+        });
+      }
+    });
+  }
+
   // User profile data
   userProfile = {
     name: 'Helder Santiago',

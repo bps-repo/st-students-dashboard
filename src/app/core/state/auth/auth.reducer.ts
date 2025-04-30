@@ -94,6 +94,16 @@ export const authFeature = createFeature(
         ...state,
         isLoading: false,
         error,
+      })),
+
+      // Initialize auth state from localStorage
+      on(authActions.initAuthSuccess, (state, {authResponse, user}) => ({
+        ...state,
+        authResponse,
+        user: {name: user.name, email: user.sub!, role: user.role},
+        isAuthenticated: true,
+        isLoading: false,
+        error: null,
       })))
   }
 );

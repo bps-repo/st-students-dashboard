@@ -8,6 +8,9 @@ import {Observable, of} from 'rxjs';
 import {Store} from '@ngrx/store';
 import {selectAllUnits, selectUnitsError, selectUnitsLoading} from '../../core/state/units/units.selectors';
 import {UnitsActions} from "../../core/state/units/units.actions";
+import {authSelectors} from "../../core/state/auth/auth.selectors";
+import {UserToken} from "../../core/models/userToken";
+import {User} from "../../core/models/User";
 
 @Component({
   selector: 'app-home-page',
@@ -21,6 +24,7 @@ export class HomePageComponent implements OnInit {
   protected unities$: Observable<Unit[]>;
   protected loading$: Observable<boolean>;
   protected error$: Observable<string | null>;
+  protected user$!: Observable<User | null>;
 
   private readonly dialog = inject(MatDialog);
 
@@ -34,6 +38,7 @@ export class HomePageComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.user$ = this.store.select(authSelectors.user);
     this.store.dispatch(UnitsActions.loadUnits());
   }
 
