@@ -41,29 +41,9 @@ export class AuthService {
   logout(): Observable<void> {
     // Remove user from local storage
     localStorage.removeItem(this.storageKey);
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-    localStorage.removeItem('expiresAt');
     return of(void 0)
   }
 
-  /**
-   * Get the current user from local storage
-   */
-  getCurrentUser(): Observable<UserToken | null> {
-    const userJson = localStorage.getItem(this.storageKey);
-
-    if (userJson) {
-      try {
-        const user = JSON.parse(userJson) as UserToken;
-        return of(user);
-      } catch (error) {
-        localStorage.removeItem(this.storageKey);
-      }
-    }
-
-    return of(null);
-  }
 
   /**
    * Save user to local storage
@@ -85,7 +65,6 @@ export class AuthService {
         localStorage.removeItem(this.authResponseKey);
       }
     }
-
     return null;
   }
 

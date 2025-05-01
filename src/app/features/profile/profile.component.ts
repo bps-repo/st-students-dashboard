@@ -6,6 +6,9 @@ import {UserToken} from "../../core/models/userToken";
 import {Store} from "@ngrx/store";
 import {authSelectors} from "../../core/state/auth/auth.selectors";
 import {User} from "../../core/models/User";
+import {UserProfile} from "../../core/dtos/user-profile";
+import {userProfileSelectors} from "../../core/state/user-profile/user-profile.selectors";
+import {userProfileActions} from "../../core/state/user-profile/user-profile.actions";
 
 /**
  * Modern Profile Component
@@ -21,20 +24,33 @@ import {User} from "../../core/models/User";
 })
 export class ProfileComponent implements OnInit {
 
-  protected user$!: Observable<User | null>
+  protected isLoading$!: Observable<boolean>
+  protected errors$!: Observable<Partial<UserToken> | null>
 
-  userProfileForm!: FormGroup
+  protected user$!: Observable<User | null>
+  protected userProfile$!: Observable<UserProfile | null>
+  protected userProfileForm!: FormGroup
+
 
   constructor(private store$: Store, private form: FormBuilder) {
+    // Initialize loading and error observables
+    this.isLoading$ = this.store$.select(userProfileSelectors.loading);
+    this.errors$ = this.store$.select(userProfileSelectors.error);
+
+    this.store$.dispatch(userProfileActions.getUserProfile());
 
     // Initialize the form with default values
     this.userProfileForm = this.form.group({
+      birthdate: [''],
       firstName: [''],
       lastName: [''],
-      email: [''],
       phone: [''],
       location: [''],
-      country: ['']
+      country: [''],
+      bio: [''],
+      identificationNumber: [''],
+      gender: [''],
+      email: [''],
     });
   }
 
@@ -42,37 +58,26 @@ export class ProfileComponent implements OnInit {
     // Subscribe to the user observable from the store
     this.user$ = this.store$.select(authSelectors.user);
 
+    this.userProfile$ = this.store$.select(userProfileSelectors.userProfile);
+
     // Initialize the form with user data
-    this.user$.subscribe(user => {
+    this.userProfile$.subscribe(user => {
       if (user) {
+        console.log('user', user);
         this.userProfileForm.patchValue({
-          firstName: user.name,
-          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          phone: user.phone,
+          birthdate: user.birthDate,
+          bio: user.bio,
+          identificationNumber: user.identificationNumber,
+          gender: user.gender,
         });
       }
     });
   }
 
-  // User profile data
-  userProfile = {
-    name: 'Helder Santiago',
-    email: 'heldersantiago23@gmail.com',
-    phone: '+55 (11) 98765-4321',
-    location: 'São Paulo, Brasil',
-    language: 'Português, English',
-    level: 'C1 - Advanced',
-    bio: 'Estudante de inglês apaixonado por aprender novas línguas e culturas.'
-  };
 
-  // Form fields
-  formData = {
-    firstName: 'Helder',
-    lastName: 'Santiago',
-    email: 'heldersantiago23@gmail.com',
-    phone: '+55 (11) 98765-4321',
-    location: 'São Paulo',
-    country: 'Brasil'
-  };
 
   // Settings
   settings = {
@@ -97,15 +102,6 @@ export class ProfileComponent implements OnInit {
    * Saves the profile changes
    */
   saveChanges(): void {
-    // In a real app, this would call a service to update the profile
-    console.log('Saving profile changes:', this.formData);
-
-    // Update the displayed profile data
-    this.userProfile.name = `${this.formData.firstName} ${this.formData.lastName}`;
-    this.userProfile.email = this.formData.email;
-    this.userProfile.phone = this.formData.phone;
-    this.userProfile.location = `${this.formData.location}, ${this.formData.country}`;
-
     // Show success message (in a real app, this would be a toast notification)
     alert('Perfil atualizado com sucesso!');
   }
@@ -115,14 +111,6 @@ export class ProfileComponent implements OnInit {
    */
   discardChanges(): void {
     // Reset form data to match user profile
-    this.formData = {
-      firstName: this.userProfile.name.split(' ')[0],
-      lastName: this.userProfile.name.split(' ').slice(1).join(' '),
-      email: this.userProfile.email,
-      phone: this.userProfile.phone,
-      location: this.userProfile.location.split(',')[0].trim(),
-      country: this.userProfile.location.split(',')[1]?.trim() || 'Brasil'
-    };
 
     // Show message (in a real app, this would be a toast notification)
     alert('Alterações descartadas!');
