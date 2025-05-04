@@ -13,7 +13,7 @@ export class UnitsEffects {
   alertService = inject(AlertService)
 
   /**
-   * Load units effect
+   * Load un  its effect
    */
   loadUnits$ = createEffect(() => {
     return this.actions$.pipe(

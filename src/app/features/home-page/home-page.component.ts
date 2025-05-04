@@ -11,6 +11,7 @@ import {UnitsActions} from "../../core/state/units/units.actions";
 import {authSelectors} from "../../core/state/auth/auth.selectors";
 import {UserToken} from "../../core/models/userToken";
 import {User} from "../../core/models/User";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-home-page',
@@ -28,7 +29,7 @@ export class HomePageComponent implements OnInit {
 
   private readonly dialog = inject(MatDialog);
 
-  constructor(public store: Store) {
+  constructor(public store: Store, protected route: Router) {
     this.unities$ = this.store.select(selectAllUnits);
     this.loading$ = of(false);
     this.error$ = of(null);
@@ -80,6 +81,12 @@ export class HomePageComponent implements OnInit {
       status: 'lock',
     },
   ];
+
+  protected routeToMaterials(unit: Unit) {
+    if (unit.status != 'lock') {
+      this.route.navigate(['/lessons/materials'])
+    }
+  }
 
   protected onClick(
     modalContent: TemplateRef<any>,
