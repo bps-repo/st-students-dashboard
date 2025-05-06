@@ -9,11 +9,14 @@ import {provideRouterStore, routerReducer} from '@ngrx/router-store';
 import {routes} from './app.routes';
 import {provideClientHydration} from '@angular/platform-browser';
 import {provideAnimationsAsync} from '@angular/platform-browser/animations/async';
-import {provideHttpClient, withFetch} from "@angular/common/http";
+import {provideHttpClient, withFetch, withInterceptors} from "@angular/common/http";
 import {authFeature} from "./core/state/auth/auth.reducer";
 import {AuthEffects} from "./core/state/auth/auth.effects";
 import {unitsFeature} from "./core/state/units/unitsFeature";
 import {UnitsEffects} from "./core/state/units/units.effects";
+import {userProfileFeature} from "./core/state/user-profile/user-profile.reducers";
+import {UserProfileEffects} from "./core/state/user-profile/user-profile.effects";
+import {tokenInterceptor} from "./core/interceptors/token.interceptor";
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -22,7 +25,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideClientHydration(),
     provideAnimationsAsync(),
-    provideHttpClient(withFetch()),
+    provideHttpClient(withFetch(), withInterceptors([tokenInterceptor])),
 
     // NGRX
     provideStore({
@@ -30,9 +33,10 @@ export const appConfig: ApplicationConfig = {
     }),
     provideState(authFeature),
     provideState(unitsFeature),
-    provideEffects([AuthEffects, UnitsEffects]),
+    provideState(userProfileFeature),
+    provideEffects([AuthEffects, UnitsEffects, UserProfileEffects]),
     provideStoreDevtools({
-      maxAge: 25,
+      maxAge: 100,
       logOnly: !isDevMode(),
       autoPause: true,
       trace: false,

@@ -1,21 +1,32 @@
-import {Injectable, Inject, PLATFORM_ID, inject} from '@angular/core';
+import {Injectable, PLATFORM_ID, inject} from '@angular/core';
 import {isPlatformBrowser} from '@angular/common';
-import {Actions, createEffect, ofType} from '@ngrx/effects';
-import {of, EMPTY} from 'rxjs'; // Import EMPTY
-import {catchError, exhaustMap, map, tap, switchMap} from 'rxjs/operators';
+import {Actions, createEffect, ofType, OnInitEffects} from '@ngrx/effects';
+import {of, switchMap} from 'rxjs'; // Import EMPTY
+import {catchError, exhaustMap, map, tap} from 'rxjs/operators';
 import {Router} from '@angular/router';
 import {AuthService} from '../../services/auth.service';
 import {authActions} from "./auth.actions";
+import {Action, Store} from '@ngrx/store';
+import {userProfileActions} from "../user-profile/user-profile.actions";
 
 @Injectable()
-export class AuthEffects {
+export class AuthEffects implements OnInitEffects {
   actions$ = inject(Actions)
+  store = inject(Store)
   authService = inject(AuthService)
   router = inject(Router)
 
   /**
+   * This method is called when the effects are initialized
+   */
+  ngrxOnInitEffects(): Action {
+    return authActions.initAuth();
+  }
+
+  /**
    * Login effect
    */
+    // Then the login effect becomes:
   login$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(authActions.login),
@@ -31,7 +42,10 @@ export class AuthEffects {
               return authActions.loginFailure({error: 'Login failed'});
             }
 
-            const user = this.authService.getUserFromToken(authResponse.accessToken)!;
+            const user = this.authService.getUserFromToken(authResponse.accessToken);
+            if (!user) {
+              return authActions.loginFailure({error: 'Invalid token'});
+            }
 
             return authActions.loginSuccess({authResponse, user});
           }),
@@ -43,20 +57,18 @@ export class AuthEffects {
     );
   });
 
+
   /**
    * Login success effect - Navigate to home page
    */
   loginSuccess$ = createEffect(
     () => {
-
       return this.actions$.pipe(
         ofType(authActions.loginSuccess),
         tap((action) => {
-          console.log('action.authResponse', action.user);
-          // Store the token in local storage
-          localStorage.setItem("auth_response", JSON.stringify(action.authResponse));
           localStorage.setItem('accessToken', action.authResponse.accessToken);
           localStorage.setItem('refreshToken', action.authResponse.refreshToken);
+          localStorage.setItem('auth_response', JSON.stringify(action.authResponse));
           this.router.navigate(['/home']);
         })
       );
@@ -73,6 +85,8 @@ export class AuthEffects {
       exhaustMap(() => {
         return this.authService.logout().pipe(
           map(() => {
+            // Clear local storage
+
             return authActions.logoutSuccess();
           }),
           catchError((error) => {
@@ -91,8 +105,15 @@ export class AuthEffects {
 
       return this.actions$.pipe(
         ofType(authActions.logoutSuccess),
-        tap((action) => {
-          this.router.navigate(['/auth/login']);
+        tap(() => {
+          localStorage.removeItem('auth_response');
+          localStorage.removeItem('accessToken');
+          localStorage.removeItem('refreshToken');
+          localStorage.removeItem('expiresAt');
+
+          //clear user profile
+          this.store.dispatch(userProfileActions.clearUserProfile());
+          this.router.navigate(['/auth/login']).then();
         })
       );
     },
@@ -103,8 +124,6 @@ export class AuthEffects {
    * Reset password effect
    */
   resetPassword$ = createEffect(() => {
-
-
     return this.actions$.pipe(
       ofType(authActions.resetPassword),
       exhaustMap(({email}) => {
@@ -124,7 +143,6 @@ export class AuthEffects {
    * Verify OTP effect
    */
   verifyOtp$ = createEffect(() => {
-
     return this.actions$.pipe(
       ofType(authActions.verifyOtp),
       exhaustMap(({email, otp}) => {
@@ -146,18 +164,61 @@ export class AuthEffects {
   getUser$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(authActions.getUser),
-      exhaustMap(() => {
-        return this.authService.getCurrentUser().pipe(
-          map((user) => {
-            if (user) {
-              return authActions.getUserSuccess({user});
-            }
+      map((actions) => {
+        try {
+          // Direct call to getUserFromToken which now returns UserToken | null
+          const user = this.authService.getUserFromToken(actions.token);
+
+          if (user) {
+            return authActions.getUserSuccess({user});
+          } else {
             return authActions.getUserFailure({error: 'User not found'});
-          }),
-          catchError((error) => {
-            return of(authActions.getUserFailure({error: error.message || 'Failed to get user'}));
-          })
-        );
+          }
+        } catch (error) {
+          // Handle any synchronous errors thrown by getUserFromToken
+          const errorMessage = error instanceof Error ? error.message : 'Failed to get user';
+          return authActions.getUserFailure({error: errorMessage});
+        }
+      })
+    );
+  });
+
+  /**
+   * Get user success effect - Save user to localStorage
+   */
+  getUserSuccess$ = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(authActions.getUserSuccess),
+        tap((action) => {
+        })
+      );
+    },
+    {dispatch: false}
+  );
+
+  /**
+   * Initialize auth state from localStorage
+   */
+  /**
+   * Initialize auth state from localStorage
+   */
+  initAuth$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(authActions.initAuth),
+      map(() => {
+        const authResponse = this.authService.getAuthResponseFromStorage();
+        if (!authResponse || !authResponse.accessToken) {
+          return authActions.initAuthFailure();
+        }
+
+        // Direct call since getUserFromToken returns a value, not an Observable
+        const user = this.authService.getUserFromToken(authResponse.accessToken);
+        if (!user) {
+          return authActions.initAuthFailure();
+        }
+
+        return authActions.initAuthSuccess({authResponse, user});
       })
     );
   });

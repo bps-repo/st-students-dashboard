@@ -1,16 +1,19 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {OverlayComponent} from '../overlay/overlay.component';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {CommonModule} from '@angular/common';
 import {Store} from "@ngrx/store";
 import {authActions} from "../../../core/state/auth/auth.actions";
+import {UserToken} from "../../../core/models/userToken";
+import {authSelectors} from "../../../core/state/auth/auth.selectors";
 
 @Component({
   selector: 'app-header',
   imports: [OverlayComponent, CommonModule],
   templateUrl: './header.component.html'
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
+  protected user$!: Observable<UserToken | null>;
   private overlayState = new BehaviorSubject<boolean>(false);
   showOverlay$ = this.overlayState.asObservable();
 
@@ -23,5 +26,9 @@ export class HeaderComponent {
 
   onLogout() {
     this.store.dispatch(authActions.logout())
+  }
+
+  ngOnInit() {
+    this.user$ = this.store.select((state) => state.auth.user);
   }
 }

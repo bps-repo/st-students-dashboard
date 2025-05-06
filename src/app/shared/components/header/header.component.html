@@ -4,7 +4,8 @@
   <!-- Left side navigation -->
   <nav class="flex items-center space-x-6">
     <!-- Back button with improved hover effect -->
-    <button class="group flex items-center space-x-2 bg-white bg-opacity-10 hover:bg-opacity-20 px-4 py-2 rounded-lg transition-all duration-200 shadow-sm">
+    <button
+      class="group flex items-center space-x-2 bg-white bg-opacity-10 hover:bg-opacity-20 px-4 py-2 rounded-lg transition-all duration-200 shadow-sm">
       <i class="pi pi-arrow-left text-white"></i>
       <span class="font-medium">Voltar</span>
     </button>
@@ -29,20 +30,21 @@
         class="w-8 h-8 rounded-full border-2 border-white border-opacity-30 object-cover"
         alt="user-photo"
       />
-      <span class="font-medium">Helder</span>
+      <span class="font-medium">{{ (user$ | async)?.name }}</span>
       <i class="pi pi-chevron-down text-sm"></i>
 
       <!-- Overlay for user menu -->
       @if (showOverlay$|async) {
-      <div
-        class="fixed inset-0 backdrop-blur-sm transition-all bg-black bg-opacity-50 z-50"
-      ></div>
-      <app-overlay></app-overlay>
+        <div
+          class="fixed inset-0 backdrop-blur-sm transition-all bg-black bg-opacity-50 z-50"
+        ></div>
+        <app-overlay></app-overlay>
       }
     </div>
 
     <!-- Sign out button with improved styling -->
-    <a (click)="onLogout()" class="flex items-center justify-center bg-white bg-opacity-10 hover:bg-opacity-20 p-3 rounded-full cursor-pointer transition-all duration-200 shadow-sm">
+    <a (click)="onLogout()"
+       class="flex items-center justify-center bg-white bg-opacity-10 hover:bg-opacity-20 p-3 rounded-full cursor-pointer transition-all duration-200 shadow-sm">
       <i class="pi pi-sign-out text-white"></i>
     </a>
   </div>

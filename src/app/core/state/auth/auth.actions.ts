@@ -1,6 +1,7 @@
-import {createAction, createActionGroup, emptyProps, props} from '@ngrx/store';
-import {User} from './auth.state';
+import {createActionGroup, emptyProps, props} from '@ngrx/store';
 import {AuthResponse} from "../../dtos/auth-response";
+import {UserToken} from "../../models/userToken";
+import {UserProfile} from "../../dtos/user-profile";
 
 /**
  * Login Actions
@@ -12,7 +13,7 @@ export const authActions = createActionGroup(
     source: authFeatureKey,
     events: {
       login: props<{ email: string; password: string }>(),
-      loginSuccess: props<{ authResponse: AuthResponse, user: User }>(),
+      loginSuccess: props<{ authResponse: AuthResponse, user: UserToken }>(),
       loginFailure: props<{ error: string }>(),
       logout: emptyProps(),
       logoutSuccess: emptyProps(),
@@ -24,10 +25,18 @@ export const authActions = createActionGroup(
       verifyOtp: props<{ email: string; otp: string }>(),
       verifyOtpSuccess: emptyProps(),
       verifyOtpFailure: props<{ error: string }>(),
-      getUser: emptyProps(),
-      getUserSuccess: props<{ user: User }>(),
+      getUser: props<{ token: string }>(),
+      getUserSuccess: props<{ user: UserToken }>(),
       getUserFailure: props<{ error: string }>(),
+      // New actions for state persistence
+      initAuth: emptyProps(),
+      initAuthSuccess: props<{ authResponse: AuthResponse, user: UserToken }>(),
+      initAuthFailure: emptyProps(),
+
+      // User Profile actions
+      updateUserProfile: props<{ user: Partial<UserProfile> }>(),
+      updateUserProfileSuccess: props<{ user: Partial<UserProfile> }>(),
+      updateUserProfileFailure: props<{ error: any }>(),
     },
   }
 )
-
