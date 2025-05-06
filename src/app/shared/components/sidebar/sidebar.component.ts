@@ -1,7 +1,7 @@
-import { CommonModule } from '@angular/common';
-import { Component, OnInit, signal } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
-import { LocalstorageService } from '../../services/localstorage.service';
+import {CommonModule} from '@angular/common';
+import {Component, OnInit, signal} from '@angular/core';
+import {RouterLink, RouterLinkActive} from '@angular/router';
+import {LocalstorageService} from '../../services/localstorage.service';
 
 interface navLink {
   label: string;
@@ -10,15 +10,17 @@ interface navLink {
   activeIcon?: string;
   active: boolean;
 }
+
 @Component({
-    selector: 'app-sidebar',
-    imports: [CommonModule, RouterLink, RouterLinkActive],
-    templateUrl: './sidebar.component.html'
+  selector: 'app-sidebar',
+  imports: [CommonModule, RouterLink, RouterLinkActive],
+  templateUrl: './sidebar.component.html'
 })
 export class SidebarComponent implements OnInit {
   isNavBarOpened = signal(false);
 
-  constructor(private localStorageService: LocalstorageService) {}
+  constructor(private localStorageService: LocalstorageService) {
+  }
 
   navLinks: navLink[] = [
     {
@@ -29,17 +31,17 @@ export class SidebarComponent implements OnInit {
       active: false,
     },
     {
-      label: 'Cursos',
-      path: '/courses',
-      icon: 'pi pi-tablet',
-      activeIcon: 'pi pi-tablet-alt',
-      active: false,
-    },
-    {
-      label: 'Minhas Aulas',
+      label: 'Calendário',
       path: '/lessons',
       icon: 'pi pi-folder-open',
       activeIcon: 'pi pi-folder-open-alt',
+      active: false,
+    },
+    {
+      label: 'Aulas',
+      path: '/courses',
+      icon: 'pi pi-tablet',
+      activeIcon: 'pi pi-tablet-alt',
       active: false,
     },
     {
