@@ -3,14 +3,13 @@ import {CommonModule} from '@angular/common';
 import {ChangeDetectionStrategy} from '@angular/core';
 import {MatDialog, MatDialogModule, MatDialogRef} from '@angular/material/dialog';
 import {CircularLevelComponent} from '../../shared/components/circular-level/circular-level.component';
-import {Unit} from '../@types/unit';
 import {Observable, of} from 'rxjs';
 import {Store} from '@ngrx/store';
 import {selectAllUnits, selectUnitsError, selectUnitsLoading} from '../../core/state/units/units.selectors';
 import {UnitsActions} from "../../core/state/units/units.actions";
 import {authSelectors} from "../../core/state/auth/auth.selectors";
-import {UserToken} from "../../core/models/userToken";
 import {User} from "../../core/models/User";
+import {Unit} from "../../core/models/Unit";
 
 @Component({
   selector: 'app-home-page',

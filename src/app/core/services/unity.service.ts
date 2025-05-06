@@ -1,34 +1,22 @@
-import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { Unit } from '../../features/@types/unit';
+import {Injectable} from '@angular/core';
+import {map, Observable, of} from 'rxjs';
+import {Unit} from "../models/Unit";
+import {HttpClient} from "@angular/common/http";
+import {environment} from "../../../environments/environment";
+import {ApiResponse} from "../dtos/api-response";
 
 @Injectable({
   providedIn: 'root',
 })
 export class UnityService {
-  constructor() {}
+  protected baseUrl = environment.apiUrl
+
+  constructor(private http: HttpClient) {
+  }
+
   getUnities(): Observable<Unit[]> {
-    return of([
-      {
-        title: 'Unidade 1',
-        description: 'Present Simple - Verb To Do',
-        status: 'done',
-      },
-      {
-        title: 'Unidade 2',
-        description: 'Phrasel Verbs + Infinitive Verbs',
-        status: 'done',
-      },
-      {
-        title: 'Unidade 3',
-        description: 'Past Simple - Regular Verbs',
-        status: 'reading',
-      },
-      {
-        title: 'Unidade 4',
-        description: 'Perfect Tense - Verb to have + main verb',
-        status: 'lock',
-      },
-    ]);
+    return this.http.get<ApiResponse<Unit[]>>(this.baseUrl + '/unities').pipe(
+      map((r) => r.data as Unit[])
+    );
   }
 }
