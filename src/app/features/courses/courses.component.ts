@@ -1,84 +1,60 @@
-import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { CardSliderComponent } from '../../shared/components/card-slider/card-slider.component';
-import { Course } from '../@types/course';
+import {CommonModule, NgOptimizedImage} from '@angular/common';
+import {Component} from '@angular/core';
+import {CardSliderComponent} from '../../shared/components/card-slider/card-slider.component';
+import {Course} from '../@types/course';
+import {COURSES, LEVELS} from "./courses.state";
+import {CarouselComponent} from "../../shared/carousel/carousel.component";
 
 @Component({
-    selector: 'app-courses',
-    imports: [CommonModule, CardSliderComponent],
-    templateUrl: './courses.component.html',
-    styleUrl: './courses.component.scss'
+  selector: 'app-courses',
+  imports: [CommonModule, CardSliderComponent, NgOptimizedImage, CarouselComponent],
+  templateUrl: './courses.component.html',
 })
 export class CoursesComponent {
-  protected readonly contents: Course[] = [
-    {
-      label: 'Video curso completo',
-      image: '/courses/course_blue.png',
-      color: 'primary',
-      type: 'content',
-    },
-    {
-      label: 'Conversação',
-      image: '/courses/course_green.png',
-      color: 'success',
-      type: 'content',
-    },
-    {
-      label: 'Pronuncia',
-      image: '/courses/course_blue.png',
-      color: 'primary',
-      type: 'content',
-    },
-    {
-      label: 'Leitura e Escrita',
-      image: '/courses/course_blue.png',
-      color: 'primary',
-      type: 'content',
-    },
-    {
-      label: 'Reading and Writing',
-      image: '/courses/course_green.png',
-      color: 'success',
-      type: 'content',
-    },
-    {
-      label: 'listening',
-      image: '/courses/course_blue.png',
-      color: 'primary',
-      type: 'content',
-    },
-  ];
+  protected readonly contents: Course[] = COURSES
 
-  protected readonly modules: Course[] = [
+  protected readonly levels: Course[] = LEVELS
+
+  protected readonly videos: any[] = [
     {
-      label: 'Beginner',
-      image: '/courses/course_blue.png',
-      color: 'primary',
-      type: 'course',
+      level: "Beginner",
+      description: "Conversação Avançada: Expressões Idiomáticas ",
+      views: 12
     },
     {
-      label: 'Elementary',
-      image: '/courses/course_white.png',
-      color: 'warning',
-      type: 'course',
+      level: "Elementary",
+      description: "Gramática: Uso do Present Perfect",
+      views: 12
     },
     {
-      label: 'Intermediate',
-      image: '/courses/course_green.png',
-      color: 'success',
-      type: 'course',
+      level: "Pre-Intermediate",
+      description: "Vocabulário para Viagens e Turismo",
+      views: 12
     },
     {
-      label: 'Upper Intermedidate',
-      image: '/courses/course_orange.png',
-      color: 'warning',
-      type: 'course',
+      level: "Intermediate",
+      description: "Pronúncia: Sons Difíceis em Inglês",
+      views: 12
     },
     {
-      label: 'Advanced',
-      image: '/courses/course_blue.png',
-      color: 'primary',
-      type: 'course',
+      level: "Upper Intermediate",
+      description: "Conversação Avançada: Expressões Idiomáticas ",
+      views: 12
     },
-  ];
+    {
+      level: "Upper Intermediate",
+      description: "Conversação Avançada: Expressões Idiomáticas ",
+      views: 12
+    },
+    {
+      level: "Upper Intermediate",
+      description: "Conversação Avançada: Expressões Idiomáticas ",
+      views: 12
+    },
+    {
+      level: "Upper Intermediate",
+      description: "Conversação Avançada: Expressões Idiomáticas ",
+      views: 12
+    },
+  ]
 }

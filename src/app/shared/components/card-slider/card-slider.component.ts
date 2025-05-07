@@ -23,7 +23,6 @@ import { AnimationFrameService } from "../../../core/animation-frame.service";
     selector: 'app-card-slider',
     imports: [CommonModule, NgbCarouselModule, MatPaginatorModule],
     templateUrl: './card-slider.component.html',
-    styleUrls: ['./card-slider.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CardSliderComponent implements OnInit, AfterViewInit {
