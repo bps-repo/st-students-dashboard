@@ -12,7 +12,6 @@ import { FormsModule } from '@angular/forms';
     selector: 'app-support',
     imports: [CommonModule, FormsModule],
     templateUrl: './support.component.html',
-    styleUrl: './support.component.scss'
 })
 export class SupportComponent {
   // Form data

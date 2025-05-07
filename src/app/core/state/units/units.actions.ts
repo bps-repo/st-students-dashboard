@@ -1,5 +1,5 @@
 import {createAction, createActionGroup, emptyProps, props} from '@ngrx/store';
-import {Unit} from '../../../features/@types/unit';
+import {Unit} from "../../models/Unit";
 
 /**
  * Load Units Actions

@@ -4,7 +4,7 @@ import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} fr
 import {CommonModule} from "@angular/common";
 import {RouterModule} from "@angular/router";
 import {Store} from "@ngrx/store";
-import {authActions} from "../../../core/state/auth/auth.actions";
+import {AuthActions} from "../../../core/state/auth/authActions";
 import {Observable} from "rxjs";
 import {authSelectors} from "../../../core/state/auth/auth.selectors";
 
@@ -45,7 +45,7 @@ export class LoginComponent {
   onSubmit() {
     if (this.loginForm.valid) {
       // Dispatch login action
-      this.store.dispatch(authActions.login({
+      this.store.dispatch(AuthActions.login({
         email: this.loginForm.value.email,
         password: this.loginForm.value.password
       }));

@@ -1,10 +1,9 @@
-import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { FlashCard } from '../@types/flash-card';
-import { TabMenuComponent } from '../../shared/components/tab-menu/tab-menu.component';
-import { TabMenuConfig } from '../@types/tab-menu';
-import { FlashCardComponent } from '../../shared/components/flash-card/flash-card.component';
-import { FormsModule } from '@angular/forms';
+import {CommonModule} from '@angular/common';
+import {ChangeDetectionStrategy, Component, signal} from '@angular/core';
+import {TabMenuComponent} from '../../shared/components/tab-menu/tab-menu.component';
+import {FormsModule} from '@angular/forms';
+import {FlashCard} from "../../@types/flash-card";
+import {TabMenuConfig} from "../../@types/tab-menu";
 
 /**
  * Modern Events Component
@@ -12,10 +11,10 @@ import { FormsModule } from '@angular/forms';
  * Displays upcoming and past events with a modern, responsive design.
  */
 @Component({
-    selector: 'app-events',
-    imports: [CommonModule, TabMenuComponent, FormsModule],
-    templateUrl: './events.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'app-events',
+  imports: [CommonModule, TabMenuComponent, FormsModule],
+  templateUrl: './events.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EventsComponent {
   // Event detail modal state

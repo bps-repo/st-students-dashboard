@@ -1,7 +1,7 @@
 import {CanActivateFn, Router} from '@angular/router';
 import {inject} from "@angular/core";
 import {Store} from "@ngrx/store";
-import {authActions} from "../state/auth/auth.actions";
+import {AuthActions} from "../state/auth/authActions";
 
 export const authGuard: CanActivateFn = (route, state) => {
   const token = localStorage.getItem('accessToken');
@@ -13,6 +13,6 @@ export const authGuard: CanActivateFn = (route, state) => {
     return false;
   }
 
-  store$.dispatch(authActions.initAuth());
+  store$.dispatch(AuthActions.initAuth());
   return true;
 };

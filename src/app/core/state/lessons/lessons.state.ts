@@ -1,5 +1,5 @@
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
-import { Lesson } from '../../../features/@types/lesson';
+import {Lesson} from "../../../@types/lesson";
 
 /**
  * Lessons state interface using entity adapter for normalized state

@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, signal } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { FlashCard } from '../../../features/@types/flash-card';
+import {FlashCard} from "../../../@types/flash-card";
 
 @Component({
     selector: 'app-flash-card',

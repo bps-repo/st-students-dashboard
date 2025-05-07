@@ -8,7 +8,6 @@ import { AlertService } from '../../../core/services/alert.service';
   selector: 'app-reset-password',
   imports: [ReactiveFormsModule, FormsModule, CommonModule, RouterModule],
   templateUrl: './reset-password.component.html',
-  styleUrl: './reset-password.component.scss'
 })
 export class ResetPasswordComponent {
   resetForm: FormGroup;

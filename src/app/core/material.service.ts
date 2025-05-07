@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { Material } from '../features/@types/material';
-import { MaterialType } from '../features/@types/material-type';
+import {MaterialType} from "../@types/material-type";
+import {Material} from "../@types/material";
 
 @Injectable({
   providedIn: 'root',

@@ -1,5 +1,5 @@
-import { createAction, props } from '@ngrx/store';
-import { Lesson } from '../../../features/@types/lesson';
+import {createAction, props} from '@ngrx/store';
+import {Lesson} from "../../../@types/lesson";
 
 /**
  * Load Lessons Actions

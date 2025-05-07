@@ -20,7 +20,6 @@ import {userProfileActions} from "../../core/state/user-profile/user-profile.act
   selector: 'app-profile',
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './profile.component.html',
-  styleUrl: './profile.component.scss'
 })
 export class ProfileComponent implements OnInit {
 
