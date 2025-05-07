@@ -1,11 +1,11 @@
 import {createFeature, createReducer, on} from "@ngrx/store";
 import {StudentActions, STUDENT_FEATURE_KEY} from "./studentActions";
-import {initialState} from "./student.state";
+import {initialStudentState} from "./student.state";
 
 export const studentFeature = createFeature({
   name: STUDENT_FEATURE_KEY,
   reducer: createReducer(
-    initialState,
+    initialStudentState,
     on(StudentActions.loadStudent, (state) => ({
       ...state,
       errors: null,

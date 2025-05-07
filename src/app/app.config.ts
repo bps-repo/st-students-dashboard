@@ -18,13 +18,10 @@ import {StudentEffects} from "./core/state/student/student.effects";
 import {studentFeature} from "./core/state/student/student.reducer";
 import {LevelEffects} from "./core/state/level/level.effects";
 import {levelFeature} from "./core/state/level/level.reducer";
+import {UserProfileEffects} from "./core/state/user-profile/user-profile.effects";
+import {ngrxEffects, ngrxFeatures} from "./core/state/app.state";
 
-const ngrxFeatures = [
-  authFeature,
-  unitsFeature,
-  studentFeature,
-  levelFeature,
-]
+
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -41,7 +38,7 @@ export const appConfig: ApplicationConfig = {
     }),
     ...ngrxFeatures.map(
       (features) => provideState(features as FeatureSlice<any>)),
-    provideEffects([AuthEffects, UnitsEffects, StudentEffects, LevelEffects]),
+    provideEffects(ngrxEffects),
     provideStoreDevtools({
       maxAge: 25,
       logOnly: !isDevMode(),

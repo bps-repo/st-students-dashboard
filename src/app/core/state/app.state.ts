@@ -1,7 +1,19 @@
-import { RouterReducerState } from '@ngrx/router-store';
-import { AuthState, initialAuthState } from './auth/auth.state';
-import { UnitsState, initialUnitsState } from './units/units.state';
-import { CoursesState, initialCoursesState } from './courses/courses.state';
+import {RouterReducerState} from '@ngrx/router-store';
+import {AuthState, initialAuthState} from './auth/auth.state';
+import {UnitsState, initialUnitsState} from './units/units.state';
+import {CoursesState, initialCoursesState} from './courses/courses.state';
+import {authFeature} from "./auth/auth.reducer";
+import {unitsFeature} from "./units/unitsFeature";
+import {studentFeature} from "./student/student.reducer";
+import {levelFeature} from "./level/level.reducer";
+import {AuthEffects} from "./auth/auth.effects";
+import {UnitsEffects} from "./units/units.effects";
+import {StudentEffects} from "./student/student.effects";
+import {LevelEffects} from "./level/level.effects";
+import {UserProfileEffects} from "./user-profile/user-profile.effects";
+import {userProfileFeature} from "./user-profile/user-profile.reducers";
+import {initialStudentState, StudentState} from "./student/student.state";
+import {initialUserProfileState, UserProfileState} from "./user-profile/user-profile.actions";
 
 /**
  * Interface for the root state of the application
@@ -11,7 +23,8 @@ export interface AppState {
   auth: AuthState;
   units: UnitsState;
   courses: CoursesState;
-  // Other feature states will be added here
+  student: StudentState,
+  userProfile: UserProfileState
 }
 
 /**
@@ -22,5 +35,23 @@ export const initialAppState: AppState = {
   auth: initialAuthState,
   units: initialUnitsState,
   courses: initialCoursesState,
-  // Other initial feature states will be added here
+  student: initialStudentState,
+  userProfile: initialUserProfileState
 };
+
+
+export const ngrxFeatures = [
+  authFeature,
+  unitsFeature,
+  studentFeature,
+  levelFeature,
+  userProfileFeature
+]
+
+export const ngrxEffects = [
+  AuthEffects,
+  UnitsEffects,
+  StudentEffects,
+  LevelEffects,
+  UserProfileEffects
+]

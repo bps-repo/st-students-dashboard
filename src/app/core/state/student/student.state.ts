@@ -13,7 +13,7 @@ export const studentAdapter: EntityAdapter<Student> = createEntityAdapter<Studen
   sortComparer: false
 })
 
-export const initialState: StudentState = studentAdapter.getInitialState({
+export const initialStudentState: StudentState = studentAdapter.getInitialState({
     errors: null,
     loading: false,
     student: null,
