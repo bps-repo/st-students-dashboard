@@ -1,26 +1,27 @@
 import {inject, Injectable} from "@angular/core";
 import {Actions, createEffect, ofType} from "@ngrx/effects";
 import {StudentService} from "../../services/student-service";
-import {StudentActions} from "./studentActions";
+import {LevelActions} from "./levelActions";
 import {exhaustMap, map, of} from "rxjs";
 import {catchError, tap} from "rxjs/operators";
 import {Store} from "@ngrx/store";
 import {UnitsActions} from "../units/units.actions";
 import {AuthActions} from "../auth/authActions";
+import {LevelService} from "../../services/level-service";
 
 @Injectable()
-export class StudentEffects {
+export class LevelEffects {
   actions$ = inject(Actions)
   store$ = inject(Store)
-  studentService = inject(StudentService)
+  levelService = inject(LevelService)
 
   loadStudent$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(StudentActions.loadStudent),
+      ofType(LevelActions.loadLevel),
       exhaustMap(() =>
-        this.studentService.getStudentByEmail().pipe(
-          map((student) => StudentActions.loadStudentSuccess({student})),
-          catchError((e) => of(StudentActions.loadStudentFailure({errors: e})))
+        this.levelService.getLevelById().pipe(
+          map((level) => LevelActions.loadLevelSuccess({level})),
+          catchError((e) => of(LevelActions.loadLevelFailure({errors: e})))
         )
       )
     )
@@ -28,9 +29,9 @@ export class StudentEffects {
 
   loadStudentSuccess = createEffect(() => {
     return this.actions$.pipe(
-      ofType(StudentActions.loadStudentSuccess),
+      ofType(LevelActions.loadLevelSuccess),
       tap(() => {
-        this.store$.dispatch(UnitsActions.loadUnits())
+        // any action
       })
     )
   }, {dispatch: false})
@@ -38,9 +39,9 @@ export class StudentEffects {
 
   loadStudentFailure = createEffect(() => {
     return this.actions$.pipe(
-      ofType(StudentActions.loadStudentFailure),
+      ofType(LevelActions.loadLevelFailure),
       tap(() => {
-        this.store$.dispatch(AuthActions.logout())
+        //any action
       })
     )
   }, {dispatch: false})

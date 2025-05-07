@@ -7,7 +7,7 @@ import {UserToken} from "../../models/userToken";
  */
 export const authFeatureKey = 'auth';
 
-export const authActions = createActionGroup(
+export const AuthActions = createActionGroup(
   {
     source: authFeatureKey,
     events: {
@@ -27,7 +27,6 @@ export const authActions = createActionGroup(
       getUser: emptyProps(),
       getUserSuccess: props<{ user: UserToken }>(),
       getUserFailure: props<{ error: string }>(),
-      // New actions for state persistence
       initAuth: emptyProps(),
       initAuthSuccess: props<{ authResponse: AuthResponse, user: UserToken }>(),
       initAuthFailure: emptyProps(),

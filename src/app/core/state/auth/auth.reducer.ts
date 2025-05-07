@@ -1,6 +1,6 @@
 import {createFeature, createReducer, on} from '@ngrx/store';
 import {initialAuthState} from './auth.state';
-import {authActions, authFeatureKey} from "./auth.actions";
+import {AuthActions, authFeatureKey} from "./authActions";
 
 export const authFeature = createFeature(
   {
@@ -8,13 +8,13 @@ export const authFeature = createFeature(
     reducer: createReducer
     (initialAuthState,
       // Login
-      on(authActions.login, (state) => ({
+      on(AuthActions.login, (state) => ({
         ...state,
         isLoading: true,
         error: null,
       })),
 
-      on(authActions.loginSuccess, (state, {authResponse, user}) => ({
+      on(AuthActions.loginSuccess, (state, {authResponse, user}) => ({
         ...state,
         authResponse,
         user,
@@ -23,66 +23,66 @@ export const authFeature = createFeature(
         error: null,
       })),
 
-      on(authActions.loginFailure, (state, {error}) => ({
+      on(AuthActions.loginFailure, (state, {error}) => ({
         ...state,
         isLoading: false,
         error,
       })),
 
       // Logout
-      on(authActions.logout, (state) => ({
+      on(AuthActions.logout, (state) => ({
         ...state,
         isLoading: true,
       })),
 
-      on(authActions.logoutSuccess, () => ({
+      on(AuthActions.logoutSuccess, () => ({
         ...initialAuthState,
       })),
 
       // Reset Password
-      on(authActions.resetPassword, (state) => ({
+      on(AuthActions.resetPassword, (state) => ({
         ...state,
         isLoading: true,
         error: null,
       })),
 
-      on(authActions.resetPasswordSuccess, (state) => ({
+      on(AuthActions.resetPasswordSuccess, (state) => ({
         ...state,
         isLoading: false,
       })),
 
-      on(authActions.resetPasswordFailure, (state, {error}) => ({
+      on(AuthActions.resetPasswordFailure, (state, {error}) => ({
         ...state,
         isLoading: false,
         error,
       })),
 
       // Verify OTP
-      on(authActions.verifyOtp, (state) => ({
+      on(AuthActions.verifyOtp, (state) => ({
         ...state,
         isLoading: true,
         error: null,
       })),
 
-      on(authActions.verifyOtpSuccess, (state) => ({
+      on(AuthActions.verifyOtpSuccess, (state) => ({
         ...state,
         isLoading: false,
       })),
 
-      on(authActions.verifyOtpFailure, (state, {error}) => ({
+      on(AuthActions.verifyOtpFailure, (state, {error}) => ({
         ...state,
         isLoading: false,
         error,
       })),
 
       // Get User
-      on(authActions.getUser, (state) => ({
+      on(AuthActions.getUser, (state) => ({
         ...state,
         isLoading: true,
         error: null,
       })),
 
-      on(authActions.getUserSuccess, (state, {user}) => ({
+      on(AuthActions.getUserSuccess, (state, {user}) => ({
         ...state,
         user,
         isAuthenticated: true,
@@ -90,14 +90,14 @@ export const authFeature = createFeature(
         error: null,
       })),
 
-      on(authActions.getUserFailure, (state, {error}) => ({
+      on(AuthActions.getUserFailure, (state, {error}) => ({
         ...state,
         isLoading: false,
         error,
       })),
 
       // Initialize auth state from localStorage
-      on(authActions.initAuthSuccess, (state, {authResponse, user}) => ({
+      on(AuthActions.initAuthSuccess, (state, {authResponse, user}) => ({
         ...state,
         authResponse,
         user: {name: user.name, email: user.sub!, role: user.role},

@@ -3,7 +3,7 @@ import {OverlayComponent} from '../overlay/overlay.component';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {CommonModule} from '@angular/common';
 import {Store} from "@ngrx/store";
-import {authActions} from "../../../core/state/auth/auth.actions";
+import {AuthActions} from "../../../core/state/auth/authActions";
 import {UserToken} from "../../../core/models/userToken";
 import {authSelectors} from "../../../core/state/auth/auth.selectors";
 
@@ -25,7 +25,7 @@ export class HeaderComponent implements OnInit {
   }
 
   onLogout() {
-    this.store.dispatch(authActions.logout())
+    this.store.dispatch(AuthActions.logout())
   }
 
   ngOnInit() {
