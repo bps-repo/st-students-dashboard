@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { Material } from '../../@types/material';
-import { MaterialType } from '../../@types/material-type';
 import { CommonModule } from '@angular/common';
 import { Observable, map, of } from 'rxjs';
 import { MaterialService } from '../../../core/material.service';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import {MaterialType} from "../../../@types/material-type";
+import {Material} from "../../../@types/material";
 
 /**
  * Modern Materials Component

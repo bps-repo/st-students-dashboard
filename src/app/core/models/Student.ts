@@ -7,6 +7,8 @@ export interface Student {
   id?: string;
   name: string;
   email: string;
+  enrollmentDate : Date;
+  centerName :string;
   status: StudentStatus;
   centerId: string;
   userId: string;

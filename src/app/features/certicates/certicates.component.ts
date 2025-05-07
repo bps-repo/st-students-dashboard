@@ -1,7 +1,6 @@
-import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { Certificate } from '../@types/certificate';
-import { CircularLevelComponent } from '../../shared/components/circular-level/circular-level.component';
+import {CommonModule} from '@angular/common';
+import {Component} from '@angular/core';
+import {CircularLevelComponent} from '../../shared/components/circular-level/circular-level.component';
 
 /**
  * Modern Certificates Component
@@ -10,10 +9,9 @@ import { CircularLevelComponent } from '../../shared/components/circular-level/c
  * with a modern, responsive design.
  */
 @Component({
-    selector: 'app-certicates',
-    imports: [CommonModule, CircularLevelComponent],
-    templateUrl: './certicates.component.html',
-    styleUrl: './certicates.component.scss'
+  selector: 'app-certicates',
+  imports: [CommonModule, CircularLevelComponent],
+  templateUrl: './certicates.component.html',
 })
 export class CerticatesComponent {
   // Current user level information
@@ -21,7 +19,7 @@ export class CerticatesComponent {
   levelProgress: number = 75;
 
   // Certificate data
-  certificates: Certificate[] = [
+  certificates: any[] = [
     {
       title: 'Beginner',
       description: 'Ideal para quem quer ter o primeiro contato com o idioma. Foco em vocabulário básico e expressões simples.',

@@ -1,15 +1,19 @@
 import {Component, inject, OnInit, TemplateRef} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {ChangeDetectionStrategy} from '@angular/core';
-import {MatDialog, MatDialogModule, MatDialogRef} from '@angular/material/dialog';
-import {CircularLevelComponent} from '../../shared/components/circular-level/circular-level.component';
-import {Observable, of} from 'rxjs';
+import {MatDialog, MatDialogModule} from '@angular/material/dialog';
+import {combineLatest, map, Observable, Observer, of, Subscription} from 'rxjs';
 import {Store} from '@ngrx/store';
-import {selectAllUnits, selectUnitsError, selectUnitsLoading} from '../../core/state/units/units.selectors';
-import {UnitsActions} from "../../core/state/units/units.actions";
-import {authSelectors} from "../../core/state/auth/auth.selectors";
-import {User} from "../../core/models/User";
-import {Unit} from "../../core/models/Unit";
+import {CircularLevelComponent} from "../../../shared/components/circular-level/circular-level.component";
+import {Unit} from "../../../core/models/Unit";
+import {User} from "../../../core/models/User";
+import {selectAllUnits, selectUnitsError, selectUnitsLoading} from "../../../core/state/units/units.selectors";
+import {authSelectors} from "../../../core/state/auth/auth.selectors";
+import {UnitsActions} from "../../../core/state/units/units.actions";
+import {Student} from "../../../core/models/Student";
+import {StudentSelectors} from "../../../core/state/student/student.selectors";
+import {StudentActions} from "../../../core/state/student/studentActions";
+
 
 @Component({
   selector: 'app-home-page',
@@ -20,25 +24,42 @@ import {Unit} from "../../core/models/Unit";
 })
 export class HomePageComponent implements OnInit {
   selectedValue: string = '';
-  protected unities$: Observable<Unit[]>;
+  protected units$: Observable<Unit[]>;
   protected loading$: Observable<boolean>;
   protected error$: Observable<string | null>;
   protected user$!: Observable<User | null>;
 
+  protected student$!: Observable<Student | null>
+
   private readonly dialog = inject(MatDialog);
 
   constructor(public store: Store) {
-    this.unities$ = this.store.select(selectAllUnits);
+    this.units$ = this.store.select(selectAllUnits);
     this.loading$ = of(false);
     this.error$ = of(null);
 
     this.loading$ = this.store.select(selectUnitsLoading);
     this.error$ = this.store.select(selectUnitsError);
+
+    this.student$ = this.store.select(StudentSelectors.student)
   }
 
   ngOnInit(): void {
     this.user$ = this.store.select(authSelectors.user);
-    this.store.dispatch(UnitsActions.loadUnits());
+
+    // Update units' statuses based on student.unit
+    this.units$ = combineLatest([this.store.select(selectAllUnits), this.student$]).pipe(
+      map(([units, student]) => {
+        if (!student) return units;
+
+        return units.map(unit => {
+          if (unit.id === student.currentUnit.id) {
+            return {...unit, status: 'available'};
+          }
+          return {...unit, status: 'lock'};
+        });
+      })
+    );
   }
 
   protected items: any[] = [
@@ -82,9 +103,14 @@ export class HomePageComponent implements OnInit {
 
   protected onClick(
     modalContent: TemplateRef<any>,
-    width?: string
+    width?: string,
+    unit?: Unit
   ): void {
     let modalWidth: string;
+
+    if (unit?.status === 'lock') {
+      return
+    }
 
     // Convert size codes to responsive widths
     if (width === 'l') {

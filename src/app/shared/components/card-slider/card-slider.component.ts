@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import {CommonModule} from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -9,10 +9,9 @@ import {
   ChangeDetectorRef,
   AfterViewInit
 } from '@angular/core';
-import { NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
-import { MatPaginatorModule } from '@angular/material/paginator';
-import { Course } from '../../../features/@types/course';
-import { AnimationFrameService } from "../../../core/animation-frame.service";
+import {NgbCarouselModule} from '@ng-bootstrap/ng-bootstrap';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import {Course} from "../../../@types/course";
 
 /**
  * Modern Card Slider Component
@@ -20,10 +19,10 @@ import { AnimationFrameService } from "../../../core/animation-frame.service";
  * Displays a horizontal scrollable carousel of course or content cards with a modern design.
  */
 @Component({
-    selector: 'app-card-slider',
-    imports: [CommonModule, NgbCarouselModule, MatPaginatorModule],
-    templateUrl: './card-slider.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'app-card-slider',
+  imports: [CommonModule, NgbCarouselModule, MatPaginatorModule],
+  templateUrl: './card-slider.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CardSliderComponent implements OnInit, AfterViewInit {
   @Input() index = 0;
@@ -36,12 +35,11 @@ export class CardSliderComponent implements OnInit, AfterViewInit {
   private scrollAmount = 300; // Amount to scroll on button click
 
   constructor(
-    private animationService: AnimationFrameService,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
-    this.animationService.request(() => {})
   }
 
   ngAfterViewInit() {

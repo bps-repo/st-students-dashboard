@@ -1,5 +1,5 @@
-import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { UnitsState, unitsAdapter } from './units.state';
+import {createFeatureSelector, createSelector} from '@ngrx/store';
+import {UnitsState, unitsAdapter} from './units.state';
 
 /**
  * Feature selector for the units state

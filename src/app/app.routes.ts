@@ -1,20 +1,19 @@
 import {Routes} from '@angular/router';
-import {HomePageComponent} from './features/home-page/home-page.component';
-import {CoursesComponent} from './features/courses/courses.component';
+import {LessonsComponent} from './features/courses/lessons.component';
 import {EventsComponent} from './features/events/events.component';
 import {CerticatesComponent} from './features/certicates/certicates.component';
 import {ProfileComponent} from './features/profile/profile.component';
 import {TeachersComponent} from './features/teachers/teachers.component';
 import {ChangePasswordComponent} from './features/auth/change-password/change-password.component';
 import {SupportComponent} from './features/support/support.component';
-import {TestsComponent} from './features/tests/tests.component';
 import {MaterialsComponent} from './features/lessons/materials/materials.component';
 import {MaterialDetailComponent} from './features/lessons/material-detail/material-detail.component';
-import {LessonScheduleComponent} from "./features/lesson-schedule/lesson-schedule.component";
 import {LayoutContentComponent} from "./layout/layout-content/layout-content.component";
 import {LoginComponent} from "./features/auth/login/login.component";
 import {ResetPasswordComponent} from "./features/auth/reset-password/reset-password.component";
 import {authGuard} from "./core/guards/auth.guard";
+import {CalendarComponent} from "./features/lessons/calendar/calendar.component";
+import {HomePageComponent} from "./features/home/home-page/home-page.component";
 
 export const routes: Routes = [
   {
@@ -32,8 +31,8 @@ export const routes: Routes = [
         component: HomePageComponent,
       },
       {
-        path: 'courses',
-        component: CoursesComponent,
+        path: 'lessons',
+        component: LessonsComponent,
       },
       {
         path: 'profile',
@@ -44,8 +43,8 @@ export const routes: Routes = [
         component: TeachersComponent,
       },
       {
-        path: 'lessons',
-        component: LessonScheduleComponent,
+        path: 'calendar',
+        component: CalendarComponent,
       },
       {
         path: 'events',
@@ -60,16 +59,8 @@ export const routes: Routes = [
         component: ChangePasswordComponent,
       },
       {
-        path: 'schedules',
-        component: LessonScheduleComponent,
-      },
-      {
         path: 'support',
         component: SupportComponent,
-      },
-      {
-        path: 'tests',
-        component: TestsComponent,
       },
       {
         path: 'lessons/materials',

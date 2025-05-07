@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { TabMenuConfig } from '../../../features/@types/tab-menu';
 import { CommonModule } from '@angular/common';
+import {TabMenuConfig} from "../../../@types/tab-menu";
 
 @Component({
     selector: 'app-tab-menu',

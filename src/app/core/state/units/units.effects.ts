@@ -19,7 +19,7 @@ export class UnitsEffects {
     return this.actions$.pipe(
       ofType(UnitsActions.loadUnits),
       exhaustMap(() =>
-        this.unityService.getUnities().pipe(
+        this.unityService.getUnitsByLevelId().pipe(
           map((units) => {
             return UnitsActions.loadUnitsSuccess({units});
           }),

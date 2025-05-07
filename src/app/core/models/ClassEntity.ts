@@ -8,4 +8,5 @@ export interface ClassEntity {
   levelId: string;
   teacherId: string;
   status: ClassStatus;
+  centerId: string,
 }

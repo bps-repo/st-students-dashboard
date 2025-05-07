@@ -70,3 +70,46 @@ export const LEVELS = [
     type: 'course',
   },
 ];
+
+export const VIDEOS = [
+  {
+    level: "Beginner",
+    description: "Conversação Avançada: Expressões Idiomáticas ",
+    views: 12
+  },
+  {
+    level: "Elementary",
+    description: "Gramática: Uso do Present Perfect",
+    views: 12
+  },
+  {
+    level: "Pre-Intermediate",
+    description: "Vocabulário para Viagens e Turismo",
+    views: 12
+  },
+  {
+    level: "Intermediate",
+    description: "Pronúncia: Sons Difíceis em Inglês",
+    views: 12
+  },
+  {
+    level: "Upper Intermediate",
+    description: "Conversação Avançada: Expressões Idiomáticas ",
+    views: 12
+  },
+  {
+    level: "Upper Intermediate",
+    description: "Conversação Avançada: Expressões Idiomáticas ",
+    views: 12
+  },
+  {
+    level: "Upper Intermediate",
+    description: "Conversação Avançada: Expressões Idiomáticas ",
+    views: 12
+  },
+  {
+    level: "Upper Intermediate",
+    description: "Conversação Avançada: Expressões Idiomáticas ",
+    views: 12
+  },
+]

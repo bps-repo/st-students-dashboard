@@ -3,9 +3,9 @@ import { YoutubePlayerComponent } from '../../../shared/components/youtube-playe
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MaterialService } from '../../../core/material.service';
-import { Material } from '../../@types/material';
-import { MaterialType } from '../../@types/material-type';
-import { Observable, map, of, switchMap } from 'rxjs';
+import { map, of, switchMap } from 'rxjs';
+import {Material} from "../../../@types/material";
+import {MaterialType} from "../../../@types/material-type";
 
 /**
  * Modern Material Detail Component

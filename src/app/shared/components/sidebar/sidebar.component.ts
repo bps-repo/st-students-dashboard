@@ -32,14 +32,14 @@ export class SidebarComponent implements OnInit {
     },
     {
       label: 'Calendário',
-      path: '/lessons',
+      path: '/calendar',
       icon: 'pi pi-folder-open',
       activeIcon: 'pi pi-folder-open-alt',
       active: false,
     },
     {
       label: 'Aulas',
-      path: '/courses',
+      path: '/lessons',
       icon: 'pi pi-tablet',
       activeIcon: 'pi pi-tablet-alt',
       active: false,

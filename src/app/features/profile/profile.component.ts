@@ -17,7 +17,6 @@ import {User} from "../../core/models/User";
   selector: 'app-profile',
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './profile.component.html',
-  styleUrl: './profile.component.scss'
 })
 export class ProfileComponent implements OnInit {
 

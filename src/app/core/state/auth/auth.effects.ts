@@ -6,14 +6,15 @@ import {catchError, exhaustMap, map, tap} from 'rxjs/operators';
 import {Router} from '@angular/router';
 import {AuthService} from '../../services/auth.service';
 import {authActions} from "./auth.actions";
-import {Action} from '@ngrx/store';
+import {Action, Store} from '@ngrx/store';
+import {StudentActions} from "../student/studentActions";
 
 @Injectable()
 export class AuthEffects implements OnInitEffects {
   actions$ = inject(Actions)
+  store$ = inject(Store)
   authService = inject(AuthService)
   router = inject(Router)
-  platformId = inject(PLATFORM_ID)
 
   /**
    * This method is called when the effects are initialized
@@ -207,7 +208,8 @@ export class AuthEffects implements OnInitEffects {
         if (!user) {
           return authActions.initAuthFailure();
         }
-
+        
+        this.store$.dispatch(StudentActions.loadStudent())
         return authActions.initAuthSuccess({authResponse, user});
       })
     );

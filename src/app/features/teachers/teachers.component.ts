@@ -15,7 +15,6 @@ interface Teacher {
     selector: 'app-teachers',
     imports: [CommonModule],
     templateUrl: './teachers.component.html',
-    styleUrl: './teachers.component.scss'
 })
 export class TeachersComponent {
   protected teachers: Array<Teacher> = [

@@ -1,6 +1,6 @@
-  import {Component, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
-  import {RouterModule} from "@angular/router";
+import {RouterModule} from "@angular/router";
 
 interface CalendarDay {
   date: Date;
@@ -21,13 +21,13 @@ interface CalendarEvent {
 }
 
 @Component({
-  selector: 'app-lesson-schedule',
+  selector: 'app-calendar',
   standalone: true,
   imports: [CommonModule, RouterModule],
-  templateUrl: './lesson-schedule.component.html',
+  templateUrl: './calendar.component.html',
   styleUrls: []
 })
-export class LessonScheduleComponent implements OnInit {
+export class CalendarComponent implements OnInit {
   // Calendar data
   calendarDays: CalendarDay[] = [];
   weekDayNames: string[] = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta'];

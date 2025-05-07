@@ -14,6 +14,8 @@ import {authFeature} from "./core/state/auth/auth.reducer";
 import {AuthEffects} from "./core/state/auth/auth.effects";
 import {unitsFeature} from "./core/state/units/unitsFeature";
 import {UnitsEffects} from "./core/state/units/units.effects";
+import {StudentEffects} from "./core/state/student/student.effects";
+import {studentFeature} from "./core/state/student/student.reducer";
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -30,7 +32,8 @@ export const appConfig: ApplicationConfig = {
     }),
     provideState(authFeature),
     provideState(unitsFeature),
-    provideEffects([AuthEffects, UnitsEffects]),
+    provideState(studentFeature),
+    provideEffects([AuthEffects, UnitsEffects, StudentEffects]),
     provideStoreDevtools({
       maxAge: 25,
       logOnly: !isDevMode(),
