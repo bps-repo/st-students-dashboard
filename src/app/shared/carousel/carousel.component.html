@@ -1,0 +1,25 @@
+<!-- Modern Horizontal Card Slider Component with Car Design -->
+<div class="relative">
+  <!-- Navigation Buttons -->
+  <button
+    (click)="scrollLeft()"
+    class="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-white rounded-full shadow-md p-1 sm:p-2 -ml-2 sm:-ml-3 hover:bg-gray-100 focus:outline-none"
+    *ngIf="canScrollLeft">
+    <i class="pi pi-chevron-left"></i>
+  </button>
+
+  <button
+    (click)="scrollRight()"
+    class="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-white rounded-full shadow-md p-1 sm:p-2 -mr-2 sm:-mr-3 hover:bg-gray-100 focus:outline-none"
+    *ngIf="canScrollRight">
+    <i class="pi pi-chevron-right"></i>
+  </button>
+
+  <!-- Horizontal Scrollable Container -->
+  <div #scrollContainer class="flex overflow-hidden pb-3 sm:pb-4 hide-scrollbar" (scroll)="onScroll()">
+    <div class="flex space-x-3 sm:space-x-4 px-1 sm:px-2">
+      <!-- Course Card with Car Design -->
+      <ng-content></ng-content>
+    </div>
+  </div>
+</div>
