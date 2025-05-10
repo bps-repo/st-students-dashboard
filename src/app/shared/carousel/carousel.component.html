@@ -16,7 +16,7 @@
   </button>
 
   <!-- Horizontal Scrollable Container -->
-  <div #scrollContainer class="flex overflow-hidden pb-3 sm:pb-4 hide-scrollbar" (scroll)="onScroll()">
+  <div #scrollContainer class="flex overflow-hidden pb-3 sm:pb-4 hide-scrollbar transition-all duration-150" (scroll)="onScroll()">
     <div class="flex space-x-3 sm:space-x-4 px-1 sm:px-2">
       <!-- Course Card with Car Design -->
       <ng-content></ng-content>

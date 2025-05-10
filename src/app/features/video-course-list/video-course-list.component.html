@@ -1,0 +1,97 @@
+<div class="p-6 max-w-7xl mx-auto">
+  <!-- Header -->
+  <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+    <div class="mb-4 md:mb-0">
+      <h1 class="text-2xl font-bold text-primary-700">Videos Aulas</h1>
+      <p class="text-neutral-600 mt-1">Acesse as aulas recomendadas</p>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="relative w-full md:w-64">
+      <input
+        [(ngModel)]="searchQuery"
+        (ngModelChange)="applyFilters()"
+        type="text"
+        placeholder="Pesquisar aulas..."
+        class="w-full pl-10 pr-4 py-2 bg-white border border-neutral-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all"
+      >
+      <i class="pi pi-search absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400"></i>
+    </div>
+  </div>
+
+
+  <!-- Filter Section -->
+  <div class="bg-white rounded-xl p-4 shadow-md mb-8">
+    <div class="flex flex-wrap gap-3">
+      <div
+        (click)="setFilter('all')"
+        [ngClass]="activeFilter() === 'all' ? 'bg-primary-50 text-primary-700' : 'bg-neutral-50 text-neutral-700'"
+        class="px-3 py-1.5 rounded-lg font-medium text-sm flex items-center hover:bg-primary-100 transition-all cursor-pointer">
+        <i class="pi pi-list mr-2"></i>
+        <span>Todas</span>
+      </div>
+      <div *ngFor="let course of (videos$ | async)"
+           (click)="setFilter(course.level!)"
+           [ngClass]="activeFilter() === course.level ? 'bg-primary-50 text-primary-700' : 'bg-neutral-50 text-neutral-700'"
+           class="px-3 py-1.5 rounded-lg font-medium text-sm flex items-center hover:bg-neutral-100 transition-all cursor-pointer">
+        <i class="pi pi-file-pdf mr-2"></i>
+        <span>{{ course.level }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- video Grid -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+    <div
+      *ngFor="let course of filteredVideos$ | async"
+      class="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-md transition group"
+    >
+      <div class="relative">
+        <img
+          [src]="course.thumbnail"
+          [alt]="course.title"
+          class="w-full h-40 object-cover"
+          onerror="this.src='assets/images/placeholder.jpg'"
+        />
+        <div class="absolute top-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded">45min
+        </div>
+        <div
+          class="absolute inset-0 bg-primary-900/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition">
+          <i class="fa fa-play-circle text-4xl text-white"></i>
+        </div>
+      </div>
+      <div class="p-4">
+        <div class="flex items-center mb-2">
+              <span
+                class="text-xs font-medium px-2 py-1 rounded uppercase"
+                [ngClass]="{
+                  'bg-success-100 text-success-700': course.level === VideoLevel.BEGINNER,
+                  'bg-accent-100 text-accent-700': course.level === VideoLevel.ELEMENTARY,
+                  'bg-warning-100 text-warning-700': course.level === VideoLevel.INTERMEDIATE,
+                  'bg-error-100 text-error-700': course.level === VideoLevel.ADVANCED
+                }"
+              >
+                {{ course.level }}
+              </span>
+        </div>
+        <h3 class="font-semibold text-neutral-800 mb-1">{{ course.title }}</h3>
+        <p class="text-neutral-500 text-sm">{{ course.instructor }}</p>
+
+        <div class="mt-3 pt-3 border-t border-neutral-100 flex items-center justify-between text-sm text-neutral-500">
+          <div class="flex items-center">
+            <i class="fa fa-play-circle mr-1"></i>
+            <span>{{ course.views }} visualizações</span>
+          </div>
+          <div class="flex items-center space-x-2">
+            <button class="p-1 hover:text-primary-600">
+              <i class="fa fa-comment"></i>
+            </button>
+            <button class="p-1 hover:text-primary-600">
+              <i class="fa fa-share-alt"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

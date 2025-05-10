@@ -1,5 +1,5 @@
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
-import { Course } from '../../../features/@types/course';
+import {Course} from "../../../@types/course";
 
 /**
  * Courses state interface using entity adapter for normalized state

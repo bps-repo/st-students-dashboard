@@ -14,6 +14,8 @@ import {ResetPasswordComponent} from "./features/auth/reset-password/reset-passw
 import {authGuard} from "./core/guards/auth.guard";
 import {CalendarComponent} from "./features/lessons/calendar/calendar.component";
 import {HomePageComponent} from "./features/home/home-page/home-page.component";
+import {VideoCoursesComponent} from "./features/video-course/video-courses.component";
+import {VideoCourseListComponent} from "./features/video-course-list/video-course-list.component";
 
 export const routes: Routes = [
   {
@@ -23,7 +25,7 @@ export const routes: Routes = [
   },
   {
     path: '',
-    canActivate: [authGuard],
+    canActivate: [],
     component: LayoutContentComponent,
     children: [
       {
@@ -33,6 +35,14 @@ export const routes: Routes = [
       {
         path: 'lessons',
         component: LessonsComponent,
+      },
+      {
+        path: 'video-lessons',
+        component: VideoCoursesComponent,
+      },
+      {
+        path: 'video-lessons-list',
+        component: VideoCourseListComponent,
       },
       {
         path: 'profile',
