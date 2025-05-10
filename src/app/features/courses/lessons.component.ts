@@ -4,10 +4,11 @@ import {CardSliderComponent} from '../../shared/components/card-slider/card-slid
 import {COURSES, LEVELS, VIDEOS} from "./courses.state";
 import {CarouselComponent} from "../../shared/carousel/carousel.component";
 import {Course} from "../../@types/course";
+import {RouterLink} from "@angular/router";
 
 @Component({
   selector: 'app-lessons',
-  imports: [CommonModule, CardSliderComponent, NgOptimizedImage, CarouselComponent],
+  imports: [CommonModule, CardSliderComponent, NgOptimizedImage, CarouselComponent, RouterLink],
   templateUrl: './lessons.component.html',
 })
 export class LessonsComponent {

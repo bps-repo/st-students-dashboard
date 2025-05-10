@@ -3,7 +3,8 @@
   <!-- Loading State -->
   <div *ngIf="loading()" class="flex justify-center items-center py-12">
     <div class="bg-white rounded-xl shadow-md p-8 text-center">
-      <div class="w-16 h-16 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin mx-auto mb-4"></div>
+      <div
+        class="w-16 h-16 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin mx-auto mb-4"></div>
       <h2 class="text-xl font-bold text-neutral-800">Carregando material...</h2>
       <p class="text-neutral-600 mt-2">Por favor, aguarde enquanto carregamos o conteúdo.</p>
     </div>
@@ -18,7 +19,7 @@
       <h2 class="text-xl font-bold text-neutral-800 mb-2">Erro ao carregar material</h2>
       <p class="text-neutral-600">{{ error() }}</p>
       <a routerLink="/lessons/materials"
-        class="mt-6 px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-all"
+         class="mt-6 px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-all"
       >
         Voltar para materiais
       </a>
@@ -68,67 +69,6 @@
         </button>
       </div>
     </div>
-
-    <div class="bg-white rounded-xl shadow-md overflow-hidden mb-8">
-      <!-- Lesson Header with Gradient Background -->
-      <div class="relative bg-gradient-to-r from-primary-600 to-primary-500 px-6 py-4 text-white">
-        <div class="absolute inset-0 bg-[url('/bg_st.png')] bg-cover bg-center opacity-20"></div>
-        <div class="flex flex-col md:flex-row justify-between items-start md:items-center relative">
-          <div class="flex items-center mb-4 md:mb-0">
-            <div class="p-3 bg-white bg-opacity-20 rounded-lg mr-4 flex-shrink-0">
-              <i class="pi pi-book text-2xl"></i>
-            </div>
-            <div>
-              <h2 class="text-xl font-bold">Aula 02: Adjectives and Nouns</h2>
-              <p class="text-sm opacity-90 mt-1">Módulo: Intermediate</p>
-            </div>
-          </div>
-          <a
-            href="https://st-andrews.net/"
-            target="_blank"
-            class="bg-white bg-opacity-20 hover:bg-opacity-30 px-4 py-2 rounded-lg text-white font-medium transition-all flex items-center"
-          >
-            <span>Link da aula</span>
-            <i class="pi pi-external-link ml-2"></i>
-          </a>
-        </div>
-      </div>
-
-      <!-- Lesson Content -->
-      <div class="p-6">
-        <p class="text-neutral-600 mb-4">
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Doloremque
-          repellat non molestias esse dolore illum, velit, fuga modi in dicta
-          rerum odio accusamus perferendis possimus excepturi quia magnam aliquid
-          iure.
-        </p>
-
-        <!-- Lesson Metadata -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 bg-neutral-50 p-4 rounded-lg">
-          <div class="flex items-center">
-            <i class="pi pi-user text-accent-500 mr-3"></i>
-            <div>
-              <p class="text-xs text-neutral-500">Professor</p>
-              <p class="font-medium text-neutral-800">Carlos Morias</p>
-            </div>
-          </div>
-          <div class="flex items-center">
-            <i class="pi pi-calendar text-accent-500 mr-3"></i>
-            <div>
-              <p class="text-xs text-neutral-500">Data</p>
-              <p class="font-medium text-neutral-800">25-04-2024 12:30min</p>
-            </div>
-          </div>
-          <div class="flex items-center">
-            <i class="pi pi-desktop text-accent-500 mr-3"></i>
-            <div>
-              <p class="text-xs text-neutral-500">Modelo</p>
-              <p class="font-medium text-neutral-800">Online</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
     <!-- VIDEO TYPE CONTENT -->
     <div *ngIf="getMaterialCategory(materialType()) === 'video'" class="grid grid-cols-1 lg:grid-cols-12 gap-8">
       <!-- Video Section -->
@@ -155,7 +95,8 @@
 
           <!-- Video Actions -->
           <div class="grid grid-cols-3 border-t border-neutral-100">
-            <button class="flex items-center justify-center space-x-2 py-4 hover:bg-neutral-50 transition-all text-accent-700 font-medium">
+            <button
+              class="flex items-center justify-center space-x-2 py-4 hover:bg-neutral-50 transition-all text-accent-700 font-medium">
               <i class="pi pi-download"></i>
               <span>Baixar Vídeo</span>
             </button>
@@ -165,7 +106,8 @@
               <i class="pi pi-arrow-right"></i>
               <span>Próximo Vídeo</span>
             </button>
-            <button class="flex items-center justify-center space-x-2 py-4 hover:bg-neutral-50 transition-all text-success-600 font-medium">
+            <button
+              class="flex items-center justify-center space-x-2 py-4 hover:bg-neutral-50 transition-all text-success-600 font-medium">
               <i class="pi pi-check-circle"></i>
               <span>Marcar Concluído</span>
             </button>
@@ -189,7 +131,8 @@
 
           <div class="p-4">
             <div class="divide-y divide-neutral-100">
-              <div class="flex justify-between items-center py-3 px-2 hover:bg-neutral-50 transition-all rounded-lg cursor-pointer">
+              <div
+                class="flex justify-between items-center py-3 px-2 hover:bg-neutral-50 transition-all rounded-lg cursor-pointer">
                 <div class="flex items-center">
                   <div class="w-10 h-10 rounded-lg bg-primary-100 flex items-center justify-center mr-3">
                     <i class="pi pi-file-pdf text-primary-600"></i>
@@ -199,11 +142,13 @@
                     <p class="text-xs text-neutral-500">PDF - 2.4 MB</p>
                   </div>
                 </div>
-                <button class="w-8 h-8 rounded-full bg-neutral-100 flex items-center justify-center hover:bg-neutral-200 transition-all">
+                <button
+                  class="w-8 h-8 rounded-full bg-neutral-100 flex items-center justify-center hover:bg-neutral-200 transition-all">
                   <i class="pi pi-download text-neutral-700"></i>
                 </button>
               </div>
-              <div class="flex justify-between items-center py-3 px-2 hover:bg-neutral-50 transition-all rounded-lg cursor-pointer">
+              <div
+                class="flex justify-between items-center py-3 px-2 hover:bg-neutral-50 transition-all rounded-lg cursor-pointer">
                 <div class="flex items-center">
                   <div class="w-10 h-10 rounded-lg bg-accent-100 flex items-center justify-center mr-3">
                     <i class="pi pi-file-excel text-accent-600"></i>
@@ -213,7 +158,8 @@
                     <p class="text-xs text-neutral-500">XLSX - 1.1 MB</p>
                   </div>
                 </div>
-                <button class="w-8 h-8 rounded-full bg-neutral-100 flex items-center justify-center hover:bg-neutral-200 transition-all">
+                <button
+                  class="w-8 h-8 rounded-full bg-neutral-100 flex items-center justify-center hover:bg-neutral-200 transition-all">
                   <i class="pi pi-download text-neutral-700"></i>
                 </button>
               </div>
@@ -244,7 +190,8 @@
             <div class="prose max-w-none">
               <h3 class="text-lg font-bold text-neutral-800 mb-3">Resumo do Vídeo</h3>
               <p class="text-neutral-700 mb-4">
-                Este vídeo explica os conceitos fundamentais de {{ material.title }}. Abaixo estão os pontos-chave abordados:
+                Este vídeo explica os conceitos fundamentais de {{ material.title }}. Abaixo estão os pontos-chave
+                abordados:
               </p>
 
               <ul class="list-disc pl-5 text-neutral-700 mb-6">
@@ -256,23 +203,28 @@
 
               <h3 class="text-lg font-bold text-neutral-800 mb-3">Timestamps</h3>
               <div class="space-y-2">
-                <div class="flex items-center bg-neutral-50 p-2 rounded-lg hover:bg-neutral-100 transition-all cursor-pointer">
+                <div
+                  class="flex items-center bg-neutral-50 p-2 rounded-lg hover:bg-neutral-100 transition-all cursor-pointer">
                   <div class="w-12 text-accent-600 font-medium">00:00</div>
                   <div class="text-neutral-800">Introdução</div>
                 </div>
-                <div class="flex items-center bg-neutral-50 p-2 rounded-lg hover:bg-neutral-100 transition-all cursor-pointer">
+                <div
+                  class="flex items-center bg-neutral-50 p-2 rounded-lg hover:bg-neutral-100 transition-all cursor-pointer">
                   <div class="w-12 text-accent-600 font-medium">02:15</div>
                   <div class="text-neutral-800">Conceitos básicos</div>
                 </div>
-                <div class="flex items-center bg-neutral-50 p-2 rounded-lg hover:bg-neutral-100 transition-all cursor-pointer">
+                <div
+                  class="flex items-center bg-neutral-50 p-2 rounded-lg hover:bg-neutral-100 transition-all cursor-pointer">
                   <div class="w-12 text-accent-600 font-medium">08:30</div>
                   <div class="text-neutral-800">Exemplos práticos</div>
                 </div>
-                <div class="flex items-center bg-neutral-50 p-2 rounded-lg hover:bg-neutral-100 transition-all cursor-pointer">
+                <div
+                  class="flex items-center bg-neutral-50 p-2 rounded-lg hover:bg-neutral-100 transition-all cursor-pointer">
                   <div class="w-12 text-accent-600 font-medium">15:45</div>
                   <div class="text-neutral-800">Exercícios</div>
                 </div>
-                <div class="flex items-center bg-neutral-50 p-2 rounded-lg hover:bg-neutral-100 transition-all cursor-pointer">
+                <div
+                  class="flex items-center bg-neutral-50 p-2 rounded-lg hover:bg-neutral-100 transition-all cursor-pointer">
                   <div class="w-12 text-accent-600 font-medium">22:10</div>
                   <div class="text-neutral-800">Conclusão</div>
                 </div>
@@ -287,8 +239,10 @@
               <span class="text-sm font-bold text-accent-600">45%</span>
             </div>
             <div class="w-full bg-neutral-200 rounded-full h-2.5">
-              <div class="bg-gradient-to-r from-accent-500 to-accent-600 h-2.5 rounded-full relative" style="width: 45%">
-                <div class="absolute -right-1 -top-1 bg-white w-4 h-4 rounded-full border-2 border-accent-500 shadow-sm"></div>
+              <div class="bg-gradient-to-r from-accent-500 to-accent-600 h-2.5 rounded-full relative"
+                   style="width: 45%">
+                <div
+                  class="absolute -right-1 -top-1 bg-white w-4 h-4 rounded-full border-2 border-accent-500 shadow-sm"></div>
               </div>
             </div>
           </div>
@@ -326,24 +280,29 @@
 
               <div class="space-y-6 text-neutral-700">
                 <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed erat molestie vehicula. Sed auctor neque eu tellus rhoncus ut eleifend nibh porttitor. Ut in nulla enim.
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu
+                  sed erat molestie vehicula. Sed auctor neque eu tellus rhoncus ut eleifend nibh porttitor. Ut in nulla
+                  enim.
                 </p>
 
                 <h2 class="text-xl font-bold text-neutral-800 mt-6 mb-3">Seção 1: Introdução</h2>
                 <p>
-                  Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus.
+                  Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu
+                  erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus.
                 </p>
 
                 <div class="bg-neutral-50 p-4 rounded-lg border-l-4 border-primary-500 my-4">
                   <h3 class="font-bold text-neutral-800 mb-2">Nota importante</h3>
                   <p class="text-neutral-600">
-                    Phasellus ultrices nulla quis nibh. Quisque a lectus. Donec consectetuer ligula vulputate sem tristique cursus.
+                    Phasellus ultrices nulla quis nibh. Quisque a lectus. Donec consectetuer ligula vulputate sem
+                    tristique cursus.
                   </p>
                 </div>
 
                 <h2 class="text-xl font-bold text-neutral-800 mt-6 mb-3">Seção 2: Exemplos</h2>
                 <p>
-                  Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante.
+                  Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
+                  Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante.
                 </p>
               </div>
             </div>
@@ -351,15 +310,18 @@
 
           <!-- Document Actions -->
           <div class="grid grid-cols-3 border-t border-neutral-100">
-            <button class="flex items-center justify-center space-x-2 py-4 hover:bg-neutral-50 transition-all text-primary-700 font-medium">
+            <button
+              class="flex items-center justify-center space-x-2 py-4 hover:bg-neutral-50 transition-all text-primary-700 font-medium">
               <i class="pi pi-download"></i>
               <span>Baixar PDF</span>
             </button>
-            <button class="flex items-center justify-center space-x-2 py-4 hover:bg-neutral-50 transition-all text-primary-700 font-medium border-l border-r border-neutral-100">
+            <button
+              class="flex items-center justify-center space-x-2 py-4 hover:bg-neutral-50 transition-all text-primary-700 font-medium border-l border-r border-neutral-100">
               <i class="pi pi-printer"></i>
               <span>Imprimir</span>
             </button>
-            <button class="flex items-center justify-center space-x-2 py-4 hover:bg-neutral-50 transition-all text-success-600 font-medium">
+            <button
+              class="flex items-center justify-center space-x-2 py-4 hover:bg-neutral-50 transition-all text-success-600 font-medium">
               <i class="pi pi-check-circle"></i>
               <span>Marcar Concluído</span>
             </button>
@@ -430,8 +392,10 @@
               <span class="text-sm font-bold text-primary-600">60%</span>
             </div>
             <div class="w-full bg-neutral-200 rounded-full h-2.5">
-              <div class="bg-gradient-to-r from-primary-500 to-primary-600 h-2.5 rounded-full relative" style="width: 60%">
-                <div class="absolute -right-1 -top-1 bg-white w-4 h-4 rounded-full border-2 border-primary-500 shadow-sm"></div>
+              <div class="bg-gradient-to-r from-primary-500 to-primary-600 h-2.5 rounded-full relative"
+                   style="width: 60%">
+                <div
+                  class="absolute -right-1 -top-1 bg-white w-4 h-4 rounded-full border-2 border-primary-500 shadow-sm"></div>
               </div>
             </div>
           </div>
@@ -491,7 +455,8 @@
             <div *ngIf="activeTab() === 0" class="prose max-w-none">
               <h3 class="text-lg font-bold text-neutral-800 mb-3">Instruções</h3>
               <p class="text-neutral-700 mb-4">
-                Este exercício foi desenvolvido para testar seu conhecimento sobre {{ material.title }}. Leia atentamente as instruções abaixo antes de começar:
+                Este exercício foi desenvolvido para testar seu conhecimento sobre {{ material.title }}. Leia
+                atentamente as instruções abaixo antes de começar:
               </p>
 
               <ul class="list-disc pl-5 text-neutral-700 mb-6">
@@ -519,18 +484,31 @@
                   <div>
                     <p class="mb-2">1. She finished in ___ place in the competition.</p>
                     <div class="flex gap-2">
-                      <button class="px-3 py-1 border border-neutral-300 rounded-md hover:bg-neutral-100 transition-all">first</button>
-                      <button class="px-3 py-1 border border-neutral-300 rounded-md hover:bg-neutral-100 transition-all">one</button>
-                      <button class="px-3 py-1 border border-neutral-300 rounded-md hover:bg-neutral-100 transition-all">1st</button>
+                      <button
+                        class="px-3 py-1 border border-neutral-300 rounded-md hover:bg-neutral-100 transition-all">first
+                      </button>
+                      <button
+                        class="px-3 py-1 border border-neutral-300 rounded-md hover:bg-neutral-100 transition-all">one
+                      </button>
+                      <button
+                        class="px-3 py-1 border border-neutral-300 rounded-md hover:bg-neutral-100 transition-all">1st
+                      </button>
                     </div>
                   </div>
 
                   <div>
                     <p class="mb-2">2. This is the ___ time I've visited this museum.</p>
                     <div class="flex gap-2">
-                      <button class="px-3 py-1 border border-neutral-300 rounded-md hover:bg-neutral-100 transition-all">two</button>
-                      <button class="px-3 py-1 border border-neutral-300 rounded-md hover:bg-neutral-100 transition-all">second</button>
-                      <button class="px-3 py-1 border border-neutral-300 rounded-md hover:bg-neutral-100 transition-all">2nd</button>
+                      <button
+                        class="px-3 py-1 border border-neutral-300 rounded-md hover:bg-neutral-100 transition-all">two
+                      </button>
+                      <button
+                        class="px-3 py-1 border border-neutral-300 rounded-md hover:bg-neutral-100 transition-all">
+                        second
+                      </button>
+                      <button
+                        class="px-3 py-1 border border-neutral-300 rounded-md hover:bg-neutral-100 transition-all">2nd
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -543,12 +521,14 @@
                 <div class="space-y-4">
                   <div>
                     <p class="mb-2">1. 21st</p>
-                    <input type="text" class="w-full p-2 border border-neutral-300 rounded-md" placeholder="Digite sua resposta...">
+                    <input type="text" class="w-full p-2 border border-neutral-300 rounded-md"
+                           placeholder="Digite sua resposta...">
                   </div>
 
                   <div>
                     <p class="mb-2">2. 33rd</p>
-                    <input type="text" class="w-full p-2 border border-neutral-300 rounded-md" placeholder="Digite sua resposta...">
+                    <input type="text" class="w-full p-2 border border-neutral-300 rounded-md"
+                           placeholder="Digite sua resposta...">
                   </div>
                 </div>
               </div>
@@ -559,8 +539,12 @@
               <div class="bg-success-50 p-4 rounded-lg border-l-4 border-success-500">
                 <h3 class="font-bold text-neutral-800 mb-3">Respostas do Exercício 1</h3>
                 <ol class="list-decimal pl-5 text-neutral-700">
-                  <li class="mb-2">She finished in <span class="font-bold text-success-700">first</span> place in the competition.</li>
-                  <li class="mb-2">This is the <span class="font-bold text-success-700">second</span> time I've visited this museum.</li>
+                  <li class="mb-2">She finished in <span class="font-bold text-success-700">first</span> place in the
+                    competition.
+                  </li>
+                  <li class="mb-2">This is the <span class="font-bold text-success-700">second</span> time I've visited
+                    this museum.
+                  </li>
                 </ol>
               </div>
 
@@ -576,11 +560,13 @@
 
           <!-- Exercise Actions -->
           <div class="grid grid-cols-2 border-t border-neutral-100">
-            <button class="flex items-center justify-center space-x-2 py-4 hover:bg-neutral-50 transition-all text-secondary-700 font-medium">
+            <button
+              class="flex items-center justify-center space-x-2 py-4 hover:bg-neutral-50 transition-all text-secondary-700 font-medium">
               <i class="pi pi-download"></i>
               <span>Baixar Exercícios</span>
             </button>
-            <button class="flex items-center justify-center space-x-2 py-4 hover:bg-neutral-50 transition-all text-success-600 font-medium border-l border-neutral-100">
+            <button
+              class="flex items-center justify-center space-x-2 py-4 hover:bg-neutral-50 transition-all text-success-600 font-medium border-l border-neutral-100">
               <i class="pi pi-check-circle"></i>
               <span>Marcar Concluído</span>
             </button>
@@ -656,8 +642,10 @@
               <span class="text-sm font-bold text-secondary-600">30%</span>
             </div>
             <div class="w-full bg-neutral-200 rounded-full h-2.5">
-              <div class="bg-gradient-to-r from-secondary-500 to-secondary-600 h-2.5 rounded-full relative" style="width: 30%">
-                <div class="absolute -right-1 -top-1 bg-white w-4 h-4 rounded-full border-2 border-secondary-500 shadow-sm"></div>
+              <div class="bg-gradient-to-r from-secondary-500 to-secondary-600 h-2.5 rounded-full relative"
+                   style="width: 30%">
+                <div
+                  class="absolute -right-1 -top-1 bg-white w-4 h-4 rounded-full border-2 border-secondary-500 shadow-sm"></div>
               </div>
             </div>
           </div>

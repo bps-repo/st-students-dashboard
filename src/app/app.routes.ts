@@ -16,6 +16,7 @@ import {CalendarComponent} from "./features/lessons/calendar/calendar.component"
 import {HomePageComponent} from "./features/home/home-page/home-page.component";
 import {VideoCoursesComponent} from "./features/video-course/video-courses.component";
 import {VideoCourseListComponent} from "./features/video-course-list/video-course-list.component";
+import {LessonDetailComponent} from "./features/lessons/lesson-detail/lesson-detail.component";
 
 export const routes: Routes = [
   {
@@ -35,6 +36,10 @@ export const routes: Routes = [
       {
         path: 'lessons',
         component: LessonsComponent,
+      },
+      {
+        path: 'lessons/:id',
+        component: LessonDetailComponent,
       },
       {
         path: 'video-lessons',

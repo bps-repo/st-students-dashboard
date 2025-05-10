@@ -12,6 +12,7 @@ import {
 import {NgbCarouselModule} from '@ng-bootstrap/ng-bootstrap';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {Course} from "../../../@types/course";
+import {RouterLink} from "@angular/router";
 
 /**
  * Modern Card Slider Component
@@ -20,7 +21,7 @@ import {Course} from "../../../@types/course";
  */
 @Component({
   selector: 'app-card-slider',
-  imports: [CommonModule, NgbCarouselModule, MatPaginatorModule],
+  imports: [CommonModule, NgbCarouselModule, MatPaginatorModule, RouterLink],
   templateUrl: './card-slider.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
