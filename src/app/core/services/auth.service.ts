@@ -14,7 +14,8 @@ import {User} from "../models/User";
 export class AuthService {
   private readonly storageKey = 'auth_user';
   private readonly authResponseKey = 'auth_response';
-  private readonly apiUrl = environment.apiUrl + "/auth";
+  private readonly authUrl = environment.apiUrl + "/auth";
+  private readonly apiUrl = environment.apiUrl + "/users";
 
   constructor(private http: HttpClient) {
   }
@@ -24,7 +25,7 @@ export class AuthService {
    */
   login(email: string, password: string): Observable<AuthResponse> {
     console.log(`Logging in with email: ${email} and password: ${password}`);
-    return this.http.post<ApiResponse<AuthResponse>>(`${this.apiUrl}/login`, {email, password}).pipe(
+    return this.http.post<ApiResponse<AuthResponse>>(`${this.authUrl}/login`, {email, password}).pipe(
       map((response) => {
         if (response) {
           console.log(`Login successful: ${JSON.stringify(response)}`);
@@ -37,7 +38,7 @@ export class AuthService {
   }
 
   getCurrentUser(): Observable<User> {
-    return this.http.get<ApiResponse<User>>(`${this.apiUrl}/user`).pipe(map(r => r.data as User))
+    return this.http.get<ApiResponse<User>>(`${this.apiUrl}/${this.userId}`).pipe(map(r => r.data as User))
   }
 
   /**
@@ -71,6 +72,10 @@ export class AuthService {
       }
     }
     return null;
+  }
+
+  getAccessTokenFromStorage() {
+    return localStorage.getItem("accessToken");
   }
 
   /**
@@ -108,5 +113,9 @@ export class AuthService {
       console.error('Error parsing token:', error);
       return null;
     }
+  }
+
+  get userId() {
+    return this.getUserFromToken(this.getAccessTokenFromStorage()!)?.id;
   }
 }

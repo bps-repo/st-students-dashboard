@@ -35,7 +35,7 @@ export const AuthActions = createActionGroup(
       getUserFailure: props<{ error: string }>(),
 
       initAuth: emptyProps(),
-      initAuthSuccess: props<{ authResponse: AuthResponse, userToken: UserToken }>(),
+      initAuthSuccess: props<{ accessToken: string }>(),
       initAuthFailure: emptyProps(),
     },
   }

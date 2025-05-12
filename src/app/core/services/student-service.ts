@@ -5,8 +5,8 @@ import {Student} from "../models/Student";
 import {ApiResponse} from "../dtos/api-response";
 import {inject, Injectable} from "@angular/core";
 import {Store} from "@ngrx/store";
-import {authSelectors} from "../state/auth/auth.selectors";
-import {User} from "../models/User";
+import {UserToken} from "../models/userToken";
+import {AuthService} from "./auth.service";
 
 
 @Injectable({
@@ -14,12 +14,12 @@ import {User} from "../models/User";
 })
 export class StudentService {
   store = inject(Store)
-  user: User | null = null;
+  user: UserToken | null = null;
 
   protected baseUrl = `${environment.apiUrl}/students`
 
-  constructor(private http: HttpClient) {
-    this.store.select(authSelectors.user).subscribe((user) => this.user = user)
+  constructor(private http: HttpClient, private authService: AuthService) {
+    this.user = authService.getUserFromToken(authService.getAccessTokenFromStorage()!)
   }
 
   getStudentByEmail(): Observable<Student> {

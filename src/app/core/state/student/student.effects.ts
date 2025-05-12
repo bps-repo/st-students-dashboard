@@ -42,7 +42,7 @@ export class StudentEffects {
     return this.actions$.pipe(
       ofType(StudentActions.loadStudentFailure),
       tap(() => {
-        this.store$.dispatch(AuthActions.logout())
+        //this.store$.dispatch(AuthActions.logout())
       })
     )
   }, {dispatch: false})
