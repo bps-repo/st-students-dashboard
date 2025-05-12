@@ -59,14 +59,11 @@ export class AuthEffects implements OnInitEffects {
    */
   loginSuccess$ = createEffect(
     () => {
-
       return this.actions$.pipe(
         ofType(AuthActions.loginSuccess),
         tap((action) => {
-          localStorage.setItem("auth_response", JSON.stringify(action.authResponse));
           localStorage.setItem('accessToken', action.authResponse.accessToken);
           localStorage.setItem('refreshToken', action.authResponse.refreshToken);
-
           // Load Student Information
           this.router.navigate(['/home']);
         })
@@ -200,16 +197,11 @@ export class AuthEffects implements OnInitEffects {
     return this.actions$.pipe(
       ofType(AuthActions.initAuth),
       map(() => {
-        const authResponse = this.authService.getAuthResponseFromStorage();
-        if (!authResponse || !authResponse.accessToken) {
+        const accessToken = this.authService.getAccessTokenFromStorage();
+        if (!accessToken) {
           return AuthActions.initAuthFailure();
         }
-
-        const userToken = this.authService.getUserFromToken(authResponse.accessToken);
-        if (!userToken) {
-          return AuthActions.initAuthFailure();
-        }
-        return AuthActions.initAuthSuccess({authResponse, userToken});
+        return AuthActions.initAuthSuccess({accessToken});
       })
     );
   });
@@ -218,6 +210,7 @@ export class AuthEffects implements OnInitEffects {
     return this.actions$.pipe(
       ofType(AuthActions.initAuthSuccess),
       tap(() => {
+        this.store$.dispatch(AuthActions.getUser())
         this.store$.dispatch(StudentActions.loadStudent())
       })
     )

@@ -33,8 +33,7 @@ export class ProfileComponent implements OnInit {
   constructor(private store$: Store, private form: FormBuilder) {
     // Initialize loading and error observables
     this.isLoading$ = this.store$.select(authSelectors.loading);
-
-    this.store$.dispatch(AuthActions.getUser());
+    this.user$ = store$.select(authSelectors.user);
 
     // Initialize the form with default values
     this.userProfileForm = this.form.group({
@@ -57,11 +56,12 @@ export class ProfileComponent implements OnInit {
       if (user) {
         console.log('user', user);
         this.userProfileForm.patchValue({
-          firstName: user.firstName,
-          lastName: user.lastName,
+          firstName: user.firstname,
+          lastName: user.lastname,
           phone: user.phone,
           birthdate: user.dateOfbirth,
           gender: user.gender,
+          email: user.email
         });
       }
     });

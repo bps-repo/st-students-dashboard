@@ -2,6 +2,12 @@ import {CommonModule} from '@angular/common';
 import {Component, OnInit, signal} from '@angular/core';
 import {RouterLink, RouterLinkActive} from '@angular/router';
 import {LocalstorageService} from '../../services/localstorage.service';
+import {Observable} from "rxjs";
+import {Student} from "../../../core/models/Student";
+import {Store} from "@ngrx/store";
+import {StudentSelectors} from "../../../core/state/student/student.selectors";
+import {LevelSelectors} from "../../../core/state/level/level.selectors";
+import {Level} from "../../../core/models/Level";
 
 interface navLink {
   label: string;
@@ -17,9 +23,11 @@ interface navLink {
   templateUrl: './sidebar.component.html'
 })
 export class SidebarComponent implements OnInit {
+  level$!: Observable<Level | null>
   isNavBarOpened = signal(false);
 
-  constructor(private localStorageService: LocalstorageService) {
+  constructor(private localStorageService: LocalstorageService, private store$: Store<any>) {
+    this.level$ = store$.select(LevelSelectors.level);
   }
 
   navLinks: navLink[] = [
