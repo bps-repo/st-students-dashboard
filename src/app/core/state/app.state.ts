@@ -10,10 +10,7 @@ import {AuthEffects} from "./auth/auth.effects";
 import {UnitsEffects} from "./units/units.effects";
 import {StudentEffects} from "./student/student.effects";
 import {LevelEffects} from "./level/level.effects";
-import {UserProfileEffects} from "./user-profile/user-profile.effects";
-import {userProfileFeature} from "./user-profile/user-profile.reducers";
 import {initialStudentState, StudentState} from "./student/student.state";
-import {initialUserProfileState, UserProfileState} from "./user-profile/user-profile.actions";
 
 /**
  * Interface for the root state of the application
@@ -24,7 +21,6 @@ export interface AppState {
   units: UnitsState;
   courses: CoursesState;
   student: StudentState,
-  userProfile: UserProfileState
 }
 
 /**
@@ -36,7 +32,6 @@ export const initialAppState: AppState = {
   units: initialUnitsState,
   courses: initialCoursesState,
   student: initialStudentState,
-  userProfile: initialUserProfileState
 };
 
 
@@ -45,7 +40,6 @@ export const ngrxFeatures = [
   unitsFeature,
   studentFeature,
   levelFeature,
-  userProfileFeature
 ]
 
 export const ngrxEffects = [
@@ -53,5 +47,4 @@ export const ngrxEffects = [
   UnitsEffects,
   StudentEffects,
   LevelEffects,
-  UserProfileEffects
 ]

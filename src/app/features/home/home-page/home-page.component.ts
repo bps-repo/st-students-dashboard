@@ -13,6 +13,9 @@ import {UnitsActions} from "../../../core/state/units/units.actions";
 import {Student} from "../../../core/models/Student";
 import {StudentSelectors} from "../../../core/state/student/student.selectors";
 import {StudentActions} from "../../../core/state/student/studentActions";
+import {Level} from "../../../core/models/Level";
+import {LevelActions} from "../../../core/state/level/levelActions";
+import {LevelSelectors} from "../../../core/state/level/level.selectors";
 
 
 @Component({
@@ -28,6 +31,7 @@ export class HomePageComponent implements OnInit {
   protected loading$: Observable<boolean>;
   protected error$: Observable<string | null>;
   protected user$!: Observable<User | null>;
+  protected level$!: Observable<Level | null>;
 
   protected student$!: Observable<Student | null>
 
@@ -35,6 +39,7 @@ export class HomePageComponent implements OnInit {
 
   constructor(public store: Store) {
     this.units$ = this.store.select(selectAllUnits);
+    this.level$ = this.store.select(LevelSelectors.level)
     this.loading$ = of(false);
     this.error$ = of(null);
 
@@ -45,21 +50,21 @@ export class HomePageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.user$ = this.store.select(authSelectors.user);
-
+    // this.user$ = this.store.select(authSelectors.user);
     // Update units' statuses based on student.unit
-    this.units$ = combineLatest([this.store.select(selectAllUnits), this.student$]).pipe(
-      map(([units, student]) => {
-        if (!student) return units;
-
-        return units.map(unit => {
-          if (unit.id === student.currentUnit.id) {
-            return {...unit, status: 'available'};
-          }
-          return {...unit, status: 'lock'};
-        });
-      })
-    );
+    // this.units$ = combineLatest([this.store.select(selectAllUnits), this.student$]).pipe(
+    //   map(([units, student]) => {
+    //     if (!student) return units;
+    //     console.log(student)
+    //
+    //     return units.map(unit => {
+    //       if (unit.id === student.currentUnit.id) {
+    //         return {...unit, status: 'available'};
+    //       }
+    //       return {...unit, status: 'lock'};
+    //     });
+    //   })
+    // );
   }
 
   protected items: any[] = [

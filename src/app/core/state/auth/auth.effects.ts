@@ -42,9 +42,9 @@ export class AuthEffects implements OnInitEffects {
               return AuthActions.loginFailure({error: 'Login failed'});
             }
 
-            const user = this.authService.getUserFromToken(authResponse.accessToken)!;
+            const userToken = this.authService.getUserFromToken(authResponse.accessToken)!;
 
-            return AuthActions.loginSuccess({authResponse, user});
+            return AuthActions.loginSuccess({authResponse, userToken});
           }),
           catchError((error) => {
             return of(AuthActions.loginFailure({error: error.error || 'Login failed'}));
@@ -159,24 +159,24 @@ export class AuthEffects implements OnInitEffects {
   /**
    * Get current user effect
    */
-  // getUser$ = createEffect(() => {
-  //   return this.actions$.pipe(
-  //     ofType(AuthActions.getUser),
-  //     exhaustMap(() => {
-  //       return this.authService.getCurrentUser().pipe(
-  //         map((user) => {
-  //           if (user) {
-  //             return AuthActions.getUserSuccess({user});
-  //           }
-  //           return AuthActions.getUserFailure({error: 'User not found'});
-  //         }),
-  //         catchError((error) => {
-  //           return of(AuthActions.getUserFailure({error: error.message || 'Failed to get user'}));
-  //         })
-  //       );
-  //     })
-  //   );
-  // });
+  getUser$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(AuthActions.getUser),
+      exhaustMap(() => {
+        return this.authService.getCurrentUser().pipe(
+          map((user) => {
+            if (user) {
+              return AuthActions.getUserSuccess({user});
+            }
+            return AuthActions.getUserFailure({error: 'User not found'});
+          }),
+          catchError((error) => {
+            return of(AuthActions.getUserFailure({error: error.message || 'Failed to get user'}));
+          })
+        );
+      })
+    );
+  });
 
   /**
    * Get user success effect - Save user to localStorage
@@ -187,7 +187,6 @@ export class AuthEffects implements OnInitEffects {
         ofType(AuthActions.getUserSuccess),
         tap((action) => {
           // Store the user in local storage
-          this.authService.saveUser(action.user);
         })
       );
     },
@@ -206,11 +205,11 @@ export class AuthEffects implements OnInitEffects {
           return AuthActions.initAuthFailure();
         }
 
-        const user = this.authService.getUserFromToken(authResponse.accessToken);
-        if (!user) {
+        const userToken = this.authService.getUserFromToken(authResponse.accessToken);
+        if (!userToken) {
           return AuthActions.initAuthFailure();
         }
-        return AuthActions.initAuthSuccess({authResponse, user});
+        return AuthActions.initAuthSuccess({authResponse, userToken});
       })
     );
   });

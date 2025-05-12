@@ -7,6 +7,7 @@ import {catchError, tap} from "rxjs/operators";
 import {Store} from "@ngrx/store";
 import {UnitsActions} from "../units/units.actions";
 import {AuthActions} from "../auth/authActions";
+import {LevelActions} from "../level/levelActions";
 
 @Injectable()
 export class StudentEffects {
@@ -31,6 +32,7 @@ export class StudentEffects {
       ofType(StudentActions.loadStudentSuccess),
       tap(() => {
         this.store$.dispatch(UnitsActions.loadUnits())
+        this.store$.dispatch(LevelActions.loadLevel())
       })
     )
   }, {dispatch: false})

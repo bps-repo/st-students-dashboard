@@ -6,6 +6,8 @@ import {Store} from "@ngrx/store";
 import {AuthActions} from "../../../core/state/auth/authActions";
 import {UserToken} from "../../../core/models/userToken";
 import {authSelectors} from "../../../core/state/auth/auth.selectors";
+import {Student} from "../../../core/models/Student";
+import {StudentSelectors} from "../../../core/state/student/student.selectors";
 
 @Component({
   selector: 'app-header',
@@ -14,10 +16,15 @@ import {authSelectors} from "../../../core/state/auth/auth.selectors";
 })
 export class HeaderComponent implements OnInit {
   protected user$!: Observable<UserToken | null>;
+  protected studen$!: Observable<Student | null>;
   private overlayState = new BehaviorSubject<boolean>(false);
   showOverlay$ = this.overlayState.asObservable();
+  store$ = inject(Store)
 
-  store = inject(Store)
+  constructor() {
+    this.studen$ = this.store$.select(StudentSelectors.student);
+  }
+
 
   toggleOverlay() {
     const currentState = this.overlayState.getValue();
@@ -25,10 +32,10 @@ export class HeaderComponent implements OnInit {
   }
 
   onLogout() {
-    this.store.dispatch(AuthActions.logout())
+    this.store$.dispatch(AuthActions.logout())
   }
 
   ngOnInit() {
-    this.user$ = this.store.select((state) => state.auth.user);
+    this.user$ = this.store$.select((state) => state.auth.user);
   }
 }

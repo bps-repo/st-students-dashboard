@@ -10,15 +10,6 @@ import {routes} from './app.routes';
 import {provideClientHydration} from '@angular/platform-browser';
 import {provideAnimationsAsync} from '@angular/platform-browser/animations/async';
 import {provideHttpClient, withFetch} from "@angular/common/http";
-import {authFeature} from "./core/state/auth/auth.reducer";
-import {AuthEffects} from "./core/state/auth/auth.effects";
-import {unitsFeature} from "./core/state/units/unitsFeature";
-import {UnitsEffects} from "./core/state/units/units.effects";
-import {StudentEffects} from "./core/state/student/student.effects";
-import {studentFeature} from "./core/state/student/student.reducer";
-import {LevelEffects} from "./core/state/level/level.effects";
-import {levelFeature} from "./core/state/level/level.reducer";
-import {UserProfileEffects} from "./core/state/user-profile/user-profile.effects";
 import {ngrxEffects, ngrxFeatures} from "./core/state/app.state";
 
 

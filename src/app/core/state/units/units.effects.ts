@@ -2,14 +2,14 @@ import {Injectable, inject} from '@angular/core';
 import {Actions, createEffect, ofType} from '@ngrx/effects';
 import {of} from 'rxjs';
 import {catchError, exhaustMap, map} from 'rxjs/operators';
-import {UnityService} from '../../services/unity.service';
+import {UnitService} from '../../services/unit.service';
 import {AlertService} from '../../services/alert.service';
 import {UnitsActions} from './units.actions';
 
 @Injectable()
 export class UnitsEffects {
   actions$ = inject(Actions)
-  unityService = inject(UnityService)
+  unityService = inject(UnitService)
   alertService = inject(AlertService)
 
   /**

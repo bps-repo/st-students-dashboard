@@ -11,7 +11,7 @@ import {StudentSelectors} from "../state/student/student.selectors";
 @Injectable({
   providedIn: 'root',
 })
-export class UnityService {
+export class UnitService {
   private baseUrl = `${environment.apiUrl}/units`
   student?: Student
 
@@ -26,7 +26,7 @@ export class UnityService {
   }
 
   getUnitsByLevelId(): Observable<Unit[]> {
-    return this.http.get<ApiResponse<Unit[]>>(`${this.baseUrl}/by-level/${this.student?.currentClass.levelId}`).pipe(
+    return this.http.get<ApiResponse<Unit[]>>(`${this.baseUrl}/by-level/${this.student?.levelId}`).pipe(
       map((r) => r.data as Unit[])
     );
   }

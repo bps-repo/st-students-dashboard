@@ -26,7 +26,7 @@ export const routes: Routes = [
   },
   {
     path: '',
-    canActivate: [],
+    canActivate: [authGuard],
     component: LayoutContentComponent,
     children: [
       {

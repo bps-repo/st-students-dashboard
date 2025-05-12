@@ -1,11 +1,12 @@
-import {UserToken} from "../../models/userToken";
 import {User} from "../../models/User";
+import {UserToken} from "../../models/userToken";
 
 
 /**
  * Authentication state interface
  */
 export interface AuthState {
+  userToken: UserToken | null;
   user: User | null;
   authResponse: any;
   isAuthenticated: boolean;
@@ -18,6 +19,7 @@ export interface AuthState {
  */
 export const initialAuthState: AuthState = {
   user: null,
+  userToken: null,
   authResponse: null,
   isAuthenticated: false,
   isLoading: false,

@@ -4,6 +4,7 @@ import {AuthState} from './auth.state';
 const selectAuth = createFeatureSelector<AuthState>('auth');
 
 export const authSelectors = {
+  userToken: createSelector(selectAuth, (state: AuthState) => state.userToken),
   user: createSelector(selectAuth, (state: AuthState) => state.user),
   loading: createSelector(selectAuth, (state: AuthState) => state.isLoading),
   error: createSelector(selectAuth, (state: AuthState) => state.error),

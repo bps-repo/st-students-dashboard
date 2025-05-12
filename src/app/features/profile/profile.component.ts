@@ -7,8 +7,7 @@ import {Store} from "@ngrx/store";
 import {authSelectors} from "../../core/state/auth/auth.selectors";
 import {User} from "../../core/models/User";
 import {UserProfile} from "../../core/dtos/user-profile";
-import {userProfileSelectors} from "../../core/state/user-profile/user-profile.selectors";
-import {userProfileActions} from "../../core/state/user-profile/user-profile.actions";
+import {AuthActions} from "../../core/state/auth/authActions";
 
 /**
  * Modern Profile Component
@@ -27,16 +26,15 @@ export class ProfileComponent implements OnInit {
   protected errors$!: Observable<Partial<UserToken> | null>
 
   protected user$!: Observable<User | null>
-  protected userProfile$!: Observable<UserProfile | null>
+  protected student!: Observable<UserProfile | null>
   protected userProfileForm!: FormGroup
 
 
   constructor(private store$: Store, private form: FormBuilder) {
     // Initialize loading and error observables
-    this.isLoading$ = this.store$.select(userProfileSelectors.loading);
-    this.errors$ = this.store$.select(userProfileSelectors.error);
+    this.isLoading$ = this.store$.select(authSelectors.loading);
 
-    this.store$.dispatch(userProfileActions.getUserProfile());
+    this.store$.dispatch(AuthActions.getUser());
 
     // Initialize the form with default values
     this.userProfileForm = this.form.group({
@@ -55,27 +53,19 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit() {
     // Subscribe to the user observable from the store
-    this.user$ = this.store$.select(authSelectors.user);
-
-    this.userProfile$ = this.store$.select(userProfileSelectors.userProfile);
-
-    // Initialize the form with user data
-    this.userProfile$.subscribe(user => {
+    this.user$.subscribe(user => {
       if (user) {
         console.log('user', user);
         this.userProfileForm.patchValue({
           firstName: user.firstName,
           lastName: user.lastName,
           phone: user.phone,
-          birthdate: user.birthDate,
-          bio: user.bio,
-          identificationNumber: user.identificationNumber,
+          birthdate: user.dateOfbirth,
           gender: user.gender,
         });
       }
     });
   }
-
 
 
   // Settings

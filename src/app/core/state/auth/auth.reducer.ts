@@ -1,6 +1,7 @@
 import {createFeature, createReducer, on} from '@ngrx/store';
 import {initialAuthState} from './auth.state';
 import {AuthActions, authFeatureKey} from "./authActions";
+import {UserToken} from "../../models/userToken";
 
 export const authFeature = createFeature(
   {
@@ -14,10 +15,10 @@ export const authFeature = createFeature(
         error: null,
       })),
 
-      on(AuthActions.loginSuccess, (state, {authResponse, user}) => ({
+      on(AuthActions.loginSuccess, (state, {authResponse, userToken}) => ({
         ...state,
         authResponse,
-        user,
+        userToken,
         isAuthenticated: true,
         isLoading: false,
         error: null,
@@ -97,10 +98,10 @@ export const authFeature = createFeature(
       })),
 
       // Initialize auth state from localStorage
-      on(AuthActions.initAuthSuccess, (state, {authResponse, user}) => ({
+      on(AuthActions.initAuthSuccess, (state, {authResponse, userToken}) => ({
         ...state,
         authResponse,
-        user: {name: user.name, email: user.sub!, role: user.role},
+        userToken,
         isAuthenticated: true,
         isLoading: false,
         error: null,

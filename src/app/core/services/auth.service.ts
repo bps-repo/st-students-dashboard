@@ -6,6 +6,7 @@ import {HttpClient} from "@angular/common/http";
 import {ApiResponse} from "../dtos/api-response";
 import {AuthResponse} from "../dtos/auth-response";
 import {UserToken} from "../models/userToken";
+import {User} from "../models/User";
 
 @Injectable({
   providedIn: 'root'
@@ -33,6 +34,10 @@ export class AuthService {
         }
       }),
     )
+  }
+
+  getCurrentUser(): Observable<User> {
+    return this.http.get<ApiResponse<User>>(`${this.apiUrl}/user`).pipe(map(r => r.data as User))
   }
 
   /**
