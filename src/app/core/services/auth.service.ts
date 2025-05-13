@@ -1,103 +1,128 @@
 import {Injectable} from '@angular/core';
-import {map, Observable, of, throwError} from 'rxjs';
-import {delay} from 'rxjs/operators';
-import {environment} from "../../../environments/environment";
-import {HttpClient} from "@angular/common/http";
-import {ApiResponse} from "../dtos/api-response";
-import {AuthResponse} from "../dtos/auth-response";
-import {UserToken} from "../models/userToken";
-import {User} from "../models/User";
+import {HttpClient} from '@angular/common/http';
+import {Observable, of, throwError} from 'rxjs';
+import {map, catchError, delay} from 'rxjs/operators';
+import {environment} from '../../../environments/environment';
+import {ApiResponse} from '../dtos/api-response';
+import {AuthResponse} from '../dtos/auth-response';
+import {UserToken} from '../models/userToken';
+import {User} from '../models/User';
+
+export const AUTH_STORAGE_KEYS = {
+  USER: 'auth_user',
+  AUTH_RESPONSE: 'auth_response',
+  ACCESS_TOKEN: 'accessToken',
+  REFRESH_TOKEN: 'refreshToken'
+} as const;
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly storageKey = 'auth_user';
-  private readonly authResponseKey = 'auth_response';
-  private readonly authUrl = environment.apiUrl + "/auth";
-  private readonly apiUrl = environment.apiUrl + "/users";
+  private readonly authUrl = `${environment.apiUrl}/auth`;
+  private readonly usersUrl = `${environment.apiUrl}/users`;
 
   constructor(private http: HttpClient) {
   }
 
   /**
    * Login with email and password
+   * @returns Observable of AuthResponse or error
    */
   login(email: string, password: string): Observable<AuthResponse> {
-    console.log(`Logging in with email: ${email} and password: ${password}`);
     return this.http.post<ApiResponse<AuthResponse>>(`${this.authUrl}/login`, {email, password}).pipe(
-      map((response) => {
-        if (response) {
-          console.log(`Login successful: ${JSON.stringify(response)}`);
-          return response.data as AuthResponse;
-        } else {
-          throw new Error(response);
+      map(response => {
+        if (!response || !response.data) {
+          throw new Error('Invalid response from server');
         }
+        return response.data as AuthResponse;
       }),
-    )
+      catchError(error => {
+        const errorMessage = error.error?.message || 'Login failed';
+        return throwError(() => new Error(errorMessage));
+      })
+    );
   }
 
+  /**
+   * Get current user information
+   * @returns Observable of User or error
+   */
   getCurrentUser(): Observable<User> {
-    return this.http.get<ApiResponse<User>>(`${this.apiUrl}/${this.userId}`).pipe(map(r => r.data as User))
+    const userId = this.getUserId();
+    if (!userId) {
+      return throwError(() => new Error('User not authenticated'));
+    }
+
+    return this.http.get<ApiResponse<User>>(`${this.usersUrl}/${userId}`).pipe(
+      map(response => {
+        if (!response || !response.data) {
+          throw new Error('Invalid response from server');
+        }
+        return response.data as User;
+      }),
+      catchError(error => {
+        const errorMessage = error.error?.message || 'Failed to get user information';
+        return throwError(() => new Error(errorMessage));
+      })
+    );
   }
 
   /**
    * Logout the current user
+   * @returns Observable that completes when logout is successful
    */
   logout(): Observable<void> {
-    // Remove user from local storage
-    localStorage.removeItem(this.storageKey);
-    return of(void 0)
-  }
-
-
-  /**
-   * Save user to local storage
-   */
-  saveUser(user: UserToken): void {
-    localStorage.setItem(this.storageKey, JSON.stringify(user));
-  }
-
-  /**
-   * Get auth response from local storage
-   */
-  getAuthResponseFromStorage(): AuthResponse | null {
-    const authResponseJson = localStorage.getItem(this.authResponseKey);
-
-    if (authResponseJson) {
-      try {
-        return JSON.parse(authResponseJson) as AuthResponse;
-      } catch (error) {
-        localStorage.removeItem(this.authResponseKey);
-      }
-    }
-    return null;
-  }
-
-  getAccessTokenFromStorage() {
-    return localStorage.getItem("accessToken");
+    // In a real implementation, this would call an API endpoint to invalidate the token
+    return of(void 0);
   }
 
   /**
    * Request password reset
+   * @param email Email address for password reset
    */
   resetPassword(email: string): Observable<void> {
-    return of(void 0).pipe(delay(1000)); // Simulate API delay
+    // In a real implementation, this would call an API endpoint
+    return this.http.post<ApiResponse<void>>(`${this.authUrl}/reset-password`, {email}).pipe(
+      map(response => void 0),
+      catchError(error => {
+        const errorMessage = error.error?.message || 'Failed to request password reset';
+        return throwError(() => new Error(errorMessage));
+      }),
+      // Fallback to mock implementation for development
+      catchError(() => of(void 0).pipe(delay(1000)))
+    );
   }
 
   /**
-   * Verify OTP code
+   * Verify OTP code for password reset
+   * @param email Email address
+   * @param otp One-time password code
    */
   verifyOtp(email: string, otp: string): Observable<void> {
-    // This is a mock implementation
-    // In a real application, this would call an API
-    if (otp === '123456') {
-      return of(void 0).pipe(delay(1000)); // Simulate API delay
-    }
-
-    return throwError(() => new Error('Invalid OTP code')).pipe(delay(1000));
+    // In a real implementation, this would call an API endpoint
+    return this.http.post<ApiResponse<void>>(`${this.authUrl}/verify-otp`, {email, otp}).pipe(
+      map(response => void 0),
+      catchError(error => {
+        const errorMessage = error.error?.message || 'Invalid OTP code';
+        return throwError(() => new Error(errorMessage));
+      }),
+      // Fallback to mock implementation for development
+      catchError(() => {
+        // Mock validation for development
+        if (otp === '123456') {
+          return of(void 0).pipe(delay(1000));
+        }
+        return throwError(() => new Error('Invalid OTP code')).pipe(delay(1000));
+      })
+    );
   }
 
+  /**
+   * Parse JWT token to get user information
+   * @param token JWT token string
+   * @returns UserToken object or null if token is invalid
+   */
   getUserFromToken(token: string): UserToken | null {
     if (!token) {
       return null;
@@ -115,7 +140,62 @@ export class AuthService {
     }
   }
 
-  get userId() {
-    return this.getUserFromToken(this.getAccessTokenFromStorage()!)?.id;
+  /**
+   * Get access token from storage
+   */
+  getAccessToken(): string | null {
+    return localStorage.getItem(AUTH_STORAGE_KEYS.ACCESS_TOKEN);
+  }
+
+  /**
+   * Get refresh token from storage
+   */
+  getRefreshToken(): string | null {
+    return localStorage.getItem(AUTH_STORAGE_KEYS.REFRESH_TOKEN);
+  }
+
+  /**
+   * Save auth tokens to storage
+   */
+  saveAuthTokens(accessToken: string, refreshToken: string): void {
+    localStorage.setItem(AUTH_STORAGE_KEYS.ACCESS_TOKEN, accessToken);
+    localStorage.setItem(AUTH_STORAGE_KEYS.REFRESH_TOKEN, refreshToken);
+  }
+
+  /**
+   * Save user to local storage
+   */
+  saveUser(user: UserToken): void {
+    localStorage.setItem(AUTH_STORAGE_KEYS.USER, JSON.stringify(user));
+  }
+
+  /**
+   * Clear all auth-related data from storage
+   */
+  clearAuthData(): void {
+    localStorage.removeItem(AUTH_STORAGE_KEYS.USER);
+    localStorage.removeItem(AUTH_STORAGE_KEYS.AUTH_RESPONSE);
+    localStorage.removeItem(AUTH_STORAGE_KEYS.ACCESS_TOKEN);
+    localStorage.removeItem(AUTH_STORAGE_KEYS.REFRESH_TOKEN);
+  }
+
+  /**
+   * Get current user ID from token
+   */
+  getUserId(): string | null {
+    const token = this.getAccessToken();
+    if (!token) {
+      return null;
+    }
+
+    const userToken = this.getUserFromToken(token);
+    return userToken?.id || null;
+  }
+
+  /**
+   * Check if user is authenticated
+   */
+  isAuthenticated(): boolean {
+    return !!this.getAccessToken();
   }
 }

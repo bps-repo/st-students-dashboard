@@ -1,218 +1,201 @@
-import {Injectable, PLATFORM_ID, inject} from '@angular/core';
+import {Injectable, inject} from '@angular/core';
 import {isPlatformBrowser} from '@angular/common';
 import {Actions, createEffect, ofType, OnInitEffects} from '@ngrx/effects';
-import {isEmpty, of} from 'rxjs'; // Import EMPTY
-import {catchError, exhaustMap, map, tap} from 'rxjs/operators';
+import {of} from 'rxjs';
+import {catchError, exhaustMap, map, tap, switchMap} from 'rxjs/operators';
 import {Router} from '@angular/router';
-import {AuthService} from '../../services/auth.service';
-import {AuthActions} from "./authActions";
 import {Action, Store} from '@ngrx/store';
-import {StudentActions} from "../student/studentActions";
-import {authSelectors} from "./auth.selectors";
+
+import {AuthService, AUTH_STORAGE_KEYS} from '../../services/auth.service';
+import {AuthActions} from './authActions';
+import {StudentActions} from '../student/studentActions';
 
 @Injectable()
 export class AuthEffects implements OnInitEffects {
-  actions$ = inject(Actions)
-  store$ = inject(Store)
-  authService = inject(AuthService)
-  router = inject(Router)
+  private readonly actions$ = inject(Actions);
+  private readonly store = inject(Store);
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
 
   /**
-   * This method is called when the effects are initialized
+   * Initialize auth state when effects are loaded
    */
   ngrxOnInitEffects(): Action {
     return AuthActions.initAuth();
   }
 
   /**
-   * Login effect
+   * Login effect - Authenticate user with credentials
    */
-  login$ = createEffect(() => {
-    return this.actions$.pipe(
+  login$ = createEffect(() =>
+    this.actions$.pipe(
       ofType(AuthActions.login),
-      exhaustMap(({email, password}) => {
-        return this.authService.login(email, password).pipe(
-          map((authResponse) => {
-            // Check if the response is empty
-            if (!authResponse) {
-              return AuthActions.loginFailure({error: 'Login failed'});
-            }
-            // Check if the response contains a token
-            if (!authResponse.accessToken) {
-              return AuthActions.loginFailure({error: 'Login failed'});
+      exhaustMap(({email, password}) =>
+        this.authService.login(email, password).pipe(
+          map(authResponse => {
+            if (!authResponse?.accessToken) {
+              return AuthActions.loginFailure({error: 'Invalid authentication response'});
             }
 
-            const userToken = this.authService.getUserFromToken(authResponse.accessToken)!;
+            const userToken = this.authService.getUserFromToken(authResponse.accessToken);
+            if (!userToken) {
+              return AuthActions.loginFailure({error: 'Invalid token received'});
+            }
 
             return AuthActions.loginSuccess({authResponse, userToken});
           }),
-          catchError((error) => {
-            return of(AuthActions.loginFailure({error: error.error || 'Login failed'}));
-          })
-        );
-      })
-    );
-  });
+          catchError(error =>
+            of(AuthActions.loginFailure({
+              error: error.message || 'Authentication failed'
+            }))
+          )
+        )
+      )
+    )
+  );
 
   /**
-   * Login success effect - Navigate to home page
+   * Login success effect - Save auth data and navigate
    */
-  loginSuccess$ = createEffect(
-    () => {
-      return this.actions$.pipe(
+  loginSuccess$ = createEffect(() =>
+      this.actions$.pipe(
         ofType(AuthActions.loginSuccess),
-        tap((action) => {
-          localStorage.setItem('accessToken', action.authResponse.accessToken);
-          localStorage.setItem('refreshToken', action.authResponse.refreshToken);
-          // Load Student Information
+        tap(({authResponse, userToken}) => {
+          // Save auth data to storage
+          this.authService.saveAuthTokens(
+            authResponse.accessToken,
+            authResponse.refreshToken
+          );
+          this.authService.saveUser(userToken);
+
+          // Navigate to home page
           this.router.navigate(['/home']);
         })
-      );
-    },
+      ),
     {dispatch: false}
   );
 
   /**
-   * Logout effect
+   * Logout effect - Clear auth data
    */
-  logout$ = createEffect(() => {
-    return this.actions$.pipe(
+  logout$ = createEffect(() =>
+    this.actions$.pipe(
       ofType(AuthActions.logout),
-      exhaustMap(() => {
-        return this.authService.logout().pipe(
-          map(() => {
-            return AuthActions.logoutSuccess();
-          }),
-          catchError((error) => {
-            return of(AuthActions.logoutSuccess()); // Still logout even if API fails
-          })
-        );
-      })
-    );
-  });
+      exhaustMap(() =>
+        this.authService.logout().pipe(
+          map(() => AuthActions.logoutSuccess()),
+          catchError(() => of(AuthActions.logoutSuccess())) // Still logout on error
+        )
+      )
+    )
+  );
 
   /**
-   * Logout success effect - Navigate to login page
+   * Logout success effect - Clear storage and navigate
    */
-  logoutSuccess$ = createEffect(
-    () => {
-
-      return this.actions$.pipe(
+  logoutSuccess$ = createEffect(() =>
+      this.actions$.pipe(
         ofType(AuthActions.logoutSuccess),
         tap(() => {
-          // Clear all auth-related items from localStorage
-          localStorage.removeItem('auth_response');
-          localStorage.removeItem('accessToken');
-          localStorage.removeItem('refreshToken');
-          localStorage.removeItem('auth_user');
+          // Clear auth data from storage
+          this.authService.clearAuthData();
 
-          this.store$.dispatch(StudentActions.clearStudent())
-          this.router.navigate(['/auth/login']).then();
+          // Clear related state
+          this.store.dispatch(StudentActions.clearStudent());
+
+          // Navigate to login page
+          this.router.navigate(['/auth/login']);
         })
-      );
-    },
+      ),
     {dispatch: false}
   );
 
   /**
    * Reset password effect
    */
-  resetPassword$ = createEffect(() => {
-    return this.actions$.pipe(
+  resetPassword$ = createEffect(() =>
+    this.actions$.pipe(
       ofType(AuthActions.resetPassword),
-      exhaustMap(({email}) => {
-        return this.authService.resetPassword(email).pipe(
-          map(() => {
-            return AuthActions.resetPasswordSuccess();
-          }),
-          catchError((error) => {
-            return of(AuthActions.resetPasswordFailure({error: error.message || 'Failed to send verification code'}));
-          })
-        );
-      })
-    );
-  });
+      exhaustMap(({email}) =>
+        this.authService.resetPassword(email).pipe(
+          map(() => AuthActions.resetPasswordSuccess()),
+          catchError(error =>
+            of(AuthActions.resetPasswordFailure({
+              error: error.message || 'Failed to send verification code'
+            }))
+          )
+        )
+      )
+    )
+  );
 
   /**
    * Verify OTP effect
    */
-  verifyOtp$ = createEffect(() => {
-
-    return this.actions$.pipe(
+  verifyOtp$ = createEffect(() =>
+    this.actions$.pipe(
       ofType(AuthActions.verifyOtp),
-      exhaustMap(({email, otp}) => {
-        return this.authService.verifyOtp(email, otp).pipe(
-          map(() => {
-            return AuthActions.verifyOtpSuccess();
-          }),
-          catchError((error) => {
-            return of(AuthActions.verifyOtpFailure({error: error.message || 'Verification failed'}));
-          })
-        );
-      })
-    );
-  });
+      exhaustMap(({email, otp}) =>
+        this.authService.verifyOtp(email, otp).pipe(
+          map(() => AuthActions.verifyOtpSuccess()),
+          catchError(error =>
+            of(AuthActions.verifyOtpFailure({
+              error: error.message || 'Verification failed'
+            }))
+          )
+        )
+      )
+    )
+  );
 
   /**
    * Get current user effect
    */
-  getUser$ = createEffect(() => {
-    return this.actions$.pipe(
+  getUser$ = createEffect(() =>
+    this.actions$.pipe(
       ofType(AuthActions.getUser),
-      exhaustMap(() => {
-        return this.authService.getCurrentUser().pipe(
-          map((user) => {
-            if (user) {
-              return AuthActions.getUserSuccess({user});
-            }
-            return AuthActions.getUserFailure({error: 'User not found'});
-          }),
-          catchError((error) => {
-            return of(AuthActions.getUserFailure({error: error.message || 'Failed to get user'}));
-          })
-        );
-      })
-    );
-  });
-
-  /**
-   * Get user success effect - Save user to localStorage
-   */
-  getUserSuccess$ = createEffect(
-    () => {
-      return this.actions$.pipe(
-        ofType(AuthActions.getUserSuccess),
-        tap((action) => {
-          // Store the user in local storage
-        })
-      );
-    },
-    {dispatch: false}
+      exhaustMap(() =>
+        this.authService.getCurrentUser().pipe(
+          map(user => AuthActions.getUserSuccess({user})),
+          catchError(error =>
+            of(AuthActions.getUserFailure({
+              error: error.message || 'Failed to get user information'
+            }))
+          )
+        )
+      )
+    )
   );
 
   /**
-   * Initialize auth state from localStorage
+   * Init auth effect - Check for stored auth data
    */
-  initAuth$ = createEffect(() => {
-    return this.actions$.pipe(
+  initAuth$ = createEffect(() =>
+    this.actions$.pipe(
       ofType(AuthActions.initAuth),
       map(() => {
-        const accessToken = this.authService.getAccessTokenFromStorage();
+        const accessToken = this.authService.getAccessToken();
+
         if (!accessToken) {
           return AuthActions.initAuthFailure();
         }
+
         return AuthActions.initAuthSuccess({accessToken});
       })
-    );
-  });
-
-  initAuthSuccess = createEffect(() => {
-    return this.actions$.pipe(
-      ofType(AuthActions.initAuthSuccess),
-      tap(() => {
-        this.store$.dispatch(AuthActions.getUser())
-        this.store$.dispatch(StudentActions.loadStudent())
-      })
     )
-  }, {dispatch: false})
+  );
+
+  /**
+   * Init auth success effect - Load user and student data
+   */
+  initAuthSuccess$ = createEffect(() =>
+      this.actions$.pipe(
+        ofType(AuthActions.initAuthSuccess),
+        tap(() => {
+          this.store.dispatch(AuthActions.getUser());
+          this.store.dispatch(StudentActions.loadStudent());
+        })
+      ),
+    {dispatch: false}
+  );
 }
