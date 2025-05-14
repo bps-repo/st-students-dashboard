@@ -3,63 +3,114 @@
     'w-[250px]': !isNavBarOpened(),
     'w-[100px]': isNavBarOpened(),
   }"
-  class="h-screen transition-all duration-200 bg-primary-50 border-r border-primary-100 p-8 shadow-lg flex flex-col gap-16"
+  class="h-screen transition-all duration-300 ease-in-out bg-primary-50 border-r border-primary-100 shadow-lg flex flex-col justify-between overflow-hidden"
 >
-  <section class="flex flex-col justify-center items-center gap-5">
-    <img
-      src="/user.png"
-      [ngClass]="{
-        'w-28 h-28': !isNavBarOpened(),
-        'w-20 h-[2.5rem]': isNavBarOpened(),
-      }"
-      class="rounded-full"
-      alt="photo"
-    />
-    <h1
-      *ngIf="!isNavBarOpened()"
-      class="flex flex-row gap-2 items-center font-heading text-sm text-primary-700 bg-primary-100 px-6 py-2 rounded-md transition-all duration-200 shadow-sm"
-    >
-      <span
-        class="flex justify-center text-white font-bold items-center w-4 h-4 bg-primary-600 clip-hexagon2 rounded-full p-4"
-      >L</span
-      >
-      {{ (level$ | async)?.name }}
-    </h1>
-  </section>
-  <nav
-    class="flex flex-col gap-6 font-medium text-[16px] cursor-pointer"
-  >
-    @for (navLink of navLinks; track $index) {
-      <a
-        (click)="setActiveTab(navLink)"
-        [routerLink]="[navLink.path]"
-        [routerLinkActive]="['active']"
+  <div class="flex flex-col p-4 md:p-6 lg:p-8">
+    <section class="flex flex-col justify-center items-center gap-4 mb-8">
+      <img
+        src="/user.png"
         [ngClass]="{
-        'text-primary-700 bg-primary-100 rounded-md px-2 py-1': navLink.active,
-        'text-neutral-700': !navLink.active
-      }"
-        class="hover:text-primary-600 hover:bg-primary-50 active:text-primary-700 transition-all flex flex-row gap-4 px-2 py-1 rounded-md"
+          'w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28': !isNavBarOpened(),
+          'w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20': isNavBarOpened(),
+        }"
+        class="rounded-full object-cover transition-all duration-300"
+        alt="photo"
+      />
+      <h1
+        *ngIf="!isNavBarOpened()"
+        class="flex flex-row gap-2 items-center font-heading text-sm text-primary-700 bg-primary-100 px-4 py-2 rounded-md transition-all duration-200 shadow-sm"
       >
-        <i class="{{ navLink.icon }} text-[28px]" [ngClass]="{'text-primary-600': navLink.active}"></i>
         <span
-          *ngIf="!isNavBarOpened()"
-          class="font-heading text-[17px] font-bold"
-        >{{ navLink.label }}</span
+          class="flex justify-center text-white font-bold items-center w-4 h-4 bg-primary-600 rounded-full p-3 text-xs">L</span>
+        {{ (level$ | async)?.name }}
+      </h1>
+    </section>
+
+    <nav class="flex flex-col gap-4 font-medium cursor-pointer mb-auto">
+      @for (navLink of navLinks; track $index) {
+        <a
+          (click)="setActiveTab(navLink)"
+          [routerLink]="[navLink.path]"
+          [routerLinkActive]="['active']"
+          [ngClass]="{
+            'text-primary-700 bg-primary-100 rounded-md': navLink.active,
+            'text-neutral-700': !navLink.active
+          }"
+          class="hover:text-primary-600 hover:bg-primary-50 active:text-primary-700 transition-all flex flex-row items-center gap-3 px-3 py-2 rounded-md"
         >
+          <i class="{{ navLink.icon }} text-[20px] md:text-[24px]" [ngClass]="{'text-primary-600': navLink.active}"></i>
+          <span
+            *ngIf="!isNavBarOpened()"
+            class="font-heading text-sm md:text-base whitespace-nowrap overflow-hidden transition-all duration-300"
+          >{{ navLink.label }}</span>
+        </a>
+      }
+    </nav>
+  </div>
+
+  <!-- Social Media Icons with Hover Effect -->
+  <div class="p-4 md:p-6 flex justify-center mb-4">
+    <div class="group relative">
+      <!-- Main visible icon -->
+      <a href="#"
+         class="flex  items-center justify-center w-10 h-10 md:w-14 md:h-14 bg-primary-500 text-white rounded-full hover:bg-primary-600 transition-all z-10">
+        <i class="pi pi-link text-lg md:text-xl"></i>
       </a>
-    }
-  </nav>
-  <div
-    [ngClass]="{
-      'left-[6.5rem] ': isNavBarOpened(),
-      'left-[15.5rem] ': !isNavBarOpened(),
-    }"
-    (click)="toggleSidebar()"
-    class="flex justify-center items-center absolute top-[10.5rem] transition-all duration-200 transform -translate-x-1/2 bg-accent-500 hover:bg-accent-600 clip-hexagon2 rounded-full w-8 h-8 text-white p-5 cursor-pointer shadow-md"
-  >
-    <i
-      [ngClass]="getSideBarIcon()"
-      class="font-bold text-[16px] transition-all"
-    ></i>
+
+      <!-- Hidden icons that appear on hover -->
+      <div
+        class="absolute bottom-full left-1/2 transform -translate-x-1/2 flex flex-col justify-center items-center opacity-0 group-hover:opacity-100 transition-all duration-300 ease-in-out gap-3 mb-2">
+        <!-- WhatsApp - appears first (bottom) -->
+        <a href="#"
+           class="flex items-center justify-center w-8 h-8 md:w-10 md:h-10 bg-success-50 text-success-600 rounded-full hover:bg-success-100 transition-all scale-0 group-hover:scale-100 origin-bottom transform group-hover:-translate-y-0 transition-all duration-300 delay-0">
+          <i class="pi pi-whatsapp text-sm md:text-lg"></i>
+        </a>
+
+        <a href="#"
+           class="flex items-center justify-center w-8 h-8 md:w-10 md:h-10 bg-success-50 text-success-600 rounded-full hover:bg-primary-100 transition-all scale-0 group-hover:scale-100 origin-bottom transform group-hover:-translate-y-0 transition-all duration-300 delay-75">
+          <i class="pi pi-facebook text-sm md:text-lg"></i>
+        </a>
+
+        <!-- LinkedIn - appears second -->
+        <a href="#"
+           class="flex items-center justify-center w-8 h-8 md:w-10 md:h-10 bg-accent-50 text-accent-600 rounded-full hover:bg-accent-100 transition-all scale-0 group-hover:scale-100 origin-bottom transform group-hover:-translate-y-0 transition-all duration-300 delay-150">
+          <i class="pi pi-linkedin text-sm md:text-lg"></i>
+        </a>
+
+        <!-- YouTube - appears third -->
+        <a href="#"
+           class="flex items-center justify-center w-8 h-8 md:w-10 md:h-10 bg-warning-50 text-warning-600 rounded-full hover:bg-warning-100 transition-all scale-0 group-hover:scale-100 origin-bottom transform group-hover:-translate-y-0 transition-all duration-300 delay-225">
+          <i class="pi pi-youtube text-sm md:text-lg"></i>
+        </a>
+
+        <!-- TikTok - appears fourth -->
+        <a href="#"
+           class="flex items-center justify-center w-8 h-8 md:w-10 md:h-10 bg-neutral-50 text-neutral-800 rounded-full hover:bg-neutral-100 transition-all scale-0 group-hover:scale-100 origin-bottom transform group-hover:-translate-y-0 transition-all duration-300 delay-300">
+          <i class="pi pi-tiktok text-sm md:text-lg"></i>
+        </a>
+
+        <!-- Instagram - appears last (top) -->
+        <a href="#"
+           class="flex items-center justify-center w-8 h-8 md:w-10 md:h-10 bg-secondary-50 text-secondary-600 rounded-full hover:bg-secondary-100 transition-all scale-0 group-hover:scale-100 origin-bottom transform group-hover:-translate-y-0 transition-all duration-300 delay-375">
+          <i class="pi pi-instagram text-sm md:text-lg"></i>
+        </a>
+      </div>
+    </div>
   </div>
 </aside>
+
+<div
+  [ngClass]="{
+    'left-[6.5rem]': isNavBarOpened(),
+    'left-[15.5rem]': !isNavBarOpened(),
+    'left-[5rem] md:left-[6.5rem]': isNavBarOpened() && window.innerWidth < 768,
+    'left-[12rem] md:left-[15.5rem]': !isNavBarOpened() && window.innerWidth < 768
+  }"
+  (click)="toggleSidebar()"
+  class="flex justify-center items-center absolute top-[10.5rem] md:top-[12rem] transition-all duration-300 ease-in-out transform -translate-x-1/2 bg-accent-500 hover:bg-accent-600 rounded-full w-7 h-7 md:w-8 md:h-8 text-white cursor-pointer shadow-md z-20"
+>
+  <i
+    [ngClass]="getSideBarIcon()"
+    class="font-bold text-sm md:text-base transition-all"
+  ></i>
+</div>

@@ -3,9 +3,7 @@ import {Component, OnInit, signal} from '@angular/core';
 import {RouterLink, RouterLinkActive} from '@angular/router';
 import {LocalstorageService} from '../../services/localstorage.service';
 import {Observable} from "rxjs";
-import {Student} from "../../../core/models/Student";
 import {Store} from "@ngrx/store";
-import {StudentSelectors} from "../../../core/state/student/student.selectors";
 import {LevelSelectors} from "../../../core/state/level/level.selectors";
 import {Level} from "../../../core/models/Level";
 
@@ -110,4 +108,6 @@ export class SidebarComponent implements OnInit {
     // Save the active tab in local storage.
     this.localStorageService.setItem('activeTab', tab);
   }
+
+  protected readonly window = window;
 }
