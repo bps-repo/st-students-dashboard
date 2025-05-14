@@ -2,25 +2,24 @@ import {Component, inject, OnInit, TemplateRef} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {ChangeDetectionStrategy} from '@angular/core';
 import {MatDialog, MatDialogModule} from '@angular/material/dialog';
-import {combineLatest, map, Observable, Observer, of, Subscription} from 'rxjs';
+import {Observable, of} from 'rxjs';
 import {Store} from '@ngrx/store';
 import {CircularLevelComponent} from "../../../shared/components/circular-level/circular-level.component";
 import {Unit} from "../../../core/models/Unit";
-import {User} from "../../../core/models/User";
 import {selectAllUnits, selectUnitsError, selectUnitsLoading} from "../../../core/state/units/units.selectors";
-import {authSelectors} from "../../../core/state/auth/auth.selectors";
 import {UnitsActions} from "../../../core/state/units/units.actions";
 import {Student} from "../../../core/models/Student";
 import {StudentSelectors} from "../../../core/state/student/student.selectors";
-import {StudentActions} from "../../../core/state/student/studentActions";
 import {Level} from "../../../core/models/Level";
-import {LevelActions} from "../../../core/state/level/levelActions";
 import {LevelSelectors} from "../../../core/state/level/level.selectors";
+import {CircularLoaderComponent} from "../../../shared/circular-loader/circular-loader.component";
+import {LoaderComponent} from "../../../shared/loader/loader.component";
+import {PushPipe} from "@ngrx/component";
 
 
 @Component({
   selector: 'app-home-page',
-  imports: [CommonModule, CircularLevelComponent, MatDialogModule],
+  imports: [CommonModule, CircularLevelComponent, MatDialogModule, CircularLoaderComponent, LoaderComponent, PushPipe],
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -28,9 +27,10 @@ import {LevelSelectors} from "../../../core/state/level/level.selectors";
 export class HomePageComponent implements OnInit {
   selectedValue: string = '';
   protected units$: Observable<Unit[]>;
-  protected loading$: Observable<boolean>;
+  protected loadingUnit$: Observable<boolean>;
+  protected loadingStudent$: Observable<boolean>;
+  protected loadingLevel$: Observable<boolean>;
   protected error$: Observable<string | null>;
-  protected user$!: Observable<User | null>;
   protected level$!: Observable<Level | null>;
 
   protected student$!: Observable<Student | null>
@@ -39,32 +39,20 @@ export class HomePageComponent implements OnInit {
 
   constructor(public store: Store) {
     this.units$ = this.store.select(selectAllUnits);
-    this.level$ = this.store.select(LevelSelectors.level)
-    this.loading$ = of(false);
+    this.level$ = this.store.select(LevelSelectors.levelStudent)
+    this.loadingUnit$ = of(false);
     this.error$ = of(null);
 
-    this.loading$ = this.store.select(selectUnitsLoading);
+    // Loading values
+    this.loadingStudent$ = this.store.select(StudentSelectors.loading)
+    this.loadingLevel$ = this.store.select(LevelSelectors.loading)
+    this.loadingUnit$ = this.store.select(selectUnitsLoading);
     this.error$ = this.store.select(selectUnitsError);
 
     this.student$ = this.store.select(StudentSelectors.student)
   }
 
   ngOnInit(): void {
-    // this.user$ = this.store.select(authSelectors.user);
-    // Update units' statuses based on student.unit
-    // this.units$ = combineLatest([this.store.select(selectAllUnits), this.student$]).pipe(
-    //   map(([units, student]) => {
-    //     if (!student) return units;
-    //     console.log(student)
-    //
-    //     return units.map(unit => {
-    //       if (unit.id === student.currentUnit.id) {
-    //         return {...unit, status: 'available'};
-    //       }
-    //       return {...unit, status: 'lock'};
-    //     });
-    //   })
-    // );
   }
 
   protected items: any[] = [

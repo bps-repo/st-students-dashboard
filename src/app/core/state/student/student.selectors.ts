@@ -1,12 +1,24 @@
 import {createFeatureSelector, createSelector} from "@ngrx/store";
-import {StudentState} from "./student.state";
+import {studentAdapter, StudentState} from "./student.state";
 import {STUDENT_FEATURE_KEY} from "./studentActions";
 
 
-const selectStudent = createFeatureSelector<StudentState>(STUDENT_FEATURE_KEY);
+const selectStudentState = createFeatureSelector<StudentState>(STUDENT_FEATURE_KEY);
 
 export const StudentSelectors = {
-  student: createSelector(selectStudent, state => state.student),
-  loading: createSelector(selectStudent, state => state.loading),
-  errors: createSelector(selectStudent, state => state.errors),
+  student: createSelector(selectStudentState, state => state.student),
+  loading: createSelector(selectStudentState, state => state.loading),
+  errors: createSelector(selectStudentState, state => state.errors),
 }
+
+const {
+  selectIds,
+  selectEntities,
+  selectAll,
+  selectTotal
+} = studentAdapter.getSelectors(selectStudentState);
+
+export const selectAllStudents = selectAll;
+export const selectStudentTotal = selectTotal;
+export const selectStudentEntities = selectEntities;
+export const selectStudentIds = selectIds;

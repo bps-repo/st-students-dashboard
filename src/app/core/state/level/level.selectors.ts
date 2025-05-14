@@ -1,12 +1,24 @@
 import {createFeatureSelector, createSelector} from "@ngrx/store";
-import {LevelState} from "./level.state";
+import {levelAdapter, LevelState} from "./level.state";
 import {LEVEL_FEATURE_KEY} from "./levelActions";
 
 
-const selectStudent = createFeatureSelector<LevelState>(LEVEL_FEATURE_KEY);
+const selectLevelState = createFeatureSelector<LevelState>(LEVEL_FEATURE_KEY);
 
 export const LevelSelectors = {
-  level: createSelector(selectStudent, state => state.level),
-  loading: createSelector(selectStudent, state => state.loading),
-  errors: createSelector(selectStudent, state => state.errors),
+  levelStudent: createSelector(selectLevelState, state => state.levelStudent),
+  loading: createSelector(selectLevelState, state => state.loading),
+  errors: createSelector(selectLevelState, state => state.errors),
+  levels: createSelector(selectLevelState, state => state.levels),
+  loadingLevels: createSelector(selectLevelState, state => state.loadingLevels)
 }
+
+const {
+  selectIds,
+  selectTotal,
+  selectAll
+} = levelAdapter.getSelectors(selectLevelState);
+
+export const selectAllLevels = selectAll;
+export const selectLevelTotal = selectTotal;
+export const selectLevelIds = selectIds;

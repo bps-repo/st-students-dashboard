@@ -32,58 +32,72 @@ export const routes: Routes = [
       {
         path: 'home',
         component: HomePageComponent,
+        data: {breadcrumb: 'Inicio'}
       },
       {
         path: 'lessons',
         component: LessonsComponent,
+        data: {breadcrumb: 'Cursos'}
       },
       {
         path: 'lessons/:id',
         component: LessonDetailComponent,
+        data: {breadcrumb: 'Detalhe do Curso'}
       },
       {
         path: 'video-lessons',
         component: VideoCoursesComponent,
+        data: {breadcrumb: 'Video Cursos'}
       },
       {
         path: 'video-lessons-list',
         component: VideoCourseListComponent,
+        data: {breadcrumb: 'Lista de Video Cursos'}
       },
       {
         path: 'profile',
         component: ProfileComponent,
+        data: {breadcrumb: 'Perfil'}
       },
       {
         path: 'teachers',
         component: TeachersComponent,
+        data: {breadcrumb: 'Professores'}
       },
       {
         path: 'calendar',
         component: CalendarComponent,
+        data: {breadcrumb: 'Calendário'}
       },
       {
         path: 'events',
         component: EventsComponent,
+        data: {breadcrumb: 'Eventos'}
       },
       {
         path: 'certificates',
         component: CerticatesComponent,
+        data: {breadcrumb: 'Certificados'}
       },
       {
         path: 'change-password',
         component: ChangePasswordComponent,
+        data: {breadcrumb: 'Mudar Senha'}
       },
       {
         path: 'support',
         component: SupportComponent,
+        data: {breadcrumb: 'Suporte'}
       },
       {
         path: 'lessons/materials',
         component: MaterialsComponent,
+        data: {breadcrumb: 'Materiais'}
       },
       {
         path: 'lessons/materials/:id',
         component: MaterialDetailComponent,
+        data: {breadcrumb: 'Detalhe do Material'}
       },
     ]
   },

@@ -41,7 +41,7 @@
         </div>
         <div>
           <h3 class="text-sm font-medium opacity-80">Níveis</h3>
-          <p class="text-2xl font-bold">5</p>
+          <p class="text-2xl font-bold">{{ (levels$ | async)?.length }}</p>
         </div>
       </div>
       <div class="flex items-center justify-between mt-2">
@@ -71,36 +71,19 @@
   </div>
 
   <!--  Video Section -->
-  <section class="mb-10">
+  <app-circular-loader *ngIf="(loader$ | async)" size="sm" [color]="'secondary'"></app-circular-loader>
+
+  <section *ngIf="!(loader$ | async)" class="mb-10">
     <!-- Courses Section -->
     <section>
       <div class="flex items-center justify-between mb-4">
         <h2 class="text-xl font-bold text-neutral-800">Níveis</h2>
-        <!--        <a href="#" class="text-accent-600 hover:text-accent-700 flex items-center text-sm font-medium">-->
-        <!--          Ver todos-->
-        <!--          <i class="pi pi-arrow-right ml-1"></i>-->
-        <!--        </a>-->
       </div>
 
+
       <div class="bg-white rounded-xl p-4 shadow-md">
-        <app-card-slider [items]="levels" [index]="0"/>
+        <app-card-slider [items]="(levels$ | async)!" [index]="0"/>
       </div>
     </section>
   </section>
-
-  <!-- Complementary Materials Section -->
-  <!--  <section class="mb-10">-->
-  <!--    <div class="flex items-center justify-between mb-4">-->
-  <!--      <h2 class="text-xl font-bold text-neutral-800">Materiais Complementares</h2>-->
-  <!--      <a href="#" class="text-accent-600 hover:text-accent-700 flex items-center text-sm font-medium">-->
-  <!--        Ver todos-->
-  <!--        <i class="pi pi-arrow-right ml-1"></i>-->
-  <!--      </a>-->
-  <!--    </div>-->
-
-  <!--    <div class="bg-white rounded-xl p-4 shadow-md">-->
-  <!--      <app-card-slider [items]="contents" [index]="0"/>-->
-  <!--    </div>-->
-  <!--  </section>-->
-
 </div>

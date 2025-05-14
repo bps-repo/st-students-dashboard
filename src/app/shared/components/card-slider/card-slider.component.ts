@@ -13,6 +13,7 @@ import {NgbCarouselModule} from '@ng-bootstrap/ng-bootstrap';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {Course} from "../../../@types/course";
 import {RouterLink} from "@angular/router";
+import {Level} from "../../../core/models/Level";
 
 /**
  * Modern Card Slider Component
@@ -27,7 +28,7 @@ import {RouterLink} from "@angular/router";
 })
 export class CardSliderComponent implements OnInit, AfterViewInit {
   @Input() index = 0;
-  @Input() items: Course[] = [];
+  @Input() items: Level[] = [];
   @ViewChild('scrollContainer') scrollContainer!: ElementRef<HTMLDivElement>;
 
   canScrollLeft = false;
@@ -103,20 +104,39 @@ export class CardSliderComponent implements OnInit, AfterViewInit {
     if (!color) {
       return 'from-primary-600 to-primary-500'; // Default gradient if color is undefined
     }
-
     switch (color) {
-      case 'primary':
+      case 'Beginner':
         return 'from-primary-600 to-primary-500';
-      case 'secondary':
+      case 'Intermediate':
         return 'from-secondary-600 to-secondary-500';
-      case 'accent':
+      case 'Advanced':
         return 'from-accent-600 to-accent-500';
-      case 'success':
+      case 'Pre-Intermediate':
         return 'from-success-700 to-success-500';
-      case 'warning':
+      case 'Elementary':
         return 'from-warning-700 to-warning-500';
       default:
         return 'from-primary-600 to-primary-500';
+    }
+  }
+
+  getLevelColor(color: string | undefined): string {
+    if (!color) {
+      return 'from-primary-600 to-primary-500'; // Default gradient if color is undefined
+    }
+    switch (color) {
+      case 'Elementary':
+        return 'primary';
+      case 'Intermediate':
+        return 'secondary';
+      case 'Advanced':
+        return 'accent';
+      case 'Pre-Intermediate':
+        return 'success';
+      case 'Upper-Intermediate':
+        return 'warning';
+      default:
+        return 'primary';
     }
   }
 }

@@ -60,7 +60,7 @@ export const LEVELS = [
   {
     label: 'Upper Intermedidate',
     image: '/courses/course_orange.png',
-    color: 'warning',
+    color: 'warn-ing',
     type: 'course',
   },
   {
