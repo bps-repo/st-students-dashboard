@@ -24,4 +24,10 @@ export class LevelService {
       map((r) => r.data as Level)
     )
   }
+
+  getLevels(): Observable<Level[]> {
+    return this.http.get<ApiResponse<Level[]>>(this.baseUrl).pipe(
+      map((r) => r.data as Level[])
+    )
+  }
 }

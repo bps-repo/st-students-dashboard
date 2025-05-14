@@ -1,12 +1,13 @@
 import {Component, Input} from '@angular/core';
 import {Observable, of} from "rxjs";
-import {AsyncPipe, NgIf} from "@angular/common";
+import { NgIf} from "@angular/common";
+import {PushPipe} from "@ngrx/component";
 
 @Component({
   selector: 'app-loader',
   imports: [
     NgIf,
-    AsyncPipe
+    PushPipe
   ],
   templateUrl: './loader.component.html',
 })

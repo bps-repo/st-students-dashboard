@@ -59,13 +59,13 @@ export class CircularLoaderComponent {
   get colorClass(): string {
     switch (this.color) {
       case 'primary':
-        return 'border-blue-500';
+        return 'border-primary-500';
       case 'secondary':
-        return 'border-gray-500';
+        return 'border-secondary-500';
       case 'success':
-        return 'border-green-500';
+        return 'border-success-500';
       case 'danger':
-        return 'border-red-500';
+        return 'border-secondary-500';
       case 'warning':
         return 'border-yellow-500';
       case 'info':

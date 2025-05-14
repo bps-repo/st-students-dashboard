@@ -4,7 +4,9 @@ import {Level} from "../../models/Level";
 export interface LevelState extends EntityState<Level> {
   errors: any,
   loading: boolean,
-  level: Level | null,
+  loadingLevels: boolean,
+  levelStudent: Level | null,
+  levels: Level[]
 }
 
 export const levelAdapter: EntityAdapter<Level> = createEntityAdapter<Level>
@@ -16,6 +18,8 @@ export const levelAdapter: EntityAdapter<Level> = createEntityAdapter<Level>
 export const initialState: LevelState = levelAdapter.getInitialState({
     errors: null,
     loading: false,
-    level: null,
+    levelStudent: null,
+    loadingLevels: false,
+    levels: []
   }
 )

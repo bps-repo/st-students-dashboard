@@ -14,11 +14,12 @@ import {Level} from "../../../core/models/Level";
 import {LevelSelectors} from "../../../core/state/level/level.selectors";
 import {CircularLoaderComponent} from "../../../shared/circular-loader/circular-loader.component";
 import {LoaderComponent} from "../../../shared/loader/loader.component";
+import {PushPipe} from "@ngrx/component";
 
 
 @Component({
   selector: 'app-home-page',
-  imports: [CommonModule, CircularLevelComponent, MatDialogModule, CircularLoaderComponent, LoaderComponent],
+  imports: [CommonModule, CircularLevelComponent, MatDialogModule, CircularLoaderComponent, LoaderComponent, PushPipe],
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -38,7 +39,7 @@ export class HomePageComponent implements OnInit {
 
   constructor(public store: Store) {
     this.units$ = this.store.select(selectAllUnits);
-    this.level$ = this.store.select(LevelSelectors.level)
+    this.level$ = this.store.select(LevelSelectors.levelStudent)
     this.loadingUnit$ = of(false);
     this.error$ = of(null);
 

@@ -42,7 +42,7 @@ export class StudentEffects {
         tap(() => {
           // Load related data when student is successfully loaded
           this.store.dispatch(UnitsActions.loadUnits());
-          this.store.dispatch(LevelActions.loadLevel());
+          this.store.dispatch(LevelActions.loadStudentLevel());
         })
       ),
     {dispatch: false}

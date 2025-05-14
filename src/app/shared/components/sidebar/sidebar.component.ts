@@ -28,7 +28,7 @@ export class SidebarComponent implements OnInit {
   isNavBarOpened = signal(false);
 
   constructor(private localStorageService: LocalstorageService, private store$: Store<any>) {
-    this.level$ = store$.select(LevelSelectors.level);
+    this.level$ = store$.select(LevelSelectors.levelStudent);
     this.loading$ = store$.select(LevelSelectors.loading);
   }
 

@@ -15,21 +15,21 @@ export class LevelEffects {
   store$ = inject(Store)
   levelService = inject(LevelService)
 
-  loadStudent$ = createEffect(() => {
+  loadStudentLevel$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(LevelActions.loadLevel),
+      ofType(LevelActions.loadStudentLevel),
       exhaustMap(() =>
         this.levelService.getLevelById().pipe(
-          map((level) => LevelActions.loadLevelSuccess({level})),
-          catchError((e) => of(LevelActions.loadLevelFailure({errors: e})))
+          map((level) => LevelActions.loadStudentLevelSuccess({levelStudent: level})),
+          catchError((e) => of(LevelActions.loadStudentLevelFailure({errors: e})))
         )
       )
     )
   })
 
-  loadStudentSuccess = createEffect(() => {
+  loadStudentLevelSuccess = createEffect(() => {
     return this.actions$.pipe(
-      ofType(LevelActions.loadLevelSuccess),
+      ofType(LevelActions.loadStudentLevelSuccess),
       tap(() => {
         // any action
       })
@@ -37,12 +37,25 @@ export class LevelEffects {
   }, {dispatch: false})
 
 
-  loadStudentFailure = createEffect(() => {
+  loadStudentLevelFailure = createEffect(() => {
     return this.actions$.pipe(
-      ofType(LevelActions.loadLevelFailure),
+      ofType(LevelActions.loadStudentLevelFailure),
       tap(() => {
         //any action
       })
     )
   }, {dispatch: false})
+
+
+  loadLevels$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(LevelActions.loadLevels),
+      exhaustMap(() =>
+        this.levelService.getLevels().pipe(
+          map((levels) => LevelActions.loadLevelsSuccess({levels})),
+          catchError((e) => of(LevelActions.loadLevelsFailed({errors: e})))
+        )
+      )
+    )
+  })
 }

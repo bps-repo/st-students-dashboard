@@ -6,19 +6,19 @@ export const levelFeature = createFeature({
   name: LEVEL_FEATURE_KEY,
   reducer: createReducer(
     initialState,
-    on(LevelActions.loadLevel, (state) => ({
+    on(LevelActions.loadStudentLevel, (state) => ({
       ...state,
       errors: null,
       loading: true,
     })),
-    on(LevelActions.loadLevelSuccess, (state, {level}) => ({
+    on(LevelActions.loadStudentLevelSuccess, (state, {levelStudent}) => ({
         ...state,
-        level,
+        levelStudent,
         loading: false,
         errors: null,
       }
     )),
-    on(LevelActions.loadLevelFailure, (state, {errors}) => ({
+    on(LevelActions.loadStudentLevelFailure, (state, {errors}) => ({
       ...state,
       errors,
       loading: false
@@ -28,6 +28,26 @@ export const levelFeature = createFeature({
       student: null,
       loading: false,
       errors: null,
+      levels: [],
+    })),
+
+
+    // Levels State
+    on(LevelActions.loadLevels, (state, level) => ({
+      ...state,
+      loadingLevels: true,
+      errors: null,
+    })),
+    on(LevelActions.loadLevelsSuccess, (state, {levels}) => ({
+      ...state,
+      levels,
+      loadingLevels: false,
+      errors: null,
+    })),
+    on(LevelActions.loadStudentLevelFailure, (state, {errors}) => ({
+      ...state,
+      errors,
+      loadingLevels: false
     }))
   )
 })

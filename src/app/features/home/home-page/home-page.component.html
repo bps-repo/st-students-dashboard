@@ -1,13 +1,14 @@
 <!-- Modern Home Page Component -->
 
-<app-circular-loader class="m-10" *ngIf="loadingStudent$ | async" [color]="'primary'" [size]="'sm'"></app-circular-loader>
+<app-circular-loader class="m-10" *ngIf="loadingStudent$ | ngrxPush" [color]="'primary'"
+                     [size]="'sm'"></app-circular-loader>
 
-<div *ngIf="!(loadingStudent$ | async)" class="px-8 py-6 bg-background-light font-heading">
+<div *ngIf="!(loadingStudent$ | ngrxPush)" class="px-8 py-6 bg-background-light font-heading">
   <!-- Header Section with Welcome Message and Search -->
   <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
     <div class="mb-4 md:mb-0">
       <h1 class="text-3xl font-bold text-primary-700 flex items-center">
-        Seja Bem-Vindo, <span class="text-primary-500 font-bold ml-2">{{ (student$ | async)?.userFirstName }}</span>
+        Seja Bem-Vindo, <span class="text-primary-500 font-bold ml-2">{{ (student$ | ngrxPush)?.userFirstName }}</span>
         <span class="ml-2 animate-pulse">👋</span>
       </h1>
       <p class="text-neutral-600 mt-1">Vamos continuar de onde paramos?</p>
@@ -26,7 +27,7 @@
 
   <!-- Level and Progress Section -->
   <app-loader [loading]="loadingLevel$" [label]="'Carregando nível...'"></app-loader>
-  <div *ngIf="!(loadingLevel$ | async)" class="bg-white rounded-xl p-6 shadow-md mb-8">
+  <div *ngIf="!(loadingLevel$ | ngrxPush)" class="bg-white rounded-xl p-6 shadow-md mb-8">
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
       <div class="flex items-center mb-4 md:mb-0">
         <div class="p-3 bg-gradient-to-r from-primary-600 to-primary-500 rounded-xl text-white shadow-md mr-4">
@@ -37,7 +38,7 @@
             <h2 class="text-xl font-bold text-neutral-800">Nível</h2>
             <div
               class="ml-3 bg-primary-100 text-primary-700 px-4 py-1 rounded-lg font-semibold flex items-center cursor-pointer hover:bg-primary-200 transition-all">
-              <span>{{ (level$ | async)?.name }}</span>
+              <span>{{ (level$ | ngrxPush)?.name }}</span>
               <i class="pi pi-chevron-down ml-2"></i>
             </div>
           </div>
@@ -78,13 +79,13 @@
       <app-loader [loading]="loadingUnit$" [label]="'Carregando unidades...'"></app-loader>
 
       <!-- Error State -->
-      <div *ngIf="(error$ | async) && !(loadingUnit$ | async)" class="bg-white rounded-xl shadow-md p-6">
+      <div *ngIf="(error$ | ngrxPush) && !(loadingUnit$ | ngrxPush)" class="bg-white rounded-xl shadow-md p-6">
         <div class="flex flex-col items-center text-center">
           <div class="rounded-full bg-red-100 p-4 mb-4">
             <i class="pi pi-exclamation-triangle text-red-500 text-2xl"></i>
           </div>
           <h3 class="text-lg font-bold text-neutral-800 mb-2">Erro ao carregar unidades</h3>
-          <p class="text-neutral-600 mb-4">{{ error$ | async }}</p>
+          <p class="text-neutral-600 mb-4">{{ error$ | ngrxPush }}</p>
           <button
             (click)="store.dispatch(loadUnits())"
             class="px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-all"
@@ -95,10 +96,11 @@
       </div>
 
       <!-- Units Cards -->
-      <div *ngIf="!(loadingUnit$ | async) && !(error$ | async)" class="bg-white rounded-xl shadow-md overflow-hidden">
+      <div *ngIf="!(loadingUnit$ | ngrxPush) && !(error$ | ngrxPush)"
+           class="bg-white rounded-xl shadow-md overflow-hidden">
         <div class="divide-y divide-neutral-100">
           <div
-            *ngFor="let item of units$ | async; let i = index"
+            *ngFor="let item of units$ | ngrxPush; let i = index"
             (click)="onClick(modalContent, 'l', item)"
             class="p-6 hover:bg-neutral-50 transition-all cursor-pointer"
           >
@@ -205,7 +207,7 @@
           </h4>
 
           <div class="space-y-3">
-            <div *ngFor="let item of units$ | async; let i = index"
+            <div *ngFor="let item of units$ | ngrxPush; let i = index"
                  class="bg-neutral-50 rounded-lg p-3 hover:shadow-md transition-all">
               <div class="flex justify-between items-start">
                 <div>
