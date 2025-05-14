@@ -8,10 +8,13 @@ import {UserToken} from "../../../core/models/userToken";
 import {authSelectors} from "../../../core/state/auth/auth.selectors";
 import {Student} from "../../../core/models/Student";
 import {StudentSelectors} from "../../../core/state/student/student.selectors";
+import {BreadcrumbComponent} from "../../breadcrumb/breadcrumb.component";
+
+
 
 @Component({
   selector: 'app-header',
-  imports: [OverlayComponent, CommonModule],
+  imports: [OverlayComponent, CommonModule, BreadcrumbComponent],
   templateUrl: './header.component.html'
 })
 export class HeaderComponent implements OnInit {
