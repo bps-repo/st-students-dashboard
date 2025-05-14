@@ -1,6 +1,6 @@
 <!-- Modern Home Page Component -->
 
-<app-circular-loader *ngIf="loadingStudent$ | async" [color]="'primary'" [size]="'sm'"></app-circular-loader>
+<app-circular-loader class="m-10" *ngIf="loadingStudent$ | async" [color]="'primary'" [size]="'sm'"></app-circular-loader>
 
 <div *ngIf="!(loadingStudent$ | async)" class="px-8 py-6 bg-background-light font-heading">
   <!-- Header Section with Welcome Message and Search -->

@@ -23,11 +23,13 @@ interface navLink {
   templateUrl: './sidebar.component.html'
 })
 export class SidebarComponent implements OnInit {
+  loading$!: Observable<boolean>
   level$!: Observable<Level | null>
   isNavBarOpened = signal(false);
 
   constructor(private localStorageService: LocalstorageService, private store$: Store<any>) {
     this.level$ = store$.select(LevelSelectors.level);
+    this.loading$ = store$.select(LevelSelectors.loading);
   }
 
   navLinks: navLink[] = [
