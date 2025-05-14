@@ -21,32 +21,32 @@
     >
       <span
         class="flex justify-center text-white font-bold items-center w-4 h-4 bg-primary-600 clip-hexagon2 rounded-full p-4"
-        >C1</span
+      >C1</span
       >
-      C1 - Advanced
+      {{ (level$ | async)?.name }}
     </h1>
   </section>
   <nav
     class="flex flex-col gap-6 font-medium text-[16px] cursor-pointer"
   >
     @for (navLink of navLinks; track $index) {
-    <a
-      (click)="setActiveTab(navLink)"
-      [routerLink]="[navLink.path]"
-      [routerLinkActive]="['active']"
-      [ngClass]="{
+      <a
+        (click)="setActiveTab(navLink)"
+        [routerLink]="[navLink.path]"
+        [routerLinkActive]="['active']"
+        [ngClass]="{
         'text-primary-700 bg-primary-100 rounded-md px-2 py-1': navLink.active,
         'text-neutral-700': !navLink.active
       }"
-      class="hover:text-primary-600 hover:bg-primary-50 active:text-primary-700 transition-all flex flex-row gap-4 px-2 py-1 rounded-md"
-    >
-      <i class="{{ navLink.icon }} text-[28px]" [ngClass]="{'text-primary-600': navLink.active}"></i>
-      <span
-        *ngIf="!isNavBarOpened()"
-        class="font-heading text-[17px] font-bold"
-        >{{ navLink.label }}</span
+        class="hover:text-primary-600 hover:bg-primary-50 active:text-primary-700 transition-all flex flex-row gap-4 px-2 py-1 rounded-md"
       >
-    </a>
+        <i class="{{ navLink.icon }} text-[28px]" [ngClass]="{'text-primary-600': navLink.active}"></i>
+        <span
+          *ngIf="!isNavBarOpened()"
+          class="font-heading text-[17px] font-bold"
+        >{{ navLink.label }}</span
+        >
+      </a>
     }
   </nav>
   <div
