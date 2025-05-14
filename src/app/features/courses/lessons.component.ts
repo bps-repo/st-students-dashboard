@@ -7,7 +7,7 @@ import {Store} from "@ngrx/store";
 import {LevelActions} from "../../core/state/level/levelActions";
 import {Observable} from "rxjs";
 import {Level} from "../../core/models/Level";
-import {LevelSelectors} from "../../core/state/level/level.selectors";
+import {LevelSelectors, selectLevelTotal} from "../../core/state/level/level.selectors";
 import {PushPipe} from "@ngrx/component";
 import {LoaderComponent} from "../../shared/loader/loader.component";
 import {CircularLoaderComponent} from "../../shared/circular-loader/circular-loader.component";
@@ -20,6 +20,7 @@ import {CircularLoaderComponent} from "../../shared/circular-loader/circular-loa
 export class LessonsComponent implements OnInit {
   levels$!: Observable<Level[]>
   loader$!: Observable<boolean>
+  levelTotal!: Observable<number>
 
   protected readonly contents: Course[] = COURSES
 
@@ -28,6 +29,7 @@ export class LessonsComponent implements OnInit {
   protected readonly videos: any[] = VIDEOS
 
   constructor(private store$: Store) {
+    this.levelTotal = this.store$.select(selectLevelTotal)
     this.levels$ = this.store$.select(LevelSelectors.levels)
     this.loader$ = this.store$.select(LevelSelectors.loadingLevels)
   }
