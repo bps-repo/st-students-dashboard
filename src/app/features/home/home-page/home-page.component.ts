@@ -1,7 +1,7 @@
 import {Component, inject, OnInit, TemplateRef} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {ChangeDetectionStrategy} from '@angular/core';
-import {MatDialog, MatDialogModule} from '@angular/material/dialog';
+import {MatDialog, MatDialogModule, MatDialogRef} from '@angular/material/dialog';
 import {Observable, of} from 'rxjs';
 import {Store} from '@ngrx/store';
 import {CircularLevelComponent} from "../../../shared/components/circular-level/circular-level.component";
@@ -15,11 +15,12 @@ import {LevelSelectors} from "../../../core/state/level/level.selectors";
 import {CircularLoaderComponent} from "../../../shared/circular-loader/circular-loader.component";
 import {LoaderComponent} from "../../../shared/loader/loader.component";
 import {PushPipe} from "@ngrx/component";
+import {RouterModule} from "@angular/router";
 
 
 @Component({
   selector: 'app-home-page',
-  imports: [CommonModule, CircularLevelComponent, MatDialogModule, CircularLoaderComponent, LoaderComponent, PushPipe],
+  imports: [CommonModule, MatDialogModule, CircularLoaderComponent, LoaderComponent, PushPipe, RouterModule],
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -93,42 +94,6 @@ export class HomePageComponent implements OnInit {
       status: 'lock',
     },
   ];
-
-  protected onClick(
-    modalContent: TemplateRef<any>,
-    width?: string,
-    unit?: Unit
-  ): void {
-    let modalWidth: string;
-
-    if (unit?.status === 'lock') {
-      return
-    }
-
-    // Convert size codes to responsive widths
-    if (width === 'l') {
-      modalWidth = '90vw';
-      // Set a max-width to prevent the modal from becoming too wide on large screens
-      const dialogRef = this.dialog.open(modalContent, {
-        width: modalWidth,
-        maxWidth: '800px',
-        // Add responsive settings
-        autoFocus: false,
-        restoreFocus: false,
-        panelClass: 'responsive-dialog'
-      });
-    } else {
-      // Default size with responsive behavior
-      modalWidth = width || '90vw';
-      const dialogRef = this.dialog.open(modalContent, {
-        width: modalWidth,
-        maxWidth: '500px',
-        autoFocus: false,
-        restoreFocus: false,
-        panelClass: 'responsive-dialog'
-      });
-    }
-  }
 
   handleSelection(event: string) {
     this.selectedValue = event;

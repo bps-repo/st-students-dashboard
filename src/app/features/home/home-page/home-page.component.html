@@ -101,10 +101,9 @@
         <div class="divide-y divide-neutral-100">
           <div
             *ngFor="let item of units$ | ngrxPush; let i = index"
-            (click)="onClick(modalContent, 'l', item)"
             class="p-6 hover:bg-neutral-50 transition-all cursor-pointer"
           >
-            <div class="flex items-center">
+            <a routerLink="/units/{{item.id}}}" class="flex items-center">
               <!-- Status Circle -->
               <div
                 [ngClass]="
@@ -167,7 +166,7 @@
 
               <!-- Arrow -->
               <i *ngIf="item.status === 'available'" class="pi pi-chevron-right text-neutral-400 ml-2"></i>
-            </div>
+            </a>
           </div>
         </div>
       </div>
@@ -293,118 +292,3 @@
     </div>
   </div>
 </div>
-
-<!-- Modern Modal Component -->
-<ng-template #modalContent let-observer>
-  <div class="p-4 sm:p-6 w-full bg-white rounded-xl overflow-y-auto max-h-[90vh]">
-    <!-- Modal Header with Close Button -->
-    <div class="flex justify-between items-center mb-4 sm:mb-6">
-      <h2 class="text-xl sm:text-2xl font-bold text-primary-700">Detalhes do Nível</h2>
-      <button
-        class="text-neutral-500 hover:text-neutral-700 p-2 rounded-full hover:bg-neutral-100 transition-all"
-        (click)="observer.complete()"
-      >
-        <i class="pi pi-times"></i>
-      </button>
-    </div>
-
-    <!-- Level Header -->
-    <div class="bg-gradient-to-r from-primary-600 to-primary-500 text-white p-4 sm:p-5 rounded-xl mb-4 sm:mb-6">
-      <div class="flex flex-col sm:flex-row items-start sm:items-center">
-        <div class="bg-white bg-opacity-20 rounded-xl p-3 sm:p-4 mb-3 sm:mb-0 sm:mr-4">
-          <app-circular-level label="C1" size="20"/>
-        </div>
-        <div class="w-full">
-          <h3 class="text-lg sm:text-xl font-medium mb-1">Advanced</h3>
-          <p class="text-xl sm:text-2xl font-bold">14 aulas, 3 exercícios nesta unidade</p>
-
-          <!-- Progress Bar -->
-          <div class="w-full bg-white bg-opacity-20 rounded-full h-2 mt-3">
-            <div class="bg-white h-2 rounded-full relative" style="width: 50%">
-              <div class="absolute -right-1 -top-1 bg-white w-4 h-4 rounded-full shadow-sm"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Levels Grid - Responsive grid that adapts to screen size -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-      <!-- Level Items -->
-      <div
-        *ngFor="let item of items"
-        class="bg-white border border-neutral-200 rounded-xl p-3 sm:p-4 hover:shadow-md transition-all"
-      >
-        <div class="flex flex-col sm:flex-row sm:items-center">
-          <!-- Level Icon -->
-          <div
-            [ngClass]="
-              item.status == 'done'
-                ? 'bg-gradient-to-r from-success-600 to-success-500'
-                : item.status == 'lock'
-                ? 'bg-neutral-300'
-                : 'bg-gradient-to-r from-primary-600 to-primary-500'
-            "
-            class="rounded-lg p-3 text-white mb-3 sm:mb-0 sm:mr-4 self-start"
-          >
-            <app-circular-level
-              label="{{ item.label }}"
-              status="{{ item.status }}"
-              size="16"
-            />
-          </div>
-
-          <!-- Level Content -->
-          <div class="flex-grow">
-            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center">
-              <h4 class="font-bold text-base sm:text-lg text-neutral-800 mb-1 sm:mb-0">{{ item.title }}</h4>
-              <span
-                [ngClass]="
-                  item.status == 'done'
-                    ? 'bg-success-100 text-success-700'
-                    : item.status == 'lock'
-                    ? 'bg-neutral-100 text-neutral-500'
-                    : 'bg-primary-100 text-primary-700'
-                "
-                class="text-xs px-2 py-1 rounded-full font-medium self-start sm:self-auto"
-              >
-                {{ item.status == 'done' ? 'Concluído' : item.status == 'lock' ? 'Bloqueado' : 'Em andamento' }}
-              </span>
-            </div>
-            <p class="text-neutral-600 mt-1 text-sm sm:text-base">{{ item.description }}</p>
-
-            <!-- Progress Bar -->
-            <div class="w-full bg-neutral-200 rounded-full h-1.5 mt-3">
-              <div
-                [ngClass]="
-                  item.status == 'done'
-                    ? 'bg-success-500'
-                    : item.status == 'lock'
-                    ? 'bg-neutral-400'
-                    : 'bg-primary-500'
-                "
-                class="h-1.5 rounded-full"
-                [style.width]="item.status == 'done' ? '100%' : item.status == 'lock' ? '0%' : '50%'"
-              ></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Action Buttons -->
-    <div class="flex flex-col sm:flex-row sm:justify-end mt-6 space-y-2 sm:space-y-0 sm:space-x-4">
-      <button
-        class="w-full sm:w-auto px-4 py-2 border border-neutral-300 rounded-lg text-neutral-700 hover:bg-neutral-50 transition-all order-2 sm:order-1"
-        (click)="observer.complete()"
-      >
-        Fechar
-      </button>
-      <button
-        class="w-full sm:w-auto px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-all order-1 sm:order-2"
-      >
-        Ver Detalhes
-      </button>
-    </div>
-  </div>
-</ng-template>

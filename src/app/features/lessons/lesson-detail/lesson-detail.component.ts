@@ -14,7 +14,7 @@ import {Material} from "../../../@types/material";
  * and a modern, responsive design.
  */
 @Component({
-  selector: 'app-lesson-detail',
+  selector: 'app-unit-detail',
   imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './lesson-detail.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
