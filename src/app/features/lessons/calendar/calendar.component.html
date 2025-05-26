@@ -15,10 +15,12 @@
       </div>
     </div>
 
+    <app-circular-loader *ngIf="(isLoading$ | async)" size="sm" [color]="'secondary'"></app-circular-loader>
+
     <!-- Weekly Schedule Grid -->
-    <div class="weekly-schedule">
+    <div *ngIf="!(isLoading$ | async)" class="weekly-schedule">
       <!-- Days of Week Header with Dates -->
-      <div class="grid grid-cols-[60px_1fr_1fr_1fr_1fr_1fr] gap-0">
+      <div class="grid grid-cols-[60px_1fr_1fr_1fr_1fr_1fr_1fr] gap-0">
         <!-- Narrower empty cell for time column -->
         <div class="text-center py-2"></div>
 
@@ -35,7 +37,7 @@
       </div>
 
       <!-- Schedule Grid with Hours -->
-      <div class="grid grid-cols-[60px_1fr_1fr_1fr_1fr_1fr] gap-0">
+      <div class="grid grid-cols-[60px_1fr_1fr_1fr_1fr_1fr_1fr] gap-0">
         <!-- Narrower Time Column -->
         <div class="relative" [style.height.px]="getScheduleHeight()">
           <!-- Hour Labels -->
@@ -76,11 +78,11 @@
             <div class="text-xs text-light font-medium">{{ getEventTimeString(event) }}</div>
             <div class="text-xs text-light font-medium flex items-center">
               <i class="pi pi-user mr-1 text-[10px]"></i>
-              {{ event.teacherId }}
+              {{ 'Professor' }}
             </div>
             <div *ngIf="event.centerId" class="text-xs text-light flex items-center">
               <i class="pi pi-home mr-1 text-primary text-[10px]"></i>
-              {{ event.centerId }}
+              {{ 'sala' }}
             </div>
 
             <!-- Hover Card -->
@@ -89,7 +91,7 @@
             >
               <div class="text-sm font-semibold mb-1">{{ event.title }}</div>
               <div class="text-xs mb-1">
-                <span class="font-semibold">Professor:</span> {{ event.teacherId }}
+                <span class="font-semibold">Professor:</span> {{ 'professor' }}
               </div>
               <div class="text-xs mb-1">
                 <span class="font-semibold">Hora:</span> {{ getEventTimeString(event) }}
@@ -99,7 +101,7 @@
                 <span class="font-semibold">Link:</span> clique aqui
               </a>
               <div *ngIf="event.centerId" class="text-xs">
-                <span class="font-semibold">Sala:</span> {{ event.centerId }}
+                <span class="font-semibold">Sala:</span> {{ 'sala' }}
               </div>
               <div *ngIf="event.title" class="text-xs text-neutral-600 mt-2">
                 {{ event.title }}
