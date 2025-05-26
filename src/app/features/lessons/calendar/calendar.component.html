@@ -15,10 +15,11 @@
       </div>
     </div>
 
-    <app-circular-loader *ngIf="(isLoading$ | async)" size="sm" [color]="'secondary'"></app-circular-loader>
+    <app-circular-loader *ngIf="((isLoading$) | async)" size="sm"
+                         [color]="'secondary'"></app-circular-loader>
 
     <!-- Weekly Schedule Grid -->
-    <div *ngIf="!(isLoading$ | async)" class="weekly-schedule">
+    <div *ngIf="!((isLoading$) | async)" class="weekly-schedule">
       <!-- Days of Week Header with Dates -->
       <div class="grid grid-cols-[60px_1fr_1fr_1fr_1fr_1fr_1fr] gap-0">
         <!-- Narrower empty cell for time column -->

@@ -8,6 +8,7 @@ import {LessonSchedule} from "../../../core/models/LessonSchedule";
 import {Observable, of} from "rxjs";
 import {LoaderComponent} from "../../../shared/loader/loader.component";
 import {CircularLoaderComponent} from "../../../shared/circular-loader/circular-loader.component";
+import {StudentSelectors} from "../../../core/state/student/student.selectors";
 
 interface CalendarDay {
   date: Date;
@@ -30,6 +31,7 @@ export class CalendarComponent implements OnInit {
   protected lessons$!: LessonSchedule[];
 
   isLoading$: Observable<boolean> = of(false)
+  isLoadingStudent: boolean = false
 
   errors$: Observable<any> = of(null)
 
@@ -59,13 +61,19 @@ export class CalendarComponent implements OnInit {
 
     this.isLoading$ = store$.select(LessonsSelectors.selectLessonsLoading)
 
+    store$.select(StudentSelectors.loading).subscribe(
+      (loading) => {
+        this.isLoadingStudent = loading;
+      }
+    )
+
     this.currentMonth = this.currentDate.getMonth();
     this.currentYear = this.currentDate.getFullYear();
     this.initializeWeekStartDate();
   }
 
   ngOnInit(): void {
-    this.store$.dispatch(LessonsActions.loadLessons())
+    this.store$.dispatch(LessonsActions.loadLessons());
     this.generateCalendarDays();
     this.loadEvents();
   }
@@ -153,6 +161,9 @@ export class CalendarComponent implements OnInit {
 
   // Load events for the current week
   loadEvents(): void {
+    if (!this.lessons$ || this.lessons$.length === 0) {
+      return;
+    }
 
     // Get the end date of the week (Saturday)
     const weekEndDate = new Date(this.weekStartDate);
