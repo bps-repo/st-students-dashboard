@@ -1,11 +1,9 @@
-import {Component, inject, OnInit, TemplateRef} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {ChangeDetectionStrategy} from '@angular/core';
-import {MatDialog, MatDialogModule, MatDialogRef} from '@angular/material/dialog';
-import {Observable, of} from 'rxjs';
+import {MatDialog, MatDialogModule} from '@angular/material/dialog';
+import {combineLatest, map, Observable, of} from 'rxjs';
 import {Store} from '@ngrx/store';
-import {CircularLevelComponent} from "../../../shared/components/circular-level/circular-level.component";
-import {Unit} from "../../../core/models/Unit";
+import {Unit, UnitStatus} from "../../../core/models/Unit";
 import {selectAllUnits, selectUnitsError, selectUnitsLoading} from "../../../core/state/units/units.selectors";
 import {UnitsActions} from "../../../core/state/units/units.actions";
 import {Student} from "../../../core/models/Student";
@@ -15,7 +13,7 @@ import {LevelSelectors} from "../../../core/state/level/level.selectors";
 import {CircularLoaderComponent} from "../../../shared/circular-loader/circular-loader.component";
 import {LoaderComponent} from "../../../shared/loader/loader.component";
 import {PushPipe} from "@ngrx/component";
-import {RouterModule} from "@angular/router";
+import {Router, RouterModule} from "@angular/router";
 
 
 @Component({
@@ -38,7 +36,7 @@ export class HomePageComponent implements OnInit {
 
   private readonly dialog = inject(MatDialog);
 
-  constructor(public store: Store) {
+  constructor(public store: Store, private readonly router: Router) {
     this.units$ = this.store.select(selectAllUnits);
     this.level$ = this.store.select(LevelSelectors.levelStudent)
     this.loadingUnit$ = of(false);
@@ -51,9 +49,22 @@ export class HomePageComponent implements OnInit {
     this.error$ = this.store.select(selectUnitsError);
 
     this.student$ = this.store.select(StudentSelectors.student)
+
+    this.units$ = combineLatest([
+      this.units$,
+      this.student$
+    ]).pipe(
+      map(([units, student]) => this.updateUnitsWithStatus(units, student))
+    );
   }
 
   ngOnInit(): void {
+  }
+
+  navigateToUnit(unit: Unit) {
+    if (unit.status === UnitStatus.LOCK) return
+    this.router.navigate(['/units', unit.id]).then(r => {
+    });
   }
 
   protected items: any[] = [
@@ -95,9 +106,37 @@ export class HomePageComponent implements OnInit {
     },
   ];
 
+  private updateUnitsWithStatus(units: Unit[], student: Student | null): Unit[] {
+    if (!units || !student || !student.currentUnit) {
+      // If no student data or currentUnit, mark all as locked
+      return units.map(unit => ({
+        ...unit,
+        status: UnitStatus.LOCK
+      }));
+    }
+
+    const currentUnitId = student.currentUnit.id;
+
+    return units.map(unit => {
+      let status: UnitStatus;
+
+      if (unit.id === currentUnitId) {
+        status = UnitStatus.AVAILABLE;
+      } else {
+        status = UnitStatus.LOCK;
+      }
+      return {
+        ...unit,
+        status
+      };
+    });
+  }
+
   handleSelection(event: string) {
     this.selectedValue = event;
   }
 
   protected loadUnits = UnitsActions.loadUnits
+
+  protected UnitStatus = UnitStatus;
 }

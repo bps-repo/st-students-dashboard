@@ -2,10 +2,14 @@ import {ChangeDetectionStrategy, Component, signal} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {Observable, map, of} from 'rxjs';
 import {MaterialService} from '../../../core/material.service';
-import {RouterModule} from '@angular/router';
+import {ActivatedRoute, ActivatedRouteSnapshot, RouterModule} from '@angular/router';
 import {FormsModule} from '@angular/forms';
 import {MaterialType} from "../../../@types/material-type";
 import {Material} from "../../../@types/material";
+import {Store} from "@ngrx/store";
+import {Unit} from "../../../core/models/Unit";
+import {selectUnitById} from "../../../core/state/units/units.selectors";
+import {PushPipe} from "@ngrx/component";
 
 /**
  * Modern Materials Component
@@ -14,113 +18,123 @@ import {Material} from "../../../@types/material";
  * and a modern, responsive design.
  */
 @Component({
-    selector: 'app-unit-detail',
-    imports: [CommonModule, RouterModule, FormsModule],
-    templateUrl: './unit-detail.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'app-unit-detail',
+  imports: [CommonModule, RouterModule, FormsModule, PushPipe],
+  templateUrl: './unit-detail.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UnitDetailComponent {
-    // Materials data
-    protected readonly materials$!: Observable<Material[]>;
-    protected filteredMaterials$!: Observable<Material[]>;
+  // Materials data
+  protected readonly materials$!: Observable<Material[]>;
+  protected filteredMaterials$!: Observable<Material[]>;
 
-    protected subMenus = [
-        {
-            label: "Aulas",
-            type: MaterialType.LESSON,
-            icon: ""
-        },
-        {
-            label: "Vídeos",
-            type: MaterialType.VIDEO,
-            icon: ""
-        },
-        {
-            label: "Quiz",
-            type: MaterialType.QUIZ,
-            icon: ""
-        }, {
-            label: "Exames",
-            type: MaterialType.EXAM,
-            icon: ""
+  protected unitId = "";
+  protected unit$?: Observable<Unit | null>
+
+  protected subMenus = [
+    {
+      label: "Aulas",
+      type: MaterialType.LESSON,
+    },
+    {
+      label: "Vídeos",
+      type: MaterialType.VIDEO,
+    },
+    {
+      label: "Quiz",
+      type: MaterialType.QUIZ,
+    }, {
+      label: "Exames",
+      type: MaterialType.EXAM,
+    }
+  ];
+
+  // Filter state
+  protected activeFilter = signal('all');
+  protected searchQuery = '';
+
+  // Map each Material Type to a prime icon string
+  protected readonly materialTypeMap: Map<MaterialType, string> = new Map([
+    [MaterialType.TEXTBOOK, 'pi pi-file-pdf'],
+    [MaterialType.VIDEO, 'pi pi-play'],
+    [MaterialType.DOCUMENTATION, 'pi pi-file-pdf'],
+    [MaterialType.QUIZ, 'pi pi-file-edit'],
+    [MaterialType.ASSIGNMENT, 'pi pi-file-edit'],
+    [MaterialType.EXAM, 'pi pi-file-edit'],
+  ]);
+
+  constructor(private readonly materialService: MaterialService, private readonly store$: Store, private readonly router: ActivatedRoute) {
+    this.materials$ = this.materialService.getMaterial();
+    this.filteredMaterials$ = this.materials$;
+
+    this.unitId = this.router.snapshot.params['id']
+
+    console.log('Unit ID:', this.unitId);
+
+
+    this.unit$ = this.store$.select(selectUnitById(this.unitId));
+
+    this.unit$.subscribe(unit => {
+      console.log('Unit:', unit);
+    });
+  }
+
+  /**
+   * Returns the appropriate icon based on the material type
+   * @param type The material type
+   * @returns The PrimeNG icon class
+   */
+  protected getMaterialIconBasedOnType(type: MaterialType): string {
+    return this.materialTypeMap.get(type) ?? 'pi pi-book';
+  }
+
+  /**
+   * Sets the active filter for materials
+   * @param filter The filter to apply ('all', 'document', 'video', 'exercise')
+   */
+  protected setFilter(filter: string): void {
+    this.activeFilter.set(filter);
+    this.applyFilters();
+  }
+
+  /**
+   * Applies the current filters to the materials
+   */
+  protected applyFilters(): void {
+    this.filteredMaterials$ = this.materials$.pipe(
+      map(materials => {
+        let filtered = materials;
+
+        // Apply type filter
+        if (this.activeFilter() !== 'all') {
+          filtered = filtered.filter(material => {
+            switch (this.activeFilter()) {
+              case MaterialType.LESSON.toString():
+                return material.type === MaterialType.TEXTBOOK ||
+                  material.type === MaterialType.DOCUMENTATION;
+              case 'video':
+                return material.type === MaterialType.VIDEO;
+              case 'exercise':
+                return material.type === MaterialType.QUIZ ||
+                  material.type === MaterialType.ASSIGNMENT ||
+                  material.type === MaterialType.EXAM;
+              default:
+                return true;
+            }
+          });
         }
-    ];
 
-    // Filter state
-    protected activeFilter = signal('all');
-    protected searchQuery = '';
+        // Apply search filter if there's a query
+        if (this.searchQuery.trim()) {
+          const query = this.searchQuery.toLowerCase();
+          filtered = filtered.filter(material =>
+            material.title?.toLowerCase().includes(query) ||
+            material.description?.toLowerCase().includes(query)
+          );
+        }
 
-    // Map each Material Type to a prime icon string
-    protected readonly materialTypeMap: Map<MaterialType, string> = new Map([
-        [MaterialType.TEXTBOOK, 'pi pi-file-pdf'],
-        [MaterialType.VIDEO, 'pi pi-play'],
-        [MaterialType.DOCUMENTATION, 'pi pi-file-pdf'],
-        [MaterialType.QUIZ, 'pi pi-file-edit'],
-        [MaterialType.ASSIGNMENT, 'pi pi-file-edit'],
-        [MaterialType.EXAM, 'pi pi-file-edit'],
-    ]);
-
-    constructor(private readonly materialService: MaterialService) {
-        this.materials$ = this.materialService.getMaterial();
-        this.filteredMaterials$ = this.materials$;
-    }
-
-    /**
-     * Returns the appropriate icon based on the material type
-     * @param type The material type
-     * @returns The PrimeNG icon class
-     */
-    protected getMaterialIconBasedOnType(type: MaterialType): string {
-        return this.materialTypeMap.get(type) ?? 'pi pi-book';
-    }
-
-    /**
-     * Sets the active filter for materials
-     * @param filter The filter to apply ('all', 'document', 'video', 'exercise')
-     */
-    protected setFilter(filter: string ): void {
-        this.activeFilter.set(filter);
-        this.applyFilters();
-    }
-
-    /**
-     * Applies the current filters to the materials
-     */
-    protected applyFilters(): void {
-        this.filteredMaterials$ = this.materials$.pipe(
-            map(materials => {
-                let filtered = materials;
-
-                // Apply type filter
-                if (this.activeFilter() !== 'all') {
-                    filtered = filtered.filter(material => {
-                        switch (this.activeFilter()) {
-                            case MaterialType.LESSON.toString():
-                                return material.type === MaterialType.TEXTBOOK ||
-                                    material.type === MaterialType.DOCUMENTATION;
-                            case 'video':
-                                return material.type === MaterialType.VIDEO;
-                            case 'exercise':
-                                return material.type === MaterialType.QUIZ ||
-                                    material.type === MaterialType.ASSIGNMENT ||
-                                    material.type === MaterialType.EXAM;
-                            default:
-                                return true;
-                        }
-                    });
-                }
-
-                // Apply search filter if there's a query
-                if (this.searchQuery.trim()) {
-                    const query = this.searchQuery.toLowerCase();
-                    filtered = filtered.filter(material =>
-                        material.title?.toLowerCase().includes(query) ||
-                        material.description?.toLowerCase().includes(query)
-                    );
-                }
-
-                return filtered;
-            })
-        );
-    }
+        return filtered;
+      })
+    );
+  }
 }

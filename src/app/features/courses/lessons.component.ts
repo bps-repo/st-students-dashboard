@@ -14,7 +14,7 @@ import {CircularLoaderComponent} from "../../shared/circular-loader/circular-loa
 
 @Component({
   selector: 'app-lessons',
-  imports: [CommonModule, CardSliderComponent, PushPipe, LoaderComponent, CircularLoaderComponent],
+  imports: [CommonModule, CardSliderComponent, CircularLoaderComponent],
   templateUrl: './lessons.component.html',
 })
 export class LessonsComponent implements OnInit {

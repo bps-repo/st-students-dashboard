@@ -1,150 +1,147 @@
 <!-- Modern Materials Component -->
 <div class="px-8 py-6 bg-background-light font-heading">
-    <!-- Header Section with Search -->
-    <div class="bg-white rounded-xl shadow-md overflow-hidden mb-8">
-        <!-- Lesson Header with Gradient Background -->
-        <div class="relative bg-gradient-to-r from-primary-600 to-primary-500 px-6 py-4 text-white">
-            <div class="absolute inset-0 bg-[url('/bg_st.png')] bg-cover bg-center opacity-20"></div>
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center relative">
-                <div class="flex items-center mb-4 md:mb-0">
-                    <div class="p-3 bg-white bg-opacity-20 rounded-lg mr-4 flex-shrink-0">
-                        <i class="pi pi-book text-2xl"></i>
-                    </div>
-                    <div>
-                        <h2 class="text-xl font-bold">Unidade 1</h2>
-                    </div>
-                </div>
-            </div>
+  <!-- Header Section with Search -->
+  <div class="bg-white rounded-xl shadow-md overflow-hidden mb-8">
+    <!-- Lesson Header with Gradient Background -->
+    <div class="relative bg-gradient-to-r from-primary-600 to-primary-500 px-6 py-4 text-white">
+      <div class="absolute inset-0 bg-[url('/bg_st.png')] bg-cover bg-center opacity-20"></div>
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center relative">
+        <div class="flex items-center mb-4 md:mb-0">
+          <div class="p-3 bg-white bg-opacity-20 rounded-lg mr-4 flex-shrink-0">
+            <i class="pi pi-book text-2xl"></i>
+          </div>
+          <div>
+            <h2 class="text-xl font-bold">{{ (unit$ | ngrxPush)?.name }}</h2>
+          </div>
         </div>
-
-        <!-- Lesson Content -->
-        <div class="p-6">
-            <p class="text-neutral-600 mb-4">
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Doloremque
-                repellat non molestias esse dolore illum, velit, fuga modi in dicta
-                rerum odio accusamus perferendis possimus excepturi quia magnam aliquid
-                iure.
-            </p>
-
-            <!-- Lesson Metadata -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 bg-neutral-50 p-4 rounded-lg">
-                <div class="flex items-center">
-                    <i class="pi pi-user text-accent-500 mr-3"></i>
-                    <div>
-                        <p class="text-xs text-neutral-500">Professor</p>
-                        <p class="font-medium text-neutral-800">Carlos Morias</p>
-                    </div>
-                </div>
-                <div class="flex items-center">
-                    <i class="pi pi-calendar text-accent-500 mr-3"></i>
-                    <div>
-                        <p class="text-xs text-neutral-500">Data</p>
-                        <p class="font-medium text-neutral-800">25-04-2024 12:30min</p>
-                    </div>
-                </div>
-                <div class="flex items-center">
-                    <i class="pi pi-desktop text-accent-500 mr-3"></i>
-                    <div>
-                        <p class="text-xs text-neutral-500">Modelo</p>
-                        <p class="font-medium text-neutral-800">Online</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
 
-    <!-- Filter Section -->
-    <div class="bg-white rounded-xl p-4 shadow-md mb-8">
-        <div class="flex flex-wrap gap-3">
-            <div
-                    (click)="setFilter('all')"
-                    [ngClass]="activeFilter() === 'all' ? 'bg-primary-50 text-primary-700' : 'bg-neutral-50 text-neutral-700'"
-                    class="px-3 py-1.5 rounded-lg font-medium text-sm flex items-center hover:bg-primary-100 transition-all cursor-pointer">
-                <i class="pi pi-list mr-2"></i>
-                <span>Todos</span>
-            </div>
-            <div *ngFor="let menu of subMenus"
-                 (click)="setFilter(menu.type.toString())"
-                 [ngClass]="activeFilter() === menu.type.toString() ? 'bg-primary-50 text-primary-700' : 'bg-neutral-50 text-neutral-700'"
-                 class="px-3 py-1.5 rounded-lg font-medium text-sm flex items-center hover:bg-neutral-100 transition-all cursor-pointer">
-                <i [ngClass]="getMaterialIconBasedOnType(menu.type)" class="mr-2"></i>
-                <span>{{ menu.label }}</span>
-            </div>
+    <!-- Lesson Content -->
+    <div class="p-6">
+      <p class="text-neutral-600 mb-4">
+        {{ (unit$ | async)?.description || 'Descrição da unidade não disponível.' }}
+      </p>
+
+      <!-- Lesson Metadata -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 bg-neutral-50 p-4 rounded-lg">
+        <div class="flex items-center">
+          <i class="pi pi-book text-accent-500 mr-3"></i>
+          <div>
+            <p class="text-xs text-neutral-500">Aulas assistidas</p>
+            <p class="font-medium text-neutral-800">14</p>
+          </div>
         </div>
+        <div class="flex items-center">
+          <i class="pi pi-book text-accent-500 mr-3"></i>
+          <div>
+            <p class="text-xs text-neutral-500">Provas realizadas</p>
+            <p class="font-medium text-neutral-800">0/3</p>
+          </div>
+        </div>
+        <div class="flex items-center">
+          <i class="pi pi-desktop text-accent-500 mr-3"></i>
+          <div>
+            <p class="text-xs text-neutral-500">Modelo</p>
+            <p class="font-medium text-neutral-800">Online</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filter Section -->
+  <div class="bg-white rounded-xl p-4 shadow-md mb-8">
+    <div class="flex flex-wrap gap-3">
+      <div
+        (click)="setFilter('all')"
+        [ngClass]="activeFilter() === 'all' ? 'bg-primary-50 text-primary-700' : 'bg-neutral-50 text-neutral-700'"
+        class="px-3 py-1.5 rounded-lg font-medium text-sm flex items-center hover:bg-primary-100 transition-all cursor-pointer">
+        <i class="pi pi-list mr-2"></i>
+        <span>Todos (9)</span>
+      </div>
+      <div *ngFor="let menu of subMenus"
+           (click)="setFilter(menu.type.toString())"
+           [ngClass]="activeFilter() === menu.type.toString() ? 'bg-primary-50 text-primary-700' : 'bg-neutral-50 text-neutral-700'"
+           class="px-3 py-1.5 rounded-lg font-medium text-sm flex items-center hover:bg-neutral-100 transition-all cursor-pointer">
+        <i [ngClass]="getMaterialIconBasedOnType(menu.type)" class="mr-2"></i>
+        <span>{{ menu.label }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Materials Grid -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <!-- Empty State -->
+    <div *ngIf="(filteredMaterials$ | async)?.length === 0"
+         class="col-span-3 bg-white rounded-xl p-8 shadow-md text-center">
+      <div class="w-16 h-16 bg-neutral-100 rounded-full flex items-center justify-center mx-auto mb-4">
+        <i class="pi pi-file-excel text-neutral-400 text-2xl"></i>
+      </div>
+      <h3 class="text-lg font-bold text-neutral-800 mb-2">Nenhum material encontrado</h3>
+      <p class="text-neutral-600">Não encontramos materiais com os filtros selecionados. Tente outros filtros ou
+        volte
+        mais tarde.</p>
     </div>
 
-    <!-- Materials Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <!-- Empty State -->
-        <div *ngIf="(filteredMaterials$ | async)?.length === 0"
-             class="col-span-3 bg-white rounded-xl p-8 shadow-md text-center">
-            <div class="w-16 h-16 bg-neutral-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <i class="pi pi-file-excel text-neutral-400 text-2xl"></i>
-            </div>
-            <h3 class="text-lg font-bold text-neutral-800 mb-2">Nenhum material encontrado</h3>
-            <p class="text-neutral-600">Não encontramos materiais com os filtros selecionados. Tente outros filtros ou
-                volte
-                mais tarde.</p>
-        </div>
-
-        <!-- Material Card -->
-        <div
-                *ngFor="let material of filteredMaterials$ | async; index as $index"
-                [routerLink]="['/lessons/materials', $index]"
-                class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 cursor-pointer"
-        >
-            <!-- Material Header with Type-based Gradient Background -->
-            <div class="relative h-24 bg-gradient-to-r"
-                 [ngClass]="{
+    <!-- Material Card -->
+    <div
+      *ngFor="let material of filteredMaterials$ | async; index as $index"
+      [routerLink]="['/lessons/materials', $index]"
+      class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 cursor-pointer"
+    >
+      <!-- Material Header with Type-based Gradient Background -->
+      <div class="relative h-24 bg-gradient-to-r"
+           [ngClass]="{
              'from-primary-600 to-primary-500': material.type === 0,
              'from-accent-600 to-accent-500': material.type === 1,
              'from-secondary-600 to-secondary-500': material.type === 2,
              'from-success-600 to-success-500': material.type === 3,
              'from-warning-600 to-warning-500': material.type === 4
            }">
-                <div class="absolute inset-0 bg-[url('/bg_st.png')] bg-cover bg-center opacity-20"></div>
+        <div class="absolute inset-0 bg-[url('/bg_st.png')] bg-cover bg-center opacity-20"></div>
 
-                <!-- Material Type Badge -->
-                <div
-                        class="absolute top-3 right-3 bg-white bg-opacity-20 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium text-white flex items-center">
-                    <i [ngClass]="getMaterialIconBasedOnType(material.type)" class="mr-1"></i>
-                    <span *ngIf="material.type === 0">Textbook</span>
-                    <span *ngIf="material.type === 1">Vídeo</span>
-                    <span *ngIf="material.type === 2">Documentação</span>
-                    <span *ngIf="material.type === 3">Quiz</span>
-                    <span *ngIf="material.type === 4">Exercício</span>
-                    <span *ngIf="material.type === 5">Exame</span>
-                </div>
-
-                <!-- Material Icon -->
-                <div class="absolute top-1/2 left-6 transform -translate-y-1/2">
-                    <div class="w-12 h-12 rounded-full bg-white bg-opacity-20 flex items-center justify-center">
-                        <i [ngClass]="getMaterialIconBasedOnType(material.type)" class="text-white text-xl"></i>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Material Content -->
-            <div class="p-4">
-                <h2 class="text-lg font-bold text-neutral-800 mb-2">{{ material.title }}</h2>
-                <p class="text-sm text-neutral-600 mb-3">{{ material.description }}</p>
-
-                <!-- Status Badge -->
-                <div class="flex items-center">
-                    <div class="bg-success-100 text-success-700 px-2 py-1 rounded-full text-xs font-medium flex items-center">
-                        <i class="pi pi-check-circle mr-1"></i>
-                        <span>Lição concluída</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Material Footer -->
-            <div class="px-4 py-3 bg-neutral-50 border-t border-neutral-100 flex justify-between items-center">
-                <span class="text-xs text-neutral-500">Última atualização: 25/04/2024</span>
-                <div class="w-8 h-8 rounded-full bg-primary-50 flex items-center justify-center">
-                    <i class="pi pi-arrow-right text-primary-600"></i>
-                </div>
-            </div>
+        <!-- Material Type Badge -->
+        <div
+          class="absolute top-3 right-3 bg-white bg-opacity-20 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium text-white flex items-center">
+          <i [ngClass]="getMaterialIconBasedOnType(material.type)" class="mr-1"></i>
+          <span *ngIf="material.type === 0">Textbook</span>
+          <span *ngIf="material.type === 1">Vídeo</span>
+          <span *ngIf="material.type === 2">Documentação</span>
+          <span *ngIf="material.type === 3">Quiz</span>
+          <span *ngIf="material.type === 4">Exercício</span>
+          <span *ngIf="material.type === 5">Exame</span>
         </div>
+
+        <!-- Material Icon -->
+        <div class="absolute top-1/2 left-6 transform -translate-y-1/2">
+          <div class="w-12 h-12 rounded-full bg-white bg-opacity-20 flex items-center justify-center">
+            <i [ngClass]="getMaterialIconBasedOnType(material.type)" class="text-white text-xl"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Material Content -->
+      <div class="p-4">
+        <h2 class="text-lg font-bold text-neutral-800 mb-2">{{ material.title }}</h2>
+        <p class="text-sm text-neutral-600 mb-3">{{ material.description }}</p>
+
+        <!-- Status Badge -->
+        <div class="flex items-center">
+          <div class="bg-success-100 text-success-700 px-2 py-1 rounded-full text-xs font-medium flex items-center">
+            <i class="pi pi-check-circle mr-1"></i>
+            <span>Lição concluída</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Material Footer -->
+      <div class="px-4 py-3 bg-neutral-50 border-t border-neutral-100 flex justify-between items-center">
+        <span class="text-xs text-neutral-500">Última atualização: 25/04/2024</span>
+        <div class="w-8 h-8 rounded-full bg-primary-50 flex items-center justify-center">
+          <i class="pi pi-arrow-right text-primary-600"></i>
+        </div>
+      </div>
     </div>
+  </div>
 </div>

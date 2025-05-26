@@ -11,6 +11,9 @@ import {UnitsEffects} from "./units/units.effects";
 import {StudentEffects} from "./student/student.effects";
 import {LevelEffects} from "./level/level.effects";
 import {initialStudentState, StudentState} from "./student/student.state";
+import {initialLessonsState, LessonsState} from "./lessons/lessons.state";
+import {lessonFeature} from "./lessons/lessons.feature";
+import {LessonsEffects} from "./lessons/lessons.effects";
 
 /**
  * Interface for the root state of the application
@@ -21,6 +24,7 @@ export interface AppState {
   units: UnitsState;
   courses: CoursesState;
   student: StudentState,
+  lesson: LessonsState
 }
 
 /**
@@ -32,6 +36,7 @@ export const initialAppState: AppState = {
   units: initialUnitsState,
   courses: initialCoursesState,
   student: initialStudentState,
+  lesson: initialLessonsState,
 };
 
 
@@ -40,6 +45,7 @@ export const ngrxFeatures = [
   unitsFeature,
   studentFeature,
   levelFeature,
+  lessonFeature
 ]
 
 export const ngrxEffects = [
@@ -47,4 +53,5 @@ export const ngrxEffects = [
   UnitsEffects,
   StudentEffects,
   LevelEffects,
+  LessonsEffects
 ]

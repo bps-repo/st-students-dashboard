@@ -8,7 +8,8 @@
   <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
     <div class="mb-4 md:mb-0">
       <h1 class="text-3xl font-bold text-primary-700 flex items-center">
-        Seja Bem-Vindo, <span class="text-primary-500 font-bold ml-2">{{ (student$ | ngrxPush)?.userFirstName }}</span>
+        Seja Bem-Vindo, <span
+        class="text-primary-500 font-bold ml-2">{{ (student$ | ngrxPush)?.user?.firstname }}</span>
         <span class="ml-2 animate-pulse">👋</span>
       </h1>
       <p class="text-neutral-600 mt-1">Vamos continuar de onde paramos?</p>
@@ -56,10 +57,11 @@
     <div class="mt-6">
       <div class="flex justify-between items-center mb-2">
         <span class="text-neutral-700 font-medium">Progresso do nível</span>
-        <span class="text-primary-600 font-bold">2%</span>
+        <span class="text-primary-600 font-bold">{{ (student$ | ngrxPush)?.currentLevelProgress }}%</span>
       </div>
       <div class="w-full bg-neutral-200 rounded-full h-3">
-        <div class="bg-gradient-to-r from-primary-500 to-primary-600 h-3 rounded-full relative" style="width: 2%">
+        <div class="bg-gradient-to-r from-primary-500 to-primary-600 h-3 rounded-full relative"
+             [ngStyle]="{ width: (student$ | ngrxPush)?.currentLevelProgress + '%' }">
           <div
             class="absolute -right-1 -top-1 bg-white w-5 h-5 rounded-full border-2 border-primary-500 shadow-sm"></div>
         </div>
@@ -95,21 +97,22 @@
         </div>
       </div>
 
+      <div *ngIf="(units$ | ngrxPush)?.length == 0" class="text-center">Sem unidades disponíveis</div>
       <!-- Units Cards -->
       <div *ngIf="!(loadingUnit$ | ngrxPush) && !(error$ | ngrxPush)"
            class="bg-white rounded-xl shadow-md overflow-hidden">
         <div class="divide-y divide-neutral-100">
           <div
-            *ngFor="let item of units$ | ngrxPush; let i = index"
+            *ngFor="let unit of units$ | ngrxPush; let i = index"
             class="p-6 hover:bg-neutral-50 transition-all cursor-pointer"
           >
-            <a routerLink="/units/{{item.id}}}" class="flex items-center">
+            <a (click)="navigateToUnit(unit)" class="flex items-center">
               <!-- Status Circle -->
               <div
                 [ngClass]="
-                  item.status == 'done'
+                  unit.status == UnitStatus.COMPLETE
                     ? 'bg-gradient-to-r from-success-600 to-success-500'
-                    : item.status == 'lock'
+                    : unit.status == 'lock'
                     ? 'bg-neutral-300'
                     : 'bg-gradient-to-r from-primary-600 to-primary-500'
                 "
@@ -117,9 +120,9 @@
               >
                 <i
                   [ngClass]="
-                    item.status == 'done'
+                    unit.status == UnitStatus.COMPLETE
                       ? 'pi pi-check text-success-500'
-                      : item.status == 'lock'
+                      : unit.status == 'lock'
                       ? 'pi pi-lock'
                       : 'pi pi-book'
                   "
@@ -130,42 +133,42 @@
               <!-- Content -->
               <div class="flex-grow">
                 <div class="flex items-center justify-between">
-                  <h3 class="font-bold text-lg text-neutral-800">{{ item.name }}</h3>
+                  <h3 class="font-bold text-lg text-neutral-800">{{ unit.name }}</h3>
                   <div class="flex items-center">
                     <span
                       [ngClass]="
-                        item.status == 'done'
+                        unit.status == UnitStatus.COMPLETE
                           ? 'bg-success-100 text-success-700'
-                          : item.status == 'lock'
+                          : unit.status == 'lock'
                           ? 'bg-neutral-100 text-neutral-500'
                           : 'bg-primary-100 text-primary-700'
                       "
                       class="ml-3 text-xs px-2 py-1 rounded-full font-medium"
                     >
-                      {{ item.status == 'done' ? 'Concluída' : item.status == 'lock' ? 'Bloqueada' : 'Em andamento' }}
+                      {{ unit.status == UnitStatus.COMPLETE ? 'Concluída' : unit.status == UnitStatus.LOCK ? 'Bloqueada' : 'Em andamento' }}
                     </span>
                   </div>
                 </div>
-                <p class="text-neutral-600 mt-1">{{ item.description }}</p>
+                <p class="text-neutral-600 mt-1">{{ unit.description }}</p>
 
                 <!-- Progress Bar for each unit -->
                 <div class="w-full bg-neutral-200 rounded-full h-1.5 mt-3">
                   <div
                     [ngClass]="
-                      item.status == 'done'
+                      unit.status == UnitStatus.COMPLETE
                         ? 'bg-success-500'
-                        : item.status == 'lock'
+                        : unit.status == 'lock'
                         ? 'bg-neutral-400'
                         : 'bg-primary-500'
                     "
                     class="h-1.5 rounded-full"
-                    [style.width]="item.status == 'done' ? '100%' : item.status == 'lock' ? '0%' : '50%'"
+                    [style.width]="unit.status == UnitStatus.COMPLETE ? '100%' : unit.status == 'lock' ? '0%' : '50%'"
                   ></div>
                 </div>
               </div>
 
               <!-- Arrow -->
-              <i *ngIf="item.status === 'available'" class="pi pi-chevron-right text-neutral-400 ml-2"></i>
+              <i *ngIf="unit.status === UnitStatus.AVAILABLE" class="pi pi-chevron-right text-neutral-400 ml-2"></i>
             </a>
           </div>
         </div>

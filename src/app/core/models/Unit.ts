@@ -4,5 +4,13 @@ export interface Unit {
   description: string,
   orderUnit: string,
   levelId: string,
-  status: "lock" | "available" | "done" | "reading";
+  status: UnitStatus;
+}
+
+
+
+export enum UnitStatus {
+  LOCK = "lock",
+  AVAILABLE = "available",
+  COMPLETE = "complete",
 }
