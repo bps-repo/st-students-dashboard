@@ -2,22 +2,19 @@ import {StudentStatus} from "../enums/StudentStatus";
 import {ClassEntity} from "./ClassEntity";
 import {Unit} from "./Unit";
 import {UnitProgress} from "./UnitProgress";
+import {User} from "./User";
 
 export interface Student {
   id?: string;
   name: string;
-  userUsername: string,
-  userEmail: string,
-  userFirstName: string,
-  email: string;
+  user: User
   enrollmentDate: Date;
-  centerName: string;
   status: StudentStatus;
   centerId: string;
   levelId: string;
-  userId: string;
   studentClass: ClassEntity;
   attendances: any[];
+  currentLevelProgress:number
   certificates: any[]
   currentUnit: Unit,
   classes?: ClassEntity[],

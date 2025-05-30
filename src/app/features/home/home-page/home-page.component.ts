@@ -1,11 +1,9 @@
-import {Component, inject, OnInit, TemplateRef} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {ChangeDetectionStrategy} from '@angular/core';
 import {MatDialog, MatDialogModule} from '@angular/material/dialog';
-import {Observable, of} from 'rxjs';
+import {combineLatest, map, Observable, of} from 'rxjs';
 import {Store} from '@ngrx/store';
-import {CircularLevelComponent} from "../../../shared/components/circular-level/circular-level.component";
-import {Unit} from "../../../core/models/Unit";
+import {Unit, UnitStatus} from "../../../core/models/Unit";
 import {selectAllUnits, selectUnitsError, selectUnitsLoading} from "../../../core/state/units/units.selectors";
 import {UnitsActions} from "../../../core/state/units/units.actions";
 import {Student} from "../../../core/models/Student";
@@ -15,11 +13,12 @@ import {LevelSelectors} from "../../../core/state/level/level.selectors";
 import {CircularLoaderComponent} from "../../../shared/circular-loader/circular-loader.component";
 import {LoaderComponent} from "../../../shared/loader/loader.component";
 import {PushPipe} from "@ngrx/component";
+import {Router, RouterModule} from "@angular/router";
 
 
 @Component({
   selector: 'app-home-page',
-  imports: [CommonModule, CircularLevelComponent, MatDialogModule, CircularLoaderComponent, LoaderComponent, PushPipe],
+  imports: [CommonModule, MatDialogModule, CircularLoaderComponent, LoaderComponent, PushPipe, RouterModule],
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -37,7 +36,7 @@ export class HomePageComponent implements OnInit {
 
   private readonly dialog = inject(MatDialog);
 
-  constructor(public store: Store) {
+  constructor(public store: Store, private readonly router: Router) {
     this.units$ = this.store.select(selectAllUnits);
     this.level$ = this.store.select(LevelSelectors.levelStudent)
     this.loadingUnit$ = of(false);
@@ -50,9 +49,22 @@ export class HomePageComponent implements OnInit {
     this.error$ = this.store.select(selectUnitsError);
 
     this.student$ = this.store.select(StudentSelectors.student)
+
+    this.units$ = combineLatest([
+      this.units$,
+      this.student$
+    ]).pipe(
+      map(([units, student]) => this.updateUnitsWithStatus(units, student))
+    );
   }
 
   ngOnInit(): void {
+  }
+
+  navigateToUnit(unit: Unit) {
+    if (unit.status === UnitStatus.LOCK) return
+    this.router.navigate(['/units', unit.id]).then(r => {
+    });
   }
 
   protected items: any[] = [
@@ -94,40 +106,30 @@ export class HomePageComponent implements OnInit {
     },
   ];
 
-  protected onClick(
-    modalContent: TemplateRef<any>,
-    width?: string,
-    unit?: Unit
-  ): void {
-    let modalWidth: string;
-
-    if (unit?.status === 'lock') {
-      return
+  private updateUnitsWithStatus(units: Unit[], student: Student | null): Unit[] {
+    if (!units || !student || !student.currentUnit) {
+      // If no student data or currentUnit, mark all as locked
+      return units.map(unit => ({
+        ...unit,
+        status: UnitStatus.LOCK
+      }));
     }
 
-    // Convert size codes to responsive widths
-    if (width === 'l') {
-      modalWidth = '90vw';
-      // Set a max-width to prevent the modal from becoming too wide on large screens
-      const dialogRef = this.dialog.open(modalContent, {
-        width: modalWidth,
-        maxWidth: '800px',
-        // Add responsive settings
-        autoFocus: false,
-        restoreFocus: false,
-        panelClass: 'responsive-dialog'
-      });
-    } else {
-      // Default size with responsive behavior
-      modalWidth = width || '90vw';
-      const dialogRef = this.dialog.open(modalContent, {
-        width: modalWidth,
-        maxWidth: '500px',
-        autoFocus: false,
-        restoreFocus: false,
-        panelClass: 'responsive-dialog'
-      });
-    }
+    const currentUnitId = student.currentUnit.id;
+
+    return units.map(unit => {
+      let status: UnitStatus;
+
+      if (unit.id === currentUnitId) {
+        status = UnitStatus.AVAILABLE;
+      } else {
+        status = UnitStatus.LOCK;
+      }
+      return {
+        ...unit,
+        status
+      };
+    });
   }
 
   handleSelection(event: string) {
@@ -135,4 +137,6 @@ export class HomePageComponent implements OnInit {
   }
 
   protected loadUnits = UnitsActions.loadUnits
+
+  protected UnitStatus = UnitStatus;
 }

@@ -17,6 +17,7 @@ import {HomePageComponent} from "./features/home/home-page/home-page.component";
 import {VideoCoursesComponent} from "./features/video-course/video-courses.component";
 import {VideoCourseListComponent} from "./features/video-course-list/video-course-list.component";
 import {LessonDetailComponent} from "./features/lessons/lesson-detail/lesson-detail.component";
+import {UnitDetailComponent} from "./features/units/unit-detail/unit-detail.component";
 
 export const routes: Routes = [
   {
@@ -43,6 +44,11 @@ export const routes: Routes = [
         path: 'lessons/:id',
         component: LessonDetailComponent,
         data: {breadcrumb: 'Detalhe do Curso'}
+      },
+      {
+        path: 'units/:id',
+        component: UnitDetailComponent,
+        data: {breadcrumb: 'Detalhe da Unidade'}
       },
       {
         path: 'video-lessons',

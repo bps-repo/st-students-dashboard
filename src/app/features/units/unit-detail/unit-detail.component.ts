@@ -2,10 +2,14 @@ import {ChangeDetectionStrategy, Component, signal} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {Observable, map, of} from 'rxjs';
 import {MaterialService} from '../../../core/material.service';
-import {RouterModule} from '@angular/router';
+import {ActivatedRoute, ActivatedRouteSnapshot, RouterModule} from '@angular/router';
 import {FormsModule} from '@angular/forms';
 import {MaterialType} from "../../../@types/material-type";
 import {Material} from "../../../@types/material";
+import {Store} from "@ngrx/store";
+import {Unit} from "../../../core/models/Unit";
+import {selectUnitById} from "../../../core/state/units/units.selectors";
+import {PushPipe} from "@ngrx/component";
 
 /**
  * Modern Materials Component
@@ -15,14 +19,35 @@ import {Material} from "../../../@types/material";
  */
 @Component({
   selector: 'app-unit-detail',
-  imports: [CommonModule, RouterModule, FormsModule],
-  templateUrl: './lesson-detail.component.html',
+  imports: [CommonModule, RouterModule, FormsModule, PushPipe],
+  templateUrl: './unit-detail.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class LessonDetailComponent {
+export class UnitDetailComponent {
   // Materials data
   protected readonly materials$!: Observable<Material[]>;
   protected filteredMaterials$!: Observable<Material[]>;
+
+  protected unitId = "";
+  protected unit$?: Observable<Unit | null>
+
+  protected subMenus = [
+    {
+      label: "Aulas",
+      type: MaterialType.LESSON,
+    },
+    {
+      label: "Vídeos",
+      type: MaterialType.VIDEO,
+    },
+    {
+      label: "Quiz",
+      type: MaterialType.QUIZ,
+    }, {
+      label: "Exames",
+      type: MaterialType.EXAM,
+    }
+  ];
 
   // Filter state
   protected activeFilter = signal('all');
@@ -38,9 +63,20 @@ export class LessonDetailComponent {
     [MaterialType.EXAM, 'pi pi-file-edit'],
   ]);
 
-  constructor(private readonly materialService: MaterialService) {
+  constructor(private readonly materialService: MaterialService, private readonly store$: Store, private readonly router: ActivatedRoute) {
     this.materials$ = this.materialService.getMaterial();
     this.filteredMaterials$ = this.materials$;
+
+    this.unitId = this.router.snapshot.params['id']
+
+    console.log('Unit ID:', this.unitId);
+
+
+    this.unit$ = this.store$.select(selectUnitById(this.unitId));
+
+    this.unit$.subscribe(unit => {
+      console.log('Unit:', unit);
+    });
   }
 
   /**
@@ -73,7 +109,7 @@ export class LessonDetailComponent {
         if (this.activeFilter() !== 'all') {
           filtered = filtered.filter(material => {
             switch (this.activeFilter()) {
-              case 'document':
+              case MaterialType.LESSON.toString():
                 return material.type === MaterialType.TEXTBOOK ||
                   material.type === MaterialType.DOCUMENTATION;
               case 'video':

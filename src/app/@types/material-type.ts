@@ -5,4 +5,5 @@ export enum MaterialType {
   QUIZ,
   ASSIGNMENT,
   EXAM,
+  LESSON
 }

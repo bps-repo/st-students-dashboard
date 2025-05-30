@@ -79,7 +79,8 @@
         <div class="absolute inset-0 bg-[url('/bg_st.png')] bg-cover bg-center opacity-20"></div>
 
         <!-- Event Type Badge -->
-        <div class="absolute top-3 right-3 bg-white bg-opacity-20 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium text-white">
+        <div
+          class="absolute top-3 right-3 bg-white bg-opacity-20 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium text-white">
           <span *ngIf="event.type === 'workshop'">Workshop</span>
           <span *ngIf="event.type === 'conversation'">Conversação</span>
           <span *ngIf="event.type === 'lecture'">Palestra</span>
@@ -121,10 +122,12 @@
         <div class="flex items-center justify-between mb-4">
           <div class="flex items-center">
             <div class="flex -space-x-2">
-              <div class="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center text-primary-700 text-xs font-bold border-2 border-white">
+              <div
+                class="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center text-primary-700 text-xs font-bold border-2 border-white">
                 {{ event.participants }}+
               </div>
-              <div class="w-8 h-8 rounded-full bg-accent-500 flex items-center justify-center text-white text-xs border-2 border-white">
+              <div
+                class="w-8 h-8 rounded-full bg-accent-500 flex items-center justify-center text-white text-xs border-2 border-white">
                 ST
               </div>
             </div>
@@ -171,11 +174,14 @@
       <i class="pi pi-calendar-times text-neutral-400 text-2xl"></i>
     </div>
     <h3 class="text-lg font-bold text-neutral-800 mb-2">Nenhum evento encontrado</h3>
-    <p class="text-neutral-600">Não encontramos eventos com os filtros selecionados. Tente outros filtros ou volte mais tarde.</p>
+    <p class="text-neutral-600">Não encontramos eventos com os filtros selecionados. Tente outros filtros ou volte mais
+      tarde.</p>
   </div>
 
   <!-- Event Details Modal -->
-  <div *ngIf="showEventDetails()" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+  <div *ngIf="showEventDetails()"
+       class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4
+  ">
     <div class="bg-white rounded-xl shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto">
       <!-- Modal Header -->
       <div class="p-4 border-b border-neutral-200 flex justify-between items-center">
