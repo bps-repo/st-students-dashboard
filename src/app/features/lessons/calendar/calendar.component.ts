@@ -1,36 +1,43 @@
 import {Component, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {RouterModule} from "@angular/router";
+import {Store} from "@ngrx/store";
+import {LessonsActions} from "../../../core/state/lessons/lessons.actions";
+import {LessonsEntitySelectors, LessonsSelectors} from "../../../core/state/lessons/lessons.selectors";
+import {LessonSchedule} from "../../../core/models/LessonSchedule";
+import {Observable, of} from "rxjs";
+import {LoaderComponent} from "../../../shared/loader/loader.component";
+import {CircularLoaderComponent} from "../../../shared/circular-loader/circular-loader.component";
+import {StudentSelectors} from "../../../core/state/student/student.selectors";
 
 interface CalendarDay {
   date: Date;
   dayNumber: number;
   isCurrentMonth: boolean;
   isToday: boolean;
-  events: CalendarEvent[];
+  events: LessonSchedule[];
 }
 
-interface CalendarEvent {
-  id: number;
-  title: string;
-  startDate: Date;
-  endDate: Date;
-  teacher: string;
-  room?: string;
-  color?: string;
-}
 
 @Component({
   selector: 'app-calendar',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, LoaderComponent, CircularLoaderComponent],
   templateUrl: './calendar.component.html',
   styleUrls: []
 })
 export class CalendarComponent implements OnInit {
+
+  protected lessons$!: LessonSchedule[];
+
+  isLoading$: Observable<boolean> = of(false)
+  isLoadingStudent: boolean = false
+
+  errors$: Observable<any> = of(null)
+
   // Calendar data
   calendarDays: CalendarDay[] = [];
-  weekDayNames: string[] = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta'];
+  weekDayNames: string[] = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', "Sábado"];
 
   // Current date tracking
   currentDate: Date = new Date();
@@ -44,12 +51,31 @@ export class CalendarComponent implements OnInit {
   hourHeight: number = 60; // Height in pixels for each hour block
 
   // Events data
-  events: CalendarEvent[] = [];
+  events: LessonSchedule[] = [];
 
-  constructor() {
+  constructor(private readonly store$: Store) {
+    this.store$.select(LessonsEntitySelectors.selectAllLessons).subscribe((lesson) => {
+      this.lessons$ = lesson;
+      console.log('Lessons:', this.lessons$);
+    })
+
+    this.isLoading$ = store$.select(LessonsSelectors.selectLessonsLoading)
+
+    store$.select(StudentSelectors.loading).subscribe(
+      (loading) => {
+        this.isLoadingStudent = loading;
+      }
+    )
+
     this.currentMonth = this.currentDate.getMonth();
     this.currentYear = this.currentDate.getFullYear();
     this.initializeWeekStartDate();
+  }
+
+  ngOnInit(): void {
+    this.store$.dispatch(LessonsActions.loadLessons());
+    this.generateCalendarDays();
+    this.loadEvents();
   }
 
   // Initialize the week start date to the Monday of the current week
@@ -70,17 +96,12 @@ export class CalendarComponent implements OnInit {
     this.currentYear = this.weekStartDate.getFullYear();
   }
 
-  ngOnInit(): void {
-    this.generateCalendarDays();
-    this.loadEvents();
-  }
-
   // Generate the calendar days for the current week
   generateCalendarDays(): void {
     this.calendarDays = [];
 
-    // Generate weekdays (Monday to Friday) for the current week
-    for (let i = 0; i < 5; i++) {
+    // Generate weekdays (Monday to Saturday) for the current week
+    for (let i = 0; i < 6; i++) {
       const date = new Date(this.weekStartDate);
       date.setDate(this.weekStartDate.getDate() + i);
 
@@ -105,32 +126,6 @@ export class CalendarComponent implements OnInit {
       date.getFullYear() === today.getFullYear();
   }
 
-  // Navigate to the previous week
-  navigateToPreviousWeek(): void {
-    // Update weekStartDate to the previous week
-    this.weekStartDate.setDate(this.weekStartDate.getDate() - 7);
-
-    // Update month and year based on the week start date
-    this.currentMonth = this.weekStartDate.getMonth();
-    this.currentYear = this.weekStartDate.getFullYear();
-
-    this.generateCalendarDays();
-    this.loadEvents();
-  }
-
-  // Navigate to the next week
-  navigateToNextWeek(): void {
-    // Update weekStartDate to the next week
-    this.weekStartDate.setDate(this.weekStartDate.getDate() + 7);
-
-    // Update month and year based on the week start date
-    this.currentMonth = this.weekStartDate.getMonth();
-    this.currentYear = this.weekStartDate.getFullYear();
-
-    this.generateCalendarDays();
-    this.loadEvents();
-  }
-
   // Get the week range label (e.g., "10-14 April 2023")
   getWeekLabel(): string {
     const monthNames = [
@@ -138,9 +133,9 @@ export class CalendarComponent implements OnInit {
       'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
     ];
 
-    // Get the end date of the week (Friday)
+    // Get the end date of the week (Saturday)
     const weekEndDate = new Date(this.weekStartDate);
-    weekEndDate.setDate(this.weekStartDate.getDate() + 4); // Friday is 4 days after Monday
+    weekEndDate.setDate(this.weekStartDate.getDate() + 5); // Saturday is 5 days after Monday
 
     // Format the date range
     const startDay = this.weekStartDate.getDate();
@@ -166,57 +161,14 @@ export class CalendarComponent implements OnInit {
 
   // Load events for the current week
   loadEvents(): void {
-    // In a real application, this data would come from a service
-    // For now, we'll use mock data based on the current week
+    if (!this.lessons$ || this.lessons$.length === 0) {
+      return;
+    }
 
-    // Get the end date of the week (Friday)
+    // Get the end date of the week (Saturday)
     const weekEndDate = new Date(this.weekStartDate);
-    weekEndDate.setDate(this.weekStartDate.getDate() + 4); // Friday is 4 days after Monday
+    weekEndDate.setDate(this.weekStartDate.getDate() + 5); // Saturday is 5 days after Monday
 
-    // Create events for the current week
-    const mockEvents: CalendarEvent[] = [
-      {
-        id: 1,
-        title: 'Gramática Avançada',
-        startDate: new Date(this.weekStartDate.getFullYear(), this.weekStartDate.getMonth(), this.weekStartDate.getDate(), 9, 0), // Monday at 9:00
-        endDate: new Date(this.weekStartDate.getFullYear(), this.weekStartDate.getMonth(), this.weekStartDate.getDate(), 10, 30), // Monday at 10:30
-        teacher: 'Prof. Silva',
-        color: 'bg-accent-100'
-      },
-      {
-        id: 2,
-        title: 'Conversação',
-        startDate: new Date(this.weekStartDate.getFullYear(), this.weekStartDate.getMonth(), this.weekStartDate.getDate() + 1, 14, 0), // Tuesday at 14:00
-        endDate: new Date(this.weekStartDate.getFullYear(), this.weekStartDate.getMonth(), this.weekStartDate.getDate() + 1, 15, 30), // Tuesday at 15:30
-        teacher: 'Prof. Santos',
-        color: 'bg-success-100'
-      },
-      {
-        id: 3,
-        title: 'Listening Comprehension',
-        startDate: new Date(this.weekStartDate.getFullYear(), this.weekStartDate.getMonth(), this.weekStartDate.getDate() + 2, 19, 0), // Wednesday at 19:00
-        endDate: new Date(this.weekStartDate.getFullYear(), this.weekStartDate.getMonth(), this.weekStartDate.getDate() + 2, 20, 30), // Wednesday at 20:30
-        teacher: 'Prof. Johnson',
-        color: 'bg-primary-100'
-      },
-      {
-        id: 4,
-        title: 'Business English',
-        startDate: new Date(this.weekStartDate.getFullYear(), this.weekStartDate.getMonth(), this.weekStartDate.getDate() + 3, 10, 0), // Thursday at 10:00
-        endDate: new Date(this.weekStartDate.getFullYear(), this.weekStartDate.getMonth(), this.weekStartDate.getDate() + 3, 11, 30), // Thursday at 11:30
-        teacher: 'Prof. Oliveira',
-        color: 'bg-warning-100'
-      },
-      {
-        id: 5,
-        title: 'Preparação para TOEFL',
-        startDate: new Date(this.weekStartDate.getFullYear(), this.weekStartDate.getMonth(), this.weekStartDate.getDate() + 4, 16, 0), // Friday at 16:00
-        endDate: new Date(this.weekStartDate.getFullYear(), this.weekStartDate.getMonth(), this.weekStartDate.getDate() + 4, 17, 30), // Friday at 17:30
-        teacher: 'Prof. Garcia',
-        room: 'Sala 302',
-        color: 'bg-secondary-100'
-      }
-    ];
 
     // Clear existing events from calendar days
     this.calendarDays.forEach(day => {
@@ -224,14 +176,14 @@ export class CalendarComponent implements OnInit {
     });
 
     // Assign events to calendar days
-    mockEvents.forEach(event => {
-      // For multi-day events, add to all days between start and end
-      const startDate = new Date(event.startDate);
-      const endDate = new Date(event.endDate);
+    this.lessons$.forEach(lesson => {
 
+      const lessonStartDate = new Date(lesson.startTime);
+      const lessonEndDate = new Date(lesson.endTime);
       // Reset hours to compare just the dates
-      startDate.setHours(0, 0, 0, 0);
-      endDate.setHours(0, 0, 0, 0);
+
+      lessonStartDate.setHours(0, 0, 0, 0);
+      lessonEndDate.setHours(0, 0, 0, 0);
 
       // Loop through all days in the calendar
       this.calendarDays.forEach(day => {
@@ -239,27 +191,27 @@ export class CalendarComponent implements OnInit {
         calendarDate.setHours(0, 0, 0, 0);
 
         // If the calendar day is between start and end dates (inclusive), add the event
-        if (calendarDate >= startDate && calendarDate <= endDate) {
-          day.events.push(event);
+        if (calendarDate >= lessonStartDate && calendarDate <= lessonEndDate) {
+          day.events.push(lesson);
         }
       });
     });
   }
 
   // Get formatted time for an event (e.g., "09:00 - 10:30")
-  getEventTimeString(event: CalendarEvent): string {
-    const startHours = event.startDate.getHours().toString().padStart(2, '0');
-    const startMinutes = event.startDate.getMinutes().toString().padStart(2, '0');
-    const endHours = event.endDate.getHours().toString().padStart(2, '0');
-    const endMinutes = event.endDate.getMinutes().toString().padStart(2, '0');
+  getEventTimeString(event: LessonSchedule): string {
+    const startHours = event.startTime.getHours().toString().padStart(2, '0');
+    const startMinutes = event.endTime.getMinutes().toString().padStart(2, '0');
+    const endHours = event.endTime.getHours().toString().padStart(2, '0');
+    const endMinutes = event.endTime.getMinutes().toString().padStart(2, '0');
 
     return `${startHours}:${startMinutes} - ${endHours}:${endMinutes}`;
   }
 
   // Check if an event spans multiple days
-  isMultiDayEvent(event: CalendarEvent): boolean {
-    const startDate = new Date(event.startDate);
-    const endDate = new Date(event.endDate);
+  isMultiDayEvent(event: LessonSchedule): boolean {
+    const startDate = new Date(event.startTime);
+    const endDate = new Date(event.endTime);
 
     // Reset hours to compare just the dates
     startDate.setHours(0, 0, 0, 0);
@@ -269,7 +221,7 @@ export class CalendarComponent implements OnInit {
   }
 
   // Get events for a specific day
-  getEventsForDay(day: CalendarDay): CalendarEvent[] {
+  getEventsForDay(day: CalendarDay): LessonSchedule[] {
     return day.events;
   }
 
@@ -281,8 +233,8 @@ export class CalendarComponent implements OnInit {
   }
 
   // Get the first day of an event for a specific calendar day
-  isFirstDayOfEvent(day: CalendarDay, event: CalendarEvent): boolean {
-    const eventStartDate = new Date(event.startDate);
+  isFirstDayOfEvent(day: CalendarDay, event: LessonSchedule): boolean {
+    const eventStartDate = new Date(event.startTime);
     eventStartDate.setHours(0, 0, 0, 0);
 
     const calendarDate = new Date(day.date);
@@ -292,8 +244,8 @@ export class CalendarComponent implements OnInit {
   }
 
   // Get the last day of an event for a specific calendar day
-  isLastDayOfEvent(day: CalendarDay, event: CalendarEvent): boolean {
-    const eventEndDate = new Date(event.endDate);
+  isLastDayOfEvent(day: CalendarDay, event: LessonSchedule): boolean {
+    const eventEndDate = new Date(event.endTime);
     eventEndDate.setHours(0, 0, 0, 0);
 
     const calendarDate = new Date(day.date);
@@ -303,9 +255,9 @@ export class CalendarComponent implements OnInit {
   }
 
   // Calculate how many days an event spans
-  getEventDuration(event: CalendarEvent): number {
-    const startDate = new Date(event.startDate);
-    const endDate = new Date(event.endDate);
+  getEventDuration(event: LessonSchedule): number {
+    const startDate = new Date(event.startTime);
+    const endDate = new Date(event.endTime);
 
     // Reset hours to compare just the dates
     startDate.setHours(0, 0, 0, 0);
@@ -348,18 +300,17 @@ export class CalendarComponent implements OnInit {
   }
 
   // Calculate the top position of an event based on its start time
-  calculateEventTop(event: CalendarEvent): number {
-    const startHour = event.startDate.getHours();
-    const startMinutes = event.startDate.getMinutes();
-
+  calculateEventTop(event: LessonSchedule): number {
+    const startHour = event.startTime.getHours();
+    const startMinutes = event.startTime.getMinutes();
     // Calculate position based on start time
     return (startHour - this.startHour + startMinutes / 60) * this.hourHeight;
   }
 
   // Calculate the height of an event based on its duration
-  calculateEventHeight(event: CalendarEvent): number {
-    const startTime = event.startDate.getHours() + event.startDate.getMinutes() / 60;
-    const endTime = event.endDate.getHours() + event.endDate.getMinutes() / 60;
+  calculateEventHeight(event: LessonSchedule): number {
+    const startTime = event.startTime.getHours() + event.startTime.getMinutes() / 60;
+    const endTime = event.endTime.getHours() + event.endTime.getMinutes() / 60;
 
     // Calculate height based on duration
     return (endTime - startTime) * this.hourHeight;

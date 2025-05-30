@@ -21,10 +21,6 @@ const {
  */
 export const selectAllUnits = selectAll;
 
-/**
- * Select the total number of units
- */
-export const selectUnitCount = selectTotal;
 
 /**
  * Select the selected unit ID
@@ -42,6 +38,16 @@ export const selectSelectedUnit = createSelector(
   selectSelectedUnitId,
   (entities, selectedId) => selectedId ? entities[selectedId] : null
 );
+
+
+/**
+ * Select unit by ID
+ */
+export const selectUnitById = (unitId: string) => createSelector(
+  selectEntities,
+  (entities) => entities[unitId] || null
+);
+
 
 /**
  * Select the loading status
@@ -67,17 +73,3 @@ export const selectUnitsByStatus = (status: string) => createSelector(
   (units) => units.filter(unit => unit.status === status)
 );
 
-/**
- * Select completed units
- */
-export const selectCompletedUnits = selectUnitsByStatus('done');
-
-/**
- * Select in-progress units
- */
-export const selectInProgressUnits = selectUnitsByStatus('reading');
-
-/**
- * Select locked units
- */
-export const selectLockedUnits = selectUnitsByStatus('lock');
