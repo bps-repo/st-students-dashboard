@@ -6,7 +6,6 @@ import {LessonsActions} from "../../../core/state/lessons/lessons.actions";
 import {LessonsEntitySelectors, LessonsSelectors} from "../../../core/state/lessons/lessons.selectors";
 import {LessonSchedule} from "../../../core/models/LessonSchedule";
 import {Observable, of} from "rxjs";
-import {LoaderComponent} from "../../../shared/loader/loader.component";
 import {CircularLoaderComponent} from "../../../shared/circular-loader/circular-loader.component";
 import {StudentSelectors} from "../../../core/state/student/student.selectors";
 
@@ -17,7 +16,6 @@ interface CalendarDay {
   isToday: boolean;
   events: LessonSchedule[];
 }
-
 
 @Component({
   selector: 'app-calendar',
