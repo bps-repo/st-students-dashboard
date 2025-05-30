@@ -22,7 +22,7 @@ interface CalendarDay {
 @Component({
   selector: 'app-calendar',
   standalone: true,
-  imports: [CommonModule, RouterModule, LoaderComponent, CircularLoaderComponent],
+  imports: [CommonModule, RouterModule, CircularLoaderComponent],
   templateUrl: './calendar.component.html',
   styleUrls: []
 })
