@@ -24,12 +24,16 @@ export class LessonService {
   // Example method to get lessons
   getLessons(): Observable<LessonSchedule[]> {
     const url = this.studentId ? `${this.baseUrl}/today?studentId=${this.studentId}` : `${this.baseUrl}/today`;
-    return this.http.get<ApiResponse<LessonSchedule[]>>(url).pipe(
-      map(response => response.data?.map(lesson => ({
-        ...lesson,
-        startDateTime: new Date(lesson.startDateTime),
-        endDateTime: new Date(lesson.endDateTime)
-      })))
+    return this.http.get<ApiResponse<any[]>>(url).pipe(
+      map(response => (response.data || []).map((lesson) => {
+        const startDateTime = lesson?.startDateTime || lesson?.startDatetime;
+        const endDateTime = lesson?.endDateTime || lesson?.endDatetime;
+        return {
+          ...lesson,
+          startTime: startDateTime ? new Date(startDateTime) : undefined,
+          endTime: endDateTime ? new Date(endDateTime) : undefined
+        };
+      }))
     );
   }
 }

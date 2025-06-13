@@ -20,7 +20,6 @@ import {Router, RouterModule} from "@angular/router";
   selector: 'app-home-page',
   imports: [CommonModule, MatDialogModule, CircularLoaderComponent, LoaderComponent, PushPipe, RouterModule],
   templateUrl: './home-page.component.html',
-  styleUrl: './home-page.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HomePageComponent implements OnInit {
