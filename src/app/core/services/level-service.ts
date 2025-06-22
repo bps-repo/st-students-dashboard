@@ -3,7 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../environments/environment.development";
 import {map, Observable} from "rxjs";
 import {Level} from "../models/Level";
-import {ApiResponse} from "../dtos/api-response";
+import {ApiResponse, PagedResponse} from "../dtos/api-response";
 import {Student} from "../models/Student";
 import {Store} from "@ngrx/store";
 import {StudentSelectors} from "../state/student/student.selectors";
@@ -26,8 +26,8 @@ export class LevelService {
   }
 
   getLevels(): Observable<Level[]> {
-    return this.http.get<ApiResponse<Level[]>>(this.baseUrl).pipe(
-      map((r) => r.data as Level[])
+    return this.http.get<ApiResponse<PagedResponse<Level[]>>>(this.baseUrl).pipe(
+      map((r) => r.data.content as Level[])
     )
   }
 }

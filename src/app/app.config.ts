@@ -9,9 +9,9 @@ import {provideRouterStore, routerReducer} from '@ngrx/router-store';
 import {routes} from './app.routes';
 import {provideClientHydration} from '@angular/platform-browser';
 import {provideAnimationsAsync} from '@angular/platform-browser/animations/async';
-import {provideHttpClient, withFetch} from "@angular/common/http";
+import {provideHttpClient, withFetch, withInterceptors} from "@angular/common/http";
 import {ngrxEffects, ngrxFeatures} from "./core/state/app.state";
-
+import {tokenInterceptor} from "./core/interceptors/token.interceptor";
 
 
 export const appConfig: ApplicationConfig = {
@@ -21,7 +21,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideClientHydration(),
     provideAnimationsAsync(),
-    provideHttpClient(withFetch()),
+    provideHttpClient(withFetch(), withInterceptors([tokenInterceptor])),
 
     // NGRX
     provideStore({
