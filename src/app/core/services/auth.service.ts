@@ -189,7 +189,8 @@ export class AuthService {
     }
 
     const userToken = this.getUserFromToken(token);
-    return userToken?.id || null;
+    console.log(userToken?.sub)
+    return userToken?.sub || null;
   }
 
   /**
