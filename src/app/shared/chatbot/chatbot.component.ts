@@ -1,11 +1,13 @@
 import {Component, OnInit, HostListener} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
+import {ChatService, ChatRequest, ChatResponse} from '../../core/services/chat.service';
 
 interface ChatMessage {
   text: string;
   isUser: boolean;
   timestamp: Date;
+  conversationId?: string;
 }
 
 @Component({
@@ -20,35 +22,12 @@ export class ChatbotComponent implements OnInit {
   userMessage = '';
   messages: ChatMessage[] = [];
   isTyping = false;
+  currentConversationId = '';
 
-  // Predefined responses for the chatbot
-  private responses = [
-    {keywords: ['hello', 'hi', 'hey'], response: 'Hello! How can I help you today?'},
-    {keywords: ['course', 'courses'], response: 'We offer various courses. You can check them in the Courses section.'},
-    {keywords: ['assignment', 'homework', 'task'], response: 'You can find your assignments in the Lessons section.'},
-    {keywords: ['grade', 'marks', 'score'], response: 'Your grades are available in your Profile section.'},
-    {
-      keywords: ['teacher', 'instructor', 'professor'],
-      response: 'You can find information about your teachers in the Teachers section.'
-    },
-    {keywords: ['event', 'events'], response: 'Check the Events section for upcoming events and activities.'},
-    {
-      keywords: ['certificate', 'certification'],
-      response: 'Your certificates are available in the Certificates section.'
-    },
-    {
-      keywords: ['support', 'help'],
-      response: 'For additional support, please visit our Support section or contact our help desk.'
-    },
-    {keywords: ['video', 'videos'], response: 'You can access video courses in the Video Courses section.'},
-    {keywords: ['profile', 'account'], response: 'You can manage your profile settings in the Profile section.'},
-    {
-      keywords: ['logout', 'sign out'],
-      response: 'To logout, click on your profile icon in the top right corner and select Logout.'
-    }
-  ];
+  // System context for the chatbot
+  private systemContext = 'Centers, Units, Students, Classes and lessons';
 
-  constructor() {
+  constructor(private chatService: ChatService) {
   }
 
   ngOnInit(): void {
@@ -80,7 +59,8 @@ export class ChatbotComponent implements OnInit {
     this.messages.push({
       text,
       isUser: true,
-      timestamp: new Date()
+      timestamp: new Date(),
+      conversationId: this.currentConversationId
     });
   }
 
@@ -88,23 +68,47 @@ export class ChatbotComponent implements OnInit {
     this.messages.push({
       text,
       isUser: false,
-      timestamp: new Date()
+      timestamp: new Date(),
+      conversationId: this.currentConversationId
     });
   }
 
   private respondToMessage(message: string): void {
-    const lowerMessage = message.toLowerCase();
+    // Create chat request
+    const chatRequest: ChatRequest = {
+      message: message,
+      systemContext: this.systemContext,
+      conversationId: this.currentConversationId || this.generateConversationId(),
+      temperature: 0.2,
+      maxTokens: 50,
+      streaming: false
+    };
 
-    // Check for matches in predefined responses
-    for (const item of this.responses) {
-      if (item.keywords.some(keyword => lowerMessage.includes(keyword))) {
-        this.addBotMessage(item.response);
-        return;
+    console.log("Message to send: ", message);
+
+    // Call the chat service
+    this.chatService.sendMessage(chatRequest).subscribe({
+      next: (response: any) => {
+
+        console.log("Chat response", response);
+        // Update conversation ID if it's a new conversation
+        if (!this.currentConversationId) {
+          this.currentConversationId = response.conversationId;
+        }
+
+        // Add bot response to messages
+        this.addBotMessage(response);
+      },
+      error: (error) => {
+        console.error('Error sending message to chat API:', error);
+        this.addBotMessage('Sorry, I encountered an error. Please try again later.');
       }
-    }
+    });
+  }
 
-    // Default response if no match found
-    this.addBotMessage('I\'m not sure how to help with that. Please try asking something else or visit our Support section for more assistance.');
+  private generateConversationId(): string {
+    // Generate a simple random ID for new conversations
+    return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
   }
 
   // Close chat when clicking outside (optional)
