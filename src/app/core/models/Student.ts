@@ -14,7 +14,7 @@ export interface Student {
   levelId: string;
   studentClass: ClassEntity;
   attendances: any[];
-  currentLevelProgress:number
+  levelProgressPercentage: number
   certificates: any[]
   currentUnit: Unit,
   classes?: ClassEntity[],

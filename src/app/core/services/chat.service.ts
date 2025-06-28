@@ -14,9 +14,25 @@ export interface ChatRequest {
   streaming: boolean;
 }
 
+export interface AssistantMessage {
+  messageType: string;
+  toolCalls: any[];
+  textContent: string;
+  reasoningContent: any;
+  prefix: any;
+  metadata: {
+    finishReason: string;
+    index: number;
+    id: string;
+    role: string;
+    messageType: string;
+  };
+}
+
 export interface ChatResponse {
   message: string;
   conversationId: string;
+  assistantMessage?: AssistantMessage;
 }
 
 @Injectable({
@@ -30,10 +46,14 @@ export class ChatService {
 
   sendMessage(request: ChatRequest): Observable<ChatResponse> {
     return this.http.post<any>(`${this.baseUrl}/message`, request).pipe(
-      map((r) => {
-        console.log("API RESPONSE: ", r, "")
-        return r.response;
+      map((response) => {
+        console.log("response ", response);
+        return {
+          message: response.response,
+          conversationId: response.conversationId,
+          assistantMessage: response.assistantMessage
+        }
       })
-    );
+    )
   }
 }

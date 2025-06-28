@@ -1,7 +1,7 @@
 import {Component, OnInit, HostListener} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
-import {ChatService, ChatRequest, ChatResponse} from '../../core/services/chat.service';
+import {ChatService, ChatRequest, ChatResponse, AssistantMessage} from '../../core/services/chat.service';
 
 interface ChatMessage {
   text: string;
@@ -88,7 +88,7 @@ export class ChatbotComponent implements OnInit {
 
     // Call the chat service
     this.chatService.sendMessage(chatRequest).subscribe({
-      next: (response: any) => {
+      next: (response: ChatResponse) => {
 
         console.log("Chat response", response);
         // Update conversation ID if it's a new conversation
@@ -97,7 +97,7 @@ export class ChatbotComponent implements OnInit {
         }
 
         // Add bot response to messages
-        this.addBotMessage(response);
+        this.addBotMessage(response.message);
       },
       error: (error) => {
         console.error('Error sending message to chat API:', error);
