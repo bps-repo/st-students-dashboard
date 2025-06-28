@@ -1,0 +1,52 @@
+<!-- Floating chat button -->
+<button
+  class="chatbot-toggle"
+  (click)="toggleChat()"
+  [class.open]="isOpen">
+  <span class="material-icons">{{ isOpen ? 'close' : 'chat' }}</span>
+</button>
+
+<!-- Chat container -->
+<div class="chatbot-container" [class.open]="isOpen">
+  <div class="chatbot-header">
+    <div class="chatbot-title">
+      <span class="material-icons">support_agent</span>
+      <h3>Virtual Assistant</h3>
+    </div>
+    <button class="close-button" (click)="toggleChat()">
+      <span class="material-icons">close</span>
+    </button>
+  </div>
+
+  <div class="chatbot-messages">
+    <div *ngFor="let message of messages"
+         class="message"
+         [class.user-message]="message.isUser"
+         [class.bot-message]="!message.isUser">
+      <div class="message-content">
+        <p>{{ message.text }}</p>
+        <span class="message-time">{{ message.timestamp | date:'shortTime' }}</span>
+      </div>
+    </div>
+
+    <!-- Typing indicator -->
+    <div *ngIf="isTyping" class="message bot-message">
+      <div class="message-content typing-indicator">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="chatbot-input">
+    <input
+      type="text"
+      placeholder="Type your message..."
+      [(ngModel)]="userMessage"
+      (keyup.enter)="sendMessage()">
+    <button (click)="sendMessage()">
+      <span class="material-icons">send</span>
+    </button>
+  </div>
+</div>
