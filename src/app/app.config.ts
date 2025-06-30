@@ -10,7 +10,7 @@ import {routes} from './app.routes';
 import {provideClientHydration} from '@angular/platform-browser';
 import {provideAnimationsAsync} from '@angular/platform-browser/animations/async';
 import {provideHttpClient, withFetch, withInterceptors} from "@angular/common/http";
-import {ngrxEffects, ngrxFeatures} from "./core/state/app.state";
+import {initialAppState, ngrxEffects, ngrxFeatures} from "./core/state/app.state";
 import {tokenInterceptor} from "./core/interceptors/token.interceptor";
 
 
