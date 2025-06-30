@@ -1,4 +1,4 @@
-import {Component, OnInit, HostListener} from '@angular/core';
+import {Component, OnInit, HostListener, signal} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {ChatService, ChatRequest, ChatResponse, AssistantMessage} from '../../core/services/chat.service';
@@ -18,7 +18,8 @@ interface ChatMessage {
   styleUrls: ['./chatbot.component.scss']
 })
 export class ChatbotComponent implements OnInit {
-  isOpen = false;
+  justToggled = false;
+  isOpen = signal(false);
   userMessage = '';
   messages: ChatMessage[] = [];
   isTyping = false;
@@ -31,12 +32,17 @@ export class ChatbotComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Add initial welcome message
     this.addBotMessage('Hi there! I\'m your virtual assistant. How can I help you today?');
   }
 
   toggleChat(): void {
-    this.isOpen = !this.isOpen;
+    this.justToggled = true;
+    this.isOpen.update(prev => !prev);
+
+    // To Allow DOM to register the open state
+    setTimeout(() => {
+      this.justToggled = false;
+    }, 200);
   }
 
   sendMessage(): void {
@@ -107,20 +113,18 @@ export class ChatbotComponent implements OnInit {
   }
 
   private generateConversationId(): string {
-    // Generate a simple random ID for new conversations
     return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
   }
 
-  // Close chat when clicking outside (optional)
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
+    if (this.justToggled) return;
     const chatbotElement = document.querySelector('.chatbot-container');
     const target = event.target as HTMLElement;
-
     if (chatbotElement && !chatbotElement.contains(target) &&
       !target.classList.contains('chatbot-toggle') &&
-      this.isOpen) {
-      this.isOpen = false;
+      this.isOpen()) {
+      this.isOpen.set(false);
     }
   }
 }
