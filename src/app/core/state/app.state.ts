@@ -14,6 +14,9 @@ import {initialStudentState, StudentState} from "./student/student.state";
 import {initialLessonsState, LessonsState} from "./lessons/lessons.state";
 import {lessonFeature} from "./lessons/lessons.feature";
 import {LessonsEffects} from "./lessons/lessons.effects";
+import {ChatBotInitialState, ChatbotState} from "./chatbot/chatbot.state";
+import {ChatBotFeature} from "./chatbot/chatbot.feature";
+import {ChatbotEffects} from "./chatbot/chatbot.effects";
 
 /**
  * Interface for the root state of the application
@@ -24,7 +27,8 @@ export interface AppState {
   units: UnitsState;
   courses: CoursesState;
   student: StudentState,
-  lesson: LessonsState
+  lesson: LessonsState,
+  chatBot: ChatbotState
 }
 
 /**
@@ -37,6 +41,7 @@ export const initialAppState: AppState = {
   courses: initialCoursesState,
   student: initialStudentState,
   lesson: initialLessonsState,
+  chatBot: ChatBotInitialState
 };
 
 
@@ -45,7 +50,8 @@ export const ngrxFeatures = [
   unitsFeature,
   studentFeature,
   levelFeature,
-  lessonFeature
+  lessonFeature,
+  ChatBotFeature
 ]
 
 export const ngrxEffects = [
@@ -53,5 +59,6 @@ export const ngrxEffects = [
   UnitsEffects,
   StudentEffects,
   LevelEffects,
-  LessonsEffects
+  LessonsEffects,
+  ChatbotEffects
 ]

@@ -97,7 +97,7 @@
         </div>
       </div>
 
-      <div *ngIf="(units$ | ngrxPush)?.length == 0" class="text-center">Sem unidades disponíveis</div>
+      <div *ngIf="((units$ | ngrxPush)?.length == 0) && !(loadingLevel$ | ngrxPush) " class="text-center">Sem unidades disponíveis</div>
       <!-- Units Cards -->
       <div *ngIf="!(loadingUnit$ | ngrxPush) && !(error$ | ngrxPush)"
            class="bg-white rounded-xl shadow-md overflow-hidden">
