@@ -3,9 +3,13 @@ import {ChatbotActions} from "./chatbot.actions";
 import {exhaustMap, of} from "rxjs";
 import {ChatService} from "../../services/chat.service";
 import {catchError, map} from "rxjs/operators";
+import {inject, Injectable} from "@angular/core";
 
+@Injectable()
 export class ChatbotEffects {
-  constructor(private readonly actions$: Actions, private chatBotService: ChatService) {
+  actions$ = inject(Actions);
+
+  constructor(private chatBotService: ChatService) {
   }
 
   sendMessage$ = createEffect(() =>
