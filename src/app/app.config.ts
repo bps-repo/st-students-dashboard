@@ -1,5 +1,5 @@
 import {provideAnimations} from "@angular/platform-browser/animations";
-import {ApplicationConfig, isDevMode, provideZoneChangeDetection} from '@angular/core';
+import {ApplicationConfig, importProvidersFrom, isDevMode, provideZoneChangeDetection} from '@angular/core';
 import {provideRouter} from '@angular/router';
 import {FeatureSlice, provideState, provideStore} from '@ngrx/store';
 import {provideEffects} from '@ngrx/effects';
@@ -12,6 +12,7 @@ import {provideAnimationsAsync} from '@angular/platform-browser/animations/async
 import {provideHttpClient, withFetch, withInterceptors} from "@angular/common/http";
 import {initialAppState, ngrxEffects, ngrxFeatures} from "./core/state/app.state";
 import {tokenInterceptor} from "./core/interceptors/token.interceptor";
+import {MarkdownModule} from "ngx-markdown";
 
 
 export const appConfig: ApplicationConfig = {
@@ -22,6 +23,7 @@ export const appConfig: ApplicationConfig = {
     provideClientHydration(),
     provideAnimationsAsync(),
     provideHttpClient(withFetch(), withInterceptors([tokenInterceptor])),
+    importProvidersFrom(MarkdownModule.forRoot()),
 
     // NGRX
     provideStore({

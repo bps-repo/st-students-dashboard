@@ -1,7 +1,8 @@
 import {Component, OnInit, HostListener, signal} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
-import {ChatService, ChatRequest, ChatResponse, AssistantMessage} from '../../core/services/chat.service';
+import {ChatService, ChatRequest, ChatResponse} from '../../core/services/chat.service';
+import {MarkdownComponent, MarkdownService} from "ngx-markdown";
 
 interface ChatMessage {
   text: string;
@@ -13,9 +14,9 @@ interface ChatMessage {
 @Component({
   selector: 'app-chatbot',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, MarkdownComponent],
   templateUrl: './chatbot.component.html',
-  styleUrls: ['./chatbot.component.scss']
+  styleUrls: ['./chatbot.component.scss'],
 })
 export class ChatbotComponent implements OnInit {
   justToggled = false;
@@ -56,7 +57,6 @@ export class ChatbotComponent implements OnInit {
     // Simulate bot typing
     this.isTyping = true;
     setTimeout(() => {
-      this.isTyping = false;
       this.respondToMessage(userQuery);
     }, 1000);
   }
@@ -90,12 +90,10 @@ export class ChatbotComponent implements OnInit {
       streaming: false
     };
 
-    console.log("Message to send: ", message);
-
     // Call the chat service
     this.chatService.sendMessage(chatRequest).subscribe({
       next: (response: ChatResponse) => {
-
+        this.isTyping = false;
         console.log("Chat response", response);
         // Update conversation ID if it's a new conversation
         if (!this.currentConversationId) {
@@ -106,6 +104,7 @@ export class ChatbotComponent implements OnInit {
         this.addBotMessage(response.message);
       },
       error: (error) => {
+        this.isTyping = false;
         console.error('Error sending message to chat API:', error);
         this.addBotMessage('Sorry, I encountered an error. Please try again later.');
       }

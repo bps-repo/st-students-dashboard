@@ -8,7 +8,6 @@ import {inject, Injectable} from "@angular/core";
 @Injectable()
 export class ChatbotEffects {
   actions$ = inject(Actions);
-
   constructor(private chatBotService: ChatService) {
   }
 
