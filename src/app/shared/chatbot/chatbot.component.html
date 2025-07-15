@@ -18,14 +18,25 @@
     </button>
   </div>
 
-  <div class="chatbot-messages">
-    <div *ngFor="let message of messages"
-         class="message"
+  <!-- Updated message template -->
+  <div class="chatbot-messages" #messagesContainer>
+    <div *ngFor="let message of messages" class="message"
          [class.user-message]="message.isUser"
          [class.bot-message]="!message.isUser">
+
+      <!-- Message content -->
       <div class="message-content">
-        <p>{{ message.text }}</p>
+        <markdown [data]="message.text"></markdown>
         <span class="message-time">{{ message.timestamp | date:'shortTime' }}</span>
+      </div>
+
+      <!-- Message icon -->
+      <div class="message-icon"
+           [class.user-icon]="message.isUser"
+           [class.bot-icon]="!message.isUser">
+      <span class="material-icons">
+        {{ message.isUser ? 'person' : 'support_agent' }}
+      </span>
       </div>
     </div>
 
@@ -35,6 +46,9 @@
         <span></span>
         <span></span>
         <span></span>
+      </div>
+      <div class="message-icon bot-icon">
+        <span class="material-icons">support_agent</span>
       </div>
     </div>
   </div>

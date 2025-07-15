@@ -1,7 +1,8 @@
 import {Component, OnInit, HostListener, signal} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
-import {ChatService, ChatRequest, ChatResponse, AssistantMessage} from '../../core/services/chat.service';
+import {ChatService, ChatRequest, ChatResponse} from '../../core/services/chat.service';
+import {MarkdownComponent, MarkdownService} from "ngx-markdown";
 
 interface ChatMessage {
   text: string;
@@ -13,9 +14,9 @@ interface ChatMessage {
 @Component({
   selector: 'app-chatbot',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, MarkdownComponent],
   templateUrl: './chatbot.component.html',
-  styleUrls: ['./chatbot.component.scss']
+  styleUrls: ['./chatbot.component.scss'],
 })
 export class ChatbotComponent implements OnInit {
   justToggled = false;
