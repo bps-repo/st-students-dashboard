@@ -11,7 +11,7 @@ import {StudentSelectors} from "../state/student/student.selectors";
   providedIn: 'root'
 })
 export class LessonService {
-  private baseUrl = `${environment.apiUrl}/lesson-schedules`;
+  private baseUrl = `${environment.apiUrl}/students/me`;
   private store$ = inject(Store)
   protected studentId?: string
 
@@ -23,8 +23,7 @@ export class LessonService {
 
   // Example method to get lessons
   getLessons(): Observable<LessonSchedule[]> {
-    const url = this.studentId ? `${this.baseUrl}/today?studentId=${this.studentId}` : `${this.baseUrl}/today`;
-    return this.http.get<ApiResponse<any[]>>(url).pipe(
+    return this.http.get<ApiResponse<any[]>>(`${this.baseUrl}/lessons`).pipe(
       map(response => (response.data || []).map((lesson) => {
         const startDateTime = lesson?.startDateTime || lesson?.startDatetime;
         const endDateTime = lesson?.endDateTime || lesson?.endDatetime;

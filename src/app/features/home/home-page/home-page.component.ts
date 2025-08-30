@@ -62,7 +62,7 @@ export class HomePageComponent implements OnInit {
 
   navigateToUnit(unit: Unit) {
     if (unit.status === UnitStatus.LOCK) return
-    this.router.navigate(['/units', unit.id]).then(r => {
+    this.router.navigate(['/units', unit.unitId]).then(r => {
     });
   }
 
@@ -114,12 +114,12 @@ export class HomePageComponent implements OnInit {
       }));
     }
 
-    const currentUnitId = student.currentUnit.id;
+    const currentUnitId = student.currentUnit.unitId;
 
     return units.map(unit => {
       let status: UnitStatus;
 
-      if (unit.id === currentUnitId) {
+      if (unit.unitId === currentUnitId) {
         status = UnitStatus.AVAILABLE;
       } else {
         status = UnitStatus.LOCK;

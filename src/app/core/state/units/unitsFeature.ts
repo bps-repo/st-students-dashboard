@@ -44,7 +44,7 @@ export const unitsFeature = createFeature({
     on(UnitsActions.updateUnitStatusSuccess, (state, {unit}) =>
       unitsAdapter.updateOne(
         {
-          id: unit.id,
+          id: unit.unitId,
           changes: unit
         },
         {

@@ -97,7 +97,9 @@
         </div>
       </div>
 
-      <div *ngIf="((units$ | ngrxPush)?.length == 0) && !(loadingLevel$ | ngrxPush) " class="text-center">Sem unidades disponíveis</div>
+      <div *ngIf="((units$ | ngrxPush)?.length == 0) && !(loadingLevel$ | ngrxPush) " class="text-center">Sem unidades
+        disponíveis
+      </div>
       <!-- Units Cards -->
       <div *ngIf="!(loadingUnit$ | ngrxPush) && !(error$ | ngrxPush)"
            class="bg-white rounded-xl shadow-md overflow-hidden">
@@ -133,7 +135,7 @@
               <!-- Content -->
               <div class="flex-grow">
                 <div class="flex items-center justify-between">
-                  <h3 class="font-bold text-lg text-neutral-800">{{ unit.name }}</h3>
+                  <h3 class="font-bold text-lg text-neutral-800">{{ unit.unitName }}</h3>
                   <div class="flex items-center">
                     <span
                       [ngClass]="
@@ -149,7 +151,7 @@
                     </span>
                   </div>
                 </div>
-                <p class="text-neutral-600 mt-1">{{ unit.description }}</p>
+                <p class="text-neutral-600 mt-1">{{ unit.unitDescription }}</p>
 
                 <!-- Progress Bar for each unit -->
                 <div class="w-full bg-neutral-200 rounded-full h-1.5 mt-3">

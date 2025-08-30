@@ -55,6 +55,7 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.userProfileForm.disable()
     // Subscribe to the user observable from the store
     this.user$.subscribe(user => {
       if (user) {

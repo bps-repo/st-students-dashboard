@@ -15,9 +15,9 @@ export interface UnitsState extends EntityState<Unit> {
  */
 export const unitsAdapter: EntityAdapter<Unit> = createEntityAdapter<Unit>({
   // Use title as the ID since we don't have a proper ID in the mock data
-  selectId: (unit: Unit) => unit.id,
+  selectId: (unit: Unit) => unit.unitId,
   // Sort by title
-  sortComparer: (a: Unit, b: Unit) => a.id.localeCompare(b.id),
+  sortComparer: (a: Unit, b: Unit) => a.unitId.localeCompare(b.unitId),
 });
 
 /**

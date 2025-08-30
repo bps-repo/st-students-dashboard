@@ -1,12 +1,20 @@
 export interface Unit {
-  id: string;
-  name: String,
-  description: string,
+  unitId: string;
+  unitName: String,
+  unitDescription: string,
   orderUnit: string,
   levelId: string,
   status: UnitStatus;
+  complete: boolean;
+  lessonProgress: number;
+  completionDate: Date;
+  maximumAssessmentAttempt: number;
+  assessmentProgress: number;
+  assessmentsPassed: number;
+  assessmentsFailed: number;
+  isCurrentUnit: boolean;
+  progressId: string;
 }
-
 
 
 export enum UnitStatus {
