@@ -7,11 +7,11 @@ import {ApiResponse} from "../dtos/api-response";
 
 export interface ChatRequest {
   message: string;
-  systemContext: string;
+  systemContext?: string;
   conversationId: string;
-  temperature: number;
-  maxTokens: number;
-  streaming: boolean;
+  temperature?: number;
+  maxTokens?: number;
+  streaming?: boolean;
 }
 
 export interface AssistantMessage {
@@ -39,19 +39,17 @@ export interface ChatResponse {
   providedIn: 'root'
 })
 export class ChatService {
-  private baseUrl = `${environment.apiUrl}/chat`;
+  private baseUrl = `${environment.apiUrl}/chat/student`;
 
   constructor(private http: HttpClient) {
   }
 
   sendMessage(request: ChatRequest): Observable<ChatResponse> {
-    return this.http.post<any>(`${this.baseUrl}/message`, request).pipe(
+    return this.http.post<any>(`${this.baseUrl}/me/message`, request).pipe(
       map((response) => {
-        console.log("response ", response);
         return {
-          message: response.response,
-          conversationId: response.conversationId,
-          assistantMessage: response.assistantMessage
+          message: response.data.response,
+          conversationId: response.data.conversationId
         }
       })
     )

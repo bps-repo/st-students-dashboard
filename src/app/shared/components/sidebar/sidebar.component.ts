@@ -6,6 +6,8 @@ import {Observable} from "rxjs";
 import {Store} from "@ngrx/store";
 import {LevelSelectors} from "../../../core/state/level/level.selectors";
 import {Level} from "../../../core/models/Level";
+import {StudentSelectors} from "../../../core/state/student/student.selectors";
+import {Student} from "../../../core/models/Student";
 
 interface navLink {
   label: string;
@@ -24,6 +26,7 @@ export class SidebarComponent implements OnInit {
   loading$!: Observable<boolean>
   level$!: Observable<Level | null>
   isNavBarOpened = signal(false);
+  student$!: Observable<Student | null>;
 
   constructor(private localStorageService: LocalstorageService, private store$: Store<any>) {
     this.level$ = store$.select(LevelSelectors.levelStudent);
@@ -89,6 +92,7 @@ export class SidebarComponent implements OnInit {
 
   ngOnInit(): void {
     this.navLinks[0].active = true;
+    this.student$ = this.store$.select(StudentSelectors.student)
   }
 
   toggleSidebar() {

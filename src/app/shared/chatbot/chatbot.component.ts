@@ -49,7 +49,6 @@ export class ChatbotComponent implements OnInit {
   sendMessage(): void {
     if (this.userMessage.trim() === '') return;
 
-    // Add user message
     this.addUserMessage(this.userMessage);
     const userQuery = this.userMessage;
     this.userMessage = '';

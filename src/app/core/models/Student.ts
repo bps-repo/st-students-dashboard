@@ -14,11 +14,24 @@ export interface Student {
   centerId: string;
   levelId: string;
   level?: Level;
+  center?: Center
   studentClass: ClassEntity;
   attendances: any[];
   levelProgressPercentage: number
   certificates: any[]
   currentUnit: Unit,
   classes?: ClassEntity[],
-  unitProgresses?: UnitProgress[]
+  unitProgresses?: UnitProgress[],
+  notes?: string
+}
+
+export interface Center {
+  id: string;
+  name: string;
+  address: string;
+  phone: string;
+  email: string;
+  logo: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }

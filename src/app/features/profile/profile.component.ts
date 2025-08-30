@@ -8,6 +8,8 @@ import {authSelectors} from "../../core/state/auth/auth.selectors";
 import {User} from "../../core/models/User";
 import {UserProfile} from "../../core/dtos/user-profile";
 import {AuthActions} from "../../core/state/auth/authActions";
+import {Student} from "../../core/models/Student";
+import {StudentSelectors} from "../../core/state/student/student.selectors";
 
 /**
  * Modern Profile Component
@@ -28,12 +30,14 @@ export class ProfileComponent implements OnInit {
   protected user$!: Observable<User | null>
   protected student!: Observable<UserProfile | null>
   protected userProfileForm!: FormGroup
+  protected student$!: Observable<Student | null>
 
 
   constructor(private store$: Store, private form: FormBuilder) {
     // Initialize loading and error observables
     this.isLoading$ = this.store$.select(authSelectors.loading);
     this.user$ = store$.select(authSelectors.user);
+    this.student$ = store$.select(StudentSelectors.student)
 
     // Initialize the form with default values
     this.userProfileForm = this.form.group({
