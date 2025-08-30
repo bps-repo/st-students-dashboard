@@ -39,7 +39,7 @@
             <h2 class="text-xl font-bold text-neutral-800">Nível</h2>
             <div
               class="ml-3 bg-primary-100 text-primary-700 px-4 py-1 rounded-lg font-semibold flex items-center cursor-pointer hover:bg-primary-200 transition-all">
-              <span>{{ (level$ | ngrxPush)?.name }}</span>
+              <span>{{ (student$ | ngrxPush)?.level?.name }}</span>
               <i class="pi pi-chevron-down ml-2"></i>
             </div>
           </div>

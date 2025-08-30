@@ -12,7 +12,7 @@ import {StudentSelectors} from "../state/student/student.selectors";
   providedIn: 'root',
 })
 export class UnitService {
-  private baseUrl = `${environment.apiUrl}/units`
+  private baseUrl = `${environment.apiUrl}/students`
   student?: Student
 
   constructor(private http: HttpClient, private store$: Store) {
@@ -25,8 +25,8 @@ export class UnitService {
     );
   }
 
-  getUnitsByLevelId(): Observable<Unit[]> {
-    return this.http.get<ApiResponse<Unit[]>>(`${this.baseUrl}/by-level/${this.student?.levelId}`).pipe(
+  getMyCurrentLevelUnits(): Observable<Unit[]> {
+    return this.http.get<ApiResponse<Unit[]>>(`${this.baseUrl}/me/current-level-unit-progress`).pipe(
       map((r) => r.data as Unit[])
     );
   }

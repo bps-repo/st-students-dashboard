@@ -23,7 +23,7 @@ export class StudentEffects {
     this.actions$.pipe(
       ofType(StudentActions.loadStudent),
       exhaustMap(() =>
-        this.studentService.getStudentByEmail().pipe(
+        this.studentService.getStudentMyProfile().pipe(
           map(student => StudentActions.loadStudentSuccess({student})),
           catchError(error => of(StudentActions.loadStudentFailure({
             errors: error.message || 'Failed to load student information'

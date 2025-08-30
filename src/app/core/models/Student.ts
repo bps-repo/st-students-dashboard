@@ -3,6 +3,7 @@ import {ClassEntity} from "./ClassEntity";
 import {Unit} from "./Unit";
 import {UnitProgress} from "./UnitProgress";
 import {User} from "./User";
+import {Level} from "./Level";
 
 export interface Student {
   id?: string;
@@ -12,6 +13,7 @@ export interface Student {
   status: StudentStatus;
   centerId: string;
   levelId: string;
+  level?: Level;
   studentClass: ClassEntity;
   attendances: any[];
   levelProgressPercentage: number

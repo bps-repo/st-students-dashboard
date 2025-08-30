@@ -19,14 +19,8 @@ export class StudentService {
    * Get student information by email from the current authenticated user
    * @returns Observable of Student or error
    */
-  getStudentByEmail(): Observable<Student> {
-    const userToken = this.authService.getUserFromToken(this.authService.getAccessToken() || '');
-
-    if (!userToken?.email) {
-      return throwError(() => new Error('User not authenticated or email not available'));
-    }
-
-    return this.http.get<ApiResponse<Student>>(`${this.baseUrl}/by-email/${userToken.email}`).pipe(
+  getStudentMyProfile(): Observable<Student> {
+    return this.http.get<ApiResponse<Student>>(`${this.baseUrl}/me`).pipe(
       map(response => {
         if (!response || !response.data) {
           throw new Error('Invalid response from server');

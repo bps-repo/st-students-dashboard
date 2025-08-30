@@ -29,8 +29,8 @@ export class AuthService {
    * Login with email and password
    * @returns Observable of AuthResponse or error
    */
-  login(email: string, password: string): Observable<AuthResponse> {
-    return this.http.post<ApiResponse<AuthResponse>>(`${this.authUrl}/login`, {email, password}).pipe(
+  login(username: string, password: string): Observable<AuthResponse> {
+    return this.http.post<ApiResponse<AuthResponse>>(`${this.authUrl}/login`, {username, password}).pipe(
       map(response => {
         if (!response || !response.data) {
           throw new Error('Invalid response from server');
