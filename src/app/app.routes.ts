@@ -18,6 +18,7 @@ import {VideoCoursesComponent} from "./features/video-course/video-courses.compo
 import {VideoCourseListComponent} from "./features/video-course-list/video-course-list.component";
 import {LessonDetailComponent} from "./features/lessons/lesson-detail/lesson-detail.component";
 import {UnitDetailComponent} from "./features/units/unit-detail/unit-detail.component";
+import {StudentContractsComponent} from "./features/contracts/student-contracts.component";
 
 export const routes: Routes = [
   {
@@ -84,6 +85,11 @@ export const routes: Routes = [
         path: 'certificates',
         component: CerticatesComponent,
         data: {breadcrumb: 'Certificados'}
+      },
+      {
+        path: 'finance',
+        component: StudentContractsComponent,
+        data: {breadcrumb: 'Financeiro'}
       },
       {
         path: 'change-password',

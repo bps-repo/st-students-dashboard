@@ -1,11 +1,11 @@
 <aside
   [ngClass]="{
-    'w-[250px]': !isNavBarOpened(),
-    'w-[100px]': isNavBarOpened(),
+    'w-[260px]': !isNavBarOpened(),
+    'w-[96px]': isNavBarOpened(),
   }"
-  class="h-screen transition-all duration-300 ease-in-out bg-primary-50 border-r border-primary-100 shadow-lg flex flex-col justify-between overflow-hidden"
+  class="h-screen transition-all duration-300 ease-in-out bg-white/70 backdrop-blur-xl border-r border-white/40 shadow-[0_10px_30px_rgba(0,0,0,0.08)] flex flex-col justify-between overflow-hidden"
 >
-  <div class="flex flex-col p-4 md:p-6 lg:p-8">
+  <div class="flex flex-col p-4 md:p-6 lg:p-7">
     <section class="flex flex-col justify-center items-center gap-4 mb-8">
       <img
         src="/user.png"
@@ -18,10 +18,10 @@
       />
       <h1
         *ngIf="!isNavBarOpened()"
-        class="flex flex-row gap-2 items-center font-heading text-sm text-primary-700 bg-primary-100 px-4 py-2 rounded-md transition-all duration-200 shadow-sm"
+        class="flex flex-row gap-2 items-center font-heading text-sm text-primary-800 bg-gradient-to-r from-primary-100 to-primary-50 px-4 py-2 rounded-full transition-all duration-200 shadow"
       >
         <span
-          class="flex justify-center text-white font-bold items-center w-4 h-4 bg-primary-600 rounded-full p-3 text-xs">L</span>
+          class="flex justify-center text-white font-bold items-center w-5 h-5 bg-primary-600 rounded-full text-[10px]">L</span>
         {{ (student$ | async)?.level?.name }}
       </h1>
     </section>
@@ -33,10 +33,10 @@
           [routerLink]="[navLink.path]"
           [routerLinkActive]="['active']"
           [ngClass]="{
-            'text-primary-700 bg-primary-100 rounded-md': navLink.active,
+            'text-primary-800 bg-primary-100 shadow-inner rounded-xl': navLink.active,
             'text-neutral-700': !navLink.active
           }"
-          class="hover:text-primary-600 hover:bg-primary-50 active:text-primary-700 transition-all flex flex-row items-center gap-3 px-3 py-2 rounded-md"
+          class="group hover:text-primary-700 hover:bg-primary-50/80 active:text-primary-800 transition-all flex flex-row items-center gap-3 px-3 py-2 rounded-xl"
         >
           <i class="{{ navLink.icon }} text-[20px] md:text-[24px]" [ngClass]="{'text-primary-600': navLink.active}"></i>
           <span
@@ -105,10 +105,10 @@
     'left-[12rem] md:left-[15.5rem]': !isNavBarOpened() && window.innerWidth < 768
   }"
   (click)="toggleSidebar()"
-  class="flex justify-center items-center absolute top-[10.5rem] md:top-[12rem] transition-all duration-300 ease-in-out transform -translate-x-1/2 bg-accent-500 hover:bg-accent-600 rounded-full w-7 h-7 md:w-8 md:h-8 text-white cursor-pointer shadow-md z-20"
+  class="flex justify-center items-center absolute top-[10.5rem] md:top-[12rem] transition-all duration-300 ease-in-out transform -translate-x-1/2 bg-gradient-to-r from-accent-500 to-accent-600 hover:from-accent-600 hover:to-accent-700 rounded-full w-8 h-8 md:w-9 md:h-9 text-white cursor-pointer shadow-lg z-20 ring-2 ring-white/60 backdrop-blur"
 >
   <i
     [ngClass]="getSideBarIcon()"
-    class="font-bold text-sm md:text-base transition-all"
+    class="font-bold text-sm md:text-base transition-all drop-shadow"
   ></i>
 </div>

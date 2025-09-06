@@ -77,6 +77,13 @@ export class SidebarComponent implements OnInit {
       active: false,
     },
     {
+      label: 'Financeiro',
+      path: '/finance',
+      icon: 'pi pi-wallet',
+      activeIcon: 'pi pi-wallet',
+      active: false,
+    },
+    {
       label: 'Ajuda',
       path: '/support',
       icon: 'pi pi-question-circle',
