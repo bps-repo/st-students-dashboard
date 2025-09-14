@@ -55,6 +55,8 @@ export class CalendarComponent implements OnInit {
     this.store$.select(LessonsEntitySelectors.selectAllLessons).subscribe((lesson) => {
       this.lessons$ = lesson;
       console.log('Lessons:', this.lessons$);
+      // Reload events whenever lessons change
+      this.loadEvents();
     })
 
     this.isLoading$ = store$.select(LessonsSelectors.selectLessonsLoading)
@@ -199,7 +201,7 @@ export class CalendarComponent implements OnInit {
   // Get formatted time for an event (e.g., "09:00 - 10:30")
   getEventTimeString(event: LessonSchedule): string {
     const startHours = event.startTime.getHours().toString().padStart(2, '0');
-    const startMinutes = event.endTime.getMinutes().toString().padStart(2, '0');
+    const startMinutes = event.startTime.getMinutes().toString().padStart(2, '0');
     const endHours = event.endTime.getHours().toString().padStart(2, '0');
     const endMinutes = event.endTime.getMinutes().toString().padStart(2, '0');
 

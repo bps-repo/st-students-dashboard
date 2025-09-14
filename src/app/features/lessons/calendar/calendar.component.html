@@ -6,6 +6,22 @@
         <h2 class="text-2xl font-bold text-primary">Calendário semanal</h2>
       </div>
       <div class="flex items-center">
+        <!-- Week Navigation Buttons -->
+        <div class="flex items-center mr-4">
+          <button 
+            (click)="goToPreviousWeek()" 
+            class="bg-primary-500 hover:bg-primary-600 text-white rounded-lg p-2 mr-2 transition-colors duration-200 flex items-center justify-center"
+            [disabled]="isLoading$ | async">
+            <i class="pi pi-chevron-left text-sm"></i>
+          </button>
+          <button 
+            (click)="goToNextWeek()" 
+            class="bg-primary-500 hover:bg-primary-600 text-white rounded-lg p-2 mr-2 transition-colors duration-200 flex items-center justify-center"
+            [disabled]="isLoading$ | async">
+            <i class="pi pi-chevron-right text-sm"></i>
+          </button>
+        </div>
+        
         <div class="bg-neutral-50 rounded-lg px-4 py-2 mr-3 border border-neutral-200">
           <span class="font-bold text-primary">{{ getWeekLabel() }}</span>
         </div>
@@ -66,46 +82,71 @@
 
           <!-- Events -->
           <a
-            routerLink="/lessons/224iksdu9233-ddf9873332-233"
+            [routerLink]="['/lessons', event.id]"
             *ngFor="let event of getEventsForDay(day)"
-            class="absolute rounded-md p-1.5 text-xs text-light font-bold cursor-pointer bg-primary transition-all hover:shadow-lg overflow-visible group"
-            [ngClass]="event.color || 'bg-accent-100'"
+            class="absolute rounded-lg p-2 text-[11px] text-black font-semibold cursor-pointer transition-all hover:shadow-xl overflow-visible group border-l-4 border-accent-500"
+            [ngClass]="event.color || ''"
             [style.top.px]="calculateEventTop(event)"
             [style.height.px]="calculateEventHeight(event)"
             [style.width.calc]="'100% - 8px'">
 
             <!-- Main Event Content -->
-            <div class="font-bold truncate">{{ event.title }}</div>
-            <div class="text-xs text-light font-medium">{{ getEventTimeString(event) }}</div>
-            <div class="text-xs text-light font-medium flex items-center">
-              <i class="pi pi-user mr-1 text-[10px]"></i>
-              {{ 'Professor' }}
+            <div class="flex items-center justify-between pr-4">
+              <div class="font-bold truncate pr-2">{{ event.title }}</div>
+              <span
+                class="px-1.5 py-0.5 rounded-full text-[10px] bg-success-100 border border-success-300 uppercase tracking-wide">
+                {{ event.status || 'PENDING' }}
+              </span>
             </div>
-            <div *ngIf="event.centerId" class="text-xs text-light flex items-center">
-              <i class="pi pi-home mr-1 text-primary text-[10px]"></i>
-              {{ 'sala' }}
+            <div class="text-[10px] opacity-90 font-medium">{{ getEventTimeString(event) }}</div>
+            <div class="text-[10px] opacity-90 font-medium flex items-center" *ngIf="event.online; else inPerson">
+              <i class="pi pi-video mr-1 text-[10px]"></i>
+              Online
             </div>
+            <ng-template #inPerson>
+              <div class="text-[10px] opacity-90 font-medium flex items-center">
+                <i class="pi pi-home mr-1 text-[10px]"></i>
+                Presencial
+              </div>
+            </ng-template>
 
             <!-- Hover Card -->
             <div
-              class="absolute left-full top-0 ml-2 w-60 z-50 hidden group-hover:block bg-white p-3 rounded-lg shadow-xl text-dark border border-neutral-200"
+              class="absolute left-full top-0 ml-2 w-64 z-50 hidden group-hover:block bg-white rounded-xl shadow-2xl text-dark border border-neutral-200"
             >
-              <div class="text-sm font-semibold mb-1">{{ event.title }}</div>
-              <div class="text-xs mb-1">
-                <span class="font-semibold">Professor:</span> {{ 'professor' }}
-              </div>
-              <div class="text-xs mb-1">
-                <span class="font-semibold">Hora:</span> {{ getEventTimeString(event) }}
-              </div>
-              <a class="text-xs mb-1 text-secondary-900" href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-                 target="_blank">
-                <span class="font-semibold">Link:</span> clique aqui
-              </a>
-              <div *ngIf="event.centerId" class="text-xs">
-                <span class="font-semibold">Sala:</span> {{ 'sala' }}
-              </div>
-              <div *ngIf="event.title" class="text-xs text-neutral-600 mt-2">
-                {{ event.title }}
+              <div class="text-sm bg-accent-400 p-3 text-white font-semibold mb-1 truncate">{{ event.title }}</div>
+              <div class="p-3 flex flex-col gap-3">
+                <div class="text-xs mb-1 flex justify-between items-center gap-2">
+                  <span class="bg-success-700 rounded-lg p-1 text-white font-bold">{{ event.status }}</span>
+                  <span>{{ getEventTimeString(event) }}</span>
+                </div>
+                <div class="text-xs mb-1 flex items-center gap-2">
+                  <i class="pi pi-clock"></i>
+                  <span>{{ getEventTimeString(event) }}</span>
+                </div>
+                <div class="text-xs mb-1 flex items-center gap-2">
+                  <span class="font-semibold">Professor(a):</span> <span class="font-normal">{{ 'Simiria' }}</span>
+                </div>
+                <a *ngIf="event.online && event.onlineLink" class="text-xs mb-1 text-secondary-900 underline"
+                   [href]="event.onlineLink" target="_blank" rel="noopener noreferrer">
+                  <span class="font-semibold">Link:</span> Abrir aula online
+                </a>
+                <div *ngIf="!event.online && event.centerId" class="text-xs">
+                  <span class="font-semibold">Centro:</span> {{ 'St Andrews Central' }}
+                </div>
+                <div *ngIf="event.description" class="text-xs text-neutral-600 mt-2 line-clamp-3">
+                  {{ event.description }}
+                </div>
+                <div class="text-[10px] opacity-90 font-medium flex items-center" *ngIf="event.online; else inPersonH">
+                  <i class="pi pi-video mr-1 text-[10px]"></i>
+                  Online
+                </div>
+                <ng-template #inPersonH>
+                  <div class="text-[12px] opacity-90 flex items-center font-semibold">
+                    <i class="pi pi-home mr-1 text-[14px] font-bold"></i>
+                    Presencial
+                  </div>
+                </ng-template>
               </div>
             </div>
           </a>

@@ -51,7 +51,7 @@ export const ngrxFeatures = [
   studentFeature,
   levelFeature,
   lessonFeature,
-  ChatBotFeature
+  ChatBotFeature,
 ]
 
 export const ngrxEffects = [

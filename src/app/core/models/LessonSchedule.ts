@@ -25,5 +25,6 @@ export enum LessonScheduleStatus {
   COMPLETED = 'COMPLETED',
   NO_SHOW = 'NO_SHOW',
   RESCHEDULED = 'RESCHEDULED',
-  BOOKED = 'BOOKED'
+  BOOKED = 'BOOKED',
+  AVAILABLE = 'AVAILABLE'
 }

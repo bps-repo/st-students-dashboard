@@ -1,11 +1,15 @@
-import {ChangeDetectionStrategy, Component, signal} from '@angular/core';
+import {ChangeDetectionStrategy, Component, computed, inject, signal} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {Observable, map, of} from 'rxjs';
+import {Observable, map} from 'rxjs';
 import {MaterialService} from '../../../core/material.service';
-import {RouterModule} from '@angular/router';
+import {ActivatedRoute, RouterModule} from '@angular/router';
 import {FormsModule} from '@angular/forms';
 import {MaterialType} from "../../../@types/material-type";
 import {Material} from "../../../@types/material";
+import {Store} from '@ngrx/store';
+import {LessonsEntitySelectors, LessonsSelectors} from '../../../core/state/lessons/lessons.selectors';
+import {LessonSchedule} from '../../../core/models/LessonSchedule';
+import {LessonsActions} from '../../../core/state/lessons/lessons.actions';
 
 /**
  * Modern Materials Component
@@ -28,6 +32,13 @@ export class LessonDetailComponent {
   protected activeFilter = signal('all');
   protected searchQuery = '';
 
+  // Lesson state
+  private readonly store = inject(Store);
+  private readonly route = inject(ActivatedRoute);
+  protected lessonId = this.route.snapshot.paramMap.get('id') as string;
+  protected lesson$ = this.store.select(LessonsEntitySelectors.selectLessonById(this.lessonId));
+  protected isLoadingLessons$ = this.store.select(LessonsSelectors.selectLessonsLoading);
+
   // Map each Material Type to a prime icon string
   protected readonly materialTypeMap: Map<MaterialType, string> = new Map([
     [MaterialType.TEXTBOOK, 'pi pi-file-pdf'],
@@ -39,6 +50,9 @@ export class LessonDetailComponent {
   ]);
 
   constructor(private readonly materialService: MaterialService) {
+    // ensure lessons are loaded in case of direct navigation
+    this.store.dispatch(LessonsActions.loadLessons());
+
     this.materials$ = this.materialService.getMaterial();
     this.filteredMaterials$ = this.materials$;
   }
