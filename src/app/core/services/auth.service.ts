@@ -135,7 +135,6 @@ export class AuthService {
       }
       return JSON.parse(atob(parts[1])) as UserToken;
     } catch (error) {
-      console.error('Error parsing token:', error);
       return null;
     }
   }
@@ -189,7 +188,6 @@ export class AuthService {
     }
 
     const userToken = this.getUserFromToken(token);
-    console.log(userToken?.sub)
     return userToken?.sub || null;
   }
 

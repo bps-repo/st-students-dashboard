@@ -1,3 +1,4 @@
+
 export interface LessonSchedule extends Partial<LessonScheduleUI> {
   id: string;
   title: string;
@@ -8,9 +9,26 @@ export interface LessonSchedule extends Partial<LessonScheduleUI> {
   endTime: Date;
   lessonId: string;
   unitId: string;
-  centerId: string;
-  teacherId?: string;
+  center: Center;
+  teacher: Teacher;
   status: LessonScheduleStatus;
+}
+
+export interface Center {
+  id: string;
+  name: string;
+  address: string;
+  phone: string;
+  email: string;
+  logo: string;
+}
+
+export interface Teacher {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  image: string;
 }
 
 
@@ -19,12 +37,7 @@ export interface LessonScheduleUI {
 }
 
 export enum LessonScheduleStatus {
-  PENDING = 'PENDING',
-  CONFIRMED = 'CONFIRMED',
-  CANCELLED = 'CANCELLED',
-  COMPLETED = 'COMPLETED',
-  NO_SHOW = 'NO_SHOW',
-  RESCHEDULED = 'RESCHEDULED',
+  PRESENT = 'PRESENT',
+  ABSENT = 'ABSENT',
   BOOKED = 'BOOKED',
-  AVAILABLE = 'AVAILABLE'
 }

@@ -13,6 +13,7 @@ import {LoginComponent} from "./features/auth/login/login.component";
 import {ResetPasswordComponent} from "./features/auth/reset-password/reset-password.component";
 import {authGuard} from "./core/guards/auth.guard";
 import {CalendarComponent} from "./features/lessons/calendar/calendar.component";
+import {LessonHistoryComponent} from "./features/lessons/lesson-history/lesson-history.component";
 import {HomePageComponent} from "./features/home/home-page/home-page.component";
 import {VideoCoursesComponent} from "./features/video-course/video-courses.component";
 import {VideoCourseListComponent} from "./features/video-course-list/video-course-list.component";
@@ -75,6 +76,11 @@ export const routes: Routes = [
         path: 'calendar',
         component: CalendarComponent,
         data: {breadcrumb: 'Calendário'}
+      },
+      {
+        path: 'lesson-history',
+        component: LessonHistoryComponent,
+        data: {breadcrumb: 'Histórico de Aulas'}
       },
       {
         path: 'events',

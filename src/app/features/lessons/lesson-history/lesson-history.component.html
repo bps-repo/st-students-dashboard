@@ -1,0 +1,190 @@
+<section class="font-heading">
+  <div class="bg-white shadow-md p-6 mb-4">
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 pb-4 border-b border-neutral-200">
+      <div class="mb-4 md:mb-0">
+        <h2 class="text-2xl font-bold text-primary">Histórico de Aulas</h2>
+        <p class="text-neutral-600 mt-1">Visualize todas as suas aulas passadas</p>
+      </div>
+      <div class="text-sm text-neutral-500">
+        Total: {{ getTotalCount() }} aulas
+      </div>
+    </div>
+
+    <!-- Loading State -->
+    <app-circular-loader *ngIf="(isLoading$ | async)" size="sm" [color]="'secondary'"></app-circular-loader>
+
+    <!-- Filters -->
+    <div *ngIf="!((isLoading$ | async))" class="mb-6">
+      <div class="bg-neutral-50 rounded-lg p-4">
+        <h3 class="text-lg font-semibold text-primary mb-4">Filtros</h3>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <!-- Status Filter -->
+          <div>
+            <label class="block text-sm font-medium text-neutral-700 mb-2">Status</label>
+            <select
+              [(ngModel)]="filterOptions.status"
+              class="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+              <option *ngFor="let option of statusOptions" [value]="option.value">
+                {{ option.label }}
+              </option>
+            </select>
+          </div>
+
+          <!-- Month Filter -->
+          <div>
+            <label class="block text-sm font-medium text-neutral-700 mb-2">Mês</label>
+            <select
+              [(ngModel)]="filterOptions.month"
+              class="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+              <option *ngFor="let option of monthOptions" [value]="option.value">
+                {{ option.label }}
+              </option>
+            </select>
+          </div>
+
+          <!-- Year Filter -->
+          <div>
+            <label class="block text-sm font-medium text-neutral-700 mb-2">Ano</label>
+            <select
+              [(ngModel)]="filterOptions.year"
+              class="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+              <option *ngFor="let year of yearOptions" [value]="year">
+                {{ year }}
+              </option>
+            </select>
+          </div>
+
+          <!-- Filter Actions -->
+          <div class="flex items-end gap-2">
+            <button
+              (click)="applyFilters()"
+              class="bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-lg transition-colors duration-200 flex items-center">
+              <i class="pi pi-search mr-2"></i>
+              Filtrar
+            </button>
+            <button
+              (click)="resetFilters()"
+              class="bg-neutral-500 hover:bg-neutral-600 text-white px-4 py-2 rounded-lg transition-colors duration-200 flex items-center">
+              <i class="pi pi-refresh mr-2"></i>
+              Limpar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Results -->
+    <div *ngIf="!((isLoading$ | async))">
+      <!-- No Results -->
+      <div *ngIf="filteredLessons$.length === 0" class="text-center py-12">
+        <i class="pi pi-calendar-times text-6xl text-neutral-300 mb-4"></i>
+        <h3 class="text-xl font-semibold text-neutral-600 mb-2">Nenhuma aula encontrada</h3>
+        <p class="text-neutral-500">Tente ajustar os filtros para encontrar suas aulas.</p>
+      </div>
+
+      <!-- Lessons List -->
+      <div *ngIf="filteredLessons$.length > 0" class="space-y-4">
+        <div *ngFor="let lesson of getPaginatedLessons()"
+             class="bg-white border border-neutral-200 rounded-lg p-4 hover:shadow-md transition-shadow duration-200">
+
+          <!-- Lesson Header -->
+          <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-3">
+            <div class="flex-1">
+              <h4 class="text-lg font-semibold text-primary mb-1">{{ lesson.title }}</h4>
+              <p class="text-sm text-neutral-600" *ngIf="lesson.description">{{ lesson.description }}</p>
+            </div>
+            <div class="mt-2 md:mt-0">
+              <span class="px-3 py-1 rounded-full text-xs font-semibold border"
+                    [ngClass]="getStatusColorClass(lesson.status)">
+                {{ getStatusLabel(lesson.status) }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Lesson Details -->
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
+            <!-- Date & Time -->
+            <div class="flex items-center">
+              <i class="pi pi-calendar text-primary mr-2"></i>
+              <div>
+                <div class="font-medium">{{ formatDate(lesson.startTime) }}</div>
+                <div class="text-neutral-600">{{ formatTime(lesson.startTime) }} - {{ formatTime(lesson.endTime) }}</div>
+              </div>
+            </div>
+
+            <!-- Teacher -->
+            <div class="flex items-center" *ngIf="lesson.teacher">
+              <i class="pi pi-user text-primary mr-2"></i>
+              <div>
+                <div class="font-medium">{{ lesson.teacher.name }}</div>
+                <div class="text-neutral-600">Professor(a)</div>
+              </div>
+            </div>
+
+            <!-- Location -->
+            <div class="flex items-center">
+              <i class="pi" [ngClass]="lesson.online ? 'pi-video' : 'pi-home'" class="text-primary mr-2"></i>
+              <div>
+                <div class="font-medium" *ngIf="lesson.online">Online</div>
+                <div class="font-medium" *ngIf="!lesson.online && lesson.center">{{ lesson.center.name }}</div>
+                <div class="text-neutral-600" *ngIf="lesson.online">Aula virtual</div>
+                <div class="text-neutral-600" *ngIf="!lesson.online">Presencial</div>
+              </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="flex items-center justify-end">
+              <a [routerLink]="['/lessons', lesson.id]"
+                 class="bg-primary-500 hover:bg-primary-600 text-white px-3 py-1 rounded text-xs transition-colors duration-200">
+                Ver Detalhes
+              </a>
+            </div>
+          </div>
+
+          <!-- Online Link (if applicable) -->
+          <div *ngIf="lesson.online && lesson.onlineLink" class="mt-3 pt-3 border-t border-neutral-100">
+            <a [href]="lesson.onlineLink"
+               target="_blank"
+               rel="noopener noreferrer"
+               class="text-primary-600 hover:text-primary-700 text-sm font-medium flex items-center">
+              <i class="pi pi-external-link mr-1"></i>
+              Acessar link da aula
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pagination -->
+      <div *ngIf="totalPages > 1" class="mt-8 flex justify-center">
+        <nav class="flex items-center space-x-2">
+          <!-- Previous Button -->
+          <button
+            (click)="changePage(currentPage - 1)"
+            [disabled]="currentPage === 1"
+            class="px-3 py-2 text-sm font-medium text-neutral-500 bg-white border border-neutral-300 rounded-lg hover:bg-neutral-50 disabled:opacity-50 disabled:cursor-not-allowed">
+            <i class="pi pi-chevron-left"></i>
+          </button>
+
+          <!-- Page Numbers -->
+          <button
+            *ngFor="let page of getPageNumbers()"
+            (click)="changePage(page)"
+            [class]="page === currentPage
+              ? 'px-3 py-2 text-sm font-medium text-white bg-primary-500 border border-primary-500 rounded-lg'
+              : 'px-3 py-2 text-sm font-medium text-neutral-700 bg-white border border-neutral-300 rounded-lg hover:bg-neutral-50'">
+            {{ page }}
+          </button>
+
+          <!-- Next Button -->
+          <button
+            (click)="changePage(currentPage + 1)"
+            [disabled]="currentPage === totalPages"
+            class="px-3 py-2 text-sm font-medium text-neutral-500 bg-white border border-neutral-300 rounded-lg hover:bg-neutral-50 disabled:opacity-50 disabled:cursor-not-allowed">
+            <i class="pi pi-chevron-right"></i>
+          </button>
+        </nav>
+      </div>
+    </div>
+  </div>
+</section>

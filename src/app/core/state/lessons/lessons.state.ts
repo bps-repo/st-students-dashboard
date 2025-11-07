@@ -12,6 +12,11 @@ export interface LessonsState extends EntityState<LessonSchedule> {
     online?: boolean;
     status?: string;
   };
+  history: {
+    lessons: LessonSchedule[];
+    isLoading: boolean;
+    error: string | null;
+  };
 }
 
 /**
@@ -27,14 +32,17 @@ export const lessonsAdapter: EntityAdapter<LessonSchedule> = createEntityAdapter
 /**
  * Initial lessons state
  */
-export const initialLessonsState: LessonsState = lessonsAdapter.getInitialState(
-  lessonsAdapter.getInitialState({
-    selectedLessonId: null,
+export const initialLessonsState: LessonsState = lessonsAdapter.getInitialState({
+  selectedLessonId: null,
+  isLoading: false,
+  error: null,
+  filters: {
+    online: undefined,
+    status: undefined,
+  },
+  history: {
+    lessons: [],
     isLoading: false,
     error: null,
-    filters: {
-      online: undefined,
-      status: undefined,
-    },
-  })
-);
+  },
+});

@@ -6,7 +6,10 @@ const selectLessonsState = createFeatureSelector<LessonsState>(LESSON_FEATURE_KE
 
 export const LessonsSelectors = {
   selectLessonsLoading: createSelector(selectLessonsState, state => state.isLoading),
-  selectLessonsError: createSelector(selectLessonsState, state => state.error)
+  selectLessonsError: createSelector(selectLessonsState, state => state.error),
+  selectHistoryLoading: createSelector(selectLessonsState, state => state.history.isLoading),
+  selectHistoryError: createSelector(selectLessonsState, state => state.history.error),
+  selectHistoryLessons: createSelector(selectLessonsState, state => state.history.lessons)
 }
 
 

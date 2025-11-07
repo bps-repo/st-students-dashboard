@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, computed, inject, signal} from '@angular/core';
+import {ChangeDetectionStrategy, Component, computed, inject, signal, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {Observable, map} from 'rxjs';
 import {MaterialService} from '../../../core/material.service';
@@ -8,25 +8,27 @@ import {MaterialType} from "../../../@types/material-type";
 import {Material} from "../../../@types/material";
 import {Store} from '@ngrx/store';
 import {LessonsEntitySelectors, LessonsSelectors} from '../../../core/state/lessons/lessons.selectors';
-import {LessonSchedule} from '../../../core/models/LessonSchedule';
+import {LessonSchedule, LessonScheduleStatus} from '../../../core/models/LessonSchedule';
 import {LessonsActions} from '../../../core/state/lessons/lessons.actions';
+import {LessonMaterialsSelectors} from '../../../core/state/lesson-materials/lesson-materials.selectors';
+import {LessonMaterialsActions} from '../../../core/state/lesson-materials/lesson-materials.actions';
+import {LessonMaterial, MaterialType as LessonMaterialType, FileType} from '../../../core/models/LessonMaterial';
+import {CircularLoaderComponent} from '../../../shared/circular-loader/circular-loader.component';
 
-/**
- * Modern Materials Component
- *
- * Displays a list of study materials with filtering capabilities
- * and a modern, responsive design.
- */
 @Component({
   selector: 'app-unit-detail',
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule, CircularLoaderComponent],
   templateUrl: './lesson-detail.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class LessonDetailComponent {
+export class LessonDetailComponent implements OnInit {
   // Materials data
   protected readonly materials$!: Observable<Material[]>;
   protected filteredMaterials$!: Observable<Material[]>;
+
+  // Lesson materials data
+  protected lessonMaterials$!: Observable<LessonMaterial[]>;
+  protected filteredLessonMaterials$!: Observable<LessonMaterial[]>;
 
   // Filter state
   protected activeFilter = signal('all');
@@ -36,8 +38,9 @@ export class LessonDetailComponent {
   private readonly store = inject(Store);
   private readonly route = inject(ActivatedRoute);
   protected lessonId = this.route.snapshot.paramMap.get('id') as string;
-  protected lesson$ = this.store.select(LessonsEntitySelectors.selectLessonById(this.lessonId));
+  protected lesson$: Observable<LessonSchedule | undefined> = this.store.select(LessonsEntitySelectors.selectLessonById(this.lessonId));
   protected isLoadingLessons$ = this.store.select(LessonsSelectors.selectLessonsLoading);
+  protected isLoadingMaterials$ = this.store.select(LessonMaterialsSelectors.selectMaterialsLoading(this.lessonId));
 
   // Map each Material Type to a prime icon string
   protected readonly materialTypeMap: Map<MaterialType, string> = new Map([
@@ -51,10 +54,19 @@ export class LessonDetailComponent {
 
   constructor(private readonly materialService: MaterialService) {
     // ensure lessons are loaded in case of direct navigation
-    this.store.dispatch(LessonsActions.loadLessons());
+    this.store.dispatch(LessonsActions.loadLessons({ status: undefined }));
 
     this.materials$ = this.materialService.getMaterial();
     this.filteredMaterials$ = this.materials$;
+
+    // Initialize lesson materials
+    this.lessonMaterials$ = this.store.select(LessonMaterialsSelectors.selectMaterialsByLesson(this.lessonId));
+    this.filteredLessonMaterials$ = this.lessonMaterials$;
+  }
+
+  ngOnInit(): void {
+    // Load lesson materials when component initializes
+    this.store.dispatch(LessonMaterialsActions.loadLessonMaterials({ lessonId: this.lessonId }));
   }
 
   /**
@@ -64,6 +76,77 @@ export class LessonDetailComponent {
    */
   protected getMaterialIconBasedOnType(type: MaterialType): string {
     return this.materialTypeMap.get(type) ?? 'pi pi-book';
+  }
+
+  /**
+   * Returns the appropriate icon based on the lesson material file type
+   * @param fileType The file type
+   * @returns The PrimeNG icon class
+   */
+  protected getLessonMaterialIcon(fileType: FileType): string {
+    const iconMap: { [key in FileType]: string } = {
+      [FileType.VIDEO]: 'pi pi-play',
+      [FileType.PDF]: 'pi pi-file-pdf',
+      [FileType.DOCUMENT]: 'pi pi-file',
+      [FileType.IMAGE]: 'pi pi-image',
+      [FileType.AUDIO]: 'pi pi-volume-up',
+      [FileType.LINK]: 'pi pi-external-link',
+      [FileType.OTHER]: 'pi pi-file'
+    };
+    return iconMap[fileType] ?? 'pi pi-file';
+  }
+
+  /**
+   * Returns the appropriate color class based on the material type
+   * @param type The material type
+   * @returns The CSS color class
+   */
+  protected getMaterialTypeColor(type: LessonMaterialType): string {
+    const colorMap: { [key in LessonMaterialType]: string } = {
+      [LessonMaterialType.GENERAL_CONTENT]: 'bg-blue-100 text-blue-800',
+      [LessonMaterialType.EXERCISE]: 'bg-green-100 text-green-800',
+      [LessonMaterialType.ASSIGNMENT]: 'bg-purple-100 text-purple-800',
+      [LessonMaterialType.REFERENCE]: 'bg-yellow-100 text-yellow-800',
+      [LessonMaterialType.SUPPLEMENTARY]: 'bg-gray-100 text-gray-800'
+    };
+    return colorMap[type] ?? 'bg-gray-100 text-gray-800';
+  }
+
+  /**
+   * Returns the material type label in Portuguese
+   * @param type The material type
+   * @returns The Portuguese label
+   */
+  protected getMaterialTypeLabel(type: LessonMaterialType): string {
+    const labelMap: { [key in LessonMaterialType]: string } = {
+      [LessonMaterialType.GENERAL_CONTENT]: 'Conteúdo Geral',
+      [LessonMaterialType.EXERCISE]: 'Exercício',
+      [LessonMaterialType.ASSIGNMENT]: 'Tarefa',
+      [LessonMaterialType.REFERENCE]: 'Referência',
+      [LessonMaterialType.SUPPLEMENTARY]: 'Complementar'
+    };
+    return labelMap[type] ?? type;
+  }
+
+  /**
+   * Checks if a material is currently available based on availability dates
+   * @param material The lesson material
+   * @returns True if the material is available
+   */
+  protected isMaterialAvailable(material: LessonMaterial): boolean {
+    const now = new Date();
+    const startDate = new Date(material.availabilityStartDate);
+    const endDate = new Date(material.availabilityEndDate);
+
+    return now >= startDate && now <= endDate && material.active;
+  }
+
+  /**
+   * Opens a material link in a new tab
+   * @param url The material URL
+   */
+  protected openMaterial(url: string): void {
+    window.open(url, '_blank', 'noopener,noreferrer');
   }
 
   /**

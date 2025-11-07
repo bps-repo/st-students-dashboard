@@ -8,7 +8,6 @@ import {LessonsActions} from './lessons.actions';
 
 import {catchError, map, switchMap} from 'rxjs/operators';
 import {of} from 'rxjs';
-import {LessonSchedule} from '../../models/LessonSchedule';
 import {inject, Injectable} from "@angular/core";
 
 @Injectable()
@@ -26,13 +25,32 @@ export class LessonsEffects {
   loadLessons$ = createEffect(() =>
     this.actions$.pipe(
       ofType(LessonsActions.loadLessons),
-      switchMap(() =>
-        this.lessonsService.getLessons().pipe(
+      switchMap(({status}) =>
+        this.lessonsService.getLessons(status).pipe(
           map((lessons) =>
             LessonsActions.loadLessonsSuccess({lessons})
           ),
           catchError((error) =>
             of(LessonsActions.loadLessonsFailure({error}))
+          )
+        )
+      )
+    )
+  );
+
+  /**
+   * Load lesson history effect
+   */
+  loadLessonHistory$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(LessonsActions.loadLessonHistory),
+      switchMap(({status, startDate, endDate}) =>
+        this.lessonsService.getLessonHistory(status, startDate, endDate).pipe(
+          map((lessons) =>
+            LessonsActions.loadLessonHistorySuccess({lessons})
+          ),
+          catchError((error) =>
+            of(LessonsActions.loadLessonHistoryFailure({error}))
           )
         )
       )

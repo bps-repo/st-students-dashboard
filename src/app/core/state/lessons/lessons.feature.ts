@@ -1,6 +1,6 @@
-import {createFeature, createReducer, on} from '@ngrx/store';
-import {initialLessonsState, lessonsAdapter} from './lessons.state';
-import {LESSON_FEATURE_KEY, LessonsActions} from "./lessons.actions";
+import { createFeature, createReducer, on } from '@ngrx/store';
+import { initialLessonsState, lessonsAdapter } from './lessons.state';
+import { LESSON_FEATURE_KEY, LessonsActions } from "./lessons.actions";
 
 export const lessonFeature = createFeature(
   {
@@ -8,13 +8,16 @@ export const lessonFeature = createFeature(
     reducer: createReducer(
       initialLessonsState,
       // Load Lessons
-      on(LessonsActions.loadLessons, (state) => ({
+      on(LessonsActions.loadLessons, (state, { status }) => ({
         ...state,
         isLoading: true,
         error: null,
+        filters: {
+          status: status || undefined,
+        },
       })),
 
-      on(LessonsActions.loadLessonsSuccess, (state, {lessons}) =>
+      on(LessonsActions.loadLessonsSuccess, (state, { lessons }) =>
         lessonsAdapter.setAll(lessons, {
           ...state,
           isLoading: false,
@@ -22,10 +25,39 @@ export const lessonFeature = createFeature(
         })
       ),
 
-      on(LessonsActions.loadLessonsFailure, (state, {error}) => ({
+      on(LessonsActions.loadLessonsFailure, (state, { error }) => ({
         ...state,
         isLoading: false,
         error,
+      })),
+
+      // Load Lesson History
+      on(LessonsActions.loadLessonHistory, (state) => ({
+        ...state,
+        history: {
+          ...state.history,
+          isLoading: true,
+          error: null,
+        },
+      })),
+
+      on(LessonsActions.loadLessonHistorySuccess, (state, { lessons }) => ({
+        ...state,
+        history: {
+          ...state.history,
+          lessons,
+          isLoading: false,
+          error: null,
+        },
+      })),
+
+      on(LessonsActions.loadLessonHistoryFailure, (state, { error }) => ({
+        ...state,
+        history: {
+          ...state.history,
+          isLoading: false,
+          error,
+        },
       })),
 
       // Load Lesson
@@ -35,7 +67,7 @@ export const lessonFeature = createFeature(
         error: null,
       })),
 
-      on(LessonsActions.loadLessonSuccess, (state, {lesson}) =>
+      on(LessonsActions.loadLessonSuccess, (state, { lesson }) =>
         lessonsAdapter.upsertOne(lesson, {
           ...state,
           isLoading: false,
@@ -43,14 +75,14 @@ export const lessonFeature = createFeature(
         })
       ),
 
-      on(LessonsActions.loadLessonFailure, (state, {error}) => ({
+      on(LessonsActions.loadLessonFailure, (state, { error }) => ({
         ...state,
         isLoading: false,
         error,
       })),
 
       // Select Lesson
-      on(LessonsActions.selectLesson, (state, {lessonId}) => ({
+      on(LessonsActions.selectLesson, (state, { lessonId }) => ({
         ...state,
         selectedLessonId: lessonId,
       })),

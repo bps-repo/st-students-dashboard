@@ -4,7 +4,7 @@ import {RouterModule} from "@angular/router";
 import {Store} from "@ngrx/store";
 import {LessonsActions} from "../../../core/state/lessons/lessons.actions";
 import {LessonsEntitySelectors, LessonsSelectors} from "../../../core/state/lessons/lessons.selectors";
-import {LessonSchedule} from "../../../core/models/LessonSchedule";
+import {LessonSchedule, LessonScheduleStatus} from "../../../core/models/LessonSchedule";
 import {Observable, of} from "rxjs";
 import {CircularLoaderComponent} from "../../../shared/circular-loader/circular-loader.component";
 import {StudentSelectors} from "../../../core/state/student/student.selectors";
@@ -73,7 +73,7 @@ export class CalendarComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.store$.dispatch(LessonsActions.loadLessons());
+    this.store$.dispatch(LessonsActions.loadLessons({ status: LessonScheduleStatus.BOOKED }));
     this.generateCalendarDays();
     this.loadEvents();
   }
@@ -319,5 +319,38 @@ export class CalendarComponent implements OnInit {
   // Get the total height of the schedule grid
   getScheduleHeight(): number {
     return (this.endHour - this.startHour) * this.hourHeight;
+  }
+
+  // Navigate to the previous week
+  goToPreviousWeek(): void {
+    const newWeekStartDate = new Date(this.weekStartDate);
+    newWeekStartDate.setDate(this.weekStartDate.getDate() - 7);
+
+    this.weekStartDate = newWeekStartDate;
+    this.currentMonth = this.weekStartDate.getMonth();
+    this.currentYear = this.weekStartDate.getFullYear();
+
+    this.generateCalendarDays();
+    this.loadEvents();
+  }
+
+  // Navigate to the next week
+  goToNextWeek(): void {
+    const newWeekStartDate = new Date(this.weekStartDate);
+    newWeekStartDate.setDate(this.weekStartDate.getDate() + 7);
+
+    this.weekStartDate = newWeekStartDate;
+    this.currentMonth = this.weekStartDate.getMonth();
+    this.currentYear = this.weekStartDate.getFullYear();
+
+    this.generateCalendarDays();
+    this.loadEvents();
+  }
+
+  // Navigate to the current week (today's week)
+  goToCurrentWeek(): void {
+    this.initializeWeekStartDate();
+    this.generateCalendarDays();
+    this.loadEvents();
   }
 }

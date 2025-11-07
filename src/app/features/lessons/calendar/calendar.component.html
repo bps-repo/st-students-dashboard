@@ -8,26 +8,36 @@
       <div class="flex items-center">
         <!-- Week Navigation Buttons -->
         <div class="flex items-center mr-4">
-          <button 
-            (click)="goToPreviousWeek()" 
+          <button
+            (click)="goToPreviousWeek()"
             class="bg-primary-500 hover:bg-primary-600 text-white rounded-lg p-2 mr-2 transition-colors duration-200 flex items-center justify-center"
-            [disabled]="isLoading$ | async">
+            [disabled]="isLoading$ | async"
+            title="Semana anterior">
             <i class="pi pi-chevron-left text-sm"></i>
           </button>
-          <button 
-            (click)="goToNextWeek()" 
+          <button
+            (click)="goToCurrentWeek()"
+            class="bg-secondary-500 hover:bg-secondary-600 text-white rounded-lg px-3 py-2 mr-2 transition-colors duration-200 text-sm font-medium"
+            [disabled]="isLoading$ | async"
+            title="Semana atual">
+            Hoje
+          </button>
+          <button
+            (click)="goToNextWeek()"
             class="bg-primary-500 hover:bg-primary-600 text-white rounded-lg p-2 mr-2 transition-colors duration-200 flex items-center justify-center"
-            [disabled]="isLoading$ | async">
+            [disabled]="isLoading$ | async"
+            title="Próxima semana">
             <i class="pi pi-chevron-right text-sm"></i>
           </button>
         </div>
-        
+
         <div class="bg-neutral-50 rounded-lg px-4 py-2 mr-3 border border-neutral-200">
           <span class="font-bold text-primary">{{ getWeekLabel() }}</span>
         </div>
-        <div class="bg-neutral-50 rounded-lg px-4 py-2 mr-3 border border-neutral-200 cursor-pointer">
+        <a routerLink="/lesson-history"
+           class="bg-neutral-50 hover:bg-neutral-100 rounded-lg px-4 py-2 mr-3 border border-neutral-200 cursor-pointer transition-colors duration-200">
           <span class="font-bold text-primary">Ver Histórico de Aulas</span>
-        </div>
+        </a>
       </div>
     </div>
 
@@ -125,14 +135,14 @@
                   <span>{{ getEventTimeString(event) }}</span>
                 </div>
                 <div class="text-xs mb-1 flex items-center gap-2">
-                  <span class="font-semibold">Professor(a):</span> <span class="font-normal">{{ 'Simiria' }}</span>
+                  <span class="font-semibold">Professor(a):</span> <span class="font-normal">{{ event.teacher.name }}</span>
                 </div>
                 <a *ngIf="event.online && event.onlineLink" class="text-xs mb-1 text-secondary-900 underline"
                    [href]="event.onlineLink" target="_blank" rel="noopener noreferrer">
                   <span class="font-semibold">Link:</span> Abrir aula online
                 </a>
-                <div *ngIf="!event.online && event.centerId" class="text-xs">
-                  <span class="font-semibold">Centro:</span> {{ 'St Andrews Central' }}
+                <div *ngIf="!event.online && event.center" class="text-xs">
+                  <span class="font-semibold">Centro:</span> {{ event.center.name }}
                 </div>
                 <div *ngIf="event.description" class="text-xs text-neutral-600 mt-2 line-clamp-3">
                   {{ event.description }}

@@ -10,13 +10,8 @@
 
     <!-- Search Bar -->s
     <div class="relative w-full md:w-64">
-      <input
-        type="text"
-        placeholder="Pesquisar materiais..."
-        [(ngModel)]="searchQuery"
-        (ngModelChange)="applyFilters()"
-        class="w-full pl-10 pr-4 py-2 bg-white border border-neutral-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all"
-      >
+      <input type="text" placeholder="Pesquisar materiais..." [(ngModel)]="searchQuery" (ngModelChange)="applyFilters()"
+        class="w-full pl-10 pr-4 py-2 bg-white border border-neutral-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all">
       <i class="pi pi-search absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400"></i>
     </div>
   </div>
@@ -35,13 +30,9 @@
             <p class="text-sm opacity-90 mt-1">{{ (lesson$ | async)?.description }}</p>
           </div>
         </div>
-        <a
-          *ngIf="(lesson$ | async)?.online && (lesson$ | async)?.onlineLink"
-          [href]="(lesson$ | async)?.onlineLink"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="bg-white bg-opacity-20 hover:bg-opacity-30 px-4 py-2 rounded-lg text-white font-medium transition-all flex items-center"
-        >
+        <a *ngIf="(lesson$ | async)?.online && (lesson$ | async)?.onlineLink" [href]="(lesson$ | async)?.onlineLink"
+          target="_blank" rel="noopener noreferrer"
+          class="bg-white bg-opacity-20 hover:bg-opacity-30 px-4 py-2 rounded-lg text-white font-medium transition-all flex items-center">
           <span>Entrar na aula</span>
           <i class="pi pi-external-link ml-2"></i>
         </a>
@@ -60,7 +51,7 @@
           <i class="pi pi-user text-accent-500 mr-3"></i>
           <div>
             <p class="text-xs text-neutral-500">Professor</p>
-            <p class="font-medium text-neutral-800">{{ (lesson$ | async)?.teacherId || 'A confirmar' }}</p>
+            <p class="font-medium text-neutral-800">{{ (lesson$ | async)?.teacher?.name || 'A confirmar' }}</p>
           </div>
         </div>
         <div class="flex items-center">
@@ -68,7 +59,8 @@
           <div>
             <p class="text-xs text-neutral-500">Data</p>
             <p class="font-medium text-neutral-800">
-              {{ (lesson$ | async)?.startTime | date:'dd/MM/yyyy HH:mm' }} - {{ (lesson$ | async)?.endTime | date:'HH:mm' }}
+              {{ (lesson$ | async)?.startTime | date:'dd/MM/yyyy HH:mm' }} - {{ (lesson$ | async)?.endTime |
+              date:'HH:mm' }}
             </p>
           </div>
         </div>
@@ -86,29 +78,25 @@
   <!-- Filter Section -->
   <div class="bg-white rounded-xl p-4 shadow-md mb-8">
     <div class="flex flex-wrap gap-3">
-      <div
-        (click)="setFilter('all')"
+      <div (click)="setFilter('all')"
         [ngClass]="activeFilter() === 'all' ? 'bg-primary-50 text-primary-700' : 'bg-neutral-50 text-neutral-700'"
         class="px-3 py-1.5 rounded-lg font-medium text-sm flex items-center hover:bg-primary-100 transition-all cursor-pointer">
         <i class="pi pi-list mr-2"></i>
         <span>Todos</span>
       </div>
-      <div
-        (click)="setFilter('document')"
+      <div (click)="setFilter('document')"
         [ngClass]="activeFilter() === 'document' ? 'bg-primary-50 text-primary-700' : 'bg-neutral-50 text-neutral-700'"
         class="px-3 py-1.5 rounded-lg font-medium text-sm flex items-center hover:bg-neutral-100 transition-all cursor-pointer">
         <i class="pi pi-file-pdf mr-2"></i>
         <span>Documentos</span>
       </div>
-      <div
-        (click)="setFilter('video')"
+      <div (click)="setFilter('video')"
         [ngClass]="activeFilter() === 'video' ? 'bg-primary-50 text-primary-700' : 'bg-neutral-50 text-neutral-700'"
         class="px-3 py-1.5 rounded-lg font-medium text-sm flex items-center hover:bg-neutral-100 transition-all cursor-pointer">
         <i class="pi pi-play mr-2"></i>
         <span>Vídeos</span>
       </div>
-      <div
-        (click)="setFilter('exercise')"
+      <div (click)="setFilter('exercise')"
         [ngClass]="activeFilter() === 'exercise' ? 'bg-primary-50 text-primary-700' : 'bg-neutral-50 text-neutral-700'"
         class="px-3 py-1.5 rounded-lg font-medium text-sm flex items-center hover:bg-neutral-100 transition-all cursor-pointer">
         <i class="pi pi-file-edit mr-2"></i>
@@ -121,7 +109,7 @@
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     <!-- Empty State -->
     <div *ngIf="(filteredMaterials$ | async)?.length === 0"
-         class="col-span-3 bg-white rounded-xl p-8 shadow-md text-center">
+      class="col-span-3 bg-white rounded-xl p-8 shadow-md text-center">
       <div class="w-16 h-16 bg-neutral-100 rounded-full flex items-center justify-center mx-auto mb-4">
         <i class="pi pi-file-excel text-neutral-400 text-2xl"></i>
       </div>
@@ -131,14 +119,11 @@
     </div>
 
     <!-- Material Card -->
-    <div
-      *ngFor="let material of filteredMaterials$ | async; index as $index"
+    <div *ngFor="let material of filteredMaterials$ | async; index as $index"
       [routerLink]="['/lessons/materials', $index]"
-      class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 cursor-pointer"
-    >
+      class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 cursor-pointer">
       <!-- Material Header with Type-based Gradient Background -->
-      <div class="relative h-24 bg-gradient-to-r"
-           [ngClass]="{
+      <div class="relative h-24 bg-gradient-to-r" [ngClass]="{
              'from-primary-600 to-primary-500': material.type === 0,
              'from-accent-600 to-accent-500': material.type === 1,
              'from-secondary-600 to-secondary-500': material.type === 2,
@@ -186,6 +171,83 @@
         <span class="text-xs text-neutral-500">Última atualização: 25/04/2024</span>
         <div class="w-8 h-8 rounded-full bg-primary-50 flex items-center justify-center">
           <i class="pi pi-arrow-right text-primary-600"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lesson Materials Section -->
+  <div class="bg-white rounded-xl shadow-md overflow-hidden mb-8">
+    <div class="px-6 py-4 bg-gradient-to-r from-secondary-600 to-secondary-500 text-white">
+      <h3 class="text-xl font-bold flex items-center">
+        <i class="pi pi-book mr-3"></i>
+        Materiais da Aula
+      </h3>
+      <p class="text-sm opacity-90 mt-1">Materiais específicos para esta aula</p>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="isLoadingMaterials$ | async" class="p-8 text-center">
+      <app-circular-loader size="md" color="secondary"></app-circular-loader>
+      <p class="text-neutral-600 mt-4">Carregando materiais...</p>
+    </div>
+
+    <!-- Materials Content -->
+    <div *ngIf="!(isLoadingMaterials$ | async)" class="p-6">
+      <!-- Empty State -->
+      <div *ngIf="(lessonMaterials$ | async)?.length === 0" class="text-center py-8">
+        <div class="w-16 h-16 bg-neutral-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <i class="pi pi-file-excel text-neutral-400 text-2xl"></i>
+        </div>
+        <h4 class="text-lg font-bold text-neutral-800 mb-2">Nenhum material disponível</h4>
+        <p class="text-neutral-600">Esta aula ainda não possui materiais específicos.</p>
+      </div>
+
+      <!-- Materials Grid -->
+      <div *ngIf="(lessonMaterials$ | async) && (lessonMaterials$ | async)!.length > 0"
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div *ngFor="let material of lessonMaterials$ | async"
+          class="bg-neutral-50 rounded-lg p-4 border border-neutral-200 hover:shadow-md transition-all duration-200"
+          [class.opacity-50]="!isMaterialAvailable(material)">
+          <!-- Material Header -->
+          <div class="flex items-start justify-between mb-3">
+            <div class="flex items-center">
+              <div class="w-10 h-10 rounded-lg bg-primary-100 flex items-center justify-center mr-3">
+                <i [ngClass]="getLessonMaterialIcon(material.fileType)" class="text-primary-600"></i>
+              </div>
+              <div>
+                <h4 class="font-semibold text-neutral-800 text-sm">{{ material.title }}</h4>
+                <span class="text-xs px-2 py-1 rounded-full" [ngClass]="getMaterialTypeColor(material.type)">
+                  {{ getMaterialTypeLabel(material.type) }}
+                </span>
+              </div>
+            </div>
+            <div *ngIf="!isMaterialAvailable(material)" class="text-xs text-orange-600 bg-orange-100 px-2 py-1 rounded">
+              Indisponível
+            </div>
+          </div>
+
+          <!-- Material Description -->
+          <p class="text-sm text-neutral-600 mb-3 line-clamp-2">{{ material.description }}</p>
+
+          <!-- Material Actions -->
+          <div class="flex items-center justify-between">
+            <div class="text-xs text-neutral-500">
+              <div *ngIf="material.uploaderName">Por: {{ material.uploaderName }}</div>
+              <div>{{ material.createdAt | date:'dd/MM/yyyy' }}</div>
+            </div>
+            <button *ngIf="isMaterialAvailable(material)" (click)="openMaterial(material.fileUrl)"
+              class="bg-primary-500 hover:bg-primary-600 text-white px-3 py-1.5 rounded text-xs font-medium transition-colors duration-200 flex items-center">
+              <i class="pi pi-external-link mr-1"></i>
+              Abrir
+            </button>
+          </div>
+
+          <!-- Availability Info -->
+          <div *ngIf="!isMaterialAvailable(material)" class="mt-2 text-xs text-neutral-500">
+            <div>Disponível: {{ material.availabilityStartDate | date:'dd/MM/yyyy' }}</div>
+            <div>Até: {{ material.availabilityEndDate | date:'dd/MM/yyyy' }}</div>
+          </div>
         </div>
       </div>
     </div>
