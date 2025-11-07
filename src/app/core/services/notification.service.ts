@@ -40,7 +40,7 @@ export class NotificationService {
    * @returns Observable that completes when successful
    */
   markAsRead(notificationId: string): Observable<void> {
-    return this.http.patch<ApiResponse<void>>(`${this.notificationsUrl}/${notificationId}/read`, {}).pipe(
+    return this.http.put<ApiResponse<void>>(`${this.notificationsUrl}/${notificationId}/mark-read`, {}).pipe(
       map(() => void 0),
       catchError(error => {
         const errorMessage = error.error?.message || error.message || 'Failed to mark notification as read';
