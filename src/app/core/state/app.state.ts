@@ -20,6 +20,9 @@ import {ChatbotEffects} from "./chatbot/chatbot.effects";
 import {LessonMaterialsState, initialLessonMaterialsState} from "./lesson-materials/lesson-materials.state";
 import {lessonMaterialsFeature} from "./lesson-materials/lesson-materials.feature";
 import {LessonMaterialsEffects} from "./lesson-materials/lesson-materials.effects";
+import {NotificationsState, initialNotificationsState} from "./notifications/notifications.state";
+import {notificationsFeature} from "./notifications/notifications.feature";
+import {NotificationsEffects} from "./notifications/notifications.effects";
 
 /**
  * Interface for the root state of the application
@@ -32,7 +35,8 @@ export interface AppState {
   student: StudentState,
   lesson: LessonsState,
   chatBot: ChatbotState,
-  lessonMaterials: LessonMaterialsState
+  lessonMaterials: LessonMaterialsState,
+  notifications: NotificationsState
 }
 
 /**
@@ -46,7 +50,8 @@ export const initialAppState: AppState = {
   student: initialStudentState,
   lesson: initialLessonsState,
   chatBot: ChatBotInitialState,
-  lessonMaterials: initialLessonMaterialsState
+  lessonMaterials: initialLessonMaterialsState,
+  notifications: initialNotificationsState
 };
 
 
@@ -58,6 +63,7 @@ export const ngrxFeatures = [
   lessonFeature,
   ChatBotFeature,
   lessonMaterialsFeature,
+  notificationsFeature,
 ]
 
 export const ngrxEffects = [
@@ -67,5 +73,6 @@ export const ngrxEffects = [
   LevelEffects,
   LessonsEffects,
   ChatbotEffects,
-  LessonMaterialsEffects
+  LessonMaterialsEffects,
+  NotificationsEffects
 ]
