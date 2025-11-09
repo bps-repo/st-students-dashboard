@@ -111,7 +111,106 @@ export class AuthEffects implements OnInitEffects {
   );
 
   /**
-   * Reset password effect
+   * Forgot password effect - Step 1: Send OTP to email
+   */
+  forgotPassword$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthActions.forgotPassword),
+      exhaustMap(({email}) =>
+        this.authService.forgotPassword(email).pipe(
+          map(message => AuthActions.forgotPasswordSuccess({message})),
+          catchError(error =>
+            of(AuthActions.forgotPasswordFailure({
+              error: error.message || 'Failed to send password reset email'
+            }))
+          )
+        )
+      )
+    )
+  );
+
+  /**
+   * Forgot password success effect - Show success message
+   */
+  forgotPasswordSuccess$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthActions.forgotPasswordSuccess),
+      tap(({message}) => {
+        // Success message will be handled by component
+      })
+    ),
+    {dispatch: false}
+  );
+
+  /**
+   * Verify reset password token effect - Step 2: Verify OTP
+   */
+  verifyResetPassword$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthActions.verifyResetPassword),
+      exhaustMap(({resetToken}) =>
+        this.authService.verifyResetPassword(resetToken).pipe(
+          map(message => AuthActions.verifyResetPasswordSuccess({message})),
+          catchError(error =>
+            of(AuthActions.verifyResetPasswordFailure({
+              error: error.message || 'Invalid reset token'
+            }))
+          )
+        )
+      )
+    )
+  );
+
+  /**
+   * Verify reset password success effect - Show success message
+   */
+  verifyResetPasswordSuccess$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthActions.verifyResetPasswordSuccess),
+      tap(({message}) => {
+        // Success message will be handled by component
+      })
+    ),
+    {dispatch: false}
+  );
+
+  /**
+   * Reset password with token effect - Step 3: Set new password
+   */
+  resetPasswordWithToken$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthActions.resetPasswordWithToken),
+      exhaustMap(({token, newPassword}) =>
+        this.authService.resetPasswordWithToken(token, newPassword).pipe(
+          map(message => AuthActions.resetPasswordWithTokenSuccess({message})),
+          catchError(error =>
+            of(AuthActions.resetPasswordWithTokenFailure({
+              error: error.message || 'Failed to reset password'
+            }))
+          )
+        )
+      )
+    )
+  );
+
+  /**
+   * Reset password success effect - Navigate to login after successful password reset
+   */
+  resetPasswordWithTokenSuccess$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthActions.resetPasswordWithTokenSuccess),
+      tap(() => {
+        // Delay navigation to allow user to see success message
+        setTimeout(() => {
+          this.router.navigate(['/auth/login']);
+        }, 2000);
+      })
+    ),
+    {dispatch: false}
+  );
+
+  /**
+   * Reset password effect (legacy - kept for backward compatibility)
    */
   resetPassword$ = createEffect(() =>
     this.actions$.pipe(
@@ -130,7 +229,7 @@ export class AuthEffects implements OnInitEffects {
   );
 
   /**
-   * Verify OTP effect
+   * Verify OTP effect (legacy - kept for backward compatibility)
    */
   verifyOtp$ = createEffect(() =>
     this.actions$.pipe(

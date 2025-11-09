@@ -22,6 +22,22 @@ export const AuthActions = createActionGroup(
 
       clearError: emptyProps(),
 
+      // Forgot Password (Step 1: Send OTP to email)
+      forgotPassword: props<{ email: string }>(),
+      forgotPasswordSuccess: props<{ message: string }>(),
+      forgotPasswordFailure: props<{ error: string }>(),
+
+      // Verify Reset Password Token (Step 2: Verify OTP)
+      verifyResetPassword: props<{ resetToken: string }>(),
+      verifyResetPasswordSuccess: props<{ message: string }>(),
+      verifyResetPasswordFailure: props<{ error: string }>(),
+
+      // Reset Password with Token (Step 3: Set new password)
+      resetPasswordWithToken: props<{ token: string; newPassword: string }>(),
+      resetPasswordWithTokenSuccess: props<{ message: string }>(),
+      resetPasswordWithTokenFailure: props<{ error: string }>(),
+
+      // Legacy actions (kept for backward compatibility)
       resetPassword: props<{ email: string }>(),
       resetPasswordSuccess: emptyProps(),
       resetPasswordFailure: props<{ error: string }>(),

@@ -78,43 +78,122 @@ export class AuthService {
   }
 
   /**
-   * Request password reset
+   * Request password reset - sends OTP to email
    * @param email Email address for password reset
    */
-  resetPassword(email: string): Observable<void> {
-    // In a real implementation, this would call an API endpoint
-    return this.http.post<ApiResponse<void>>(`${this.authUrl}/reset-password`, {email}).pipe(
-      map(response => void 0),
-      catchError(error => {
-        const errorMessage = error.error?.message || 'Failed to request password reset';
-        return throwError(() => new Error(errorMessage));
+  forgotPassword(email: string): Observable<string> {
+    return this.http.post<any>(`${this.authUrl}/forgot-password`, {email}).pipe(
+      map(response => {
+        // Handle both response structures: {success, data} or {status, data}
+        if (!response) {
+          throw new Error('Invalid response from server');
+        }
+        // Check if response has data field
+        if (response.data) {
+          return response.data as string;
+        }
+        // Fallback: check if response itself is a string or has message
+        if (typeof response === 'string') {
+          return response;
+        }
+        if (response.message) {
+          return response.message;
+        }
+        throw new Error('Invalid response from server');
       }),
-      // Fallback to mock implementation for development
-      catchError(() => of(void 0).pipe(delay(1000)))
+      catchError(error => {
+        const errorMessage = error.error?.message || error.error?.data || error.message || 'Failed to send password reset email';
+        return throwError(() => new Error(errorMessage));
+      })
     );
   }
 
   /**
-   * Verify OTP code for password reset
+   * Verify reset password token (OTP)
+   * @param resetToken The OTP token received via email
+   */
+  verifyResetPassword(resetToken: string): Observable<string> {
+    return this.http.post<any>(`${this.authUrl}/verify-reset-password`, {resetToken}).pipe(
+      map(response => {
+        // Handle both response structures: {success, data} or {status, data}
+        if (!response) {
+          throw new Error('Invalid response from server');
+        }
+        // Check if response has data field
+        if (response.data) {
+          return response.data as string;
+        }
+        // Fallback: check if response itself is a string or has message
+        if (typeof response === 'string') {
+          return response;
+        }
+        if (response.message) {
+          return response.message;
+        }
+        throw new Error('Invalid response from server');
+      }),
+      catchError(error => {
+        const errorMessage = error.error?.message || error.error?.data || error.message || 'Invalid reset token';
+        return throwError(() => new Error(errorMessage));
+      })
+    );
+  }
+
+  /**
+   * Reset password with token and new password
+   * @param token The verified reset token
+   * @param newPassword The new password
+   */
+  resetPasswordWithToken(token: string, newPassword: string): Observable<string> {
+    return this.http.post<any>(`${this.authUrl}/reset-password`, {
+      token,
+      newPassword
+    }).pipe(
+      map(response => {
+        // Handle both response structures: {success, data} or {status, data}
+        if (!response) {
+          throw new Error('Invalid response from server');
+        }
+        // Check if response has data field
+        if (response.data) {
+          return response.data as string;
+        }
+        // Fallback: check if response itself is a string or has message
+        if (typeof response === 'string') {
+          return response;
+        }
+        if (response.message) {
+          return response.message;
+        }
+        throw new Error('Invalid response from server');
+      }),
+      catchError(error => {
+        const errorMessage = error.error?.message || error.error?.data || error.message || 'Failed to reset password';
+        return throwError(() => new Error(errorMessage));
+      })
+    );
+  }
+
+  /**
+   * Request password reset (legacy method - kept for backward compatibility)
+   * @param email Email address for password reset
+   * @deprecated Use forgotPassword instead
+   */
+  resetPassword(email: string): Observable<void> {
+    return this.forgotPassword(email).pipe(
+      map(() => void 0)
+    );
+  }
+
+  /**
+   * Verify OTP code for password reset (legacy method - kept for backward compatibility)
    * @param email Email address
    * @param otp One-time password code
+   * @deprecated Use verifyResetPassword instead
    */
   verifyOtp(email: string, otp: string): Observable<void> {
-    // In a real implementation, this would call an API endpoint
-    return this.http.post<ApiResponse<void>>(`${this.authUrl}/verify-otp`, {email, otp}).pipe(
-      map(response => void 0),
-      catchError(error => {
-        const errorMessage = error.error?.message || 'Invalid OTP code';
-        return throwError(() => new Error(errorMessage));
-      }),
-      // Fallback to mock implementation for development
-      catchError(() => {
-        // Mock validation for development
-        if (otp === '123456') {
-          return of(void 0).pipe(delay(1000));
-        }
-        return throwError(() => new Error('Invalid OTP code')).pipe(delay(1000));
-      })
+    return this.verifyResetPassword(otp).pipe(
+      map(() => void 0)
     );
   }
 

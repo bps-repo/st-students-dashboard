@@ -10,7 +10,6 @@ import {MaterialsComponent} from './features/lessons/materials/materials.compone
 import {MaterialDetailComponent} from './features/lessons/material-detail/material-detail.component';
 import {LayoutContentComponent} from "./layout/layout-content/layout-content.component";
 import {LoginComponent} from "./features/auth/login/login.component";
-import {ResetPasswordComponent} from "./features/auth/reset-password/reset-password.component";
 import {authGuard} from "./core/guards/auth.guard";
 import {CalendarComponent} from "./features/lessons/calendar/calendar.component";
 import {LessonHistoryComponent} from "./features/lessons/lesson-history/lesson-history.component";
@@ -21,6 +20,7 @@ import {LessonDetailComponent} from "./features/lessons/lesson-detail/lesson-det
 import {UnitDetailComponent} from "./features/units/unit-detail/unit-detail.component";
 import {StudentContractsComponent} from "./features/contracts/student-contracts.component";
 import {NotificationsComponent} from "./features/notifications/notifications.component";
+import { ResetPasswordComponent } from './features/auth/reset-password/reset-password.component';
 
 export const routes: Routes = [
   {

@@ -40,7 +40,64 @@ export const authFeature = createFeature(
         ...initialAuthState,
       })),
 
-      // Reset Password
+      // Forgot Password (Step 1)
+      on(AuthActions.forgotPassword, (state) => ({
+        ...state,
+        isLoading: true,
+        error: null,
+      })),
+
+      on(AuthActions.forgotPasswordSuccess, (state) => ({
+        ...state,
+        isLoading: false,
+        error: null,
+      })),
+
+      on(AuthActions.forgotPasswordFailure, (state, {error}) => ({
+        ...state,
+        isLoading: false,
+        error,
+      })),
+
+      // Verify Reset Password (Step 2)
+      on(AuthActions.verifyResetPassword, (state) => ({
+        ...state,
+        isLoading: true,
+        error: null,
+      })),
+
+      on(AuthActions.verifyResetPasswordSuccess, (state) => ({
+        ...state,
+        isLoading: false,
+        error: null,
+      })),
+
+      on(AuthActions.verifyResetPasswordFailure, (state, {error}) => ({
+        ...state,
+        isLoading: false,
+        error,
+      })),
+
+      // Reset Password With Token (Step 3)
+      on(AuthActions.resetPasswordWithToken, (state) => ({
+        ...state,
+        isLoading: true,
+        error: null,
+      })),
+
+      on(AuthActions.resetPasswordWithTokenSuccess, (state) => ({
+        ...state,
+        isLoading: false,
+        error: null,
+      })),
+
+      on(AuthActions.resetPasswordWithTokenFailure, (state, {error}) => ({
+        ...state,
+        isLoading: false,
+        error,
+      })),
+
+      // Legacy Reset Password (kept for backward compatibility)
       on(AuthActions.resetPassword, (state) => ({
         ...state,
         isLoading: true,
@@ -58,7 +115,7 @@ export const authFeature = createFeature(
         error,
       })),
 
-      // Verify OTP
+      // Legacy Verify OTP (kept for backward compatibility)
       on(AuthActions.verifyOtp, (state) => ({
         ...state,
         isLoading: true,

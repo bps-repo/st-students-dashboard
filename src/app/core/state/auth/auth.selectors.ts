@@ -12,4 +12,5 @@ export const authSelectors = {
   authResponse: createSelector(selectAuth, (state: AuthState) => state.authResponse),
   accessToken: createSelector(selectAuth, (state: AuthState) => state.authResponse?.accessToken),
   refreshToken: createSelector(selectAuth, (state: AuthState) => state.authResponse?.refreshToken),
+  selectAuthState: selectAuth,
 };
