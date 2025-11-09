@@ -22,7 +22,15 @@
       >
         <span
           class="flex justify-center text-white font-bold items-center w-5 h-5 bg-primary-600 rounded-full text-[10px]">L</span>
-        {{ (student$ | async)?.level?.name }}
+        <span class="flex-1">{{ (student$ | async)?.level?.name }}</span>
+        <!-- VIP Badge -->
+        <span 
+          *ngIf="(student$ | async)?.vip"
+          class="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gradient-to-r from-yellow-400 to-yellow-500 text-white"
+          title="VIP Student"
+        >
+          <i class="pi pi-star-fill text-[10px]"></i>
+        </span>
       </h1>
     </section>
 
@@ -45,6 +53,29 @@
           >{{ navLink.label }}</span>
         </a>
       }
+      
+      <!-- VIP Chat Link (only for VIP students) -->
+      <a
+        *ngIf="(student$ | async)?.vip === true"
+        routerLink="/vip-chat"
+        routerLinkActive="text-primary-800 bg-primary-100 shadow-inner rounded-xl"
+        [routerLinkActiveOptions]="{exact: false}"
+        class="group hover:text-primary-700 hover:bg-primary-50/80 active:text-primary-800 transition-all flex flex-row items-center gap-3 px-3 py-2 rounded-xl relative text-neutral-700"
+      >
+        <i 
+          class="pi pi-comments text-[20px] md:text-[24px] text-neutral-600"
+        ></i>
+        <span
+          *ngIf="!isNavBarOpened()"
+          class="font-heading text-sm md:text-base whitespace-nowrap overflow-hidden transition-all duration-300"
+        >Chat VIP</span>
+        <!-- VIP Badge on menu item -->
+        <span 
+          *ngIf="!isNavBarOpened()"
+          class="absolute -top-1 -right-1 w-3 h-3 bg-gradient-to-r from-yellow-400 to-yellow-500 rounded-full border-2 border-white"
+          title="VIP Exclusive"
+        ></span>
+      </a>
     </nav>
   </div>
 

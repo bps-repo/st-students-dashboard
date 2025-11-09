@@ -1,9 +1,9 @@
-import {Component, signal} from '@angular/core';
-import {CommonModule} from "@angular/common";
-import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {map, Observable, of} from "rxjs";
-import {VideoCourse} from "../../core/models/VideoCourse";
-import {VideoLevel} from "../../core/enums/video-level";
+import { Component, signal } from '@angular/core';
+import { CommonModule } from "@angular/common";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { map, Observable, of } from "rxjs";
+import { VideoCourse } from "../../core/models/VideoCourse";
+import { VideoLevel } from "../../core/enums/video-level";
 
 @Component({
   selector: 'app-video-course-list',

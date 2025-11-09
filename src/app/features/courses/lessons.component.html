@@ -1,16 +1,13 @@
 <!-- Modern Courses Component -->
-<div class="px-8 py-6 bg-background-light font-heading">
+<div class="px-4 sm:px-6 md:px-8 py-4 sm:py-6 bg-background-light font-heading overflow-x-hidden w-full max-w-full min-w-0">
   <!-- Header Section with Search -->
   <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
     <h1 class="text-2xl font-bold text-primary-700 mb-4 md:mb-0">Vídeos Aulas</h1>
 
     <!-- Search Bar -->
     <div class="relative w-full md:w-64">
-      <input
-        type="text"
-        placeholder="Pesquisar aulas..."
-        class="w-full pl-10 pr-4 py-2 bg-white border border-neutral-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all"
-      >
+      <input type="text" placeholder="Pesquisar aulas..."
+        class="w-full pl-10 pr-4 py-2 bg-white border border-neutral-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all">
       <i class="pi pi-search absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400"></i>
     </div>
   </div>
@@ -62,7 +59,7 @@
         </div>
       </div>
       <div class="flex items-center justify-between mt-2">
-        <span class="text-sm opacity-80">Intermediate - Lesson 4</span>
+        <span class="text-sm opacity-80">Interme‘diate - Lesson 4</span>
         <button class="bg-white bg-opacity-20 hover:bg-opacity-30 px-3 py-1 rounded-lg text-sm transition-all">
           Entrar
         </button>
@@ -81,8 +78,8 @@
       </div>
 
 
-      <div class="bg-white rounded-xl p-4 shadow-md">
-        <app-card-slider [items]="(levels$ | async)!" [index]="0"/>
+      <div class="bg-white rounded-xl p-2 sm:p-4 shadow-md overflow-hidden w-full max-w-full min-w-0">
+        <app-card-slider [items]="(levels$ | async) ?? []" [index]="0" />
       </div>
     </section>
   </section>

@@ -1,0 +1,146 @@
+<div class="min-h-screen bg-gradient-to-br from-neutral-50 via-primary-50/40 to-accent-50/40 p-4 sm:p-6 md:p-8">
+  <div class="max-w-4xl mx-auto">
+    <!-- Header -->
+    <div class="bg-white rounded-xl shadow-md p-4 sm:p-6 mb-6">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-4">
+          <div *ngIf="teacher" class="relative">
+            <img 
+              [src]="teacher.image || '/user.png'" 
+              [alt]="teacher.name"
+              class="w-12 h-12 sm:w-16 sm:h-16 rounded-full object-cover border-2 border-primary-500"
+            >
+            <!-- VIP Badge -->
+            <div class="absolute -top-1 -right-1 bg-gradient-to-r from-yellow-400 to-yellow-500 rounded-full p-1">
+              <i class="pi pi-star-fill text-white text-xs"></i>
+            </div>
+          </div>
+          <div>
+            <h1 class="text-xl sm:text-2xl font-bold text-primary-700">
+              {{ teacher?.name || 'Loading...' }}
+            </h1>
+            <p class="text-sm text-neutral-600 flex items-center gap-2">
+              <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-yellow-100 to-yellow-200 text-yellow-800">
+                <i class="pi pi-star-fill mr-1"></i>
+                VIP Teacher
+              </span>
+            </p>
+          </div>
+        </div>
+        <div *ngIf="loading" class="flex items-center">
+          <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-primary-600"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chat Container -->
+    <div class="bg-white rounded-xl shadow-md flex flex-col" style="height: calc(100vh - 280px); min-height: 500px;">
+      <!-- Messages Area -->
+      <div 
+        #messagesContainer 
+        class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4"
+        style="scroll-behavior: smooth;"
+      >
+        <div *ngIf="loading && messages.length === 0" class="flex items-center justify-center h-full">
+          <div class="text-center">
+            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
+            <p class="text-neutral-600">Loading conversation...</p>
+          </div>
+        </div>
+
+        <div *ngFor="let message of messages" 
+             class="flex items-start gap-3"
+             [ngClass]="{'flex-row-reverse': message.isUser}">
+          <!-- Avatar -->
+          <div class="flex-shrink-0">
+            <img 
+              [src]="message.senderImage || '/user.png'" 
+              [alt]="message.senderName"
+              class="w-8 h-8 sm:w-10 sm:h-10 rounded-full object-cover border-2"
+              [ngClass]="message.isUser ? 'border-primary-500' : 'border-accent-500'"
+            >
+          </div>
+
+          <!-- Message Content -->
+          <div 
+            class="flex-1 max-w-[80%] sm:max-w-[70%]"
+            [ngClass]="message.isUser ? 'items-end' : 'items-start'">
+            <div 
+              class="rounded-2xl px-4 py-3 shadow-sm"
+              [ngClass]="message.isUser 
+                ? 'bg-primary-500 text-white rounded-tr-none' 
+                : 'bg-neutral-100 text-neutral-800 rounded-tl-none'">
+              <div class="text-sm sm:text-base">
+                <markdown [data]="message.text"></markdown>
+              </div>
+              <div 
+                class="text-xs mt-2 opacity-70"
+                [ngClass]="message.isUser ? 'text-white' : 'text-neutral-600'">
+                {{ message.timestamp | date:'short' }}
+              </div>
+            </div>
+            <div class="text-xs text-neutral-500 mt-1 px-2">
+              {{ message.senderName }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Typing Indicator -->
+        <div *ngIf="isTyping" class="flex items-start gap-3">
+          <div class="flex-shrink-0">
+            <img 
+              [src]="teacher?.image || '/user.png'" 
+              [alt]="teacher?.name"
+              class="w-8 h-8 sm:w-10 sm:h-10 rounded-full object-cover border-2 border-accent-500"
+            >
+          </div>
+          <div class="bg-neutral-100 rounded-2xl rounded-tl-none px-4 py-3">
+            <div class="flex space-x-1">
+              <div class="w-2 h-2 bg-neutral-400 rounded-full animate-bounce" style="animation-delay: 0s"></div>
+              <div class="w-2 h-2 bg-neutral-400 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+              <div class="w-2 h-2 bg-neutral-400 rounded-full animate-bounce" style="animation-delay: 0.4s"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Input Area -->
+      <div class="border-t border-neutral-200 p-4">
+        <form (ngSubmit)="sendMessage()" class="flex items-center gap-3">
+          <input
+            type="text"
+            [(ngModel)]="userMessage"
+            name="userMessage"
+            placeholder="Type your message..."
+            class="flex-1 px-4 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+            [disabled]="loading || !teacher"
+          >
+          <button
+            type="submit"
+            [disabled]="!userMessage.trim() || loading || !teacher"
+            class="bg-primary-500 hover:bg-primary-600 disabled:bg-neutral-300 disabled:cursor-not-allowed text-white px-6 py-3 rounded-lg transition-all flex items-center gap-2 shadow-md"
+          >
+            <i class="pi pi-send"></i>
+            <span class="hidden sm:inline">Send</span>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Info Banner -->
+    <div *ngIf="student?.vip" class="mt-4 bg-gradient-to-r from-yellow-50 to-yellow-100 border border-yellow-200 rounded-lg p-4">
+      <div class="flex items-start gap-3">
+        <i class="pi pi-info-circle text-yellow-600 text-xl mt-1"></i>
+        <div>
+          <p class="text-sm text-yellow-800 font-medium">
+            <strong>VIP Exclusive Chat</strong>
+          </p>
+          <p class="text-xs text-yellow-700 mt-1">
+            You have direct access to your assigned teacher. Messages are private and secure.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

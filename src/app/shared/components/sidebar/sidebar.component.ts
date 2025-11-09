@@ -3,6 +3,7 @@ import {Component, OnInit, signal} from '@angular/core';
 import {RouterLink, RouterLinkActive} from '@angular/router';
 import {LocalstorageService} from '../../services/localstorage.service';
 import {Observable} from "rxjs";
+import {map} from "rxjs/operators";
 import {Store} from "@ngrx/store";
 import {LevelSelectors} from "../../../core/state/level/level.selectors";
 import {Level} from "../../../core/models/Level";
@@ -91,6 +92,12 @@ export class SidebarComponent implements OnInit {
       active: false,
     },
   ];
+
+  isVipStudent(): Observable<boolean> {
+    return this.student$.pipe(
+      map(student => student?.vip === true && student?.directChatEnabled === true)
+    );
+  }
 
   get activeTab(): boolean {
     const activeTab = this.localStorageService.getItem('activeTab');

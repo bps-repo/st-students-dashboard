@@ -123,6 +123,11 @@ export const routes: Routes = [
         component: NotificationsComponent,
         data: {breadcrumb: 'Notificações'}
       },
+      {
+        path: 'vip-chat',
+        loadComponent: () => import('./features/vip-chat/vip-chat.component').then(m => m.VipChatComponent),
+        data: {breadcrumb: 'Chat VIP'}
+      },
     ]
   },
   {

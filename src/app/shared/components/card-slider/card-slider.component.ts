@@ -1,4 +1,4 @@
-import {CommonModule} from '@angular/common';
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -7,13 +7,15 @@ import {
   OnInit,
   ViewChild,
   ChangeDetectorRef,
-  AfterViewInit
+  AfterViewInit,
+  OnChanges,
+  SimpleChanges
 } from '@angular/core';
-import {NgbCarouselModule} from '@ng-bootstrap/ng-bootstrap';
-import {MatPaginatorModule} from '@angular/material/paginator';
-import {Course} from "../../../@types/course";
-import {RouterLink} from "@angular/router";
-import {Level} from "../../../core/models/Level";
+import { NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { Course } from "../../../@types/course";
+import { RouterLink } from "@angular/router";
+import { Level } from "../../../core/models/Level";
 
 /**
  * Modern Card Slider Component
@@ -26,7 +28,7 @@ import {Level} from "../../../core/models/Level";
   templateUrl: './card-slider.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CardSliderComponent implements OnInit, AfterViewInit {
+export class CardSliderComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() index = 0;
   @Input() items: Level[] = [];
   @ViewChild('scrollContainer') scrollContainer!: ElementRef<HTMLDivElement>;
@@ -44,9 +46,18 @@ export class CardSliderComponent implements OnInit, AfterViewInit {
   ngOnInit() {
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    // When items change (e.g., when levels load), recalculate scroll position
+    if (changes['items']) {
+      // Use setTimeout to ensure DOM has updated after items are rendered
+      setTimeout(() => this.checkScrollPosition(), 150);
+    }
+  }
+
   ngAfterViewInit() {
     // Initial check for scroll buttons visibility
-    setTimeout(() => this.checkScrollPosition(), 100);
+    // Use a longer timeout to ensure items are loaded and rendered
+    setTimeout(() => this.checkScrollPosition(), 200);
   }
 
   /**
@@ -80,16 +91,25 @@ export class CardSliderComponent implements OnInit, AfterViewInit {
    * Check if we can scroll in either direction and update button visibility
    */
   private checkScrollPosition() {
-    if (this.scrollContainer) {
+    if (this.scrollContainer && this.items && this.items.length > 0) {
       const container = this.scrollContainer.nativeElement;
 
-      // Can scroll left if we're not at the start
-      this.canScrollLeft = container.scrollLeft > 0;
+      // Wait for next tick to ensure layout is calculated
+      requestAnimationFrame(() => {
+        // Can scroll left if we're not at the start
+        this.canScrollLeft = container.scrollLeft > 0;
 
-      // Can scroll right if we haven't reached the end
-      this.canScrollRight = container.scrollLeft < (container.scrollWidth - container.clientWidth - 5);
+        // Can scroll right if we haven't reached the end (with small threshold for rounding)
+        const scrollThreshold = 5;
+        this.canScrollRight = container.scrollLeft < (container.scrollWidth - container.clientWidth - scrollThreshold);
 
-      // Force change detection to update button visibility
+        // Force change detection to update button visibility
+        this.cdr.detectChanges();
+      });
+    } else {
+      // No items or container not ready, hide both buttons
+      this.canScrollLeft = false;
+      this.canScrollRight = false;
       this.cdr.detectChanges();
     }
   }

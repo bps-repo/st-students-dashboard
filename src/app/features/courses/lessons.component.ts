@@ -1,16 +1,14 @@
-import {CommonModule} from '@angular/common';
-import {Component, OnInit} from '@angular/core';
-import {CardSliderComponent} from '../../shared/components/card-slider/card-slider.component';
-import {COURSES, LEVELS, VIDEOS} from "./courses.state";
-import {Course} from "../../@types/course";
-import {Store} from "@ngrx/store";
-import {LevelActions} from "../../core/state/level/levelActions";
-import {Observable} from "rxjs";
-import {Level} from "../../core/models/Level";
-import {LevelSelectors, selectLevelTotal} from "../../core/state/level/level.selectors";
-import {PushPipe} from "@ngrx/component";
-import {LoaderComponent} from "../../shared/loader/loader.component";
-import {CircularLoaderComponent} from "../../shared/circular-loader/circular-loader.component";
+import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { CardSliderComponent } from '../../shared/components/card-slider/card-slider.component';
+import { COURSES, LEVELS, VIDEOS } from "./courses.state";
+import { Course } from "../../@types/course";
+import { Store } from "@ngrx/store";
+import { LevelActions } from "../../core/state/level/levelActions";
+import { Observable } from "rxjs";
+import { Level } from "../../core/models/Level";
+import { LevelSelectors, selectLevelTotal } from "../../core/state/level/level.selectors";
+import { CircularLoaderComponent } from "../../shared/circular-loader/circular-loader.component";
 
 @Component({
   selector: 'app-lessons',

@@ -1,9 +1,6 @@
 <div class="p-5 m-5 font-heading">
   <app-tab-menu [tabConfig]="tabConfig"></app-tab-menu>
   <section class="mt-10">
-    <app-flash-card
-      *ngFor="let lesson of lessons"
-      [dataInput]="lesson"
-    ></app-flash-card>
+    <app-flash-card *ngFor="let lesson of lessons" [dataInput]="lesson"></app-flash-card>
   </section>
 </div>

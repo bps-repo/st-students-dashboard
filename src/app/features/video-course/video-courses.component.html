@@ -33,13 +33,9 @@
           <p class="text-neutral-600 mt-1">Acesse os melhores conteúdos para aprender programação</p>
         </div>
         <div class="relative">
-          <input
-            type="text"
-            placeholder="Pesquisar aulas..."
+          <input type="text" placeholder="Pesquisar aulas..."
             class="pl-10 pr-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-            [(ngModel)]="searchQuery"
-            (ngModelChange)="onSearchChange($event)"
-          />
+            [(ngModel)]="searchQuery" (ngModelChange)="onSearchChange($event)" />
           <i class="fa fa-search absolute left-3 top-3 text-neutral-400"></i>
         </div>
       </div>
@@ -96,15 +92,10 @@
       <!-- Filter Tabs -->
       <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
         <div class="flex space-x-2 p-1 bg-neutral-200 rounded-lg">
-          <button
-            *ngFor="let tab of tabs"
-            class="px-4 py-2 rounded-md text-sm font-medium transition"
-            [ngClass]="{
+          <button *ngFor="let tab of tabs" class="px-4 py-2 rounded-md text-sm font-medium transition" [ngClass]="{
               'bg-white shadow text-primary-600': activeTab === tab.id,
               'text-neutral-600 hover:text-primary-500': activeTab !== tab.id
-            }"
-            (click)="setActiveTab(tab.id)"
-          >
+            }" (click)="setActiveTab(tab.id)">
             {{ tab.label }}
           </button>
         </div>
@@ -113,9 +104,7 @@
           <i class="fa fa-filter text-neutral-500"></i>
           <select
             class="border border-neutral-300 rounded-lg px-3 py-2 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
-            [(ngModel)]="activeLevel"
-            (ngModelChange)="setActiveLevel($event)"
-          >
+            [(ngModel)]="activeLevel" (ngModelChange)="setActiveLevel($event)">
             <option *ngFor="let level of levels" [value]="level.id">
               {{ level.label }} {{ level.id !== 'all' ? '(' + (levelCounts[level.id] || 0) + ')' : '' }}
             </option>
@@ -125,17 +114,11 @@
 
       <!-- Course Grid -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        <div
-          *ngFor="let course of filteredCourses"
-          class="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-md transition group"
-        >
+        <div *ngFor="let course of filteredCourses"
+          class="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-md transition group">
           <div class="relative">
-            <img
-              [src]="course.thumbnail"
-              [alt]="course.title"
-              class="w-full h-40 object-cover"
-              onerror="this.src='assets/images/placeholder.jpg'"
-            />
+            <img [src]="course.thumbnail" [alt]="course.title" class="w-full h-40 object-cover"
+              onerror="this.src='assets/images/placeholder.jpg'" />
             <div class="absolute top-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded">
               <ng-container *ngIf="course.type === 'video'">{{ course.duration }}</ng-container>
               <ng-container *ngIf="course.type === 'documents'">{{ course.pages }} páginas</ng-container>
@@ -156,22 +139,20 @@
           </div>
           <div class="p-4">
             <div class="flex items-center mb-2">
-              <span
-                class="text-xs font-medium px-2 py-1 rounded uppercase"
-                [ngClass]="{
+              <span class="text-xs font-medium px-2 py-1 rounded uppercase" [ngClass]="{
                   'bg-success-100 text-success-700': course.level === 'beginner',
                   'bg-accent-100 text-accent-700': course.level === 'elementary',
                   'bg-warning-100 text-warning-700': course.level === 'intermediate',
                   'bg-error-100 text-error-700': course.level === 'advanced'
-                }"
-              >
+                }">
                 {{ getLevelLabel(course.level) }}
               </span>
             </div>
             <h3 class="font-semibold text-neutral-800 mb-1">{{ course.title }}</h3>
             <p class="text-neutral-500 text-sm">{{ course.instructor }}</p>
 
-            <div class="mt-3 pt-3 border-t border-neutral-100 flex items-center justify-between text-sm text-neutral-500">
+            <div
+              class="mt-3 pt-3 border-t border-neutral-100 flex items-center justify-between text-sm text-neutral-500">
               <div class="flex items-center">
                 <ng-container *ngIf="course.type === 'video'">
                   <i class="fa fa-play-circle mr-1"></i>
@@ -218,10 +199,8 @@
               {{ levelCounts['beginner'] || 0 }} cursos disponíveis
             </p>
             <div class="mt-2 flex justify-end">
-              <button
-                class="bg-success-700 hover:bg-success-900 px-3 py-1 rounded-lg text-sm font-medium"
-                (click)="setActiveLevel('beginner')"
-              >
+              <button class="bg-success-700 hover:bg-success-900 px-3 py-1 rounded-lg text-sm font-medium"
+                (click)="setActiveLevel('beginner')">
                 Ver Cursos
               </button>
             </div>
@@ -236,10 +215,8 @@
               {{ levelCounts['elementary'] || 0 } } cursos disponíveis
             </p>
             <div class="mt-2 flex justify-end">
-              <button
-                class="bg-accent-700 hover:bg-accent-900 px-3 py-1 rounded-lg text-sm font-medium"
-                (click)="setActiveLevel('elementary')"
-              >
+              <button class="bg-accent-700 hover:bg-accent-900 px-3 py-1 rounded-lg text-sm font-medium"
+                (click)="setActiveLevel('elementary')">
                 Ver Cursos
               </button>
             </div>
@@ -254,10 +231,8 @@
               {{ levelCounts['intermediate'] || 0 }} cursos disponíveis
             </p>
             <div class="mt-2 flex justify-end">
-              <button
-                class="bg-warning-700 hover:bg-warning-900 px-3 py-1 rounded-lg text-sm font-medium"
-                (click)="setActiveLevel('intermediate')"
-              >
+              <button class="bg-warning-700 hover:bg-warning-900 px-3 py-1 rounded-lg text-sm font-medium"
+                (click)="setActiveLevel('intermediate')">
                 Ver Cursos
               </button>
             </div>
@@ -272,10 +247,8 @@
               {{ levelCounts['advanced'] || 0 }} cursos disponíveis
             </p>
             <div class="mt-2 flex justify-end">
-              <button
-                class="bg-error-700 hover:bg-error-900 px-3 py-1 rounded-lg text-sm font-medium"
-                (click)="setActiveLevel('advanced')"
-              >
+              <button class="bg-error-700 hover:bg-error-900 px-3 py-1 rounded-lg text-sm font-medium"
+                (click)="setActiveLevel('advanced')">
                 Ver Cursos
               </button>
             </div>

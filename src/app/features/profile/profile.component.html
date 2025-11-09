@@ -80,11 +80,28 @@
 
         <!-- Profile Info -->
         <div class="pt-16 px-6 pb-6 text-center">
-          <h2 class="text-xl font-bold text-neutral-800">{{ (user$ | async)?.phone }}</h2>
-          <div class="flex justify-center mt-2">
+          <div class="flex items-center justify-center gap-2 mb-2">
+            <h2 class="text-xl font-bold text-neutral-800">{{ (user$ | async)?.phone }}</h2>
+            <!-- VIP Badge -->
+            <span 
+              *ngIf="(student$ | async)?.vip"
+              class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gradient-to-r from-yellow-400 to-yellow-500 text-white"
+              title="VIP Student"
+            >
+              <i class="pi pi-star-fill text-[10px]"></i>
+            </span>
+          </div>
+          <div class="flex justify-center items-center gap-2 mt-2 flex-wrap">
             <div class="bg-primary-50 text-primary-700 px-3 py-1 rounded-full text-sm font-medium flex items-center">
               <span class="w-2 h-2 bg-primary-500 rounded-full mr-2"></span>
               {{ (student$ | async)?.level?.name }}
+            </div>
+            <div 
+              *ngIf="(student$ | async)?.vip && (student$ | async)?.directChatEnabled"
+              class="bg-gradient-to-r from-yellow-50 to-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-medium flex items-center border border-yellow-200"
+            >
+              <i class="pi pi-comments text-xs mr-1"></i>
+              Chat VIP Ativo
             </div>
           </div>
 

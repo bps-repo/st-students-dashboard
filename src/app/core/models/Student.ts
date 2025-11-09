@@ -22,7 +22,10 @@ export interface Student {
   currentUnit: Unit,
   classes?: ClassEntity[],
   unitProgresses?: UnitProgress[],
-  notes?: string
+  notes?: string;
+  vip?: boolean;
+  vipTeacherId?: string | null;
+  directChatEnabled?: boolean;
 }
 
 export interface Center {
