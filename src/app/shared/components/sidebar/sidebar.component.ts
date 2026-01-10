@@ -85,6 +85,13 @@ export class SidebarComponent implements OnInit {
       active: false,
     },
     {
+      label: 'Chat AI ⭐',
+      path: '/chat',
+      icon: 'pi pi-star',
+      activeIcon: 'pi pi-question-circle-alt',
+      active: false,
+    },
+    {
       label: 'Ajuda',
       path: '/support',
       icon: 'pi pi-question-circle',

@@ -2,56 +2,64 @@ import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../environments/environment";
 import {Observable} from "rxjs";
-import {map} from "rxjs/operators";
-import {ApiResponse} from "../dtos/api-response";
+import {User} from "../models/User";
+import {AuthService} from "./auth.service";
 
 export interface ChatRequest {
   message: string;
-  systemContext?: string;
   conversationId: string;
   temperature?: number;
   maxTokens?: number;
   streaming?: boolean;
 }
 
-export interface AssistantMessage {
-  messageType: string;
-  toolCalls: any[];
-  textContent: string;
-  reasoningContent: any;
-  prefix: any;
-  metadata: {
-    finishReason: string;
-    index: number;
-    id: string;
-    role: string;
-    messageType: string;
-  };
+export interface Conversation {
+  id: string;
+  title: string;
+  createdAt: string;
+  updatedAt: string;
+  user: User
 }
 
 export interface ChatResponse {
   message: string;
   conversationId: string;
-  assistantMessage?: AssistantMessage;
+  model?: string;
+  timestamp: string;
+}
+
+export interface ChatHistory {
+  id: string;
+  userMessage: string;
+  aiResponse: string;
+  conversationId: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChatService {
-  private baseUrl = `${environment.apiUrl}/chat/student`;
+  private baseUrl = `${environment.apiUrl}/chat`;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private authService: AuthService) {
   }
 
   sendMessage(request: ChatRequest): Observable<ChatResponse> {
-    return this.http.post<any>(`${this.baseUrl}/me/message`, request).pipe(
-      map((response) => {
-        return {
-          message: response.data.response,
-          conversationId: response.data.conversationId
-        }
-      })
-    )
+    return this.http.post<ChatResponse>(`${this.baseUrl}/message`, request)
+  }
+
+  openConversation(title?: String): Observable<Conversation> {
+    return this.http.post<Conversation>(`${this.baseUrl}/context?title=${title}`, {})
+  }
+
+  getConversationHistory(conversationId: String): Observable<ChatHistory[]> {
+    return this.http.get<ChatHistory[]>(`${this.baseUrl}/${conversationId}/history`)
+  }
+
+  getConversations(): Observable<Conversation[]> {
+    const userId = this.authService.getUserId();
+    return this.http.get<Conversation[]>(`${this.baseUrl}/${userId}/conversations`)
   }
 }

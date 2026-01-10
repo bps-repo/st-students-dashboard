@@ -1,66 +1,133 @@
-<!-- Floating chat button -->
-<button
-  class="chatbot-toggle"
-  (click)="toggleChat()"
-  [ngClass]="{'open': this.isOpen()}">
-  <span class="material-icons">{{ isOpen() ? 'close' : 'chat' }}</span>
-</button>
-
-<!-- Chat container -->
-<div class="chatbot-container" [ngClass]="{ 'open': isOpen() }">
-  <div class="chatbot-header">
-    <div class="chatbot-title">
-      <span class="material-icons">support_agent</span>
-      <h3>Virtual Assistant</h3>
-    </div>
-    <button class="close-button" (click)="toggleChat()">
-      <span class="material-icons">close</span>
-    </button>
-  </div>
-
-  <!-- Updated message template -->
-  <div class="chatbot-messages" #messagesContainer>
-    <div *ngFor="let message of messages" class="message"
-         [class.user-message]="message.isUser"
-         [class.bot-message]="!message.isUser">
-
-      <!-- Message content -->
-      <div class="message-content">
-        <markdown [data]="message.text"></markdown>
-        <span class="message-time">{{ message.timestamp | date:'shortTime' }}</span>
-      </div>
-
-      <!-- Message icon -->
-      <div class="message-icon"
-           [class.user-icon]="message.isUser"
-           [class.bot-icon]="!message.isUser">
-      <span class="material-icons">
-        {{ message.isUser ? 'person' : 'support_agent' }}
-      </span>
-      </div>
+<div class="chat-history-container">
+  <!-- Sidebar -->
+  <div class="sidebar" [class.collapsed]="!isSidebarOpen()">
+    <div class="sidebar-header">
+      <h2>Conversas</h2>
+      <button class="new-chat-btn" (click)="createNewChat()">
+        <span class="material-icons">add</span>
+        <span>Novo chat</span>
+      </button>
     </div>
 
-    <!-- Typing indicator -->
-    <div *ngIf="isTyping" class="message bot-message">
-      <div class="message-content typing-indicator">
-        <span></span>
-        <span></span>
-        <span></span>
+    <div class="conversations-list">
+      <div *ngIf="isLoading()" class="loading-spinner">
+        <span class="material-icons spinning">refresh</span>
+        <p>Carregando conversas...</p>
       </div>
-      <div class="message-icon bot-icon">
-        <span class="material-icons">support_agent</span>
+
+      <div *ngIf="!isLoading() && conversations().length === 0" class="empty-state">
+        <span class="material-icons">chat_bubble_outline</span>
+        <p>Sem conversas ainda!</p>
+        <small>Clica "Novo Chat" para começar</small>
+      </div>
+
+      <div
+        *ngFor="let conversation of conversations()"
+        class="conversation-item"
+        [class.active]="selectedConversation()?.id === conversation.id"
+        (click)="selectConversation(conversation)">
+
+        <div class="conversation-icon">
+          <span class="material-icons">chat</span>
+        </div>
+
+        <div class="conversation-info">
+          <h4>{{ getConversationPreview(conversation) }}</h4>
+          <p class="conversation-preview">Click to view messages</p>
+        </div>
+
+        <button
+          class="delete-btn"
+          (click)="deleteConversation(conversation.id, $event)"
+          title="Delete conversation">
+          <span class="material-icons">delete</span>
+        </button>
       </div>
     </div>
   </div>
 
-  <div class="chatbot-input">
-    <input
-      type="text"
-      placeholder="Type your message..."
-      [(ngModel)]="userMessage"
-      (keyup.enter)="sendMessage()">
-    <button (click)="sendMessage()">
-      <span class="material-icons">send</span>
-    </button>
+  <!-- Toggle sidebar button -->
+  <button class="sidebar-toggle" (click)="toggleSidebar()">
+    <span class="material-icons">
+      {{ isSidebarOpen() ? 'chevron_left' : 'chevron_right' }}
+    </span>
+  </button>
+
+  <!-- Main chat area -->
+  <div class="chat-area">
+    <div *ngIf="!selectedConversation()" class="welcome-screen">
+      <div class="welcome-content">
+        <span class="material-icons">chat_bubble_outline</span>
+        <h1>Welcome to Virtual Assistant</h1>
+        <p>Select a conversation from the sidebar or create a new one to get started</p>
+        <button class="start-chat-btn" (click)="createNewChat()">
+          <span class="material-icons">add_comment</span>
+          Start New Conversation
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="selectedConversation()" class="active-chat">
+      <!-- Chat Header -->
+      <div class="chat-header">
+        <div class="chat-title">
+          <span class="material-icons">support_agent</span>
+          <h3>{{ selectedConversation()!.title }}</h3>
+        </div>
+      </div>
+
+      <!-- Messages -->
+      <div class="chat-messages" #messagesContainer>
+        <div *ngIf="messages().length === 0 && !isLoading()" class="empty-chat">
+          <span class="material-icons">forum</span>
+          <p>No messages yet. Start the conversation!</p>
+        </div>
+
+        <div *ngFor="let message of messages()"
+             class="message"
+             [class.user-message]="message.isUser"
+             [class.bot-message]="!message.isUser">
+
+          <div class="message-content">
+            <markdown [data]="message.text"></markdown>
+            <span class="message-time">{{ message.timestamp | date:'shortTime' }}</span>
+          </div>
+
+          <div class="message-icon"
+               [class.user-icon]="message.isUser"
+               [class.bot-icon]="!message.isUser">
+            <span class="material-icons">
+              {{ message.isUser ? 'person' : 'support_agent' }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Typing indicator -->
+        <div *ngIf="isTyping" class="message bot-message">
+          <div class="message-content typing-indicator">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <div class="message-icon bot-icon">
+            <span class="material-icons">support_agent</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Input area -->
+      <div class="chat-input">
+        <input
+          type="text"
+          placeholder="Type your message..."
+          [(ngModel)]="userMessage"
+          (keyup.enter)="sendMessage()">
+        <button (click)="sendMessage()" [disabled]="!userMessage.trim()">
+          <span class="material-icons">send</span>
+        </button>
+      </div>
+    </div>
   </div>
 </div>
+
+

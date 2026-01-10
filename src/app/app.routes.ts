@@ -20,7 +20,8 @@ import {LessonDetailComponent} from "./features/lessons/lesson-detail/lesson-det
 import {UnitDetailComponent} from "./features/units/unit-detail/unit-detail.component";
 import {StudentContractsComponent} from "./features/contracts/student-contracts.component";
 import {NotificationsComponent} from "./features/notifications/notifications.component";
-import { ResetPasswordComponent } from './features/auth/reset-password/reset-password.component';
+import {ResetPasswordComponent} from './features/auth/reset-password/reset-password.component';
+import {ChatBotComponent} from "./shared/chatbot/chatbot.component";
 
 export const routes: Routes = [
   {
@@ -127,6 +128,16 @@ export const routes: Routes = [
         path: 'vip-chat',
         loadComponent: () => import('./features/vip-chat/vip-chat.component').then(m => m.VipChatComponent),
         data: {breadcrumb: 'Chat VIP'}
+      },
+      {
+        path: 'chat',
+        component: ChatBotComponent,
+        title: 'Chat History - Virtual Assistant'
+      },
+      {
+        path: 'chat/:conversationId',
+        component: ChatBotComponent,
+        title: 'Conversation - Virtual Assistant'
       },
     ]
   },
