@@ -1,4 +1,4 @@
-import {Component, OnInit, signal, computed} from '@angular/core';
+import {Component, OnInit, signal, computed, inject} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {Router} from '@angular/router';
@@ -19,6 +19,8 @@ interface ChatMessage {
   styleUrls: ['./chatbot.component.scss'],
 })
 export class ChatBotComponent implements OnInit {
+  private chatService = inject(ChatService);
+
   conversations = signal<Conversation[]>([]);
   selectedConversation = signal<Conversation | null>(null);
   messages = signal<ChatMessage[]>([]);
@@ -26,12 +28,7 @@ export class ChatBotComponent implements OnInit {
   isTyping = false;
   isLoading = signal(false);
   isSidebarOpen = signal(true);
-  userId = ''; // You should get this from your auth service
 
-  constructor(
-    private chatService: ChatService,
-  ) {
-  }
 
   ngOnInit(): void {
     this.loadConversations();
@@ -45,7 +42,7 @@ export class ChatBotComponent implements OnInit {
         this.conversations.set(conversations);
         this.isLoading.set(false);
       },
-      error: (error) => {
+      error: () => {
         this.isLoading.set(false);
       }
     });
@@ -124,7 +121,7 @@ export class ChatBotComponent implements OnInit {
       error: (error) => {
         this.isTyping = false;
         console.error('Error sending message:', error);
-        this.addBotMessage('Sorry, I encountered an error. Please try again later.');
+        this.addBotMessage('Desculpe, ocorreu um erro. Por favor, tente novamente mais tarde.');
       }
     });
   }
@@ -148,8 +145,8 @@ export class ChatBotComponent implements OnInit {
   deleteConversation(conversationId: string, event: Event): void {
     event.stopPropagation();
 
-    if (confirm('Are you sure you want to delete this conversation?')) {
-      // You'll need to add this method to your ChatService
+    if (confirm('Tens a certeza que queres eliminar essa conversa?')) {
+      this.chatService.deleteConversationHistory(conversationId)
       this.conversations.update(convs =>
         convs.filter(conv => conv.id !== conversationId)
       );
@@ -166,7 +163,7 @@ export class ChatBotComponent implements OnInit {
   }
 
   getConversationPreview(conversation: Conversation): string {
-    return conversation.title || 'New Conversation';
+    return conversation.title || 'Nova Conversa';
   }
 
   formatDate(date: Date): string {

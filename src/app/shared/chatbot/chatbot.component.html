@@ -33,7 +33,7 @@
 
         <div class="conversation-info">
           <h4>{{ getConversationPreview(conversation) }}</h4>
-          <p class="conversation-preview">Click to view messages</p>
+          <p class="conversation-preview">Clica para ver as mensagens</p>
         </div>
 
         <button
@@ -58,11 +58,11 @@
     <div *ngIf="!selectedConversation()" class="welcome-screen">
       <div class="welcome-content">
         <span class="material-icons">chat_bubble_outline</span>
-        <h1>Welcome to Virtual Assistant</h1>
-        <p>Select a conversation from the sidebar or create a new one to get started</p>
+        <h1>Bem-Vindo ao seu Assistante Virtual de Inglês</h1>
+        <p>Selecione uma conversa na barra lateral ou crie uma nova para começar.</p>
         <button class="start-chat-btn" (click)="createNewChat()">
           <span class="material-icons">add_comment</span>
-          Start New Conversation
+          Começar uma nova conversa
         </button>
       </div>
     </div>
@@ -80,7 +80,7 @@
       <div class="chat-messages" #messagesContainer>
         <div *ngIf="messages().length === 0 && !isLoading()" class="empty-chat">
           <span class="material-icons">forum</span>
-          <p>No messages yet. Start the conversation!</p>
+          <p>Sem mensagens no momento. Comece já!!</p>
         </div>
 
         <div *ngFor="let message of messages()"
@@ -119,7 +119,7 @@
       <div class="chat-input">
         <input
           type="text"
-          placeholder="Type your message..."
+          placeholder="Pergunte qualquer coisa sobre Inglês..."
           [(ngModel)]="userMessage"
           (keyup.enter)="sendMessage()">
         <button (click)="sendMessage()" [disabled]="!userMessage.trim()">

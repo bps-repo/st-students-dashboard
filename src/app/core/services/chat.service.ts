@@ -58,6 +58,10 @@ export class ChatService {
     return this.http.get<ChatHistory[]>(`${this.baseUrl}/${conversationId}/history`)
   }
 
+  deleteConversationHistory(conversationId: String): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/${conversationId}/history`)
+  }
+
   getConversations(): Observable<Conversation[]> {
     const userId = this.authService.getUserId();
     return this.http.get<Conversation[]>(`${this.baseUrl}/${userId}/conversations`)
