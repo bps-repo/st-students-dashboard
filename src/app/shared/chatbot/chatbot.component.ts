@@ -1,4 +1,4 @@
-import {Component, OnInit, signal, computed, inject} from '@angular/core';
+import {Component, OnInit, signal, computed, inject, ViewChild, ElementRef, AfterViewChecked} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {Router} from '@angular/router';
@@ -18,8 +18,10 @@ interface ChatMessage {
   templateUrl: './chatbot.component.html',
   styleUrls: ['./chatbot.component.scss'],
 })
-export class ChatBotComponent implements OnInit {
+export class ChatBotComponent implements OnInit, AfterViewChecked {
   private chatService = inject(ChatService);
+
+  @ViewChild('messagesContainer') private messagesContainer?: ElementRef;
 
   conversations = signal<Conversation[]>([]);
   selectedConversation = signal<Conversation | null>(null);
@@ -28,10 +30,18 @@ export class ChatBotComponent implements OnInit {
   isTyping = false;
   isLoading = signal(false);
   isSidebarOpen = signal(true);
+  private shouldScrollToBottom = false;
 
 
   ngOnInit(): void {
     this.loadConversations();
+  }
+
+  ngAfterViewChecked(): void {
+    if (this.shouldScrollToBottom) {
+      this.scrollToBottom();
+      this.shouldScrollToBottom = false;
+    }
   }
 
   loadConversations(): void {
@@ -93,6 +103,7 @@ export class ChatBotComponent implements OnInit {
 
         this.messages.set(chatMessages);
         this.isLoading.set(false);
+        this.shouldScrollToBottom = true;
       },
       error: (error) => {
         console.error('Error loading conversation history:', error);
@@ -132,6 +143,7 @@ export class ChatBotComponent implements OnInit {
       isUser: true,
       timestamp: new Date()
     }]);
+    this.shouldScrollToBottom = true;
   }
 
   private addBotMessage(text: string): void {
@@ -140,6 +152,18 @@ export class ChatBotComponent implements OnInit {
       isUser: false,
       timestamp: new Date()
     }]);
+    this.shouldScrollToBottom = true;
+  }
+
+  private scrollToBottom(): void {
+    try {
+      if (this.messagesContainer) {
+        const container = this.messagesContainer.nativeElement;
+        container.scrollTop = container.scrollHeight;
+      }
+    } catch (err) {
+      console.error('Error scrolling to bottom:', err);
+    }
   }
 
   deleteConversation(conversationId: string, event: Event): void {

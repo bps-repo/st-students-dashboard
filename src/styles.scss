@@ -68,6 +68,12 @@
   .animate-ripple-delayed {
     animation: ripple 4s ease-out 2s infinite;
   }
+  
+  /* AI Sparkle Icon Animation */
+  .ai-sparkle-icon {
+    animation: aiSparkle 3s ease-in-out infinite;
+    filter: drop-shadow(0 0 4px rgba(102, 126, 234, 0.4));
+  }
 }
 
 /* Animation keyframes */
@@ -173,6 +179,26 @@
   }
   50% {
     opacity: 0.3;
+  }
+}
+
+/* AI Sparkle animation keyframe */
+@keyframes aiSparkle {
+  0%, 100% {
+    transform: scale(1) rotate(0deg);
+    filter: drop-shadow(0 0 4px rgba(102, 126, 234, 0.4));
+  }
+  25% {
+    transform: scale(1.1) rotate(-5deg);
+    filter: drop-shadow(0 0 8px rgba(102, 126, 234, 0.6));
+  }
+  50% {
+    transform: scale(1.15) rotate(0deg);
+    filter: drop-shadow(0 0 12px rgba(102, 126, 234, 0.8));
+  }
+  75% {
+    transform: scale(1.1) rotate(5deg);
+    filter: drop-shadow(0 0 8px rgba(102, 126, 234, 0.6));
   }
 }
 

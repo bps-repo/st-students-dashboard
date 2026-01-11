@@ -1,6 +1,6 @@
 <div class="chat-history-container">
   <!-- Sidebar -->
-  <div class="sidebar" [class.collapsed]="!isSidebarOpen()">
+  <div class="sidebar">
     <div class="sidebar-header">
       <h2>Conversas</h2>
       <button class="new-chat-btn" (click)="createNewChat()">
@@ -45,13 +45,6 @@
       </div>
     </div>
   </div>
-
-  <!-- Toggle sidebar button -->
-  <button class="sidebar-toggle" (click)="toggleSidebar()">
-    <span class="material-icons">
-      {{ isSidebarOpen() ? 'chevron_left' : 'chevron_right' }}
-    </span>
-  </button>
 
   <!-- Main chat area -->
   <div class="chat-area">
