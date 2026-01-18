@@ -1,7 +1,6 @@
 import {Component, OnInit, signal, computed, inject, ViewChild, ElementRef, AfterViewChecked} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
-import {Router} from '@angular/router';
 import {ChatService, Conversation, ChatHistory} from '../../core/services/chat.service';
 import {MarkdownComponent} from 'ngx-markdown';
 
@@ -90,14 +89,14 @@ export class ChatBotComponent implements OnInit, AfterViewChecked {
           chatMessages.push({
             text: item.userMessage,
             isUser: true,
-            timestamp: new Date()
+            timestamp: new Date(item.createdAt)
           });
 
           // Add AI response
           chatMessages.push({
             text: item.aiResponse,
             isUser: false,
-            timestamp: new Date()
+            timestamp: new Date(item.createdAt)
           });
         });
 

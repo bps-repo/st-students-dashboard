@@ -17,9 +17,17 @@ const {
 } = unitsAdapter.getSelectors(selectUnitsState);
 
 /**
- * Select all units
+ * Select all units (already sorted by orderUnit via entity adapter)
  */
 export const selectAllUnits = selectAll;
+
+/**
+ * Select all units sorted by orderUnit (redundant but explicit)
+ */
+export const selectAllUnitsSorted = createSelector(
+  selectAll,
+  (units) => [...units].sort((a, b) => Number(a.orderUnit) - Number(b.orderUnit))
+);
 
 
 /**

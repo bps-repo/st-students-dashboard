@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {map, Observable} from 'rxjs';
-import {Unit} from "../models/Unit";
+import {Unit, UnitStatus} from "../models/Unit";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../environments/environment";
 import {ApiResponse} from "../dtos/api-response";
@@ -27,7 +27,14 @@ export class UnitService {
 
   getMyCurrentLevelUnits(): Observable<Unit[]> {
     return this.http.get<ApiResponse<Unit[]>>(`${this.baseUrl}/me/current-level-unit-progress`).pipe(
-      map((r) => r.data as Unit[])
+      map((r) => {
+        const units = r.data.map((unit) => ({
+            ...unit,
+            status: unit.isCurrentUnit ? UnitStatus.AVAILABLE : unit.complete ? UnitStatus.COMPLETE : UnitStatus.LOCK
+          })).sort((a, b) => Number(a.orderUnit) - Number(b.orderUnit))
+        console.log("units ", units);
+        return units;
+      })
     );
   }
 }

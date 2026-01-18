@@ -1,6 +1,6 @@
 import {createFeatureSelector, createSelector} from '@ngrx/store';
 import {NotificationsState} from './notifications.state';
-import {Notification} from '../../models/Notification';
+import {Notification, NotificationType} from '../../models/Notification';
 
 const selectNotifications = createFeatureSelector<NotificationsState>('notifications');
 
@@ -13,6 +13,17 @@ export const NotificationsSelectors = {
   readNotifications: createSelector(
     selectNotifications,
     (state: NotificationsState) => state.notifications.filter(n => n.read)
+  ),
+  warningNotifications: createSelector(
+    selectNotifications,
+    (state: NotificationsState) => state.notifications.filter(n => n.type === NotificationType.WARNING && !n.read)
+  ),
+  firstWarningNotification: createSelector(
+    selectNotifications,
+    (state: NotificationsState) => {
+      const warnings = state.notifications.filter(n => n.type === NotificationType.WARNING && !n.read);
+      return warnings.length > 0 ? warnings[0] : null;
+    }
   ),
   unreadCount: createSelector(selectNotifications, (state: NotificationsState) => state.unreadCount),
   loading: createSelector(selectNotifications, (state: NotificationsState) => state.isLoading),

@@ -59,6 +59,7 @@ export class ChatService {
   }
 
   deleteConversationHistory(conversationId: String): Observable<void> {
+    console.log('deleteConversationHistory', conversationId);
     return this.http.delete<void>(`${this.baseUrl}/${conversationId}/history`)
   }
 

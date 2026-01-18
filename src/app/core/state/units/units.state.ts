@@ -14,10 +14,10 @@ export interface UnitsState extends EntityState<Unit> {
  * Entity adapter for units
  */
 export const unitsAdapter: EntityAdapter<Unit> = createEntityAdapter<Unit>({
-  // Use title as the ID since we don't have a proper ID in the mock data
+  // Use unitId as the unique identifier
   selectId: (unit: Unit) => unit.unitId,
-  // Sort by title
-  sortComparer: (a: Unit, b: Unit) => a.unitId.localeCompare(b.unitId),
+  // Sort by orderUnit to maintain correct unit order
+  sortComparer: (a: Unit, b: Unit) => Number(a.orderUnit) - Number(b.orderUnit),
 });
 
 /**
