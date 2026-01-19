@@ -7,7 +7,7 @@
   <!-- Welcome Header -->
   <div class="mb-8">
     <h1 class="text-4xl font-bold text-neutral-800 flex items-center mb-2">
-      Welcome, <span class="text-neutral-800 ml-2">{{ (student$ | ngrxPush)?.user?.firstname }}</span>
+      Seja bem-vindo, <span class="text-neutral-800 ml-2">{{ (student$ | ngrxPush)?.user?.firstname }}</span>
       <span class="ml-2 text-4xl">👋</span>
       </h1>
   </div>
@@ -33,7 +33,7 @@
         </div>
       </div>
       <!-- Percentage indicator positioned based on progress -->
-      <div class="absolute -top-1 transition-all duration-500" 
+      <div class="absolute -top-1 transition-all duration-500"
            [ngStyle]="{ left: 'calc(' + ((student$ | ngrxPush)?.levelProgressPercentage || 0) + '% - 20px)' }">
         <div class="bg-success-500 text-white px-3 py-1.5 rounded-full shadow-lg text-xs font-bold whitespace-nowrap relative">
           {{ (student$ | ngrxPush)?.levelProgressPercentage }}%

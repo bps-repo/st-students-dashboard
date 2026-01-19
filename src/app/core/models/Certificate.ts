@@ -1,13 +1,13 @@
 export interface Certificate {
   id: string; // uuid
-  student: StudentInfo;
+  student: CertificateStudent;
   levelId: string; // uuid
   levelName: string;
-  issueDate: string; // date-time
+  issueDate: string; // date-time (ISO 8601)
   certificateNumber: string;
 }
 
-export interface StudentInfo {
+export interface CertificateStudent {
   id: string;
   name: string;
   email?: string;

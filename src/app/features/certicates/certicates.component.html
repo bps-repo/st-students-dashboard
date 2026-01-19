@@ -7,17 +7,17 @@
       <p class="text-neutral-600 mt-1">Visualize e baixe seus certificados de conclusão</p>
     </div>
 
-    <!-- Filter Dropdown (Optional) -->
-    <div class="relative w-full md:w-64">
-      <div class="flex items-center bg-white border border-neutral-200 rounded-lg shadow-sm px-4 py-2 cursor-pointer hover:border-primary-300 transition-all">
-        <span class="text-neutral-700 flex-grow">Todos os certificados</span>
-        <i class="pi pi-chevron-down text-neutral-400"></i>
-      </div>
+    <!-- Certificate Count Badge -->
+    <div class="flex items-center bg-primary-50 border border-primary-200 rounded-lg shadow-sm px-4 py-2">
+      <i class="pi pi-award text-primary-600 mr-2"></i>
+      <span class="text-primary-700 font-semibold">
+        {{ (certificates$ | ngrxPush)?.length || 0 }} Certificado(s)
+      </span>
     </div>
   </div>
 
   <!-- Current Level Card -->
-  <div class="bg-white rounded-xl shadow-md overflow-hidden mb-8">
+  <div *ngIf="student$ | ngrxPush as student" class="bg-white rounded-xl shadow-md overflow-hidden mb-8">
     <div class="bg-gradient-to-r from-primary-600 to-primary-500 px-6 py-4 text-white">
       <h2 class="text-lg font-bold">Seu Nível Atual</h2>
     </div>
@@ -25,47 +25,75 @@
     <div class="p-6">
       <div class="flex flex-col md:flex-row items-center">
         <div class="mb-6 md:mb-0 md:mr-8">
-          <app-circular-level [label]="'C1'" [color]="'primary'"></app-circular-level>
+          <app-circular-level 
+            [label]="getCertificateInitials(student.level?.name || 'N/A')" 
+            [color]="'primary'">
+          </app-circular-level>
         </div>
 
         <div class="flex-grow">
-          <h3 class="text-xl font-bold text-primary-700 mb-2">{{ currentLevel }}</h3>
+          <h3 class="text-xl font-bold text-primary-700 mb-2">{{ student.level?.name || 'N/A' }}</h3>
           <p class="text-neutral-600 mb-4">Parabéns por alcançar este nível! Continue aprimorando suas habilidades.</p>
 
           <!-- Progress Bar -->
           <div class="mb-2 flex justify-between items-center">
             <span class="text-sm font-medium text-neutral-700">Progresso do nível</span>
-            <span class="text-sm font-bold text-primary-600">{{ levelProgress }}%</span>
+            <span class="text-sm font-bold text-primary-600">{{ student.levelProgressPercentage || 0 }}%</span>
           </div>
           <div class="w-full bg-neutral-200 rounded-full h-2.5">
-            <div class="bg-gradient-to-r from-primary-500 to-primary-600 h-2.5 rounded-full relative" [style.width.%]="levelProgress">
+            <div class="bg-gradient-to-r from-primary-500 to-primary-600 h-2.5 rounded-full relative" 
+                 [style.width.%]="student.levelProgressPercentage || 0">
               <div class="absolute -right-1 -top-1 bg-white w-4 h-4 rounded-full border-2 border-primary-500 shadow-sm"></div>
             </div>
           </div>
-        </div>
-
-        <div class="mt-6 md:mt-0 md:ml-8">
-          <button
-            (click)="downloadCertificate(currentLevel)"
-            class="bg-primary-50 hover:bg-primary-100 text-primary-700 font-medium py-2 px-4 rounded-lg transition-all flex items-center"
-          >
-            <i class="pi pi-download mr-2"></i>
-            Baixar Certificado
-          </button>
         </div>
       </div>
     </div>
   </div>
 
+  <!-- Loading State -->
+  <app-loader [loading]="loading$" [label]="'Carregando certificados...'"></app-loader>
+
+  <!-- Error State -->
+  <div *ngIf="(error$ | ngrxPush) && !(loading$ | ngrxPush)" class="bg-white rounded-2xl shadow-sm p-8 mb-8">
+    <div class="flex flex-col items-center text-center">
+      <div class="rounded-full bg-error-100 p-4 mb-4">
+        <i class="pi pi-exclamation-triangle text-error-500 text-3xl"></i>
+      </div>
+      <h3 class="text-xl font-bold text-neutral-800 mb-2">Erro ao carregar certificados</h3>
+      <p class="text-neutral-600 mb-4">{{ error$ | ngrxPush }}</p>
+      <button
+        (click)="retry()"
+        class="px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-all font-semibold shadow-md"
+      >
+        Tentar novamente
+      </button>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!(hasCertificates$ | ngrxPush) && !(loading$ | ngrxPush) && !(error$ | ngrxPush)" 
+       class="bg-white rounded-2xl shadow-sm p-12 text-center">
+    <div class="rounded-full bg-neutral-100 w-24 h-24 flex items-center justify-center mx-auto mb-6">
+      <i class="pi pi-award text-neutral-400 text-5xl"></i>
+    </div>
+    <h3 class="text-xl font-bold text-neutral-800 mb-2">Nenhum certificado ainda</h3>
+    <p class="text-neutral-600 max-w-md mx-auto">
+      Continue seus estudos e complete os níveis para ganhar seus certificados.
+    </p>
+  </div>
+
   <!-- Certificates Grid -->
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  <div *ngIf="(hasCertificates$ | ngrxPush) && !(loading$ | ngrxPush)" 
+       class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     <!-- Certificate Card -->
     <div
-      *ngFor="let certificate of certificates"
+      *ngFor="let certificate of certificates$ | ngrxPush; let i = index"
       class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-all duration-300"
     >
       <!-- Certificate Header with Gradient Background -->
-      <div class="relative h-32 bg-gradient-to-r" [ngClass]="'from-' + certificate.color + '-600 to-' + certificate.color + '-500'">
+      <div class="relative h-32 bg-gradient-to-r" 
+           [ngClass]="'from-' + getCertificateColor(i) + '-600 to-' + getCertificateColor(i) + '-500'">
         <div class="absolute inset-0 bg-[url('/bg_st.png')] bg-cover bg-center opacity-20"></div>
 
         <!-- Certificate Badge -->
@@ -73,7 +101,7 @@
           <div class="relative">
             <div class="w-20 h-20 rounded-full bg-white bg-opacity-20 backdrop-blur-sm flex items-center justify-center border-2 border-white">
               <span class="text-2xl font-bold text-white">
-                {{ certificate.title.substring(0, 1) }}{{ certificate.title.includes('-') ? certificate.title.split('-')[1].substring(0, 1) : '' }}
+                {{ getCertificateInitials(certificate.levelName) }}
               </span>
             </div>
           </div>
@@ -81,15 +109,29 @@
       </div>
 
       <!-- Certificate Content -->
-      <div class="p-6 text-center">
-        <h2 class="text-lg font-bold text-neutral-800 mb-2">{{ certificate.title }}</h2>
-        <div class="bg-neutral-50 rounded-lg px-3 py-1.5 inline-block mb-4">
-          <span class="text-sm text-neutral-700">Nível de Inglês</span>
+      <div class="p-6">
+        <div class="text-center mb-4">
+          <h2 class="text-lg font-bold text-neutral-800 mb-2">{{ certificate.levelName }}</h2>
+          <div class="bg-neutral-50 rounded-lg px-3 py-1.5 inline-block mb-2">
+            <span class="text-sm text-neutral-700">Nível de Inglês</span>
+          </div>
         </div>
 
-        <p class="text-neutral-600 text-sm mb-6">
-          {{ certificate.description }}
-        </p>
+        <!-- Certificate Details -->
+        <div class="space-y-3 mb-4">
+          <div class="flex items-center text-sm">
+            <i class="pi pi-id-card text-neutral-400 mr-2"></i>
+            <span class="text-neutral-600">Nº: <span class="font-mono font-semibold">{{ certificate.certificateNumber }}</span></span>
+          </div>
+          <div class="flex items-center text-sm">
+            <i class="pi pi-calendar text-neutral-400 mr-2"></i>
+            <span class="text-neutral-600">Emitido em: <span class="font-semibold">{{ formatDate(certificate.issueDate) }}</span></span>
+          </div>
+          <div class="flex items-center text-sm">
+            <i class="pi pi-user text-neutral-400 mr-2"></i>
+            <span class="text-neutral-600 truncate">{{ certificate.student.name }}</span>
+          </div>
+        </div>
 
         <!-- Certificate Status -->
         <div class="flex justify-center items-center mb-4">
@@ -103,8 +145,8 @@
       <!-- Certificate Actions -->
       <div class="px-6 py-4 bg-neutral-50 border-t border-neutral-200">
         <button
-          (click)="downloadCertificate(certificate.title)"
-          [ngClass]="'bg-' + certificate.color + '-500 hover:bg-' + certificate.color + '-600'"
+          (click)="downloadCertificate(certificate.id)"
+          [ngClass]="'bg-' + getCertificateColor(i) + '-500 hover:bg-' + getCertificateColor(i) + '-600'"
           class="w-full py-2.5 rounded-lg text-white font-medium transition-all flex items-center justify-center"
         >
           <i class="pi pi-download mr-2"></i>
