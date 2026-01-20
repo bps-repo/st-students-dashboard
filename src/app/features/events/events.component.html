@@ -1,4 +1,4 @@
-<!-- Modern Events Component -->
+<!-- Modern Events Component with NgRx -->
 <div class="px-8 py-6 bg-background-light font-heading">
   <!-- Header Section with Search -->
   <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
@@ -19,8 +19,55 @@
     </div>
   </div>
 
-  <!-- Tab Menu -->
-  <app-tab-menu [tabConfig]="tabConfig" class="mb-6"></app-tab-menu>
+  <!-- Custom Tab Menu -->
+  <div class="bg-white rounded-xl shadow-md mb-6 overflow-hidden">
+    <div class="flex border-b border-neutral-200">
+      <button
+        (click)="setTab('all')"
+        [ngClass]="{
+          'bg-primary-50 text-primary-700 border-b-4 border-primary-600': activeTab === 'all',
+          'text-neutral-600 hover:bg-neutral-50': activeTab !== 'all'
+        }"
+        class="flex-1 px-6 py-4 font-semibold text-sm transition-all focus:outline-none"
+      >
+        <i class="pi pi-th-large mr-2"></i>
+        Todos os eventos
+      </button>
+      <button
+        (click)="setTab('my-events')"
+        [ngClass]="{
+          'bg-primary-50 text-primary-700 border-b-4 border-primary-600': activeTab === 'my-events',
+          'text-neutral-600 hover:bg-neutral-50': activeTab !== 'my-events'
+        }"
+        class="flex-1 px-6 py-4 font-semibold text-sm transition-all focus:outline-none"
+      >
+        <i class="pi pi-user mr-2"></i>
+        Meus Eventos
+      </button>
+      <button
+        (click)="setTab('upcoming')"
+        [ngClass]="{
+          'bg-primary-50 text-primary-700 border-b-4 border-primary-600': activeTab === 'upcoming',
+          'text-neutral-600 hover:bg-neutral-50': activeTab !== 'upcoming'
+        }"
+        class="flex-1 px-6 py-4 font-semibold text-sm transition-all focus:outline-none"
+      >
+        <i class="pi pi-calendar-plus mr-2"></i>
+        Próximos eventos
+      </button>
+      <button
+        (click)="setTab('past')"
+        [ngClass]="{
+          'bg-primary-50 text-primary-700 border-b-4 border-primary-600': activeTab === 'past',
+          'text-neutral-600 hover:bg-neutral-50': activeTab !== 'past'
+        }"
+        class="flex-1 px-6 py-4 font-semibold text-sm transition-all focus:outline-none"
+      >
+        <i class="pi pi-history mr-2"></i>
+        Eventos passados
+      </button>
+    </div>
+  </div>
 
   <!-- Filter Section -->
   <div class="bg-white rounded-xl p-4 shadow-md mb-8">
@@ -33,32 +80,32 @@
         <span>Todos</span>
       </div>
       <div
-        (click)="setFilter('workshop')"
-        [ngClass]="activeFilter === 'workshop' ? 'bg-primary-50 text-primary-700' : 'bg-neutral-50 text-neutral-700'"
+        (click)="setFilter(EventType.WORKSHOP)"
+        [ngClass]="activeFilter === EventType.WORKSHOP ? 'bg-primary-50 text-primary-700' : 'bg-neutral-50 text-neutral-700'"
         class="px-3 py-1.5 rounded-lg font-medium text-sm flex items-center hover:bg-primary-100 transition-all cursor-pointer"
       >
         <i class="pi pi-briefcase mr-2"></i>
         <span>Workshops</span>
       </div>
       <div
-        (click)="setFilter('conversation')"
-        [ngClass]="activeFilter === 'conversation' ? 'bg-primary-50 text-primary-700' : 'bg-neutral-50 text-neutral-700'"
+        (click)="setFilter(EventType.SEMINAR)"
+        [ngClass]="activeFilter === EventType.SEMINAR ? 'bg-primary-50 text-primary-700' : 'bg-neutral-50 text-neutral-700'"
         class="px-3 py-1.5 rounded-lg font-medium text-sm flex items-center hover:bg-primary-100 transition-all cursor-pointer"
       >
         <i class="pi pi-comments mr-2"></i>
-        <span>Conversação</span>
+        <span>Seminários</span>
       </div>
       <div
-        (click)="setFilter('lecture')"
-        [ngClass]="activeFilter === 'lecture' ? 'bg-primary-50 text-primary-700' : 'bg-neutral-50 text-neutral-700'"
+        (click)="setFilter(EventType.TALK)"
+        [ngClass]="activeFilter === EventType.TALK ? 'bg-primary-50 text-primary-700' : 'bg-neutral-50 text-neutral-700'"
         class="px-3 py-1.5 rounded-lg font-medium text-sm flex items-center hover:bg-primary-100 transition-all cursor-pointer"
       >
         <i class="pi pi-book mr-2"></i>
         <span>Palestras</span>
       </div>
       <div
-        (click)="setFilter('meeting')"
-        [ngClass]="activeFilter === 'meeting' ? 'bg-primary-50 text-primary-700' : 'bg-neutral-50 text-neutral-700'"
+        (click)="setFilter(EventType.MEETING)"
+        [ngClass]="activeFilter === EventType.MEETING ? 'bg-primary-50 text-primary-700' : 'bg-neutral-50 text-neutral-700'"
         class="px-3 py-1.5 rounded-lg font-medium text-sm flex items-center hover:bg-primary-100 transition-all cursor-pointer"
       >
         <i class="pi pi-users mr-2"></i>
@@ -67,32 +114,87 @@
     </div>
   </div>
 
+  <!-- Loading State -->
+  <app-loader [loading]="loading$" [label]="'Carregando eventos...'"></app-loader>
+
+  <!-- Error State -->
+  <div *ngIf="(error$ | ngrxPush) && !(loading$ | ngrxPush)" class="bg-white rounded-2xl shadow-sm p-8 mb-8">
+    <div class="flex flex-col items-center text-center">
+      <div class="rounded-full bg-error-100 p-4 mb-4">
+        <i class="pi pi-exclamation-triangle text-error-500 text-3xl"></i>
+      </div>
+      <h3 class="text-xl font-bold text-neutral-800 mb-2">Erro ao carregar eventos</h3>
+      <p class="text-neutral-600 mb-4">{{ error$ | ngrxPush }}</p>
+      <button
+        (click)="retry()"
+        class="px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-all font-semibold shadow-md"
+      >
+        Tentar novamente
+      </button>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="(getFilteredEvents$() | ngrxPush)?.length === 0 && !(loading$ | ngrxPush) && !(error$ | ngrxPush)"
+       class="bg-white rounded-2xl shadow-sm p-12 text-center">
+    <div class="rounded-full bg-neutral-100 w-24 h-24 flex items-center justify-center mx-auto mb-6">
+      <i class="pi pi-calendar text-neutral-400 text-5xl"></i>
+    </div>
+    
+    <!-- Empty state for "Meus Eventos" tab -->
+    <div *ngIf="activeTab === 'my-events'">
+      <h3 class="text-xl font-bold text-neutral-800 mb-2">Você ainda não está inscrito em nenhum evento</h3>
+      <p class="text-neutral-600 max-w-md mx-auto mb-4">
+        Explore os eventos disponíveis e inscreva-se para começar a participar!
+      </p>
+      <button
+        (click)="setTab('all')"
+        class="mt-4 px-6 py-3 bg-primary-500 text-white rounded-lg font-medium hover:bg-primary-600 transition-all"
+      >
+        Ver Todos os Eventos
+      </button>
+    </div>
+    
+    <!-- Empty state for other tabs -->
+    <div *ngIf="activeTab !== 'my-events'">
+      <h3 class="text-xl font-bold text-neutral-800 mb-2">Nenhum evento encontrado</h3>
+      <p class="text-neutral-600 max-w-md mx-auto">
+        <span *ngIf="activeTab === 'upcoming'">Não há eventos futuros disponíveis no momento.</span>
+        <span *ngIf="activeTab === 'past'">Não há eventos passados.</span>
+        <span *ngIf="activeTab === 'all'">Não há eventos disponíveis no momento. Volte mais tarde para ver novos eventos.</span>
+      </p>
+    </div>
+  </div>
+
   <!-- Events Grid -->
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  <div *ngIf="(getFilteredEvents$() | ngrxPush)?.length"
+       class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
     <!-- Event Card -->
     <div
-      *ngFor="let event of getFilteredEvents()"
+      *ngFor="let event of getFilteredEvents$() | ngrxPush"
       class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-all duration-300"
     >
       <!-- Event Header with Gradient Background -->
-      <div class="relative h-32 bg-gradient-to-r" [ngClass]="'from-' + event.color + '-600 to-' + event.color + '-500'">
+      <div class="relative h-32 bg-gradient-to-r"
+           [ngClass]="'from-' + getEventColor(event.type) + '-600 to-' + getEventColor(event.type) + '-500'">
         <div class="absolute inset-0 bg-[url('/bg_st.png')] bg-cover bg-center opacity-20"></div>
 
         <!-- Event Type Badge -->
-        <div
-          class="absolute top-3 right-3 bg-white bg-opacity-20 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium text-white">
-          <span *ngIf="event.type === 'workshop'">Workshop</span>
-          <span *ngIf="event.type === 'conversation'">Conversação</span>
-          <span *ngIf="event.type === 'lecture'">Palestra</span>
-          <span *ngIf="event.type === 'meeting'">Encontro</span>
-          <span *ngIf="event.type === 'other'">Evento</span>
+        <div class="absolute top-3 right-3 bg-white bg-opacity-20 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium text-white">
+          {{ getEventTypeLabel(event.type) }}
+        </div>
+
+        <!-- Online/Location Badge -->
+        <div class="absolute top-3 left-3 bg-white bg-opacity-20 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium text-white flex items-center">
+          <i [ngClass]="event.online ? 'pi pi-globe' : 'pi pi-map-marker'" class="mr-1"></i>
+          <span>{{ event.online ? 'Online' : 'Presencial' }}</span>
         </div>
 
         <!-- Event Date -->
         <div class="absolute bottom-3 left-3 bg-white bg-opacity-20 backdrop-blur-sm px-3 py-2 rounded-lg text-white">
-          <div class="flex items-center">
+          <div class="flex items-center text-sm">
             <i class="pi pi-calendar mr-2"></i>
-            <span>{{ event.date }}</span>
+            <span>{{ formatDate(event.startAt) }}</span>
           </div>
         </div>
       </div>
@@ -102,158 +204,181 @@
         <h2 class="text-lg font-bold text-neutral-800 mb-2">{{ event.title }}</h2>
 
         <!-- Event Details -->
-        <div class="flex items-center text-neutral-600 mb-3">
-          <i class="pi pi-clock text-accent-500 mr-2"></i>
-          <span>{{ event.time }}</span>
-          <span class="mx-2">•</span>
-          <span class="bg-primary-50 text-primary-700 px-2 py-0.5 rounded-full text-xs">{{ event.level }}</span>
-        </div>
-
-        <!-- Event Location -->
-        <div class="flex items-center text-neutral-600 mb-3">
-          <i class="pi pi-map-marker text-accent-500 mr-2"></i>
-          <span>{{ event.location }}</span>
-        </div>
-
-        <!-- Event Description -->
-        <p class="text-sm text-neutral-600 mb-4 line-clamp-2">{{ event.description }}</p>
-
-        <!-- Participants -->
-        <div class="flex items-center justify-between mb-4">
-          <div class="flex items-center">
-            <div class="flex -space-x-2">
-              <div
-                class="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center text-primary-700 text-xs font-bold border-2 border-white">
-                {{ event.participants }}+
-              </div>
-              <div
-                class="w-8 h-8 rounded-full bg-accent-500 flex items-center justify-center text-white text-xs border-2 border-white">
-                ST
-              </div>
-            </div>
-            <span class="ml-2 text-sm text-neutral-600">participantes</span>
+        <div class="space-y-2 mb-4">
+          <div class="flex items-center text-sm text-neutral-600">
+            <i class="pi pi-clock mr-2 text-neutral-400"></i>
+            <span>{{ formatTime(event.startAt) }}</span>
           </div>
+          <div class="flex items-center text-sm text-neutral-600">
+            <i [ngClass]="event.online ? 'pi pi-video' : 'pi pi-map-marker'" class="mr-2 text-neutral-400"></i>
+            <span class="truncate">{{ event.online ? 'Online' : event.location || 'A definir' }}</span>
+          </div>
+          <div class="flex items-center text-sm text-neutral-600">
+            <i class="pi pi-users mr-2 text-neutral-400"></i>
+            <span>{{ getParticipantCount(event) }}/{{ event.maxCapacity }} participantes</span>
+          </div>
+        </div>
 
-          <!-- Event Status -->
-          <div class="flex items-center">
-            <span *ngIf="event.status === 'upcoming'" class="flex items-center text-success-600 text-xs">
-              <i class="pi pi-check-circle mr-1"></i> Aberto
-            </span>
-            <span *ngIf="event.status === 'ongoing'" class="flex items-center text-warning-600 text-xs">
-              <i class="pi pi-clock mr-1"></i> Em andamento
-            </span>
-            <span *ngIf="event.status === 'past'" class="flex items-center text-neutral-500 text-xs">
-              <i class="pi pi-calendar-times mr-1"></i> Encerrado
-            </span>
+        <p class="text-neutral-600 text-sm mb-4 line-clamp-2">
+          {{ event.description }}
+        </p>
+
+        <!-- Registration Status -->
+        <div *ngIf="student$ | ngrxPush as student" class="mb-3">
+          <div *ngIf="isRegistered(event, student.id)"
+               class="flex items-center bg-success-50 text-success-700 px-3 py-2 rounded-lg text-sm">
+            <i class="pi pi-check-circle mr-2"></i>
+            <span>Você está inscrito</span>
+          </div>
+          <div *ngIf="!isRegistered(event, student.id) && !hasCapacity(event)"
+               class="flex items-center bg-error-50 text-error-700 px-3 py-2 rounded-lg text-sm">
+            <i class="pi pi-times-circle mr-2"></i>
+            <span>Lotado</span>
           </div>
         </div>
       </div>
 
       <!-- Event Actions -->
-      <div class="px-4 py-3 bg-neutral-50 border-t border-neutral-100">
-        <div class="flex justify-between">
-          <button
-            (click)="openEventDetails(event)"
-            class="px-4 py-2 bg-white border border-neutral-200 rounded-lg text-neutral-700 text-sm font-medium hover:bg-neutral-100 transition-all"
-          >
-            <i class="pi pi-info-circle mr-1"></i> Detalhes
-          </button>
-          <button
-            class="px-4 py-2 bg-gradient-to-r from-accent-600 to-accent-500 rounded-lg text-white text-sm font-medium hover:from-accent-700 hover:to-accent-600 transition-all shadow-sm"
-          >
-            <i class="pi pi-check mr-1"></i> Participar
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Empty State -->
-  <div *ngIf="getFilteredEvents().length === 0" class="bg-white rounded-xl p-8 shadow-md text-center">
-    <div class="w-16 h-16 bg-neutral-100 rounded-full flex items-center justify-center mx-auto mb-4">
-      <i class="pi pi-calendar-times text-neutral-400 text-2xl"></i>
-    </div>
-    <h3 class="text-lg font-bold text-neutral-800 mb-2">Nenhum evento encontrado</h3>
-    <p class="text-neutral-600">Não encontramos eventos com os filtros selecionados. Tente outros filtros ou volte mais
-      tarde.</p>
-  </div>
-
-  <!-- Event Details Modal -->
-  <div *ngIf="showEventDetails()"
-       class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4
-  ">
-    <div class="bg-white rounded-xl shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto">
-      <!-- Modal Header -->
-      <div class="p-4 border-b border-neutral-200 flex justify-between items-center">
-        <h2 class="text-lg font-bold text-neutral-800">Detalhes do Evento</h2>
+      <div class="px-4 py-3 bg-neutral-50 border-t border-neutral-200 flex gap-2">
         <button
-          (click)="showEventDetails.set(false)"
-          class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-neutral-100 text-neutral-500 transition-all"
+          (click)="openEventDetails(event)"
+          class="flex-1 py-2 rounded-lg text-primary-700 border border-primary-700 font-medium hover:bg-primary-50 transition-all flex items-center justify-center text-sm"
         >
-          <i class="pi pi-times"></i>
+          <i class="pi pi-info-circle mr-1"></i>
+          Detalhes
+        </button>
+        <button
+          *ngIf="student$ | ngrxPush as student"
+          (click)="isRegistered(event, student.id) ? cancelRegistration(event.id, event.title) : registerForEvent(event.id, event.title)"
+          [disabled]="!isRegistered(event, student.id) && !hasCapacity(event)"
+          [ngClass]="{
+            'bg-error-500 hover:bg-error-600': isRegistered(event, student.id),
+            'bg-primary-500 hover:bg-primary-600': !isRegistered(event, student.id) && hasCapacity(event),
+            'bg-neutral-300 cursor-not-allowed': !isRegistered(event, student.id) && !hasCapacity(event)
+          }"
+          class="flex-1 py-2 rounded-lg text-white font-medium transition-all flex items-center justify-center text-sm"
+        >
+          <i [ngClass]="isRegistered(event, student.id) ? 'pi pi-times' : 'pi pi-plus'" class="mr-1"></i>
+          {{ isRegistered(event, student.id) ? 'Cancelar' : 'Inscrever' }}
         </button>
       </div>
+    </div>
+  </div>
 
-      <!-- Modal Content -->
-      <div class="p-4" *ngIf="selectedEvent">
-        <!-- Event Title -->
-        <h3 class="text-xl font-bold text-neutral-800 mb-2">{{ selectedEvent.title }}</h3>
-        <p class="text-neutral-600 mb-4">Nível: {{ selectedEvent.level }}</p>
+  <!-- Infinite Scroll Sentinel -->
+  <div #scrollSentinel class="py-8"></div>
 
-        <!-- Date and Time -->
-        <div class="flex items-center mb-4">
-          <i class="pi pi-calendar text-2xl text-accent-500 mr-4"></i>
+  <!-- Loading More Indicator -->
+  <div *ngIf="loading$ | ngrxPush" class="flex justify-center items-center py-8">
+    <div class="flex flex-col items-center gap-3">
+      <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-primary-500"></div>
+      <p class="text-neutral-600 text-sm">Carregando mais eventos...</p>
+    </div>
+  </div>
+
+  <!-- End of Results -->
+  <div *ngIf="!(loading$ | ngrxPush) && (currentPage$ | ngrxPush) as currentPage" class="text-center py-6">
+    <div *ngIf="(totalPages$ | ngrxPush) as totalPages">
+      <div *ngIf="currentPage + 1 >= totalPages && totalPages > 0" class="bg-neutral-100 rounded-lg px-6 py-4 inline-block">
+        <div class="flex items-center gap-2 text-neutral-600">
+          <i class="pi pi-check-circle text-success-500"></i>
+          <span class="text-sm font-medium">
+            Todos os eventos carregados ({{ totalElements$ | ngrxPush }} no total)
+          </span>
+        </div>
+      </div>
+
+      <!-- Scroll to Top Button -->
+      <button
+        *ngIf="currentPage > 0"
+        (click)="scrollToTop()"
+        class="mt-4 px-6 py-3 bg-white border border-neutral-200 text-neutral-700 rounded-lg hover:bg-neutral-50 transition-all flex items-center gap-2 mx-auto"
+      >
+        <i class="pi pi-arrow-up"></i>
+        <span>Voltar ao topo</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Event Details Modal (Simple version - can be enhanced) -->
+<div *ngIf="showEventDetails() && selectedEvent"
+     class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+     (click)="closeEventDetails()">
+  <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto" (click)="$event.stopPropagation()">
+    <div class="sticky top-0 bg-white border-b border-neutral-200 px-6 py-4 flex justify-between items-center">
+      <h2 class="text-xl font-bold text-neutral-800">Detalhes do Evento</h2>
+      <button (click)="closeEventDetails()" class="text-neutral-400 hover:text-neutral-600">
+        <i class="pi pi-times text-xl"></i>
+      </button>
+    </div>
+
+    <div class="p-6">
+      <h3 class="text-2xl font-bold text-neutral-800 mb-4">{{ selectedEvent.title }}</h3>
+
+      <div class="space-y-4 mb-6">
+        <div class="flex items-start">
+          <i class="pi pi-calendar text-primary-600 mr-3 mt-1"></i>
           <div>
-            <p class="font-bold text-neutral-800">{{ selectedEvent.date }}</p>
-            <p class="text-neutral-500">Início às {{ selectedEvent.time }}</p>
+            <p class="text-sm text-neutral-600">Data e Hora</p>
+            <p class="font-semibold text-neutral-800">
+              {{ formatDate(selectedEvent.startAt) }} às {{ formatTime(selectedEvent.startAt) }}
+            </p>
           </div>
         </div>
 
-        <!-- Location -->
-        <div class="flex items-center mb-4">
-          <i class="pi pi-map-marker text-2xl text-accent-500 mr-4"></i>
+        <div class="flex items-start">
+          <i [ngClass]="selectedEvent.online ? 'pi pi-video' : 'pi pi-map-marker'" class="text-primary-600 mr-3 mt-1"></i>
           <div>
-            <p class="font-bold text-neutral-800">Local</p>
-            <p class="text-neutral-500">{{ selectedEvent.location }}</p>
+            <p class="text-sm text-neutral-600">{{ selectedEvent.online ? 'Link Online' : 'Local' }}</p>
+            <p class="font-semibold text-neutral-800">
+              {{ selectedEvent.online ? (selectedEvent.onlineLink || 'Link será enviado') : (selectedEvent.location || 'A definir') }}
+            </p>
           </div>
         </div>
 
-        <!-- Participants -->
-        <div class="flex items-center mb-4">
-          <i class="pi pi-users text-2xl text-accent-500 mr-4"></i>
+        <div class="flex items-start">
+          <i class="pi pi-users text-primary-600 mr-3 mt-1"></i>
           <div>
-            <p class="font-bold text-neutral-800">Participantes</p>
-            <p class="text-neutral-500">{{ selectedEvent.participants }} confirmaram presença</p>
+            <p class="text-sm text-neutral-600">Participantes</p>
+            <p class="font-semibold text-neutral-800">
+              {{ getParticipantCount(selectedEvent) }}/{{ selectedEvent.maxCapacity }}
+            </p>
           </div>
         </div>
 
-        <!-- Description -->
-        <div class="mb-4">
-          <p class="font-bold text-neutral-800 mb-2">Descrição</p>
-          <p class="text-neutral-600">{{ selectedEvent.description }}</p>
-        </div>
-
-        <!-- Organizer -->
-        <div class="border-t pt-4 mt-4">
-          <p class="font-medium text-neutral-800 mb-2">Organizador</p>
-          <div class="flex items-center">
-            <div class="w-10 h-10 rounded-full bg-primary-500 text-white flex items-center justify-center mr-3">
-              <span>ST</span>
-            </div>
-            <div>
-              <p class="font-medium text-neutral-800">{{ selectedEvent.organizer }}</p>
-              <p class="text-neutral-500 text-sm">Educação</p>
-            </div>
+        <div class="flex items-start">
+          <i class="pi pi-tag text-primary-600 mr-3 mt-1"></i>
+          <div>
+            <p class="text-sm text-neutral-600">Tipo</p>
+            <p class="font-semibold text-neutral-800">{{ getEventTypeLabel(selectedEvent.type) }}</p>
           </div>
         </div>
       </div>
 
-      <!-- Modal Footer -->
-      <div class="p-4 border-t border-neutral-200">
+      <div class="mb-6">
+        <h4 class="font-bold text-neutral-800 mb-2">Descrição</h4>
+        <p class="text-neutral-600 leading-relaxed">{{ selectedEvent.description }}</p>
+      </div>
+
+      <div *ngIf="student$ | ngrxPush as student" class="flex gap-3">
         <button
-          class="w-full py-3 bg-gradient-to-r from-primary-600 to-primary-500 text-white font-medium rounded-lg hover:from-primary-700 hover:to-primary-600 transition-all shadow-sm"
+          (click)="closeEventDetails()"
+          class="flex-1 py-3 rounded-lg border border-neutral-200 text-neutral-700 font-medium hover:bg-neutral-50 transition-all"
         >
-          Quero Participar
+          Fechar
+        </button>
+        <button
+          (click)="isRegistered(selectedEvent, student.id) ? cancelRegistration(selectedEvent.id, selectedEvent.title) : registerForEvent(selectedEvent.id, selectedEvent.title); closeEventDetails()"
+          [disabled]="!isRegistered(selectedEvent, student.id) && !hasCapacity(selectedEvent)"
+          [ngClass]="{
+            'bg-error-500 hover:bg-error-600': isRegistered(selectedEvent, student.id),
+            'bg-primary-500 hover:bg-primary-600': !isRegistered(selectedEvent, student.id) && hasCapacity(selectedEvent),
+            'bg-neutral-300 cursor-not-allowed': !isRegistered(selectedEvent, student.id) && !hasCapacity(selectedEvent)
+          }"
+          class="flex-1 py-3 rounded-lg text-white font-medium transition-all"
+        >
+          {{ isRegistered(selectedEvent, student.id) ? 'Cancelar Inscrição' : 'Inscrever-se' }}
         </button>
       </div>
     </div>

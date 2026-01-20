@@ -3,8 +3,10 @@
 >
   <!-- Left side navigation -->
   <nav class="flex items-center space-x-6">
-    <!-- Back button with improved hover effect -->
+    <!-- Back button (hidden on home page) -->
     <button
+      *ngIf="!isHomePage"
+      (click)="goBack()"
       class="group flex items-center space-x-2 bg-white bg-opacity-10 hover:bg-opacity-20 px-4 py-2 rounded-lg transition-all duration-200 shadow-sm">
       <i class="pi pi-arrow-left text-white"></i>
       <span class="font-medium">Voltar</span>

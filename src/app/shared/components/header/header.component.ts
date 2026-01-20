@@ -9,6 +9,8 @@ import {authSelectors} from "../../../core/state/auth/auth.selectors";
 import {Student} from "../../../core/models/Student";
 import {StudentSelectors} from "../../../core/state/student/student.selectors";
 import {BreadcrumbComponent} from "../../breadcrumb/breadcrumb.component";
+import {Router, NavigationEnd} from "@angular/router";
+import {filter} from "rxjs/operators";
 
 
 
@@ -22,12 +24,19 @@ export class HeaderComponent implements OnInit {
   protected studen$!: Observable<Student | null>;
   private overlayState = new BehaviorSubject<boolean>(false);
   showOverlay$ = this.overlayState.asObservable();
-  store$ = inject(Store)
+  store$ = inject(Store);
+  protected isHomePage = false;
 
-  constructor() {
+  constructor(private router: Router) {
     this.studen$ = this.store$.select(StudentSelectors.student);
-  }
 
+    // Listen to route changes to detect home page
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe((event: any) => {
+      this.isHomePage = event.url === '/home' || event.url === '/';
+    });
+  }
 
   toggleOverlay() {
     const currentState = this.overlayState.getValue();
@@ -38,7 +47,13 @@ export class HeaderComponent implements OnInit {
     this.store$.dispatch(AuthActions.logout())
   }
 
+  goBack() {
+    window.history.back();
+  }
+
   ngOnInit() {
     this.user$ = this.store$.select((state) => state.auth.user);
+    // Check initial route
+    this.isHomePage = this.router.url === '/home' || this.router.url === '/';
   }
 }

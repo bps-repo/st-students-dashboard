@@ -26,6 +26,9 @@ import {NotificationsEffects} from "./notifications/notifications.effects";
 import {CertificatesState, initialCertificatesState} from "./certificates/certificates.state";
 import {certificatesFeature} from "./certificates/certificates.feature";
 import {CertificatesEffects} from "./certificates/certificates.effects";
+import {EventsState, initialEventsState} from "./events/events.state";
+import {eventsFeature} from "./events/events.feature";
+import {EventsEffects} from "./events/events.effects";
 
 /**
  * Interface for the root state of the application
@@ -40,7 +43,8 @@ export interface AppState {
   chatBot: ChatbotState,
   lessonMaterials: LessonMaterialsState,
   notifications: NotificationsState,
-  certificates: CertificatesState
+  certificates: CertificatesState,
+  events: EventsState
 }
 
 /**
@@ -56,7 +60,8 @@ export const initialAppState: AppState = {
   chatBot: ChatBotInitialState,
   lessonMaterials: initialLessonMaterialsState,
   notifications: initialNotificationsState,
-  certificates: initialCertificatesState
+  certificates: initialCertificatesState,
+  events: initialEventsState
 };
 
 
@@ -70,6 +75,7 @@ export const ngrxFeatures = [
   lessonMaterialsFeature,
   notificationsFeature,
   certificatesFeature,
+  eventsFeature,
 ]
 
 export const ngrxEffects = [
@@ -81,5 +87,6 @@ export const ngrxEffects = [
   ChatbotEffects,
   LessonMaterialsEffects,
   NotificationsEffects,
-  CertificatesEffects
+  CertificatesEffects,
+  EventsEffects
 ]

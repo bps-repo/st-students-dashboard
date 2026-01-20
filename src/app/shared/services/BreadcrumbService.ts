@@ -23,11 +23,14 @@ export class BreadcrumbService {
       const breadcrumbs: Breadcrumb[] = [];
       this.addBreadcrumb(root, [], breadcrumbs);
 
-      // Always start with Home
-      breadcrumbs.unshift({
-        label: 'Inicio',
-        url: '/home'
-      });
+      // Only add Home if we're not already on home page
+      const isHomePage = breadcrumbs.length === 1 && breadcrumbs[0].label === 'Inicio';
+      if (!isHomePage && breadcrumbs.length > 0) {
+        breadcrumbs.unshift({
+          label: 'Inicio',
+          url: '/home'
+        });
+      }
 
       this.breadcrumbs.next(breadcrumbs);
     });

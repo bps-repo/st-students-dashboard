@@ -1,164 +1,373 @@
-import {CommonModule} from '@angular/common';
-import {ChangeDetectionStrategy, Component, signal} from '@angular/core';
-import {TabMenuComponent} from '../../shared/components/tab-menu/tab-menu.component';
-import {FormsModule} from '@angular/forms';
-import {FlashCard} from "../../@types/flash-card";
-import {TabMenuConfig} from "../../@types/tab-menu";
+import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component, OnInit, signal, ElementRef, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Observable, combineLatest, map, Subject, takeUntil, debounceTime, filter } from 'rxjs';
+import { PushPipe } from '@ngrx/component';
+import { FormsModule } from '@angular/forms';
+import { LoaderComponent } from '../../shared/loader/loader.component';
+import { Event, EventType } from '../../core/models/Event';
+import { EventsActions } from '../../core/state/events/events.actions';
+import { EventsSelectors } from '../../core/state/events/events.selectors';
+import { StudentSelectors } from '../../core/state/student/student.selectors';
+import { Student } from '../../core/models/Student';
 
 /**
  * Modern Events Component
  *
- * Displays upcoming and past events with a modern, responsive design.
+ * Displays upcoming and past events with pagination and NgRx state management.
  */
 @Component({
   selector: 'app-events',
-  imports: [CommonModule, TabMenuComponent, FormsModule],
+  imports: [CommonModule, FormsModule, PushPipe, LoaderComponent],
   templateUrl: './events.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class EventsComponent {
+export class EventsComponent implements OnInit, AfterViewInit, OnDestroy {
+  // Observables from store
+  events$: Observable<Event[]>;
+  loading$: Observable<boolean>;
+  error$: Observable<string | null>;
+  student$: Observable<Student | null>;
+  currentPage$: Observable<number>;
+  totalPages$: Observable<number>;
+  totalElements$: Observable<number>;
+
   // Event detail modal state
   protected readonly showEventDetails = signal(false);
-  protected selectedEvent: FlashCard | null = null;
+  protected selectedEvent: Event | null = null;
 
   // Filter state
   protected activeFilter = 'all';
+  protected activeTab = 'all'; // 'all', 'upcoming', 'past', 'my-events'
   protected searchQuery = '';
 
-  // Event data
-  protected events: FlashCard[] = [
-    {
-      color: 'primary',
-      image: '/users/1.png',
-      title: 'Meeting with Foreigner Speakers',
-      date: '27 Oct 2024',
-      time: '19:00',
-      level: 'Beginner',
-      participants: 8,
-      location: 'Online - Zoom',
-      description: 'Practice your English with native speakers from the USA and UK. This is a great opportunity to improve your conversation skills.',
-      organizer: 'ST Andrews',
-      status: 'upcoming',
-      type: 'conversation'
-    },
-    {
-      color: 'success',
-      image: '/users/2.png',
-      title: 'Business English Workshop',
-      date: '15 Nov 2024',
-      time: '18:30',
-      level: 'Intermediate',
-      participants: 12,
-      location: 'Room 302',
-      description: 'Learn essential vocabulary and expressions for business meetings, emails, and presentations.',
-      organizer: 'ST Andrews',
-      status: 'upcoming',
-      type: 'workshop'
-    },
-    {
-      color: 'accent',
-      image: '/users/3.png',
-      title: 'TOEFL Preparation Session',
-      date: '05 Dec 2024',
-      time: '17:00',
-      level: 'Advanced',
-      participants: 15,
-      location: 'Room 201',
-      description: 'Get ready for your TOEFL exam with our expert teachers. We will cover all sections of the test.',
-      organizer: 'ST Andrews',
-      status: 'upcoming',
-      type: 'lecture'
-    },
-    {
-      color: 'secondary',
-      image: '/users/2.png',
-      title: 'English Movie Night',
-      date: '10 Dec 2024',
-      time: '20:00',
-      level: 'All Levels',
-      participants: 25,
-      location: 'Auditorium',
-      description: 'Watch an English movie with subtitles and discuss it afterward. A fun way to improve your listening skills!',
-      organizer: 'ST Andrews',
-      status: 'upcoming',
-      type: 'other'
-    },
-    {
-      color: 'warning',
-      image: '/users/1.png',
-      title: 'Pronunciation Workshop',
-      date: '18 Dec 2024',
-      time: '16:30',
-      level: 'Intermediate',
-      participants: 10,
-      location: 'Room 105',
-      description: 'Focus on improving your English pronunciation with practical exercises and feedback.',
-      organizer: 'ST Andrews',
-      status: 'upcoming',
-      type: 'workshop'
-    },
-    {
-      color: 'info',
-      image: '/users/3.png',
-      title: 'English Book Club',
-      date: '22 Dec 2024',
-      time: '18:00',
-      level: 'Advanced',
-      participants: 8,
-      location: 'Library',
-      description: 'Join our book club to discuss English literature and improve your reading comprehension.',
-      organizer: 'ST Andrews',
-      status: 'upcoming',
-      type: 'meeting'
-    },
-  ];
+  // Pagination
+  protected pageSize = 9;
 
-  // Tab menu configuration
-  protected tabConfig: TabMenuConfig = {
-    mainTab: 'Todos os eventos',
-    tabs: ['Próximos eventos', 'Eventos passados'],
-    actionButtons: [],
+  // Infinite scroll
+  @ViewChild('scrollSentinel') scrollSentinel?: ElementRef;
+  private destroy$ = new Subject<void>();
+  private intersectionObserver?: IntersectionObserver;
+  private currentPage = 0;
+  private totalPages = 1;
+  private isLoadingMore = false;
+
+  // Color mapping for event types
+  private colorMap: Record<EventType, string> = {
+    [EventType.WORKSHOP]: 'primary',
+    [EventType.SEMINAR]: 'success',
+    [EventType.CONFERENCE]: 'accent',
+    [EventType.MEETING]: 'secondary',
+    [EventType.TALK]: 'warning',
+    [EventType.TOUR]: 'info',
+    [EventType.TRAINING]: 'primary',
+    [EventType.OTHER]: 'neutral'
   };
 
-  /**
-   * Opens the event details modal for the selected event
-   * @param event The event to display details for
-   */
-  openEventDetails(event: FlashCard): void {
-    this.selectedEvent = event;
-    this.showEventDetails.set(true);
+  protected EventType = EventType;
+
+  constructor(private store: Store) {
+    this.events$ = this.store.select(EventsSelectors.events);
+    this.loading$ = this.store.select(EventsSelectors.loading);
+    this.error$ = this.store.select(EventsSelectors.error);
+    this.student$ = this.store.select(StudentSelectors.student);
+    this.currentPage$ = this.store.select(EventsSelectors.currentPage);
+    this.totalPages$ = this.store.select(EventsSelectors.totalPages);
+    this.totalElements$ = this.store.select(EventsSelectors.totalElements);
+
+    // Subscribe to pagination changes
+    this.currentPage$.pipe(takeUntil(this.destroy$)).subscribe(page => {
+      this.currentPage = page;
+    });
+
+    this.totalPages$.pipe(takeUntil(this.destroy$)).subscribe(total => {
+      this.totalPages = total;
+    });
+
+    this.loading$.pipe(takeUntil(this.destroy$)).subscribe(loading => {
+      this.isLoadingMore = loading;
+    });
+  }
+
+  ngOnInit(): void {
+    // Load first page on component init
+    this.loadEvents();
+  }
+
+  ngAfterViewInit(): void {
+    // Setup intersection observer for infinite scroll
+    this.setupInfiniteScroll();
+  }
+
+  ngOnDestroy(): void {
+    // Cleanup
+    this.destroy$.next();
+    this.destroy$.complete();
+
+    if (this.intersectionObserver) {
+      this.intersectionObserver.disconnect();
+    }
   }
 
   /**
-   * Filters events by type
-   * @param filter The filter to apply ('all', 'workshop', 'meeting', etc.)
+   * Setup intersection observer for infinite scroll
+   */
+  private setupInfiniteScroll(): void {
+    if (!this.scrollSentinel) return;
+
+    const options = {
+      root: null,
+      rootMargin: '100px',
+      threshold: 0.1
+    };
+
+    this.intersectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !this.isLoadingMore && this.hasMorePages()) {
+          this.loadNextPage();
+        }
+      });
+    }, options);
+
+    this.intersectionObserver.observe(this.scrollSentinel.nativeElement);
+  }
+
+  /**
+   * Check if there are more pages to load
+   */
+  private hasMorePages(): boolean {
+    return this.currentPage < this.totalPages - 1;
+  }
+
+  /**
+   * Load events based on current page
+   */
+  loadEvents(): void {
+    this.store.dispatch(
+      EventsActions.loadEvents({ page: 0, size: this.pageSize })
+    );
+  }
+
+  /**
+   * Load specific page
+   */
+  loadPage(page: number): void {
+    this.store.dispatch(
+      EventsActions.loadEvents({ page, size: this.pageSize })
+    );
+  }
+
+  /**
+   * Load next page
+   */
+  loadNextPage(): void {
+    this.currentPage$.subscribe(page => {
+      this.loadPage(page + 1);
+    }).unsubscribe();
+  }
+
+  /**
+   * Load previous page
+   */
+  loadPreviousPage(): void {
+    this.currentPage$.subscribe(page => {
+      this.loadPage(page - 1);
+    }).unsubscribe();
+  }
+
+  /**
+   * Retry loading events
+   */
+  retry(): void {
+    this.loadEvents();
+  }
+
+  /**
+   * Opens the event details modal for the selected event
+   */
+  openEventDetails(event: Event): void {
+    this.selectedEvent = event;
+    this.showEventDetails.set(true);
+    this.store.dispatch(EventsActions.selectEvent({ event }));
+  }
+
+  /**
+   * Closes the event details modal
+   */
+  closeEventDetails(): void {
+    this.showEventDetails.set(false);
+    this.selectedEvent = null;
+  }
+
+  /**
+   * Register for an event
+   */
+  registerForEvent(eventId: string, eventTitle?: string): void {
+    const message = eventTitle
+      ? `Tem certeza que deseja se inscrever no evento "${eventTitle}"?`
+      : 'Tem certeza que deseja se inscrever neste evento?';
+
+    if (confirm(message)) {
+      this.student$.subscribe((student) => {
+        if (student?.id) {
+          this.store.dispatch(
+            EventsActions.registerForEvent({ eventId, studentId: student.id })
+          );
+        }
+      }).unsubscribe();
+    }
+  }
+
+  /**
+   * Cancel registration for an event
+   */
+  cancelRegistration(eventId: string, eventTitle?: string): void {
+    const message = eventTitle
+      ? `Tem certeza que deseja cancelar sua inscrição no evento "${eventTitle}"?`
+      : 'Tem certeza que deseja cancelar sua inscrição neste evento?';
+
+    if (confirm(message)) {
+      this.student$.subscribe((student) => {
+        if (student?.id) {
+          this.store.dispatch(
+            EventsActions.cancelRegistration({ eventId, studentId: student.id })
+          );
+        }
+      }).unsubscribe();
+    }
+  }
+
+  /**
+   * Check if student is registered for an event
+   */
+  isRegistered(event: Event, studentId: string | undefined): boolean {
+    if (!studentId) return false;
+    return event.participations.some(p => p.studentId === studentId);
+  }
+
+  /**
+   * Check if event has capacity
+   */
+  hasCapacity(event: Event): boolean {
+    return event.participations.length < event.maxCapacity;
+  }
+
+  /**
+   * Get participant count
+   */
+  getParticipantCount(event: Event): number {
+    return event.participations.length;
+  }
+
+  /**
+   * Filter events by type
    */
   setFilter(filter: string): void {
     this.activeFilter = filter;
   }
 
   /**
-   * Gets the filtered events based on the active filter and search query
-   * @returns Filtered array of events
+   * Set active tab (all/upcoming/past)
    */
-  getFilteredEvents(): FlashCard[] {
-    let filtered = this.events;
+  setTab(tab: string): void {
+    this.activeTab = tab;
+  }
 
-    // Apply type filter
-    if (this.activeFilter !== 'all') {
-      filtered = filtered.filter(event => event.type === this.activeFilter);
-    }
+  /**
+   * Get filtered events based on active filter, tab, and search query
+   */
+  getFilteredEvents$(): Observable<Event[]> {
+    return combineLatest([this.events$, this.student$]).pipe(
+      map(([events, student]) => {
+        let filtered = events;
 
-    // Apply search filter if there's a query
-    if (this.searchQuery.trim()) {
-      const query = this.searchQuery.toLowerCase();
-      filtered = filtered.filter(event =>
-        event.title?.toLowerCase().includes(query) ||
-        event.description?.toLowerCase().includes(query) ||
-        event.organizer?.toLowerCase().includes(query)
-      );
-    }
+        // Apply tab filter (all/upcoming/past/my-events)
+        const now = new Date();
+        if (this.activeTab === 'upcoming') {
+          filtered = filtered.filter(e => new Date(e.startAt) > now);
+        } else if (this.activeTab === 'past') {
+          filtered = filtered.filter(e => new Date(e.endAt) < now);
+        } else if (this.activeTab === 'my-events') {
+          // Filter events where the student is registered
+          filtered = filtered.filter(e => 
+            student?.id && e.participations.some(p => p.studentId === student.id)
+          );
+        }
 
-    return filtered;
+        // Apply type filter
+        if (this.activeFilter !== 'all') {
+          filtered = filtered.filter(e => e.type === this.activeFilter);
+        }
+
+        // Apply search filter
+        if (this.searchQuery.trim()) {
+          const query = this.searchQuery.toLowerCase();
+          filtered = filtered.filter(e =>
+            e.title.toLowerCase().includes(query) ||
+            e.description.toLowerCase().includes(query)
+          );
+        }
+
+        return filtered;
+      })
+    );
+  }
+
+  /**
+   * Get color for event type
+   */
+  getEventColor(type: EventType): string {
+    return this.colorMap[type] || 'neutral';
+  }
+
+  /**
+   * Format date for display
+   */
+  formatDate(dateString: string): string {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('pt-BR', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric'
+    });
+  }
+
+  /**
+   * Format time for display
+   */
+  formatTime(dateString: string): string {
+    const date = new Date(dateString);
+    return date.toLocaleTimeString('pt-BR', {
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  }
+
+  /**
+   * Get event type label in Portuguese
+   */
+  getEventTypeLabel(type: EventType): string {
+    const labels: Record<EventType, string> = {
+      [EventType.WORKSHOP]: 'Workshop',
+      [EventType.SEMINAR]: 'Seminário',
+      [EventType.CONFERENCE]: 'Conferência',
+      [EventType.MEETING]: 'Encontro',
+      [EventType.TALK]: 'Palestra',
+      [EventType.TOUR]: 'Tour',
+      [EventType.TRAINING]: 'Treinamento',
+      [EventType.OTHER]: 'Evento'
+    };
+    return labels[type] || 'Evento';
+  }
+
+  /**
+   * Scroll to top of page
+   */
+  protected scrollToTop(): void {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'smooth'
+    });
   }
 }
