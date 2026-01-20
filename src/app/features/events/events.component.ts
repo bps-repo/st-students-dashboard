@@ -10,6 +10,7 @@ import { EventsActions } from '../../core/state/events/events.actions';
 import { EventsSelectors } from '../../core/state/events/events.selectors';
 import { StudentSelectors } from '../../core/state/student/student.selectors';
 import { Student } from '../../core/models/Student';
+import { ConfirmationDialogService } from '../../shared/services/confirmation-dialog.service';
 
 /**
  * Modern Events Component
@@ -66,7 +67,10 @@ export class EventsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   protected EventType = EventType;
 
-  constructor(private store: Store) {
+  constructor(
+    private store: Store,
+    private confirmationDialog: ConfirmationDialogService
+  ) {
     this.events$ = this.store.select(EventsSelectors.events);
     this.loading$ = this.store.select(EventsSelectors.loading);
     this.error$ = this.store.select(EventsSelectors.error);
@@ -203,38 +207,42 @@ export class EventsComponent implements OnInit, AfterViewInit, OnDestroy {
    * Register for an event
    */
   registerForEvent(eventId: string, eventTitle?: string): void {
-    const message = eventTitle
-      ? `Tem certeza que deseja se inscrever no evento "${eventTitle}"?`
-      : 'Tem certeza que deseja se inscrever neste evento?';
-
-    if (confirm(message)) {
-      this.student$.subscribe((student) => {
-        if (student?.id) {
-          this.store.dispatch(
-            EventsActions.registerForEvent({ eventId, studentId: student.id })
-          );
+    const title = eventTitle || 'este evento';
+    
+    this.confirmationDialog.confirmEnrollment(title)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((confirmed) => {
+        if (confirmed) {
+          this.student$.subscribe((student) => {
+            if (student?.id) {
+              this.store.dispatch(
+                EventsActions.registerForEvent({ eventId, studentId: student.id })
+              );
+            }
+          }).unsubscribe();
         }
-      }).unsubscribe();
-    }
+      });
   }
 
   /**
    * Cancel registration for an event
    */
   cancelRegistration(eventId: string, eventTitle?: string): void {
-    const message = eventTitle
-      ? `Tem certeza que deseja cancelar sua inscrição no evento "${eventTitle}"?`
-      : 'Tem certeza que deseja cancelar sua inscrição neste evento?';
-
-    if (confirm(message)) {
-      this.student$.subscribe((student) => {
-        if (student?.id) {
-          this.store.dispatch(
-            EventsActions.cancelRegistration({ eventId, studentId: student.id })
-          );
+    const title = eventTitle || 'este evento';
+    
+    this.confirmationDialog.confirmCancellation(title)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((confirmed) => {
+        if (confirmed) {
+          this.student$.subscribe((student) => {
+            if (student?.id) {
+              this.store.dispatch(
+                EventsActions.cancelRegistration({ eventId, studentId: student.id })
+              );
+            }
+          }).unsubscribe();
         }
-      }).unsubscribe();
-    }
+      });
   }
 
   /**
