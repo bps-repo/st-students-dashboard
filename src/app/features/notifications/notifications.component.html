@@ -1,172 +1,256 @@
-<div class="min-h-screen bg-background-light px-4 py-6 md:px-8 md:py-8">
-  <div class="max-w-4xl mx-auto">
-    <!-- Header -->
-    <div class="mb-6">
-      <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4">
-        <div>
-          <h1 class="text-3xl font-bold text-neutral-900 mb-2">Notificações</h1>
-          <p class="text-neutral-600">Fique atualizado com as últimas atividades</p>
-        </div>
-      </div>
+<!-- Modern Notifications Component -->
+<div class="px-8 py-6 bg-background-light font-heading">
+  <!-- Header Section -->
+  <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+    <div class="mb-4 md:mb-0">
+      <h1 class="text-2xl font-bold text-primary-700">Notificações</h1>
+      <p class="text-neutral-600 mt-1">Fique atualizado com as últimas atividades</p>
+    </div>
+    <button
+      *ngIf="(unreadCount$ | async) ?? 0 > 0"
+      (click)="markAllAsRead()"
+      class="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-all shadow-sm flex items-center"
+    >
+      <i class="pi pi-check-double mr-2"></i>
+      Marcar Todas como Lidas
+    </button>
+  </div>
 
-      <!-- Tabs -->
-      <div class="flex gap-2 border-b border-neutral-200">
-        <button (click)="setActiveTab('all')" [class.border-b-2]="activeTab === 'all'"
-          [class.border-primary-600]="activeTab === 'all'" [class.text-primary-600]="activeTab === 'all'"
-          [class.text-neutral-600]="activeTab !== 'all'" class="px-4 py-2 font-medium transition-colors">
+  <!-- Tabs Section -->
+  <div class="bg-white rounded-xl shadow-md overflow-hidden mb-6">
+    <div class="border-b border-neutral-200">
+      <div class="flex gap-1 px-4">
+        <button
+          (click)="setActiveTab('all')"
+          [ngClass]="activeTab === 'all' ? 'border-b-2 border-primary-600 text-primary-700 font-semibold' : 'text-neutral-600 hover:text-neutral-900'"
+          class="px-6 py-4 font-medium transition-all relative"
+        >
           Todas
-          <span class="ml-2 text-sm text-neutral-500">({{ (notifications$ | async)?.length || 0 }})</span>
+          <span class="ml-2 text-sm font-normal text-neutral-500">({{ (notifications$ | async)?.length || 0 }})</span>
         </button>
-        <button (click)="setActiveTab('unread')" [class.border-b-2]="activeTab === 'unread'"
-          [class.border-primary-600]="activeTab === 'unread'" [class.text-primary-600]="activeTab === 'unread'"
-          [class.text-neutral-600]="activeTab !== 'unread'" class="px-4 py-2 font-medium transition-colors">
-          Não lidas
-          <span class="ml-2 text-sm text-neutral-500">({{ (unreadCount$ | async) || 0 }})</span>
+        <button
+          (click)="setActiveTab('unread')"
+          [ngClass]="activeTab === 'unread' ? 'border-b-2 border-primary-600 text-primary-700 font-semibold' : 'text-neutral-600 hover:text-neutral-900'"
+          class="px-6 py-4 font-medium transition-all relative"
+        >
+          Não Lidas
+          <span *ngIf="(unreadCount$ | async) ?? 0 > 0" class="ml-2 bg-red-500 text-white text-xs font-bold rounded-full px-2 py-0.5">
+            {{ (unreadCount$ | async) ?? 0 }}
+          </span>
         </button>
-        <button (click)="setActiveTab('read')" [class.border-b-2]="activeTab === 'read'"
-          [class.border-primary-600]="activeTab === 'read'" [class.text-primary-600]="activeTab === 'read'"
-          [class.text-neutral-600]="activeTab !== 'read'" class="px-4 py-2 font-medium transition-colors">
+        <button
+          (click)="setActiveTab('read')"
+          [ngClass]="activeTab === 'read' ? 'border-b-2 border-primary-600 text-primary-700 font-semibold' : 'text-neutral-600 hover:text-neutral-900'"
+          class="px-6 py-4 font-medium transition-all relative"
+        >
           Lidas
-          <span class="ml-2 text-sm text-neutral-500">({{ (readNotifications$ | async)?.length || 0 }})</span>
+          <span class="ml-2 text-sm font-normal text-neutral-500">({{ (readNotifications$ | async)?.length || 0 }})</span>
         </button>
       </div>
     </div>
+  </div>
 
-    <!-- Error Message -->
-    <div *ngIf="error$ | async as error" class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-      <div class="flex items-center">
-        <svg class="h-5 w-5 text-red-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
-          <path fill-rule="evenodd"
-            d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-            clip-rule="evenodd" />
-        </svg>
-        <p class="text-red-800 font-medium">{{ error }}</p>
-      </div>
+  <!-- Error Message -->
+  <div *ngIf="error$ | async as error" class="mb-6 p-4 bg-red-50 border-l-4 border-red-500 rounded-lg shadow-sm">
+    <div class="flex items-center">
+      <i class="pi pi-exclamation-circle text-red-600 mr-3 text-xl"></i>
+      <p class="text-red-800 font-medium">{{ error }}</p>
     </div>
+  </div>
 
-    <!-- Loading State -->
-    <div *ngIf="isLoading$ | async" class="flex flex-col items-center justify-center py-12">
-      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mb-4"></div>
-      <p class="text-neutral-600">Carregando notificações...</p>
-    </div>
+  <!-- Loading State -->
+  <div *ngIf="isLoading$ | async" class="flex flex-col items-center justify-center py-16">
+    <i class="pi pi-spin pi-spinner text-4xl text-primary-600 mb-4"></i>
+    <p class="text-neutral-600">Carregando notificações...</p>
+  </div>
 
-    <!-- Notifications List -->
-    <div *ngIf="!(isLoading$ | async)" class="space-y-4">
-      <!-- Empty State -->
-      <div *ngIf="!(hasNotifications$ | async)"
-        class="text-center py-12 bg-white rounded-lg shadow-sm border border-neutral-200">
-        <svg class="mx-auto h-12 w-12 text-neutral-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-        </svg>
-        <h3 class="text-lg font-medium text-neutral-900 mb-2">Nenhuma notificação</h3>
+  <!-- Notifications List -->
+  <div *ngIf="!(isLoading$ | async)">
+    <!-- Empty State -->
+    <div *ngIf="!(hasNotifications$ | async)" class="bg-white rounded-xl shadow-md p-12 text-center">
+      <div class="max-w-md mx-auto">
+        <div class="w-20 h-20 bg-neutral-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <i class="pi pi-bell text-4xl text-neutral-400"></i>
+        </div>
+        <h3 class="text-xl font-bold text-neutral-900 mb-2">Nenhuma notificação</h3>
         <p class="text-neutral-600">Você está atualizado! Novas notificações aparecerão aqui.</p>
       </div>
-
-      <!-- All Notifications -->
-      <ng-container *ngIf="activeTab === 'all'">
-        <div *ngFor="let notification of notifications$ | async"
-          class="bg-white rounded-lg shadow-sm border border-neutral-200 p-4 hover:shadow-md transition-shadow"
-          [class.bg-blue-50]="!notification.read" [class.border-blue-300]="!notification.read">
-          <div class="flex items-start gap-4">
-            <!-- Notification Icon -->
-            <div class="flex-shrink-0">
-              <div class="w-10 h-10 rounded-full flex items-center justify-center text-lg"
-                [ngClass]="getNotificationTypeClass(notification.type)">
-                {{ getNotificationIcon(notification.type) }}
-              </div>
-            </div>
-
-            <!-- Notification Content -->
-            <div class="flex-1 min-w-0">
-              <div class="flex items-start justify-between gap-2">
-                <div class="flex-1">
-                  <h3 class="font-semibold text-neutral-900 mb-1">{{ notification.title }}</h3>
-                  <p class="text-neutral-700 text-sm mb-2">{{ notification.message }}</p>
-                  <div class="flex items-center gap-4 text-xs text-neutral-500">
-                    <span>{{ formatDate(notification.createdAt) }}</span>
-                    <span class="px-2 py-1 bg-neutral-100 rounded">{{ notification.targetType }}</span>
-                    <span class="px-2 py-1 bg-neutral-100 rounded">{{ notification.channel }}</span>
-                  </div>
-                </div>
-                <div class="flex items-center gap-2">
-                  <span *ngIf="!notification.read" class="w-2 h-2 bg-primary-600 rounded-full"></span>
-                  <button *ngIf="!notification.read" (click)="markAsRead(notification.id)"
-                    class="text-primary-600 hover:text-primary-700 text-sm font-medium">
-                    Marcar como lida
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </ng-container>
-
-      <!-- Unread Notifications -->
-      <ng-container *ngIf="activeTab === 'unread'">
-        <div *ngIf="(unreadNotifications$ | async)?.length === 0"
-          class="text-center py-12 bg-white rounded-lg shadow-sm border border-neutral-200">
-          <p class="text-neutral-600">Nenhuma notificação não lida</p>
-        </div>
-        <div *ngFor="let notification of unreadNotifications$ | async"
-          class="bg-blue-50 rounded-lg shadow-sm border border-blue-300 p-4 hover:shadow-md transition-shadow">
-          <div class="flex items-start gap-4">
-            <div class="flex-shrink-0">
-              <div class="w-10 h-10 rounded-full flex items-center justify-center text-lg"
-                [ngClass]="getNotificationTypeClass(notification.type)">
-                {{ getNotificationIcon(notification.type) }}
-              </div>
-            </div>
-            <div class="flex-1 min-w-0">
-              <div class="flex items-start justify-between gap-2">
-                <div class="flex-1">
-                  <h3 class="font-semibold text-neutral-900 mb-1">{{ notification.title }}</h3>
-                  <p class="text-neutral-700 text-sm mb-2">{{ notification.message }}</p>
-                  <div class="flex items-center gap-4 text-xs text-neutral-500">
-                    <span>{{ formatDate(notification.createdAt) }}</span>
-                    <span class="px-2 py-1 bg-neutral-100 rounded">{{ notification.targetType }}</span>
-                  </div>
-                </div>
-                <button (click)="markAsRead(notification.id)"
-                  class="text-primary-600 hover:text-primary-700 text-sm font-medium">
-                  Marcar como lida
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </ng-container>
-
-      <!-- Read Notifications -->
-      <ng-container *ngIf="activeTab === 'read'">
-        <div *ngIf="(readNotifications$ | async)?.length === 0"
-          class="text-center py-12 bg-white rounded-lg shadow-sm border border-neutral-200">
-          <p class="text-neutral-600">Nenhuma notificação lida</p>
-        </div>
-        <div *ngFor="let notification of readNotifications$ | async"
-          class="bg-white rounded-lg shadow-sm border border-neutral-200 p-4 hover:shadow-md transition-shadow opacity-75">
-          <div class="flex items-start gap-4">
-            <div class="flex-shrink-0">
-              <div class="w-10 h-10 rounded-full flex items-center justify-center text-lg"
-                [ngClass]="getNotificationTypeClass(notification.type)">
-                {{ getNotificationIcon(notification.type) }}
-              </div>
-            </div>
-            <div class="flex-1 min-w-0">
-              <div class="flex items-start justify-between gap-2">
-                <div class="flex-1">
-                  <h3 class="font-semibold text-neutral-900 mb-1">{{ notification.title }}</h3>
-                  <p class="text-neutral-700 text-sm mb-2">{{ notification.message }}</p>
-                  <div class="flex items-center gap-4 text-xs text-neutral-500">
-                    <span>{{ formatDate(notification.createdAt) }}</span>
-                    <span class="px-2 py-1 bg-neutral-100 rounded">{{ notification.targetType }}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </ng-container>
     </div>
+
+    <!-- All Notifications -->
+    <ng-container *ngIf="activeTab === 'all'">
+      <div *ngIf="(notifications$ | async)?.length === 0" class="bg-white rounded-xl shadow-md p-12 text-center">
+        <p class="text-neutral-600">Nenhuma notificação encontrada</p>
+      </div>
+      <div class="space-y-3">
+        <div
+          *ngFor="let notification of notifications$ | async"
+          class="bg-white rounded-xl shadow-sm border transition-all duration-200 hover:shadow-md"
+          [ngClass]="{
+            'border-blue-300 bg-blue-50': !notification.read,
+            'border-neutral-200': notification.read
+          }"
+        >
+          <div class="p-5">
+            <div class="flex items-start gap-4">
+              <!-- Notification Icon -->
+              <div class="flex-shrink-0">
+                <div class="w-12 h-12 rounded-full flex items-center justify-center border-2"
+                  [ngClass]="getNotificationTypeClass(notification.type)">
+                  <i [class]="getNotificationIcon(notification.type)" [ngClass]="getNotificationIconColor(notification.type)" class="pi text-xl"></i>
+                </div>
+              </div>
+
+              <!-- Notification Content -->
+              <div class="flex-1 min-w-0">
+                <div class="flex items-start justify-between gap-4">
+                  <div class="flex-1">
+                    <div class="flex items-center gap-2 mb-2">
+                      <h3 class="font-bold text-neutral-900 text-lg">{{ notification.title }}</h3>
+                      <span *ngIf="!notification.read" class="w-2 h-2 bg-primary-600 rounded-full animate-pulse"></span>
+                    </div>
+                    <p class="text-neutral-700 mb-3 leading-relaxed">{{ notification.message }}</p>
+                    <div class="flex flex-wrap items-center gap-3 text-xs">
+                      <span class="px-2 py-1 rounded-full font-medium"
+                        [ngClass]="getNotificationTypeClass(notification.type)">
+                        {{ getNotificationTypeLabel(notification.type) }}
+                      </span>
+                      <span class="text-neutral-500 flex items-center">
+                        <i class="pi pi-clock mr-1"></i>
+                        {{ formatDate(notification.createdAt) }}
+                      </span>
+                      <span class="text-neutral-500 flex items-center">
+                        <i class="pi pi-tag mr-1"></i>
+                        {{ notification.targetType }}
+                      </span>
+                    </div>
+                  </div>
+                  <div class="flex-shrink-0">
+                    <button
+                      *ngIf="!notification.read"
+                      (click)="markAsRead(notification.id)"
+                      class="px-3 py-1.5 bg-primary-50 hover:bg-primary-100 text-primary-700 rounded-lg text-sm font-medium transition-all flex items-center"
+                    >
+                      <i class="pi pi-check mr-1"></i>
+                      Marcar como lida
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- Unread Notifications -->
+    <ng-container *ngIf="activeTab === 'unread'">
+      <div *ngIf="(unreadNotifications$ | async)?.length === 0" class="bg-white rounded-xl shadow-md p-12 text-center">
+        <div class="max-w-md mx-auto">
+          <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="pi pi-check-circle text-4xl text-green-600"></i>
+          </div>
+          <h3 class="text-xl font-bold text-neutral-900 mb-2">Tudo lido!</h3>
+          <p class="text-neutral-600">Você não tem notificações não lidas.</p>
+        </div>
+      </div>
+      <div class="space-y-3">
+        <div
+          *ngFor="let notification of unreadNotifications$ | async"
+          class="bg-blue-50 border-2 border-blue-300 rounded-xl shadow-sm transition-all duration-200 hover:shadow-md"
+        >
+          <div class="p-5">
+            <div class="flex items-start gap-4">
+              <div class="flex-shrink-0">
+                <div class="w-12 h-12 rounded-full flex items-center justify-center border-2"
+                  [ngClass]="getNotificationTypeClass(notification.type)">
+                  <i [class]="getNotificationIcon(notification.type)" [ngClass]="getNotificationIconColor(notification.type)" class="pi text-xl"></i>
+                </div>
+              </div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-start justify-between gap-4">
+                  <div class="flex-1">
+                    <div class="flex items-center gap-2 mb-2">
+                      <h3 class="font-bold text-neutral-900 text-lg">{{ notification.title }}</h3>
+                      <span class="w-2 h-2 bg-primary-600 rounded-full animate-pulse"></span>
+                    </div>
+                    <p class="text-neutral-700 mb-3 leading-relaxed">{{ notification.message }}</p>
+                    <div class="flex flex-wrap items-center gap-3 text-xs">
+                      <span class="px-2 py-1 rounded-full font-medium"
+                        [ngClass]="getNotificationTypeClass(notification.type)">
+                        {{ getNotificationTypeLabel(notification.type) }}
+                      </span>
+                      <span class="text-neutral-500 flex items-center">
+                        <i class="pi pi-clock mr-1"></i>
+                        {{ formatDate(notification.createdAt) }}
+                      </span>
+                      <span class="text-neutral-500 flex items-center">
+                        <i class="pi pi-tag mr-1"></i>
+                        {{ notification.targetType }}
+                      </span>
+                    </div>
+                  </div>
+                  <div class="flex-shrink-0">
+                    <button
+                      (click)="markAsRead(notification.id)"
+                      class="px-3 py-1.5 bg-primary-600 hover:bg-primary-700 text-white rounded-lg text-sm font-medium transition-all flex items-center shadow-sm"
+                    >
+                      <i class="pi pi-check mr-1"></i>
+                      Marcar como lida
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- Read Notifications -->
+    <ng-container *ngIf="activeTab === 'read'">
+      <div *ngIf="(readNotifications$ | async)?.length === 0" class="bg-white rounded-xl shadow-md p-12 text-center">
+        <p class="text-neutral-600">Nenhuma notificação lida</p>
+      </div>
+      <div class="space-y-3">
+        <div
+          *ngFor="let notification of readNotifications$ | async"
+          class="bg-white rounded-xl shadow-sm border border-neutral-200 transition-all duration-200 hover:shadow-md opacity-90"
+        >
+          <div class="p-5">
+            <div class="flex items-start gap-4">
+              <div class="flex-shrink-0">
+                <div class="w-12 h-12 rounded-full flex items-center justify-center border-2 opacity-75"
+                  [ngClass]="getNotificationTypeClass(notification.type)">
+                  <i [class]="getNotificationIcon(notification.type)" [ngClass]="getNotificationIconColor(notification.type)" class="pi text-xl"></i>
+                </div>
+              </div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-start justify-between gap-4">
+                  <div class="flex-1">
+                    <h3 class="font-bold text-neutral-700 text-lg mb-2">{{ notification.title }}</h3>
+                    <p class="text-neutral-600 mb-3 leading-relaxed">{{ notification.message }}</p>
+                    <div class="flex flex-wrap items-center gap-3 text-xs">
+                      <span class="px-2 py-1 rounded-full font-medium opacity-75"
+                        [ngClass]="getNotificationTypeClass(notification.type)">
+                        {{ getNotificationTypeLabel(notification.type) }}
+                      </span>
+                      <span class="text-neutral-400 flex items-center">
+                        <i class="pi pi-clock mr-1"></i>
+                        {{ formatDate(notification.createdAt) }}
+                      </span>
+                      <span class="text-neutral-400 flex items-center">
+                        <i class="pi pi-tag mr-1"></i>
+                        {{ notification.targetType }}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
   </div>
 </div>

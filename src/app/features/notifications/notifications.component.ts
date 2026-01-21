@@ -8,7 +8,7 @@ import {Notification, NotificationType} from '../../core/models/Notification';
 
 /**
  * Notifications Component
- * 
+ *
  * Displays all notifications with loading and error indicators.
  * Supports marking notifications as read and filtering by read/unread status.
  */
@@ -43,7 +43,7 @@ export class NotificationsComponent implements OnInit {
   ngOnInit() {
     // Clear any previous errors
     this.store.dispatch(NotificationsActions.clearError());
-    
+
     // Load notifications
     this.store.dispatch(NotificationsActions.loadNotifications());
   }
@@ -62,22 +62,66 @@ export class NotificationsComponent implements OnInit {
 
   getNotificationTypeClass(type: NotificationType): string {
     const typeClasses: { [key in NotificationType]: string } = {
-      [NotificationType.INFO]: 'bg-blue-100 text-blue-800 border-blue-200',
-      [NotificationType.SUCCESS]: 'bg-green-100 text-green-800 border-green-200',
-      [NotificationType.WARNING]: 'bg-yellow-100 text-yellow-800 border-yellow-200',
-      [NotificationType.ERROR]: 'bg-red-100 text-red-800 border-red-200',
+      [NotificationType.INFO]: 'bg-blue-100 text-blue-700 border-blue-300',
+      [NotificationType.SUCCESS]: 'bg-green-100 text-green-700 border-green-300',
+      [NotificationType.WARNING]: 'bg-yellow-100 text-yellow-700 border-yellow-300',
+      [NotificationType.ERROR]: 'bg-red-100 text-red-700 border-red-300',
+      [NotificationType.PROMOTION]: 'bg-purple-100 text-purple-700 border-purple-300',
+      [NotificationType.SYSTEM_ALERT]: 'bg-orange-100 text-orange-700 border-orange-300',
+      [NotificationType.USER_MESSAGE]: 'bg-indigo-100 text-indigo-700 border-indigo-300',
+      [NotificationType.EVENT_REMINDER]: 'bg-pink-100 text-pink-700 border-pink-300',
+      [NotificationType.SECURITY_ALERT]: 'bg-red-200 text-red-800 border-red-400',
+      [NotificationType.MAINTENANCE_NOTIFICATION]: 'bg-gray-100 text-gray-700 border-gray-300',
     };
     return typeClasses[type] || typeClasses[NotificationType.INFO];
   }
 
   getNotificationIcon(type: NotificationType): string {
     const icons: { [key in NotificationType]: string } = {
-      [NotificationType.INFO]: 'ℹ️',
-      [NotificationType.SUCCESS]: '✓',
-      [NotificationType.WARNING]: '⚠',
-      [NotificationType.ERROR]: '✕',
+      [NotificationType.INFO]: 'pi-info-circle',
+      [NotificationType.SUCCESS]: 'pi-check-circle',
+      [NotificationType.WARNING]: 'pi-exclamation-triangle',
+      [NotificationType.ERROR]: 'pi-times-circle',
+      [NotificationType.PROMOTION]: 'pi-tag',
+      [NotificationType.SYSTEM_ALERT]: 'pi-bell',
+      [NotificationType.USER_MESSAGE]: 'pi-comment',
+      [NotificationType.EVENT_REMINDER]: 'pi-calendar',
+      [NotificationType.SECURITY_ALERT]: 'pi-shield',
+      [NotificationType.MAINTENANCE_NOTIFICATION]: 'pi-cog',
     };
     return icons[type] || icons[NotificationType.INFO];
+  }
+
+  getNotificationIconColor(type: NotificationType): string {
+    const iconColors: { [key in NotificationType]: string } = {
+      [NotificationType.INFO]: 'text-blue-600',
+      [NotificationType.SUCCESS]: 'text-green-600',
+      [NotificationType.WARNING]: 'text-yellow-600',
+      [NotificationType.ERROR]: 'text-red-600',
+      [NotificationType.PROMOTION]: 'text-purple-600',
+      [NotificationType.SYSTEM_ALERT]: 'text-orange-600',
+      [NotificationType.USER_MESSAGE]: 'text-indigo-600',
+      [NotificationType.EVENT_REMINDER]: 'text-pink-600',
+      [NotificationType.SECURITY_ALERT]: 'text-red-700',
+      [NotificationType.MAINTENANCE_NOTIFICATION]: 'text-gray-600',
+    };
+    return iconColors[type] || iconColors[NotificationType.INFO];
+  }
+
+  getNotificationTypeLabel(type: NotificationType): string {
+    const labels: { [key in NotificationType]: string } = {
+      [NotificationType.INFO]: 'Informação',
+      [NotificationType.SUCCESS]: 'Sucesso',
+      [NotificationType.WARNING]: 'Aviso',
+      [NotificationType.ERROR]: 'Erro',
+      [NotificationType.PROMOTION]: 'Promoção',
+      [NotificationType.SYSTEM_ALERT]: 'Alerta do Sistema',
+      [NotificationType.USER_MESSAGE]: 'Mensagem',
+      [NotificationType.EVENT_REMINDER]: 'Lembrete de Evento',
+      [NotificationType.SECURITY_ALERT]: 'Alerta de Segurança',
+      [NotificationType.MAINTENANCE_NOTIFICATION]: 'Manutenção',
+    };
+    return labels[type] || type;
   }
 
   formatDate(dateString: string): string {
@@ -86,18 +130,24 @@ export class NotificationsComponent implements OnInit {
     const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
 
     if (diffInSeconds < 60) {
-      return 'Just now';
+      return 'Agora';
     } else if (diffInSeconds < 3600) {
       const minutes = Math.floor(diffInSeconds / 60);
-      return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+      return `Há ${minutes} minuto${minutes > 1 ? 's' : ''}`;
     } else if (diffInSeconds < 86400) {
       const hours = Math.floor(diffInSeconds / 3600);
-      return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+      return `Há ${hours} hora${hours > 1 ? 's' : ''}`;
     } else if (diffInSeconds < 604800) {
       const days = Math.floor(diffInSeconds / 86400);
-      return `${days} day${days > 1 ? 's' : ''} ago`;
+      return `Há ${days} dia${days > 1 ? 's' : ''}`;
     } else {
-      return date.toLocaleDateString();
+      return date.toLocaleDateString('pt-BR', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
     }
   }
 }
