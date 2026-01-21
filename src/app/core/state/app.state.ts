@@ -29,6 +29,9 @@ import {CertificatesEffects} from "./certificates/certificates.effects";
 import {EventsState, initialEventsState} from "./events/events.state";
 import {eventsFeature} from "./events/events.feature";
 import {EventsEffects} from "./events/events.effects";
+import {SupportTicketsState, initialSupportTicketsState} from "./support-tickets/support-tickets.state";
+import {supportTicketsFeature} from "./support-tickets/support-tickets.feature";
+import {SupportTicketsEffects} from "./support-tickets/support-tickets.effects";
 
 /**
  * Interface for the root state of the application
@@ -44,7 +47,8 @@ export interface AppState {
   lessonMaterials: LessonMaterialsState,
   notifications: NotificationsState,
   certificates: CertificatesState,
-  events: EventsState
+  events: EventsState,
+  supportTickets: SupportTicketsState
 }
 
 /**
@@ -61,7 +65,8 @@ export const initialAppState: AppState = {
   lessonMaterials: initialLessonMaterialsState,
   notifications: initialNotificationsState,
   certificates: initialCertificatesState,
-  events: initialEventsState
+  events: initialEventsState,
+  supportTickets: initialSupportTicketsState
 };
 
 
@@ -76,6 +81,7 @@ export const ngrxFeatures = [
   notificationsFeature,
   certificatesFeature,
   eventsFeature,
+  supportTicketsFeature,
 ]
 
 export const ngrxEffects = [
@@ -88,5 +94,6 @@ export const ngrxEffects = [
   LessonMaterialsEffects,
   NotificationsEffects,
   CertificatesEffects,
-  EventsEffects
+  EventsEffects,
+  SupportTicketsEffects
 ]

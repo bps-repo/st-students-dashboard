@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { CalendarModule } from 'primeng/calendar';
 
 import { LessonsActions } from '../../../core/state/lessons/lessons.actions';
 import { LessonsSelectors } from '../../../core/state/lessons/lessons.selectors';
@@ -15,8 +16,8 @@ interface FilterOptions {
   status: LessonScheduleStatus | 'ALL';
   month: string;
   year: number;
-  startDate: string;
-  endDate: string;
+  startDate: Date | null;
+  endDate: Date | null;
 }
 
 @Component({
@@ -26,6 +27,7 @@ interface FilterOptions {
     CommonModule,
     RouterModule,
     FormsModule,
+    DatePicker,
     CircularLoaderComponent
   ],
   templateUrl: './lesson-history.component.html',
@@ -43,8 +45,8 @@ export class LessonHistoryComponent implements OnInit {
     status: 'ALL',
     month: '',
     year: new Date().getFullYear(),
-    startDate: '',
-    endDate: ''
+    startDate: null,
+    endDate: null
   };
 
   // Available filter options
@@ -121,8 +123,8 @@ export class LessonHistoryComponent implements OnInit {
   // Get start date for the current filter
   private getStartDateForFilter(): string | undefined {
     // Priority 1: Use advanced filter date if set
-    if (this.filterOptions.startDate && this.filterOptions.startDate.trim() !== '') {
-      return this.filterOptions.startDate;
+    if (this.filterOptions.startDate) {
+      return this.formatDateForAPI(this.filterOptions.startDate);
     }
 
     // Priority 2: Use month/year filter
@@ -138,8 +140,8 @@ export class LessonHistoryComponent implements OnInit {
   // Get end date for the current filter
   private getEndDateForFilter(): string | undefined {
     // Priority 1: Use advanced filter date if set
-    if (this.filterOptions.endDate && this.filterOptions.endDate.trim() !== '') {
-      return this.filterOptions.endDate;
+    if (this.filterOptions.endDate) {
+      return this.formatDateForAPI(this.filterOptions.endDate);
     }
 
     // Priority 2: Use month/year filter
@@ -152,6 +154,14 @@ export class LessonHistoryComponent implements OnInit {
     const lastDay = new Date(year, parseInt(month), 0).getDate();
     const paddedDay = lastDay.toString().padStart(2, '0');
     return `${year}-${month}-${paddedDay}`;
+  }
+
+  // Format Date object to YYYY-MM-DD string for API
+  private formatDateForAPI(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
 
   // Filter lessons based on current filter options
@@ -224,8 +234,8 @@ export class LessonHistoryComponent implements OnInit {
       status: 'ALL',
       month: '',
       year: new Date().getFullYear(),
-      startDate: '',
-      endDate: ''
+      startDate: null,
+      endDate: null
     };
     this.showAdvancedFilters = false;
     this.loadLessonHistory();

@@ -17,13 +17,11 @@
 
     <div class="p-4">
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-        <div
-          *ngFor="let category of supportCategories"
-          (click)="setActiveCategory(category.id)"
+        <div *ngFor="let category of supportCategories" (click)="setActiveCategory(category.id)"
           [ngClass]="category.active ? 'bg-primary-50 border-primary-200 text-primary-700' : 'bg-neutral-50 border-neutral-200 text-neutral-700'"
-          class="flex flex-col items-center justify-center p-4 rounded-lg border cursor-pointer hover:shadow-md transition-all text-center"
-        >
-          <i [class]="category.icon + ' text-2xl mb-2'" [ngClass]="category.active ? 'text-primary-600' : 'text-neutral-500'"></i>
+          class="flex flex-col items-center justify-center p-4 rounded-lg border cursor-pointer hover:shadow-md transition-all text-center">
+          <i [class]="category.icon + ' text-2xl mb-2'"
+            [ngClass]="category.active ? 'text-primary-600' : 'text-neutral-500'"></i>
           <span class="text-sm font-medium">{{ category.label }}</span>
         </div>
       </div>
@@ -37,59 +35,67 @@
       <div class="bg-white rounded-xl shadow-md overflow-hidden">
         <!-- Form Header -->
         <div class="bg-gradient-to-r from-primary-600 to-primary-500 px-6 py-4 text-white">
-          <h2 class="text-lg font-bold">Entre em Contato</h2>
-          <p class="text-sm mt-1">Preencha o formulário abaixo e retornaremos seu contato em breve.</p>
+          <h2 class="text-lg font-bold">Criar Novo Ticket de Suporte</h2>
+          <p class="text-sm mt-1">Preencha o formulário abaixo para criar um ticket de suporte.</p>
         </div>
 
         <!-- Form Container -->
         <div class="p-6">
           <form (ngSubmit)="submitForm()">
-            <!-- Name Field -->
+            <!-- Subject Field -->
             <div class="mb-4">
-              <label for="name" class="block text-sm font-medium text-neutral-700 mb-1">Nome completo</label>
-              <input
-                id="name"
-                name="name"
-                [(ngModel)]="formData.name"
+              <label for="subject" class="block text-sm font-medium text-neutral-700 mb-1">Assunto</label>
+              <input id="subject" name="subject" [(ngModel)]="formData.subject"
                 class="w-full px-4 py-2 bg-white border border-neutral-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                type="text"
-                placeholder="Seu nome completo"
-              />
+                type="text" placeholder="Assunto do ticket" [disabled]="(isSubmitting$ | async) ?? false" required />
             </div>
 
-            <!-- Email Field -->
+            <!-- Priority Field -->
             <div class="mb-4">
-              <label for="email" class="block text-sm font-medium text-neutral-700 mb-1">E-mail</label>
-              <input
-                id="email"
-                name="email"
-                [(ngModel)]="formData.email"
+              <label for="priority" class="block text-sm font-medium text-neutral-700 mb-1">Prioridade</label>
+              <select id="priority" name="priority" [(ngModel)]="formData.priority"
                 class="w-full px-4 py-2 bg-white border border-neutral-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                type="email"
-                placeholder="Seu e-mail"
-              />
+                [disabled]="(isSubmitting$ | async) ?? false">
+                <option *ngFor="let priority of priorityOptions" [value]="priority.value">
+                  {{ priority.label }}
+                </option>
+              </select>
             </div>
 
-            <!-- Message Field -->
+            <!-- Assign to Employee Field (Optional) -->
+            <div class="mb-4">
+              <label for="assignedToEmployeeId" class="block text-sm font-medium text-neutral-700 mb-1">
+                Atribuir a Funcionário (Opcional)
+              </label>
+              <select id="assignedToEmployeeId" name="assignedToEmployeeId" [(ngModel)]="formData.assignedToEmployeeId"
+                class="w-full px-4 py-2 bg-white border border-neutral-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                [disabled]="isLoadingEmployees || ((isSubmitting$ | async) ?? false)">
+                <option value="">Nenhum (Sistema atribuirá automaticamente)</option>
+                <option *ngFor="let employee of employees" [value]="employee.id">
+                  {{ getEmployeeFullName(employee) }} - {{ employee.role.name }}
+                </option>
+              </select>
+              <p class="text-xs text-neutral-500 mt-1">
+                <i class="pi pi-info-circle mr-1"></i>
+                Se não selecionar, o sistema atribuirá automaticamente
+              </p>
+            </div>
+
+            <!-- Description Field -->
             <div class="mb-6">
-              <label for="message" class="block text-sm font-medium text-neutral-700 mb-1">Mensagem</label>
-              <textarea
-                id="message"
-                name="message"
-                [(ngModel)]="formData.message"
+              <label for="description" class="block text-sm font-medium text-neutral-700 mb-1">Descrição</label>
+              <textarea id="description" name="description" [(ngModel)]="formData.description"
                 class="w-full px-4 py-2 bg-white border border-neutral-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                rows="5"
-                placeholder="Como podemos ajudar você?"
-              ></textarea>
+                rows="5" placeholder="Descreva seu problema ou solicitação"
+                [disabled]="(isSubmitting$ | async) ?? false" required></textarea>
             </div>
 
             <!-- Submit Button -->
-            <button
-              type="submit"
-              class="w-full py-3 px-4 bg-gradient-to-r from-primary-600 to-primary-500 text-white font-medium rounded-lg hover:from-primary-700 hover:to-primary-600 transition-all shadow-sm flex items-center justify-center"
-            >
-              <i class="pi pi-send mr-2"></i>
-              Enviar Mensagem
+            <button type="submit" [disabled]="(isSubmitting$ | async) ?? false"
+              [ngClass]="((isSubmitting$ | async) ?? false) ? 'opacity-70 cursor-not-allowed' : 'hover:from-primary-700 hover:to-primary-600'"
+              class="w-full py-3 px-4 bg-gradient-to-r from-primary-600 to-primary-500 text-white font-medium rounded-lg transition-all shadow-sm flex items-center justify-center">
+              <i [ngClass]="((isSubmitting$ | async) ?? false) ? 'pi-spin pi-spinner' : 'pi-send'" class="pi mr-2"></i>
+              {{ ((isSubmitting$ | async) ?? false) ? 'Criando Ticket...' : 'Criar Ticket' }}
             </button>
           </form>
         </div>
@@ -108,22 +114,116 @@
         <!-- FAQ Items -->
         <div class="p-4">
           <div *ngFor="let item of faqItems" class="border-b border-neutral-200 last:border-b-0">
-            <div
-              (click)="toggleFaq(item)"
-              class="py-4 px-2 flex justify-between items-center cursor-pointer hover:bg-neutral-50 transition-all"
-            >
+            <div (click)="toggleFaq(item)"
+              class="py-4 px-2 flex justify-between items-center cursor-pointer hover:bg-neutral-50 transition-all">
               <h3 class="font-medium text-neutral-800">{{ item.question }}</h3>
               <i class="pi pi-chevron-down text-neutral-500"></i>
             </div>
-            <div
-              *ngIf="item.expanded"
-              class="px-2 pb-4 text-neutral-600 text-sm"
-            >
+            <div *ngIf="item.expanded" class="px-2 pb-4 text-neutral-600 text-sm">
               {{ item.answer }}
             </div>
           </div>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- Support Tickets Section -->
+  <div class="mt-8 bg-white rounded-xl shadow-md overflow-hidden">
+    <div class="bg-gradient-to-r from-secondary-600 to-secondary-500 px-6 py-4 text-white">
+      <h2 class="text-lg font-bold">Meus Tickets de Suporte</h2>
+      <p class="text-sm mt-1">Visualize e acompanhe seus tickets de suporte</p>
+    </div>
+
+    <!-- Filter Section -->
+    <div class="p-4 bg-neutral-50 border-b border-neutral-200">
+      <div class="flex flex-wrap gap-4 items-center">
+        <div class="flex-1 min-w-[200px]">
+          <label for="statusFilter" class="block text-sm font-medium text-neutral-700 mb-1">Filtrar por Status</label>
+          <select id="statusFilter" name="statusFilter" [(ngModel)]="selectedStatus" (change)="onStatusFilterChange()"
+            class="w-full px-4 py-2 bg-white border border-neutral-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-secondary-500 focus:border-secondary-500">
+            <option *ngFor="let status of statusOptions" [value]="status.value">
+              {{ status.label }}
+            </option>
+          </select>
+        </div>
+        <div class="flex items-end">
+          <button (click)="loadSupportTickets()"
+            class="px-4 py-2 bg-secondary-600 text-white rounded-lg hover:bg-secondary-700 transition-all flex items-center">
+            <i class="pi pi-refresh mr-2"></i>
+            Atualizar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tickets List -->
+    <div class="p-6">
+      <div *ngIf="isLoadingTickets$ | async" class="flex justify-center items-center py-8">
+        <i class="pi pi-spin pi-spinner text-3xl text-primary-600"></i>
+      </div>
+
+      <ng-container *ngIf="filteredTickets$ | async as tickets">
+        <div *ngIf="(isLoadingTickets$ | async) === false && tickets.length === 0" class="text-center py-8">
+          <i class="pi pi-inbox text-5xl text-neutral-300"></i>
+          <p class="text-neutral-600 mt-4">Nenhum ticket encontrado</p>
+        </div>
+
+        <div *ngIf="(isLoadingTickets$ | async) === false && tickets.length > 0" class="space-y-4">
+          <div *ngFor="let ticket of tickets"
+            class="border border-neutral-200 rounded-lg p-4 hover:shadow-md transition-all">
+            <div class="flex flex-col md:flex-row justify-between items-start gap-4">
+              <div class="flex-1">
+                <div class="flex items-start gap-3 mb-2">
+                  <div class="flex-1">
+                    <h3 class="font-bold text-neutral-800">{{ ticket.subject }}</h3>
+                    <p class="text-sm text-neutral-600 mt-1">{{ ticket.description }}</p>
+                  </div>
+                </div>
+
+                <div class="flex flex-wrap gap-2 mt-3">
+                  <span [ngClass]="getStatusBadgeClass(ticket.status)"
+                    class="px-3 py-1 rounded-full text-xs font-medium">
+                    {{ getStatusLabel(ticket.status) }}
+                  </span>
+                  <span [ngClass]="getPriorityBadgeClass(ticket.priority)"
+                    class="px-3 py-1 rounded-full text-xs font-medium">
+                    {{ getPriorityLabel(ticket.priority) }}
+                  </span>
+                </div>
+
+                <div class="mt-3 text-xs text-neutral-500">
+                  <div class="flex flex-wrap gap-4">
+                    <span>
+                      <i class="pi pi-calendar mr-1"></i>
+                      Criado: {{ formatDate(ticket.createdAt) }}
+                    </span>
+                    <span *ngIf="ticket.assignedToName">
+                      <i class="pi pi-user mr-1"></i>
+                      Atribuído a: {{ ticket.assignedToName }}
+                    </span>
+                    <span *ngIf="ticket.resolvedAt">
+                      <i class="pi pi-check-circle mr-1"></i>
+                      Resolvido: {{ formatDate(ticket.resolvedAt) }}
+                    </span>
+                  </div>
+                </div>
+
+                <div *ngIf="ticket.responseMessage" class="mt-3 p-3 bg-success-50 border border-success-200 rounded-lg">
+                  <p class="text-sm font-medium text-success-800 mb-1">
+                    <i class="pi pi-comment mr-1"></i>
+                    Resposta:
+                  </p>
+                  <p class="text-sm text-success-700">{{ ticket.responseMessage }}</p>
+                  <p class="text-xs text-success-600 mt-1">
+                    Respondido em: {{ formatDate(ticket.respondedAt || '') }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
     </div>
   </div>
 
@@ -136,22 +236,28 @@
 
     <div class="p-6">
       <div class="flex flex-wrap gap-4 justify-center">
-        <a href="#" class="flex items-center justify-center w-12 h-12 bg-primary-50 text-primary-600 rounded-full hover:bg-primary-100 transition-all">
+        <a href="#"
+          class="flex items-center justify-center w-12 h-12 bg-primary-50 text-primary-600 rounded-full hover:bg-primary-100 transition-all">
           <i class="pi pi-facebook text-xl"></i>
         </a>
-        <a href="#" class="flex items-center justify-center w-12 h-12 bg-neutral-50 text-neutral-800 rounded-full hover:bg-neutral-100 transition-all">
+        <a href="#"
+          class="flex items-center justify-center w-12 h-12 bg-neutral-50 text-neutral-800 rounded-full hover:bg-neutral-100 transition-all">
           <i class="pi pi-tiktok text-xl"></i>
         </a>
-        <a href="#" class="flex items-center justify-center w-12 h-12 bg-secondary-50 text-secondary-600 rounded-full hover:bg-secondary-100 transition-all">
+        <a href="#"
+          class="flex items-center justify-center w-12 h-12 bg-secondary-50 text-secondary-600 rounded-full hover:bg-secondary-100 transition-all">
           <i class="pi pi-instagram text-xl"></i>
         </a>
-        <a href="#" class="flex items-center justify-center w-12 h-12 bg-warning-50 text-warning-600 rounded-full hover:bg-warning-100 transition-all">
+        <a href="#"
+          class="flex items-center justify-center w-12 h-12 bg-warning-50 text-warning-600 rounded-full hover:bg-warning-100 transition-all">
           <i class="pi pi-youtube text-xl"></i>
         </a>
-        <a href="#" class="flex items-center justify-center w-12 h-12 bg-accent-50 text-accent-600 rounded-full hover:bg-accent-100 transition-all">
+        <a href="#"
+          class="flex items-center justify-center w-12 h-12 bg-accent-50 text-accent-600 rounded-full hover:bg-accent-100 transition-all">
           <i class="pi pi-linkedin text-xl"></i>
         </a>
-        <a href="#" class="flex items-center justify-center w-12 h-12 bg-success-50 text-success-600 rounded-full hover:bg-success-100 transition-all">
+        <a href="#"
+          class="flex items-center justify-center w-12 h-12 bg-success-50 text-success-600 rounded-full hover:bg-success-100 transition-all">
           <i class="pi pi-whatsapp text-xl"></i>
         </a>
       </div>

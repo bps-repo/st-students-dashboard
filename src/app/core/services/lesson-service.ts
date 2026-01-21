@@ -52,6 +52,8 @@ export class LessonService {
       params = params.set('endDate', endDate);
     }
 
+    console.log('API Request:', `${this.baseUrl}/lessons?${params.toString()}`);
+
     return this.http.get<ApiResponse<any[]>>(`${this.baseUrl}/lessons`, { params }).pipe(
       map(response => (response.data || []).map((lesson) => {
         const startDateTime = lesson?.startDateTime || lesson?.startDatetime;
