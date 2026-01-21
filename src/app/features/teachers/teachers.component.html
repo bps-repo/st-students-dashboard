@@ -11,36 +11,40 @@
     <div class="relative w-full md:w-64">
       <input
         type="text"
+        [(ngModel)]="searchTerm"
+        (input)="onSearch()"
         placeholder="Pesquisar professores..."
-        class="w-full pl-10 pr-4 py-2 bg-white border border-neutral-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all"
+        class="w-full pl-10 pr-10 py-2 bg-white border border-neutral-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all"
       >
       <i class="pi pi-search absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400"></i>
+      <button
+        *ngIf="searchTerm"
+        (click)="clearSearch()"
+        class="absolute right-3 top-1/2 transform -translate-y-1/2 text-neutral-400 hover:text-neutral-600"
+      >
+        <i class="pi pi-times"></i>
+      </button>
     </div>
   </div>
 
-  <!-- Filter Section -->
-  <div class="bg-white rounded-xl p-4 shadow-md mb-8">
-    <div class="flex flex-wrap gap-3">
-      <div class="bg-primary-50 text-primary-700 px-3 py-1.5 rounded-lg font-medium text-sm flex items-center hover:bg-primary-100 transition-all cursor-pointer">
-        <span>Todos</span>
-      </div>
-      <div class="bg-neutral-50 text-neutral-700 px-3 py-1.5 rounded-lg font-medium text-sm flex items-center hover:bg-neutral-100 transition-all cursor-pointer">
-        <span>Conversação</span>
-      </div>
-      <div class="bg-neutral-50 text-neutral-700 px-3 py-1.5 rounded-lg font-medium text-sm flex items-center hover:bg-neutral-100 transition-all cursor-pointer">
-        <span>Business English</span>
-      </div>
-      <div class="bg-neutral-50 text-neutral-700 px-3 py-1.5 rounded-lg font-medium text-sm flex items-center hover:bg-neutral-100 transition-all cursor-pointer">
-        <span>Gramática</span>
-      </div>
-    </div>
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="flex justify-center items-center py-12">
+    <i class="pi pi-spin pi-spinner text-3xl text-primary-600"></i>
   </div>
 
   <!-- Teachers Grid -->
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+  <div *ngIf="!isLoading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    <!-- Empty State -->
+    <div *ngIf="filteredTeachers.length === 0" class="col-span-full text-center py-12">
+      <i class="pi pi-users text-5xl text-neutral-300"></i>
+      <p class="text-neutral-600 mt-4">
+        {{ searchTerm ? 'Nenhum professor encontrado' : 'Nenhum professor disponível' }}
+      </p>
+    </div>
+
     <!-- Teacher Card -->
     <div
-      *ngFor="let teacher of teachers"
+      *ngFor="let teacher of filteredTeachers"
       class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-all duration-300"
     >
       <!-- Cover Image with Gradient Overlay -->
@@ -48,8 +52,8 @@
         <div class="absolute inset-0 bg-[url('/bg_st.png')] bg-cover bg-center opacity-20"></div>
 
         <!-- Teacher Status Badge -->
-        <div class="absolute top-3 right-3 bg-success-100 text-success-700 px-2 py-1 rounded-full text-xs font-medium">
-          Online
+        <div [ngClass]="isActive(teacher) ? 'bg-success-100 text-success-700' : 'bg-neutral-100 text-neutral-700'" class="absolute top-3 right-3 px-2 py-1 rounded-full text-xs font-medium">
+          {{ isActive(teacher) ? 'Ativo' : 'Inativo' }}
         </div>
 
         <!-- Profile Image -->
@@ -57,15 +61,11 @@
           <div class="relative">
             <div class="w-20 h-20 rounded-full bg-gradient-to-r from-primary-500 to-primary-600 flex items-center justify-center p-1">
               <img
-                src="{{ teacher.image }}"
-                alt="{{ teacher.name }}"
+                [src]="getEmployeePhoto(teacher)"
+                [alt]="getEmployeeFullName(teacher)"
                 class="w-full h-full rounded-full object-cover border-2 border-white"
+                onerror="this.src='/user.png'"
               />
-            </div>
-            <!-- Rating Badge -->
-            <div class="absolute -bottom-2 -right-2 bg-warning-500 text-white px-2 py-0.5 rounded-full text-xs font-bold flex items-center">
-              <i class="pi pi-star-fill mr-1 text-[10px]"></i>
-              {{ teacher.rating }}
             </div>
           </div>
         </div>
@@ -73,62 +73,39 @@
 
       <!-- Content -->
       <div class="pt-12 px-4 text-center">
-        <h2 class="text-lg font-bold text-primary-700">{{ teacher.name }}</h2>
-        <p class="text-sm text-accent-600 font-medium mt-1">{{ teacher.role }}</p>
+        <h2 class="text-lg font-bold text-primary-700">{{ getEmployeeFullName(teacher) }}</h2>
+        <p class="text-sm text-accent-600 font-medium mt-1">{{ teacher.role.name }}</p>
 
-        <!-- Languages -->
-        <div class="flex justify-center mt-3 space-x-2">
-          <span *ngFor="let language of teacher.languages" class="bg-neutral-100 text-neutral-700 px-2 py-0.5 rounded-full text-xs">
-            {{ language }}
-          </span>
-        </div>
-
-        <!-- Description -->
-        <p class="text-sm text-neutral-600 mt-3 line-clamp-3">
-          {{ teacher.description }}
+        <!-- Role Description -->
+        <p class="text-xs text-neutral-500 mt-1 line-clamp-2">
+          {{ getRoleDescription(teacher) }}
         </p>
 
-        <!-- Specialties -->
-        <div class="mt-4">
-          <h3 class="text-xs font-medium text-neutral-500 mb-2">ESPECIALIDADES</h3>
-          <div class="flex flex-wrap justify-center gap-2">
-            <span *ngFor="let specialty of teacher.specialties" class="bg-primary-50 text-primary-700 px-2 py-1 rounded-lg text-xs">
-              {{ specialty }}
-            </span>
+        <!-- Contact Info -->
+        <div class="mt-3 space-y-1">
+          <div class="text-xs text-neutral-600">
+            <i class="pi pi-envelope mr-1"></i>
+            {{ teacher.personalInfo.email }}
+          </div>
+          <div class="text-xs text-neutral-600" *ngIf="teacher.personalInfo.phone">
+            <i class="pi pi-phone mr-1"></i>
+            {{ teacher.personalInfo.phone }}
           </div>
         </div>
 
-        <!-- Availability -->
-        <div class="mt-4 bg-neutral-50 rounded-lg p-2 text-sm text-neutral-700">
-          <i class="pi pi-calendar text-accent-500 mr-1"></i>
-          {{ teacher.availability }}
+        <!-- Work Info -->
+        <div class="mt-4 pb-4">
+          <div class="bg-neutral-50 rounded-lg p-2 text-xs text-neutral-700">
+            <div class="flex items-center justify-center mb-1">
+              <i class="pi pi-building text-accent-500 mr-1"></i>
+              <span class="font-medium">{{ teacher.workInfo.centerName }}</span>
+            </div>
+            <div class="text-neutral-500">
+              Desde {{ formatDate(teacher.workInfo.hiringDate) }}
+            </div>
+          </div>
         </div>
       </div>
-
-      <!-- Actions -->
-      <div class="p-4 flex space-x-2">
-        <button class="flex-1 bg-primary-50 hover:bg-primary-100 text-primary-700 py-2 px-3 rounded-lg font-medium text-sm transition-all flex items-center justify-center">
-          <i class="pi pi-user mr-1"></i>
-          Perfil
-        </button>
-      </div>
     </div>
-  </div>
-
-  <!-- Pagination -->
-  <div class="flex justify-center mt-8">
-    <nav class="flex items-center space-x-1">
-      <button class="p-2 rounded-lg text-neutral-500 hover:bg-neutral-100 transition-all">
-        <i class="pi pi-chevron-left"></i>
-      </button>
-      <button class="w-10 h-10 rounded-lg bg-primary-500 text-white font-medium flex items-center justify-center">1</button>
-      <button class="w-10 h-10 rounded-lg text-neutral-700 hover:bg-neutral-100 font-medium flex items-center justify-center transition-all">2</button>
-      <button class="w-10 h-10 rounded-lg text-neutral-700 hover:bg-neutral-100 font-medium flex items-center justify-center transition-all">3</button>
-      <span class="w-10 h-10 flex items-center justify-center text-neutral-500">...</span>
-      <button class="w-10 h-10 rounded-lg text-neutral-700 hover:bg-neutral-100 font-medium flex items-center justify-center transition-all">8</button>
-      <button class="p-2 rounded-lg text-neutral-500 hover:bg-neutral-100 transition-all">
-        <i class="pi pi-chevron-right"></i>
-      </button>
-    </nav>
   </div>
 </div>

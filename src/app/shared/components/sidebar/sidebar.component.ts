@@ -1,14 +1,14 @@
-import {CommonModule} from '@angular/common';
-import {Component, OnInit, signal} from '@angular/core';
-import {RouterLink, RouterLinkActive} from '@angular/router';
-import {LocalstorageService} from '../../services/localstorage.service';
-import {Observable} from "rxjs";
-import {map} from "rxjs/operators";
-import {Store} from "@ngrx/store";
-import {LevelSelectors} from "../../../core/state/level/level.selectors";
-import {Level} from "../../../core/models/Level";
-import {StudentSelectors} from "../../../core/state/student/student.selectors";
-import {Student} from "../../../core/models/Student";
+import { CommonModule } from '@angular/common';
+import { Component, OnInit, signal } from '@angular/core';
+import { RouterLink, RouterLinkActive } from '@angular/router';
+import { LocalstorageService } from '../../services/localstorage.service';
+import { Observable } from "rxjs";
+import { map } from "rxjs/operators";
+import { Store } from "@ngrx/store";
+import { LevelSelectors } from "../../../core/state/level/level.selectors";
+import { Level } from "../../../core/models/Level";
+import { StudentSelectors } from "../../../core/state/student/student.selectors";
+import { Student } from "../../../core/models/Student";
 
 interface navLink {
   label: string;
@@ -92,7 +92,14 @@ export class SidebarComponent implements OnInit {
       active: false,
     },
     {
-      label: 'Ajuda',
+      label: 'Reuniões',
+      path: '/meetings',
+      icon: 'pi pi-calendar',
+      activeIcon: 'pi pi-calendar-alt',
+      active: false,
+    },
+    {
+      label: 'Suporte',
       path: '/support',
       icon: 'pi pi-question-circle',
       activeIcon: 'pi pi-question-circle-alt',

@@ -6,6 +6,8 @@ import {ProfileComponent} from './features/profile/profile.component';
 import {TeachersComponent} from './features/teachers/teachers.component';
 import {ChangePasswordComponent} from './features/auth/change-password/change-password.component';
 import {SupportComponent} from './features/support/support.component';
+import {ScheduleMeetingComponent} from './features/meetings/schedule-meeting/schedule-meeting.component';
+import {MeetingsListComponent} from './features/meetings/meetings-list/meetings-list.component';
 import {MaterialsComponent} from './features/lessons/materials/materials.component';
 import {MaterialDetailComponent} from './features/lessons/material-detail/material-detail.component';
 import {LayoutContentComponent} from "./layout/layout-content/layout-content.component";
@@ -108,6 +110,16 @@ export const routes: Routes = [
         path: 'support',
         component: SupportComponent,
         data: {breadcrumb: 'Suporte'}
+      },
+      {
+        path: 'meetings',
+        component: MeetingsListComponent,
+        data: {breadcrumb: 'Reuniões'}
+      },
+      {
+        path: 'meetings/schedule',
+        component: ScheduleMeetingComponent,
+        data: {breadcrumb: 'Agendar Reunião'}
       },
       {
         path: 'lessons/materials',
