@@ -3,42 +3,43 @@
 <app-circular-loader class="m-10" *ngIf="loadingStudent$ | ngrxPush" [color]="'primary'"
                      [size]="'sm'"></app-circular-loader>
 
-<div *ngIf="!(loadingStudent$ | ngrxPush)" class="min-h-screen bg-neutral-50 px-6 py-8 max-w-6xl mx-auto">
+<div *ngIf="!(loadingStudent$ | ngrxPush)" class="min-h-screen bg-neutral-50 px-3 sm:px-4 md:px-6 py-4 sm:py-6 md:py-8 max-w-6xl mx-auto">
   <!-- Welcome Header -->
-  <div class="mb-8">
-    <h1 class="text-4xl font-bold text-neutral-800 flex items-center mb-2">
-      Seja bem-vindo, <span class="text-neutral-800 ml-2">{{ (student$ | ngrxPush)?.user?.firstname }}</span>
-      <span class="ml-2 text-4xl">👋</span>
-      </h1>
+  <div class="mb-6 sm:mb-8">
+    <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-neutral-800 flex flex-wrap items-center gap-2 mb-2">
+      <span>Seja bem-vindo,</span>
+      <span class="text-neutral-800">{{ (student$ | ngrxPush)?.user?.firstname }}</span>
+      <span class="text-2xl sm:text-3xl lg:text-4xl">👋</span>
+    </h1>
   </div>
 
   <!-- Level Badge and Progress Section -->
   <app-loader [loading]="loadingLevel$" [label]="'Carregando nível...'"></app-loader>
-  <div *ngIf="!(loadingLevel$ | ngrxPush)" class="mb-6">
+  <div *ngIf="!(loadingLevel$ | ngrxPush)" class="mb-4 sm:mb-6">
     <div class="flex items-center mb-3">
-      <span class="text-sm font-medium text-neutral-700 mr-3">Nível</span>
+      <span class="text-xs sm:text-sm font-medium text-neutral-700 mr-2 sm:mr-3">Nível</span>
       <div class="relative inline-block">
-        <button class="bg-primary-500 text-white px-4 py-2 rounded-lg font-semibold text-sm flex items-center hover:bg-primary-600 transition-all shadow-md">
-              <span>{{ (student$ | ngrxPush)?.level?.name }}</span>
-          <i class="pi pi-chevron-down ml-2 text-xs"></i>
+        <button class="bg-primary-500 text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg font-semibold text-xs sm:text-sm flex items-center hover:bg-primary-600 transition-all shadow-md">
+          <span>{{ (student$ | ngrxPush)?.level?.name }}</span>
+          <i class="pi pi-chevron-down ml-1.5 sm:ml-2 text-[10px] sm:text-xs"></i>
         </button>
-            </div>
-          </div>
+      </div>
+    </div>
 
     <!-- Progress Bar -->
-    <div class="relative pt-6">
-      <div class="w-full bg-neutral-200 rounded-full h-2.5">
-        <div class="bg-success-500 h-2.5 rounded-full transition-all duration-500"
+    <div class="relative pt-5 sm:pt-6">
+      <div class="w-full bg-neutral-200 rounded-full h-2 sm:h-2.5">
+        <div class="bg-success-500 h-2 sm:h-2.5 rounded-full transition-all duration-500"
              [ngStyle]="{ width: (student$ | ngrxPush)?.levelProgressPercentage + '%' }">
         </div>
       </div>
       <!-- Percentage indicator positioned based on progress -->
       <div class="absolute -top-1 transition-all duration-500"
-           [ngStyle]="{ left: 'calc(' + ((student$ | ngrxPush)?.levelProgressPercentage || 0) + '% - 20px)' }">
-        <div class="bg-success-500 text-white px-3 py-1.5 rounded-full shadow-lg text-xs font-bold whitespace-nowrap relative">
+           [ngStyle]="{ left: 'calc(' + ((student$ | ngrxPush)?.levelProgressPercentage || 0) + '% - 16px)' }">
+        <div class="bg-success-500 text-white px-2 sm:px-3 py-1 sm:py-1.5 rounded-full shadow-lg text-[10px] sm:text-xs font-bold whitespace-nowrap relative">
           {{ (student$ | ngrxPush)?.levelProgressPercentage }}%
           <!-- Small arrow pointing down -->
-          <div class="absolute left-1/2 -translate-x-1/2 bottom-0 translate-y-full w-0 h-0 border-l-4 border-r-4 border-t-4 border-l-transparent border-r-transparent border-t-success-500"></div>
+          <div class="absolute left-1/2 -translate-x-1/2 bottom-0 translate-y-full w-0 h-0 border-l-[3px] border-r-[3px] border-t-[3px] sm:border-l-4 sm:border-r-4 sm:border-t-4 border-l-transparent border-r-transparent border-t-success-500"></div>
         </div>
       </div>
     </div>
@@ -46,41 +47,41 @@
 
   <!-- Emergency Warning Banner -->
   <div *ngIf="warningNotification$ | ngrxPush as warning"
-       class="bg-gradient-to-r from-warning-600 to-warning-700 rounded-2xl p-6 md:p-8 mb-8 relative overflow-hidden shadow-lg">
+       class="bg-gradient-to-r from-warning-600 to-warning-700 rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 mb-6 sm:mb-8 relative overflow-hidden shadow-lg">
     <!-- Close Button -->
     <button
       (click)="dismissWarningNotification(warning.id)"
-      class="absolute top-4 right-4 text-white hover:bg-white hover:bg-opacity-20 rounded-full p-2 transition-all z-20"
+      class="absolute top-3 right-3 sm:top-4 sm:right-4 text-white hover:bg-white hover:bg-opacity-20 rounded-full p-1.5 sm:p-2 transition-all z-20"
       aria-label="Dismiss notification">
-      <i class="pi pi-times text-xl"></i>
+      <i class="pi pi-times text-base sm:text-xl"></i>
     </button>
 
-    <div class="relative z-10 flex items-center justify-between">
-      <div class="flex-1 pr-4">
-        <div class="flex items-center mb-3">
-          <i class="pi pi-exclamation-triangle text-white text-2xl mr-3"></i>
-          <h2 class="text-xl md:text-2xl font-bold text-white">
+    <div class="relative z-10 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+      <div class="flex-1 pr-8 sm:pr-4">
+        <div class="flex items-start sm:items-center mb-2 sm:mb-3 gap-2 sm:gap-3">
+          <i class="pi pi-exclamation-triangle text-white text-xl sm:text-2xl flex-shrink-0 mt-0.5 sm:mt-0"></i>
+          <h2 class="text-lg sm:text-xl md:text-2xl font-bold text-white">
             {{ warning.title }}
           </h2>
         </div>
-        <p class="text-white text-opacity-95 mb-4 text-base leading-relaxed">
+        <p class="text-white text-opacity-95 mb-3 sm:mb-4 text-sm sm:text-base leading-relaxed">
           {{ warning.message }}
         </p>
         <button
           *ngIf="warning.targetId && warning.targetType"
-          class="bg-white text-warning-700 font-bold px-6 py-3 rounded-lg hover:bg-neutral-100 transition-all shadow-md flex items-center">
+          class="bg-white text-warning-700 font-bold px-4 sm:px-6 py-2 sm:py-3 rounded-lg hover:bg-neutral-100 transition-all shadow-md flex items-center text-xs sm:text-sm w-full sm:w-auto justify-center">
           <span>VER DETALHES</span>
-          <i class="pi pi-arrow-right ml-2"></i>
+          <i class="pi pi-arrow-right ml-2 text-xs sm:text-sm"></i>
         </button>
       </div>
       <div class="hidden md:flex items-center justify-center flex-shrink-0">
         <div class="relative">
-          <div class="w-24 h-24 md:w-32 md:h-32 bg-secondary-500 rounded-full flex items-center justify-center animate-pulse">
-            <i class="pi pi-exclamation-circle text-white text-5xl md:text-6xl"></i>
-            <div class="absolute inset-0 rounded-full border-4 md:border-8 border-secondary-600 opacity-50"></div>
+          <div class="w-24 h-24 lg:w-32 lg:h-32 bg-secondary-500 rounded-full flex items-center justify-center animate-pulse">
+            <i class="pi pi-exclamation-circle text-white text-4xl lg:text-6xl"></i>
+            <div class="absolute inset-0 rounded-full border-4 lg:border-8 border-secondary-600 opacity-50"></div>
           </div>
           <div class="absolute inset-0 flex items-center justify-center">
-            <div class="w-32 h-32 md:w-40 md:h-40 border-4 border-warning-300 rounded-full opacity-30 animate-ping"></div>
+            <div class="w-32 h-32 lg:w-40 lg:h-40 border-4 border-warning-300 rounded-full opacity-30 animate-ping"></div>
           </div>
         </div>
       </div>
@@ -88,58 +89,58 @@
   </div>
 
     <!-- Units Section -->
-  <div class="mb-6">
-      <div class="flex items-center justify-between mb-4">
-      <h2 class="text-2xl font-bold text-neutral-800">Unidades</h2>
-      <span class="text-sm font-semibold text-neutral-600">{{ getCompletedUnitsCount(units$ | ngrxPush) }}/{{ (units$ | ngrxPush)?.length || 0 }}</span>
-      </div>
+  <div class="mb-4 sm:mb-6">
+    <div class="flex items-center justify-between mb-3 sm:mb-4">
+      <h2 class="text-xl sm:text-2xl font-bold text-neutral-800">Unidades</h2>
+      <span class="text-xs sm:text-sm font-semibold text-neutral-600">{{ getCompletedUnitsCount(units$ | ngrxPush) }}/{{ (units$ | ngrxPush)?.length || 0 }}</span>
+    </div>
 
-      <!-- Loading State -->
-      <app-loader [loading]="loadingUnit$" [label]="'Carregando unidades...'"></app-loader>
+    <!-- Loading State -->
+    <app-loader [loading]="loadingUnit$" [label]="'Carregando unidades...'"></app-loader>
 
-      <!-- Error State -->
-    <div *ngIf="(error$ | ngrxPush) && !(loadingUnit$ | ngrxPush)" class="bg-white rounded-2xl shadow-sm p-8">
-        <div class="flex flex-col items-center text-center">
-        <div class="rounded-full bg-error-100 p-4 mb-4">
-          <i class="pi pi-exclamation-triangle text-error-500 text-3xl"></i>
-          </div>
-        <h3 class="text-xl font-bold text-neutral-800 mb-2">Erro ao carregar unidades</h3>
-          <p class="text-neutral-600 mb-4">{{ error$ | ngrxPush }}</p>
-          <button
-            (click)="store.dispatch(loadUnits())"
-          class="px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-all font-semibold shadow-md"
-          >
-            Tentar novamente
-          </button>
+    <!-- Error State -->
+    <div *ngIf="(error$ | ngrxPush) && !(loadingUnit$ | ngrxPush)" class="bg-white rounded-xl sm:rounded-2xl shadow-sm p-6 sm:p-8">
+      <div class="flex flex-col items-center text-center">
+        <div class="rounded-full bg-error-100 p-3 sm:p-4 mb-3 sm:mb-4">
+          <i class="pi pi-exclamation-triangle text-error-500 text-2xl sm:text-3xl"></i>
         </div>
+        <h3 class="text-lg sm:text-xl font-bold text-neutral-800 mb-2">Erro ao carregar unidades</h3>
+        <p class="text-neutral-600 mb-4 text-sm sm:text-base">{{ error$ | ngrxPush }}</p>
+        <button
+          (click)="store.dispatch(loadUnits())"
+          class="px-5 sm:px-6 py-2.5 sm:py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-all font-semibold shadow-md text-sm sm:text-base"
+        >
+          Tentar novamente
+        </button>
       </div>
+    </div>
 
     <!-- Empty State -->
     <div *ngIf="((units$ | ngrxPush)?.length == 0) && !(loadingLevel$ | ngrxPush)"
-         class="bg-white rounded-2xl shadow-sm p-8 text-center">
-      <i class="pi pi-inbox text-neutral-300 text-5xl mb-4"></i>
-      <p class="text-neutral-600 font-medium">Sem unidades disponíveis</p>
-      </div>
+         class="bg-white rounded-xl sm:rounded-2xl shadow-sm p-6 sm:p-8 text-center">
+      <i class="pi pi-inbox text-neutral-300 text-4xl sm:text-5xl mb-3 sm:mb-4"></i>
+      <p class="text-neutral-600 font-medium text-sm sm:text-base">Sem unidades disponíveis</p>
+    </div>
 
     <!-- Units List -->
     <div *ngIf="!(loadingUnit$ | ngrxPush) && !(error$ | ngrxPush) && (units$ | ngrxPush)?.length && (units$ | ngrxPush)?.length! > 0"
-         class="bg-white rounded-2xl shadow-sm p-6">
-      <div class="space-y-6">
+         class="bg-white rounded-xl sm:rounded-2xl shadow-sm p-4 sm:p-6">
+      <div class="space-y-4 sm:space-y-6">
         <div
           *ngFor="let unit of units$ | ngrxPush; let i = index; let last = last"
           class="relative"
         >
           <div (click)="navigateToUnit(unit)"
-               class="flex items-start cursor-pointer hover:bg-neutral-50 rounded-xl p-4 -ml-4 -mr-4 transition-all group">
+               class="flex items-start cursor-pointer hover:bg-neutral-50 rounded-lg sm:rounded-xl p-3 sm:p-4 -ml-3 sm:-ml-4 -mr-3 sm:-mr-4 transition-all group">
             <!-- Status Circle with Connector Line -->
-            <div class="relative flex-shrink-0 mr-4">
+            <div class="relative flex-shrink-0 mr-3 sm:mr-4">
               <div
                 [ngClass]="{
                   'bg-success-500': unit.status == UnitStatus.COMPLETE,
                   'bg-neutral-300': unit.status == UnitStatus.LOCK,
                   'bg-warning-500': unit.status == UnitStatus.AVAILABLE
                 }"
-                class="w-14 h-14 rounded-full flex items-center justify-center shadow-md z-10 relative border-4 border-white"
+                class="w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center shadow-md z-10 relative border-3 sm:border-4 border-white"
               >
                 <i
                   [ngClass]="{
@@ -147,50 +148,48 @@
                     'pi pi-lock': unit.status == UnitStatus.LOCK,
                     'pi pi-book': unit.status == UnitStatus.AVAILABLE
                   }"
-                  class="text-white text-xl"
+                  class="text-white text-lg sm:text-xl"
                 ></i>
               </div>
               <!-- Connector Line -->
               <div *ngIf="!last"
-                   class="absolute left-1/2 top-14 w-0.5 h-12 bg-neutral-200 -ml-px"></div>
-              </div>
+                   class="absolute left-1/2 top-12 sm:top-14 w-0.5 h-10 sm:h-12 bg-neutral-200 -ml-px"></div>
+            </div>
 
-              <!-- Content -->
-            <div class="flex-grow pt-1">
-              <div class="flex items-start justify-between mb-1">
-              <div class="flex-grow">
-                  <h3 class="font-bold text-base text-neutral-800 mb-1 flex items-center">
-                    <span [ngClass]="{
-                      'text-success-600': unit.status == UnitStatus.COMPLETE,
-                      'text-neutral-800': unit.status != UnitStatus.COMPLETE
-                    }">{{ unit.unitName }}</span>
-                    <!-- Stars for completed units -->
-                    <span *ngIf="unit.status == UnitStatus.COMPLETE" class="ml-2 flex items-center">
-                      <i class="pi pi-star-fill text-warning-500 text-sm"></i>
-                      <i class="pi pi-star-fill text-warning-500 text-sm ml-0.5"></i>
-                      <i class="pi pi-star-fill text-warning-500 text-sm ml-0.5"></i>
-                    </span>
-                  </h3>
-                  <p class="text-sm text-neutral-600 leading-relaxed mb-2">{{ unit.unitDescription }}</p>
-                  <span
-                    *ngIf="unit.status == UnitStatus.COMPLETE"
-                    class="inline-block text-xs font-medium text-neutral-600"
-                  >
-                    Concluída
+            <!-- Content -->
+            <div class="flex-grow pt-0.5 sm:pt-1 min-w-0">
+              <div class="mb-1">
+                <h3 class="font-bold text-sm sm:text-base text-neutral-800 mb-1 flex flex-wrap items-center gap-1.5 sm:gap-2">
+                  <span [ngClass]="{
+                    'text-success-600': unit.status == UnitStatus.COMPLETE,
+                    'text-neutral-800': unit.status != UnitStatus.COMPLETE
+                  }" class="break-words">{{ unit.unitName }}</span>
+                  <!-- Stars for completed units -->
+                  <span *ngIf="unit.status == UnitStatus.COMPLETE" class="flex items-center flex-shrink-0">
+                    <i class="pi pi-star-fill text-warning-500 text-xs sm:text-sm"></i>
+                    <i class="pi pi-star-fill text-warning-500 text-xs sm:text-sm ml-0.5"></i>
+                    <i class="pi pi-star-fill text-warning-500 text-xs sm:text-sm ml-0.5"></i>
                   </span>
-                  <span
-                    *ngIf="unit.status == UnitStatus.LOCK"
-                    class="inline-block text-xs font-medium text-neutral-400"
-                  >
-                    Bloqueada
-                  </span>
-                  <span
-                    *ngIf="unit.status == UnitStatus.AVAILABLE"
-                    class="inline-block text-xs font-medium text-warning-700"
-                  >
-                    Em andamento
-                  </span>
-                </div>
+                </h3>
+                <p class="text-xs sm:text-sm text-neutral-600 leading-relaxed mb-1.5 sm:mb-2 line-clamp-2">{{ unit.unitDescription }}</p>
+                <span
+                  *ngIf="unit.status == UnitStatus.COMPLETE"
+                  class="inline-block text-[10px] sm:text-xs font-medium text-neutral-600"
+                >
+                  Concluída
+                </span>
+                <span
+                  *ngIf="unit.status == UnitStatus.LOCK"
+                  class="inline-block text-[10px] sm:text-xs font-medium text-neutral-400"
+                >
+                  Bloqueada
+                </span>
+                <span
+                  *ngIf="unit.status == UnitStatus.AVAILABLE"
+                  class="inline-block text-[10px] sm:text-xs font-medium text-warning-700"
+                >
+                  Em andamento
+                </span>
               </div>
             </div>
           </div>
