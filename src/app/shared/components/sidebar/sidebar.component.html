@@ -24,7 +24,7 @@
           class="flex justify-center text-white font-bold items-center w-5 h-5 bg-primary-600 rounded-full text-[10px]">L</span>
         <span class="flex-1">{{ (student$ | async)?.level?.name }}</span>
         <!-- VIP Badge -->
-        <span 
+        <span
           *ngIf="(student$ | async)?.vip"
           class="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gradient-to-r from-yellow-400 to-yellow-500 text-white"
           title="VIP Student"
@@ -37,19 +37,15 @@
     <nav class="flex flex-col gap-4 font-medium cursor-pointer mb-auto">
       @for (navLink of navLinks; track $index) {
         <a
-          (click)="setActiveTab(navLink)"
+          (click)="onNavLinkClick()"
           [routerLink]="[navLink.path]"
-          [routerLinkActive]="['active']"
-          [ngClass]="{
-            'text-primary-800 bg-primary-100 shadow-inner rounded-xl': navLink.active,
-            'text-neutral-700': !navLink.active
-          }"
-          class="group hover:text-primary-700 hover:bg-primary-50/80 active:text-primary-800 transition-all flex flex-row items-center gap-3 px-3 py-2 rounded-xl"
+          routerLinkActive="text-primary-800 bg-primary-100 shadow-inner rounded-xl"
+          [routerLinkActiveOptions]="{exact: navLink.path === '/'}"
+          class="group hover:text-primary-700 hover:bg-primary-50/80 active:text-primary-800 transition-all flex flex-row items-center gap-3 px-3 py-2 rounded-xl text-neutral-700"
         >
-          <i 
-            class="{{ navLink.icon }} text-[20px] md:text-[24px]" 
+          <i
+            class="{{ navLink.icon }} text-[20px] md:text-[24px]"
             [ngClass]="{
-              'text-primary-600': navLink.active,
               'ai-sparkle-icon': navLink.path === '/chat'
             }"
           ></i>
@@ -59,7 +55,7 @@
           >{{ navLink.label }}</span>
         </a>
       }
-      
+
       <!-- VIP Chat Link (only for VIP students) -->
       <a
         *ngIf="(student$ | async)?.vip === true"
@@ -68,7 +64,7 @@
         [routerLinkActiveOptions]="{exact: false}"
         class="group hover:text-primary-700 hover:bg-primary-50/80 active:text-primary-800 transition-all flex flex-row items-center gap-3 px-3 py-2 rounded-xl relative text-neutral-700"
       >
-        <i 
+        <i
           class="pi pi-comments text-[20px] md:text-[24px] text-neutral-600"
         ></i>
         <span
@@ -76,7 +72,7 @@
           class="font-heading text-sm md:text-base whitespace-nowrap overflow-hidden transition-all duration-300"
         >Chat VIP</span>
         <!-- VIP Badge on menu item -->
-        <span 
+        <span
           *ngIf="!isNavBarOpened()"
           class="absolute -top-1 -right-1 w-3 h-3 bg-gradient-to-r from-yellow-400 to-yellow-500 rounded-full border-2 border-white"
           title="VIP Exclusive"
@@ -84,65 +80,15 @@
       </a>
     </nav>
   </div>
-
-  <!-- Social Media Icons with Hover Effect -->
-  <!--  <div class="m-4 md:p-6 flex justify-center mb-4 group relative bg-primary-900">-->
-  <!--    &lt;!&ndash; Main visible icon &ndash;&gt;-->
-  <!--    <a href="#"-->
-  <!--       class="absolute flex  items-center justify-center w-10 h-10 md:w-14 md:h-14 bottom-[1.5px] left-[35%] bg-primary-500 text-white rounded-full hover:bg-primary-600 transition-all z-10">-->
-  <!--      <i class="pi pi-link text-lg md:text-xl"></i>-->
-  <!--    </a>-->
-
-  <!--    &lt;!&ndash; Hidden icons that appear on hover &ndash;&gt;-->
-  <!--    <div-->
-  <!--      class="absolute bottom-full left-1/2 transform -translate-x-1/2 flex flex-col justify-center items-center opacity-0 group-hover:opacity-100 transition-all duration-300 ease-in-out gap-5 mb-2">-->
-  <!--      &lt;!&ndash; WhatsApp - appears first (bottom) &ndash;&gt;-->
-  <!--      <a href="#"-->
-  <!--         class="flex items-center justify-center w-8 h-8 md:w-10 md:h-10 bg-success-50 text-success-600 rounded-full bg-success-100 transition-all scale-0 group-hover:scale-100 origin-bottom transform group-hover:-translate-y-0 duration-300 delay-0">-->
-  <!--        <i class="pi pi-whatsapp text-sm md:text-lg"></i>-->
-  <!--      </a>-->
-
-  <!--      <a href="#"-->
-  <!--         class="flex items-center justify-center w-8 h-8 md:w-10 md:h-10 bg-success-50 text-success-600 rounded-full bg-primary-100 transition-all scale-0 group-hover:scale-100 origin-bottom transform group-hover:-translate-y-0 duration-300 delay-75">-->
-  <!--        <i class="pi pi-facebook text-sm md:text-lg"></i>-->
-  <!--      </a>-->
-
-  <!--      &lt;!&ndash; LinkedIn - appears second &ndash;&gt;-->
-  <!--      <a href="#"-->
-  <!--         class="flex items-center justify-center w-8 h-8 md:w-10 md:h-10 bg-accent-50 text-accent-600 rounded-full  transition-all scale-0 group-hover:scale-100 origin-bottom transform group-hover:-translate-y-0 duration-300 delay-150">-->
-  <!--        <i class="pi pi-linkedin text-sm md:text-lg"></i>-->
-  <!--      </a>-->
-
-  <!--      &lt;!&ndash; YouTube - appears third &ndash;&gt;-->
-  <!--      <a href="#"-->
-  <!--         class="flex items-center justify-center w-8 h-8 md:w-10 md:h-10  text-warning-600 rounded-full bg-warning-100 transition-all scale-0 group-hover:scale-100 origin-bottom transform group-hover:-translate-y-0 duration-300 delay-225">-->
-  <!--        <i class="pi pi-youtube text-sm md:text-lg"></i>-->
-  <!--      </a>-->
-
-  <!--      &lt;!&ndash; TikTok - appears fourth &ndash;&gt;-->
-  <!--      <a href="#"-->
-  <!--         class="flex items-center justify-center w-8 h-8 md:w-10 md:h-10 text-neutral-800 rounded-full bg-neutral-100 transition-all scale-0 group-hover:scale-100 origin-bottom transform group-hover:-translate-y-0 duration-300 delay-300">-->
-  <!--        <i class="pi pi-tiktok text-sm md:text-lg"></i>-->
-  <!--      </a>-->
-
-  <!--      &lt;!&ndash; Instagram - appears last (top) &ndash;&gt;-->
-  <!--      <a href="#"-->
-  <!--         class="flex items-center justify-center w-8 h-8 md:w-10 md:h-10 text-secondary-600 rounded-full bg-secondary-100 transition-all scale-0 group-hover:scale-100 origin-bottom transform group-hover:-translate-y-0 duration-300 delay-375">-->
-  <!--        <i class="pi pi-instagram text-sm md:text-lg"></i>-->
-  <!--      </a>-->
-  <!--    </div>-->
-  <!--  </div>-->
 </aside>
-
+<!-- Toggle button - Desktop only (hidden on mobile) -->
 <div
   [ngClass]="{
     'left-[6.5rem]': isNavBarOpened(),
     'left-[15.5rem]': !isNavBarOpened(),
-    'left-[5rem] md:left-[6.5rem]': isNavBarOpened() && window.innerWidth < 768,
-    'left-[12rem] md:left-[15.5rem]': !isNavBarOpened() && window.innerWidth < 768
   }"
   (click)="toggleSidebar()"
-  class="flex justify-center items-center absolute top-[10.5rem] md:top-[12rem] transition-all duration-300 ease-in-out transform -translate-x-1/2 bg-gradient-to-r from-accent-500 to-accent-600 hover:from-accent-600 hover:to-accent-700 rounded-full w-8 h-8 md:w-9 md:h-9 text-white cursor-pointer shadow-lg z-20 ring-2 ring-white/60 backdrop-blur"
+  class="hidden lg:flex justify-center items-center absolute top-[10.5rem] md:top-[12rem] transition-all duration-300 ease-in-out transform -translate-x-1/2 bg-gradient-to-r from-accent-500 to-accent-600 hover:from-accent-600 hover:to-accent-700 rounded-full w-8 h-8 md:w-9 md:h-9 text-white cursor-pointer shadow-lg z-20 ring-2 ring-white/60 backdrop-blur"
 >
   <i
     [ngClass]="getSideBarIcon()"

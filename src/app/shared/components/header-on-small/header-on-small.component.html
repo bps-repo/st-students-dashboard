@@ -30,13 +30,33 @@
       </div>
     </div>
 
-    <!-- Hamburger menu button -->
-    <button
-      (click)="toggleMobileSidebar()"
-      class="flex items-center justify-center p-2 rounded-lg transition-all duration-200 hover:bg-neutral-100 text-neutral-700"
-      aria-label="Menu"
-    >
-      <i class="pi pi-bars text-lg"></i>
-    </button>
+    <!-- Right side actions -->
+    <div class="flex items-center space-x-2">
+      <!-- Notifications icon with badge -->
+      <a
+        routerLink="/notifications"
+        class="relative flex items-center justify-center p-2 rounded-lg transition-all duration-200 hover:bg-neutral-100 text-neutral-700"
+        [attr.aria-label]="(unreadCount$ | async) ? ((unreadCount$ | async) === 1 ? '1 notificação não lida' : (unreadCount$ | async) + ' notificações não lidas') : 'Notificações'"
+      >
+        <i class="pi pi-bell text-lg"></i>
+        <!-- Notification badge -->
+        <ng-container *ngIf="(unreadCount$ | async) ?? 0 > 0">
+          <span
+            class="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center shadow-md"
+          >
+            {{ (unreadCount$ | async) ?? 0 }}
+          </span>
+        </ng-container>
+      </a>
+
+      <!-- Hamburger menu button -->
+      <button
+        (click)="toggleMobileSidebar()"
+        class="flex items-center justify-center p-2 rounded-lg transition-all duration-200 hover:bg-neutral-100 text-neutral-700"
+        aria-label="Menu"
+      >
+        <i class="pi pi-bars text-lg"></i>
+      </button>
+    </div>
   </div>
 </header>
