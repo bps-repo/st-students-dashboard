@@ -19,7 +19,7 @@ export interface ConfirmationDialogData {
       <!-- Header with icon -->
       <div class="dialog-header" [ngClass]="'bg-' + getColorClass()">
         <div class="icon-container">
-          <i [class]="getIcon()" class="text-4xl"></i>
+          <i [class]="getIcon()"></i>
         </div>
       </div>
 
@@ -55,11 +55,17 @@ export interface ConfirmationDialogData {
     }
 
     .dialog-header {
-      padding: 2rem;
+      padding: 1.5rem;
       display: flex;
       justify-content: center;
       align-items: center;
       border-radius: 0.75rem 0.75rem 0 0;
+    }
+
+    @media (min-width: 640px) {
+      .dialog-header {
+        padding: 2rem;
+      }
     }
 
     .bg-warning { background: linear-gradient(135deg, #f59e0b 0%, #f97316 100%); }
@@ -70,8 +76,8 @@ export interface ConfirmationDialogData {
     .icon-container {
       background: rgba(255, 255, 255, 0.2);
       border-radius: 50%;
-      width: 80px;
-      height: 80px;
+      width: 64px;
+      height: 64px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -79,8 +85,22 @@ export interface ConfirmationDialogData {
       animation: pulse 2s ease-in-out infinite;
     }
 
+    @media (min-width: 640px) {
+      .icon-container {
+        width: 80px;
+        height: 80px;
+      }
+    }
+
     .icon-container i {
       color: white;
+      font-size: 2rem;
+    }
+
+    @media (min-width: 640px) {
+      .icon-container i {
+        font-size: 2.5rem;
+      }
     }
 
     @keyframes pulse {
@@ -89,40 +109,79 @@ export interface ConfirmationDialogData {
     }
 
     .dialog-content {
-      padding: 2rem;
+      padding: 1.25rem 1rem;
       text-align: center;
     }
 
+    @media (min-width: 640px) {
+      .dialog-content {
+        padding: 2rem;
+      }
+    }
+
     .dialog-title {
-      font-size: 1.5rem;
+      font-size: 1.25rem;
       font-weight: 700;
       color: #1f2937;
-      margin: 0 0 1rem 0;
+      margin: 0 0 0.75rem 0;
+      line-height: 1.3;
+    }
+
+    @media (min-width: 640px) {
+      .dialog-title {
+        font-size: 1.5rem;
+        margin: 0 0 1rem 0;
+      }
     }
 
     .dialog-message {
-      font-size: 1rem;
+      font-size: 0.875rem;
       color: #6b7280;
       line-height: 1.6;
       margin: 0;
     }
 
+    @media (min-width: 640px) {
+      .dialog-message {
+        font-size: 1rem;
+      }
+    }
+
     .dialog-actions {
-      padding: 0 2rem 2rem 2rem;
+      padding: 0 1rem 1.25rem 1rem;
       display: flex;
-      gap: 1rem;
+      flex-direction: column;
+      gap: 0.75rem;
       justify-content: center;
     }
 
+    @media (min-width: 640px) {
+      .dialog-actions {
+        padding: 0 2rem 2rem 2rem;
+        flex-direction: row;
+        gap: 1rem;
+      }
+    }
+
     .btn {
-      padding: 0.75rem 2rem;
+      padding: 0.625rem 1.5rem;
       border-radius: 0.5rem;
       font-weight: 600;
-      font-size: 0.95rem;
+      font-size: 0.875rem;
       border: none;
       cursor: pointer;
       transition: all 0.2s ease;
-      min-width: 120px;
+      width: 100%;
+      min-width: auto;
+    }
+
+    @media (min-width: 640px) {
+      .btn {
+        padding: 0.75rem 2rem;
+        font-size: 0.95rem;
+        width: auto;
+        min-width: 120px;
+      }
     }
 
     .btn-cancel {
@@ -182,6 +241,13 @@ export interface ConfirmationDialogData {
 
     .btn:active {
       transform: translateY(0);
+    }
+
+    @media (hover: none) {
+      .btn:hover {
+        transform: none;
+        box-shadow: none;
+      }
     }
   `]
 })
