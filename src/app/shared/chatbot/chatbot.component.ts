@@ -29,6 +29,7 @@ export class ChatBotComponent implements OnInit, AfterViewChecked {
   isTyping = false;
   isLoading = signal(false);
   isSidebarOpen = signal(true);
+  showSidebar = false;
   private shouldScrollToBottom = false;
 
 
@@ -182,7 +183,14 @@ export class ChatBotComponent implements OnInit, AfterViewChecked {
   }
 
   toggleSidebar(): void {
-    this.isSidebarOpen.update(open => !open);
+    this.showSidebar = !this.showSidebar;
+  }
+
+  closeSidebar(): void {
+    // Only close on mobile (window width < 768px)
+    if (window.innerWidth < 768) {
+      this.showSidebar = false;
+    }
   }
 
   getConversationPreview(conversation: Conversation): string {

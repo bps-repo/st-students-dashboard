@@ -1,9 +1,14 @@
 <div class="chat-history-container">
+  <!-- Mobile Menu Button -->
+  <button class="mobile-menu-btn md:hidden" (click)="toggleSidebar()">
+    <span class="material-icons">{{ showSidebar ? 'close' : 'menu' }}</span>
+  </button>
+
   <!-- Sidebar -->
-  <div class="sidebar">
+  <div class="sidebar" [class.show-mobile]="showSidebar">
     <div class="sidebar-header">
       <h2>Conversas</h2>
-      <button class="new-chat-btn" (click)="createNewChat()">
+      <button class="new-chat-btn" (click)="createNewChat(); closeSidebar()">
         <span class="material-icons">add</span>
         <span>Novo chat</span>
       </button>
@@ -25,7 +30,7 @@
         *ngFor="let conversation of conversations()"
         class="conversation-item"
         [class.active]="selectedConversation()?.id === conversation.id"
-        (click)="selectConversation(conversation)">
+        (click)="selectConversation(conversation); closeSidebar()">
 
         <div class="conversation-icon">
           <span class="material-icons">chat</span>
@@ -53,9 +58,10 @@
         <span class="material-icons">chat_bubble_outline</span>
         <h1>Bem-Vindo ao seu Assistante Virtual de Inglês</h1>
         <p>Selecione uma conversa na barra lateral ou crie uma nova para começar.</p>
-        <button class="start-chat-btn" (click)="createNewChat()">
+        <button class="start-chat-btn" (click)="createNewChat(); closeSidebar()">
           <span class="material-icons">add_comment</span>
-          Começar uma nova conversa
+          <span class="hidden sm:inline">Começar uma nova conversa</span>
+          <span class="sm:hidden">Nova conversa</span>
         </button>
       </div>
     </div>

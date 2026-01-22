@@ -15,14 +15,51 @@
   background: #f5f5f5;
   position: relative;
   overflow: hidden; // Prevent container from scrolling
-  
+
   // Professional opening animation
   animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  
+
   @media (max-width: 1023px) {
     // On smaller screens (mobile/tablet) with different header
     height: calc(100vh - var(--chat-offset-mobile));
     max-height: calc(100vh - var(--chat-offset-mobile));
+  }
+}
+
+// Mobile menu button
+.mobile-menu-btn {
+  position: fixed;
+  top: 5px;
+  right: 5px;
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 30;
+  transition: all 0.3s ease;
+
+  .material-icons {
+    color: white;
+    font-size: 24px;
+  }
+
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(102, 126, 234, 0.5);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  @media (min-width: 768px) {
+    display: none;
   }
 }
 
@@ -34,7 +71,7 @@
   display: flex;
   flex-direction: column;
   z-index: 10;
-  
+
   // Staggered animation for sidebar
   animation: slideInLeft 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
 
@@ -63,7 +100,7 @@
       font-size: 16px;
       font-weight: 500;
       transition: all 0.3s ease;
-      
+
       // Entrance animation
       animation: slideDown 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
 
@@ -157,10 +194,10 @@
       cursor: pointer;
       transition: all 0.2s ease;
       position: relative;
-      
+
       // Staggered entrance animation for conversation items
       animation: fadeInLeft 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
-      
+
       // Stagger effect using nth-child
       @for $i from 1 through 10 {
         &:nth-child(#{$i}) {
@@ -260,7 +297,7 @@
   flex-direction: column;
   background: #fafafa;
   overflow: hidden; // Prevent the entire area from scrolling
-  
+
   // Staggered animation for chat area
   animation: slideInRight 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
 
@@ -270,7 +307,7 @@
     align-items: center;
     justify-content: center;
     padding: 40px;
-    
+
     // Fade in animation for welcome screen
     animation: fadeIn 0.8s ease-out 0.4s both;
 
@@ -282,7 +319,7 @@
         font-size: 120px;
         color: #667eea;
         margin-bottom: 24px;
-        
+
         // AI bot icon animation - pulse and glow
         animation: aiPulse 2s ease-in-out infinite;
       }
@@ -327,7 +364,7 @@
     flex-direction: column;
     height: 100%;
     overflow: hidden; // Prevent the entire chat from scrolling
-    
+
     // Smooth entrance animation for chat
     animation: fadeIn 0.5s ease-out;
 
@@ -339,7 +376,7 @@
       top: 0;
       z-index: 10;
       flex-shrink: 0; // Prevent header from shrinking
-      
+
       // Slide down animation for header
       animation: slideDown 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
 
@@ -417,7 +454,7 @@
         display: flex;
         gap: 12px;
         max-width: 80%;
-        
+
         // Smooth message appearance animation
         animation: messageSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
 
@@ -446,7 +483,7 @@
           .bot-icon {
             background: #f0f0f0;
             color: #667eea;
-            
+
             // Subtle pulse for bot icon
             animation: botIconPulse 0.6s ease-out;
           }
@@ -514,7 +551,7 @@
       bottom: 0;
       z-index: 10;
       flex-shrink: 0; // Prevent input from shrinking
-      
+
       // Slide up animation for input
       animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
 
@@ -705,11 +742,38 @@
   }
 
   .sidebar {
-    position: absolute;
+    position: fixed;
+    left: -100%;
+    top: 0;
     height: 100%;
-    width: 280px;
+    width: 85%;
+    max-width: 320px;
     box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
-    z-index: 20;
+    z-index: 25;
+    transition: left 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+
+    &.show-mobile {
+      left: 0;
+    }
+
+    &::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      z-index: -1;
+    }
+
+    &.show-mobile::before {
+      opacity: 1;
+      pointer-events: all;
+    }
   }
 
   .chat-area {
