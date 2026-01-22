@@ -1,42 +1,54 @@
 <section class="font-heading">
-  <div class="bg-white shadow-md p-4 mb-4">
+  <div class="bg-white shadow-md p-3 sm:p-4 mb-4">
     <!-- Calendar Header -->
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 pb-3">
-      <div class="mb-3 md:mb-0">
-        <h2 class="text-2xl font-bold text-primary">Calendário semanal</h2>
+    <div class="flex flex-col gap-3 sm:gap-4 mb-4 sm:mb-6">
+      <!-- Title -->
+      <div>
+        <h2 class="text-xl sm:text-2xl font-bold text-primary">Calendário semanal</h2>
       </div>
-      <div class="flex items-center">
-        <!-- Week Navigation Buttons -->
-        <div class="flex items-center mr-4">
-          <button
-            (click)="goToPreviousWeek()"
-            class="bg-primary-500 hover:bg-primary-600 text-white rounded-lg p-2 mr-2 transition-colors duration-200 flex items-center justify-center"
-            [disabled]="isLoading$ | async"
-            title="Semana anterior">
-            <i class="pi pi-chevron-left text-sm"></i>
-          </button>
-          <button
-            (click)="goToCurrentWeek()"
-            class="bg-secondary-500 hover:bg-secondary-600 text-white rounded-lg px-3 py-2 mr-2 transition-colors duration-200 text-sm font-medium"
-            [disabled]="isLoading$ | async"
-            title="Semana atual">
-            Hoje
-          </button>
-          <button
-            (click)="goToNextWeek()"
-            class="bg-primary-500 hover:bg-primary-600 text-white rounded-lg p-2 mr-2 transition-colors duration-200 flex items-center justify-center"
-            [disabled]="isLoading$ | async"
-            title="Próxima semana">
-            <i class="pi pi-chevron-right text-sm"></i>
-          </button>
+
+      <!-- Controls Row -->
+      <div class="flex flex-col sm:flex-row gap-3 sm:gap-2 sm:items-center sm:justify-between">
+        <!-- Week Navigation & Label -->
+        <div class="flex items-center gap-2 flex-wrap">
+          <!-- Week Navigation Buttons -->
+          <div class="flex items-center gap-1 sm:gap-2">
+            <button
+              (click)="goToPreviousWeek()"
+              class="bg-primary-500 hover:bg-primary-600 text-white rounded-lg p-2 transition-colors duration-200 flex items-center justify-center"
+              [disabled]="isLoading$ | async"
+              title="Semana anterior">
+              <i class="pi pi-chevron-left text-xs sm:text-sm"></i>
+            </button>
+            <button
+              (click)="goToCurrentWeek()"
+              class="bg-secondary-500 hover:bg-secondary-600 text-white rounded-lg px-2 sm:px-3 py-2 transition-colors duration-200 text-xs sm:text-sm font-medium"
+              [disabled]="isLoading$ | async"
+              title="Semana atual">
+              Hoje
+            </button>
+            <button
+              (click)="goToNextWeek()"
+              class="bg-primary-500 hover:bg-primary-600 text-white rounded-lg p-2 transition-colors duration-200 flex items-center justify-center"
+              [disabled]="isLoading$ | async"
+              title="Próxima semana">
+              <i class="pi pi-chevron-right text-xs sm:text-sm"></i>
+            </button>
+          </div>
+
+          <!-- Week Label -->
+          <div class="bg-neutral-50 rounded-lg px-3 sm:px-4 py-2 border border-neutral-200">
+            <span class="font-bold text-primary text-xs sm:text-sm">{{ getWeekLabel() }}</span>
+          </div>
         </div>
 
-        <div class="bg-neutral-50 rounded-lg px-4 py-2 mr-3 border border-neutral-200">
-          <span class="font-bold text-primary">{{ getWeekLabel() }}</span>
-        </div>
+        <!-- History Link -->
         <a routerLink="/lesson-history"
-           class="bg-neutral-50 hover:bg-neutral-100 rounded-lg px-4 py-2 mr-3 border border-neutral-200 cursor-pointer transition-colors duration-200">
-          <span class="font-bold text-primary">Ver Histórico de Aulas</span>
+           class="bg-neutral-50 hover:bg-neutral-100 rounded-lg px-3 sm:px-4 py-2 border border-neutral-200 cursor-pointer transition-colors duration-200 text-center sm:text-left">
+          <span class="font-bold text-primary text-xs sm:text-sm whitespace-nowrap">
+            <span class="hidden sm:inline">Ver Histórico de Aulas</span>
+            <span class="sm:hidden">Histórico</span>
+          </span>
         </a>
       </div>
     </div>
@@ -45,44 +57,46 @@
                          [color]="'secondary'"></app-circular-loader>
 
     <!-- Weekly Schedule Grid -->
-    <div *ngIf="!((isLoading$) | async)" class="weekly-schedule">
-      <!-- Days of Week Header with Dates -->
-      <div class="grid grid-cols-[60px_1fr_1fr_1fr_1fr_1fr_1fr] gap-0">
-        <!-- Narrower empty cell for time column -->
-        <div class="text-center py-2"></div>
+    <div *ngIf="!((isLoading$) | async)" class="weekly-schedule overflow-x-auto">
+      <!-- Scroll container for mobile -->
+      <div class="min-w-max lg:min-w-0">
+        <!-- Days of Week Header with Dates -->
+        <div class="grid grid-cols-[50px_repeat(6,minmax(100px,1fr))] lg:grid-cols-[60px_1fr_1fr_1fr_1fr_1fr_1fr] gap-0">
+          <!-- Narrower empty cell for time column -->
+          <div class="text-center py-2 sticky left-0 bg-white z-10"></div>
 
-        <!-- Day headers -->
-        <div *ngFor="let day of calendarDays"
-             class="text-center p-6 font-bold border-l border-neutral-200"
-             [ngClass]="{
-               'bg-primary-500 text-info border-primary-500 text-neutral-50 font-extrabold': day.isToday,
-               'bg-neutral-50 text-primary': !day.isToday
-             }">
-          <div>{{ weekDayNames[day.date.getDay() - 1].substring(0, 3) }}</div>
-          <div class="text-sm">{{ day.dayNumber }}</div>
-        </div>
-      </div>
-
-      <!-- Schedule Grid with Hours -->
-      <div class="grid grid-cols-[60px_1fr_1fr_1fr_1fr_1fr_1fr] gap-0">
-        <!-- Narrower Time Column -->
-        <div class="relative" [style.height.px]="getScheduleHeight()">
-          <!-- Hour Labels -->
-          <div *ngFor="let hour of getHoursArray()"
-               class="absolute text-[0.80rem] text-gray-500 font-medium border-b border-primary w-full"
-               [style.top.px]="(hour - startHour) * hourHeight - 20">
-            {{ formatHour(hour) }}
+          <!-- Day headers -->
+          <div *ngFor="let day of calendarDays"
+               class="text-center p-3 sm:p-4 lg:p-6 font-bold border-l border-neutral-200 text-xs sm:text-sm lg:text-base"
+               [ngClass]="{
+                 'bg-primary-500 text-info border-primary-500 text-neutral-50 font-extrabold': day.isToday,
+                 'bg-neutral-50 text-primary': !day.isToday
+               }">
+            <div>{{ weekDayNames[day.date.getDay() - 1].substring(0, 3) }}</div>
+            <div class="text-[10px] sm:text-xs lg:text-sm mt-1">{{ day.dayNumber }}</div>
           </div>
         </div>
 
-        <!-- Day Columns -->
-        <div *ngFor="let day of calendarDays"
-             class="relative border-l rounded-xs"
-             [ngClass]="{
-               'bg-accent-50 border-accent-200': day.isToday,
-               'bg-neutral-50 border-neutral-200': !day.isToday
-             }"
-             [style.height.px]="getScheduleHeight()">
+        <!-- Schedule Grid with Hours -->
+        <div class="grid grid-cols-[50px_repeat(6,minmax(100px,1fr))] lg:grid-cols-[60px_1fr_1fr_1fr_1fr_1fr_1fr] gap-0">
+          <!-- Time Column -->
+          <div class="relative sticky left-0 bg-white z-10" [style.height.px]="getScheduleHeight()">
+            <!-- Hour Labels -->
+            <div *ngFor="let hour of getHoursArray()"
+                 class="absolute text-[0.65rem] sm:text-[0.75rem] lg:text-[0.80rem] text-gray-500 font-medium border-b border-primary w-full pr-1"
+                 [style.top.px]="(hour - startHour) * hourHeight - 20">
+              {{ formatHour(hour) }}
+            </div>
+          </div>
+
+          <!-- Day Columns -->
+          <div *ngFor="let day of calendarDays"
+               class="relative border-l rounded-xs"
+               [ngClass]="{
+                 'bg-accent-50 border-accent-200': day.isToday,
+                 'bg-neutral-50 border-neutral-200': !day.isToday
+               }"
+               [style.height.px]="getScheduleHeight()">
 
           <!-- Hour Grid Lines -->
           <div *ngFor="let hour of getHoursArray()"
@@ -94,40 +108,44 @@
           <a
             [routerLink]="['/lessons', event.id]"
             *ngFor="let event of getEventsForDay(day)"
-            class="absolute rounded-lg p-2 text-[11px] text-black font-semibold cursor-pointer transition-all hover:shadow-xl overflow-visible group border-l-4 border-accent-500"
+            class="absolute rounded-md lg:rounded-lg p-1.5 sm:p-2 text-[9px] sm:text-[10px] lg:text-[11px] text-black font-semibold cursor-pointer transition-all hover:shadow-xl overflow-visible group border-l-2 sm:border-l-4 border-accent-500"
             [ngClass]="event.color || ''"
             [style.top.px]="calculateEventTop(event)"
             [style.height.px]="calculateEventHeight(event)"
-            [style.width.calc]="'100% - 8px'">
+            [style.width.calc]="'100% - 4px'">
 
             <!-- Main Event Content -->
-            <div class="flex items-center justify-between pr-4">
-              <div class="font-bold truncate pr-2">{{ event.title }}</div>
-              <span
-                class="px-1.5 py-0.5 rounded-full text-[10px] bg-success-100 border border-success-300 uppercase tracking-wide">
-                {{ event.status || 'PENDING' }}
-              </span>
-            </div>
-            <div class="text-[10px] opacity-90 font-medium">{{ getEventTimeString(event) }}</div>
-            <div class="text-[10px] opacity-90 font-medium flex items-center" *ngIf="event.online; else inPerson">
-              <i class="pi pi-video mr-1 text-[10px]"></i>
-              Online
-            </div>
-            <ng-template #inPerson>
-              <div class="text-[10px] opacity-90 font-medium flex items-center">
-                <i class="pi pi-home mr-1 text-[10px]"></i>
-                Presencial
+            <div class="flex flex-col gap-0.5 h-full">
+              <div class="flex items-center justify-between gap-1">
+                <div class="font-bold truncate flex-1 text-[9px] sm:text-[10px] lg:text-[11px]">{{ event.title }}</div>
+                <span
+                  class="px-1 sm:px-1.5 py-0.5 rounded-full text-[8px] sm:text-[9px] lg:text-[10px] bg-success-100 border border-success-300 uppercase tracking-wide flex-shrink-0">
+                  {{ event.status || 'PENDING' }}
+                </span>
               </div>
-            </ng-template>
+              <div class="text-[8px] sm:text-[9px] lg:text-[10px] opacity-90 font-medium">{{ getEventTimeString(event) }}</div>
+              <div class="text-[8px] sm:text-[9px] lg:text-[10px] opacity-90 font-medium flex items-center" *ngIf="event.online; else inPerson">
+                <i class="pi pi-video mr-1 text-[8px] sm:text-[9px] lg:text-[10px]"></i>
+                <span class="hidden sm:inline">Online</span>
+                <span class="sm:hidden">📹</span>
+              </div>
+              <ng-template #inPerson>
+                <div class="text-[8px] sm:text-[9px] lg:text-[10px] opacity-90 font-medium flex items-center">
+                  <i class="pi pi-home mr-1 text-[8px] sm:text-[9px] lg:text-[10px]"></i>
+                  <span class="hidden sm:inline">Presencial</span>
+                  <span class="sm:hidden">🏠</span>
+                </div>
+              </ng-template>
+            </div>
 
-            <!-- Hover Card -->
+            <!-- Hover Card (Desktop only - hidden on mobile/touch devices) -->
             <div
-              class="absolute left-full top-0 ml-2 w-64 z-50 hidden group-hover:block bg-white rounded-xl shadow-2xl text-dark border border-neutral-200"
+              class="absolute left-full top-0 ml-2 w-64 z-50 hidden lg:group-hover:block bg-white rounded-xl shadow-2xl text-dark border border-neutral-200 pointer-events-auto"
             >
               <div class="text-sm bg-accent-400 p-3 text-white font-semibold mb-1 truncate">{{ event.title }}</div>
               <div class="p-3 flex flex-col gap-3">
                 <div class="text-xs mb-1 flex justify-between items-center gap-2">
-                  <span class="bg-success-700 rounded-lg p-1 text-white font-bold">{{ event.status }}</span>
+                  <span class="bg-success-700 rounded-lg p-1 text-white font-bold text-[10px]">{{ event.status }}</span>
                   <span>{{ getEventTimeString(event) }}</span>
                 </div>
                 <div class="text-xs mb-1 flex items-center gap-2">
@@ -137,7 +155,7 @@
                 <div class="text-xs mb-1 flex items-center gap-2">
                   <span class="font-semibold">Professor(a):</span> <span class="font-normal">{{ event.teacher.name }}</span>
                 </div>
-                <a *ngIf="event.online && event.onlineLink" class="text-xs mb-1 text-secondary-900 underline"
+                <a *ngIf="event.online && event.onlineLink" class="text-xs mb-1 text-secondary-900 underline hover:text-secondary-700"
                    [href]="event.onlineLink" target="_blank" rel="noopener noreferrer">
                   <span class="font-semibold">Link:</span> Abrir aula online
                 </a>
@@ -161,6 +179,7 @@
             </div>
           </a>
 
+          </div>
         </div>
       </div>
     </div>
