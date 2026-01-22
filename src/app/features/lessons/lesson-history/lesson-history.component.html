@@ -1,12 +1,12 @@
 <section class="font-heading">
-  <div class="bg-white shadow-md p-6 mb-4">
+  <div class="bg-white shadow-md p-4 sm:p-6 mb-4">
     <!-- Header -->
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 pb-4 border-b border-neutral-200">
-      <div class="mb-4 md:mb-0">
-        <h2 class="text-2xl font-bold text-primary">Histórico de Aulas</h2>
-        <p class="text-neutral-600 mt-1">Visualize todas as suas aulas passadas</p>
+    <div class="flex flex-col gap-3 sm:gap-4 mb-4 sm:mb-6 pb-3 sm:pb-4 border-b border-neutral-200">
+      <div>
+        <h2 class="text-xl sm:text-2xl font-bold text-primary">Histórico de Aulas</h2>
+        <p class="text-neutral-600 mt-1 text-sm sm:text-base">Visualize todas as suas aulas passadas</p>
       </div>
-      <div class="text-sm text-neutral-500">
+      <div class="text-xs sm:text-sm text-neutral-500">
         Total: {{ getTotalCount() }} aulas
       </div>
     </div>
@@ -15,26 +15,27 @@
     <app-circular-loader *ngIf="(isLoading$ | async)" size="sm" [color]="'secondary'"></app-circular-loader>
 
     <!-- Filters -->
-    <div *ngIf="!((isLoading$ | async))" class="mb-6">
-      <div class="bg-neutral-50 rounded-lg p-4">
-        <div class="flex justify-between items-center mb-4">
-          <h3 class="text-lg font-semibold text-primary">Filtros</h3>
+    <div *ngIf="!((isLoading$ | async))" class="mb-4 sm:mb-6">
+      <div class="bg-neutral-50 rounded-lg p-3 sm:p-4">
+        <div class="flex flex-col xs:flex-row justify-between items-start xs:items-center gap-2 sm:gap-0 mb-3 sm:mb-4">
+          <h3 class="text-base sm:text-lg font-semibold text-primary">Filtros</h3>
           <button
             (click)="toggleAdvancedFilters()"
-            class="text-sm text-primary-600 hover:text-primary-700 font-medium flex items-center transition-colors duration-200">
-            <i class="pi mr-1" [ngClass]="showAdvancedFilters ? 'pi-chevron-up' : 'pi-chevron-down'"></i>
-            {{ showAdvancedFilters ? 'Ocultar' : 'Mostrar' }} filtros avançados
+            class="text-xs sm:text-sm text-primary-600 hover:text-primary-700 font-medium flex items-center transition-colors duration-200">
+            <i class="pi mr-1 text-xs" [ngClass]="showAdvancedFilters ? 'pi-chevron-up' : 'pi-chevron-down'"></i>
+            <span class="hidden xs:inline">{{ showAdvancedFilters ? 'Ocultar' : 'Mostrar' }} filtros avançados</span>
+            <span class="xs:hidden">{{ showAdvancedFilters ? 'Ocultar' : 'Avançados' }}</span>
           </button>
         </div>
 
         <!-- Basic Filters -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-3 sm:mb-4">
           <!-- Status Filter -->
           <div>
-            <label class="block text-sm font-medium text-neutral-700 mb-2">Status</label>
+            <label class="block text-xs sm:text-sm font-medium text-neutral-700 mb-1.5 sm:mb-2">Status</label>
             <select
               [(ngModel)]="filterOptions.status"
-              class="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+              class="w-full px-3 py-2 text-sm border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
               <option *ngFor="let option of statusOptions" [value]="option.value">
                 {{ option.label }}
               </option>
@@ -43,10 +44,10 @@
 
           <!-- Month Filter -->
           <div>
-            <label class="block text-sm font-medium text-neutral-700 mb-2">Mês</label>
+            <label class="block text-xs sm:text-sm font-medium text-neutral-700 mb-1.5 sm:mb-2">Mês</label>
             <select
               [(ngModel)]="filterOptions.month"
-              class="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+              class="w-full px-3 py-2 text-sm border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
               <option *ngFor="let option of monthOptions" [value]="option.value">
                 {{ option.label }}
               </option>
@@ -55,10 +56,10 @@
 
           <!-- Year Filter -->
           <div>
-            <label class="block text-sm font-medium text-neutral-700 mb-2">Ano</label>
+            <label class="block text-xs sm:text-sm font-medium text-neutral-700 mb-1.5 sm:mb-2">Ano</label>
             <select
               [(ngModel)]="filterOptions.year"
-              class="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+              class="w-full px-3 py-2 text-sm border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
               <option *ngFor="let year of yearOptions" [value]="year">
                 {{ year }}
               </option>
@@ -67,61 +68,61 @@
         </div>
 
         <!-- Advanced Filters (Collapsible) -->
-        <div *ngIf="showAdvancedFilters" class="border-t border-neutral-200 pt-4 mb-4">
-          <h4 class="text-sm font-semibold text-neutral-700 mb-3">Filtros Avançados</h4>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div *ngIf="showAdvancedFilters" class="border-t border-neutral-200 pt-3 sm:pt-4 mb-3 sm:mb-4">
+          <h4 class="text-xs sm:text-sm font-semibold text-neutral-700 mb-2 sm:mb-3">Filtros Avançados</h4>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             <!-- Start Date Filter -->
             <div>
-              <label class="block text-sm font-medium text-neutral-700 mb-2">
-                <i class="pi pi-calendar text-primary mr-1"></i>
+              <label class="block text-xs sm:text-sm font-medium text-neutral-700 mb-1.5 sm:mb-2">
+                <i class="pi pi-calendar text-primary mr-1 text-xs"></i>
                 Data inicial
               </label>
               <div class="relative">
                 <input
                   type="date"
                   [(ngModel)]="filterOptions.startDate"
-                  class="w-full px-3 py-2 pr-10 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200"
+                  class="w-full px-3 py-2 pr-10 text-sm border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200"
                   placeholder="MM/YYYY">
                 <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-neutral-400">
-                  <i class="pi pi-calendar-plus"></i>
+                  <i class="pi pi-calendar-plus text-xs"></i>
                 </div>
               </div>
-              <p class="text-xs text-neutral-500 mt-1">Sobrescreve filtro de mês/ano</p>
+              <p class="text-[10px] sm:text-xs text-neutral-500 mt-1">Sobrescreve filtro de mês/ano</p>
             </div>
 
             <!-- End Date Filter -->
             <div>
-              <label class="block text-sm font-medium text-neutral-700 mb-2">
-                <i class="pi pi-calendar text-primary mr-1"></i>
+              <label class="block text-xs sm:text-sm font-medium text-neutral-700 mb-1.5 sm:mb-2">
+                <i class="pi pi-calendar text-primary mr-1 text-xs"></i>
                 Data final
               </label>
               <div class="relative">
                 <input
                   type="date"
                   [(ngModel)]="filterOptions.endDate"
-                  class="w-full px-3 py-2 pr-10 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200"
+                  class="w-full px-3 py-2 pr-10 text-sm border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200"
                     placeholder="MM/YYYY">
                 <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-neutral-400">
-                  <i class="pi pi-calendar-plus"></i>
+                  <i class="pi pi-calendar-plus text-xs"></i>
                 </div>
               </div>
-              <p class="text-xs text-neutral-500 mt-1">Sobrescreve filtro de mês/ano</p>
+              <p class="text-[10px] sm:text-xs text-neutral-500 mt-1">Sobrescreve filtro de mês/ano</p>
             </div>
           </div>
         </div>
 
         <!-- Filter Actions -->
-        <div class="flex gap-2">
+        <div class="flex flex-col xs:flex-row gap-2">
           <button
             (click)="applyFilters()"
-            class="bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-lg transition-colors duration-200 flex items-center">
-            <i class="pi pi-search mr-2"></i>
+            class="bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-lg transition-colors duration-200 flex items-center justify-center text-sm">
+            <i class="pi pi-search mr-2 text-xs"></i>
             Filtrar
           </button>
           <button
             (click)="resetFilters()"
-            class="bg-neutral-500 hover:bg-neutral-600 text-white px-4 py-2 rounded-lg transition-colors duration-200 flex items-center">
-            <i class="pi pi-refresh mr-2"></i>
+            class="bg-neutral-500 hover:bg-neutral-600 text-white px-4 py-2 rounded-lg transition-colors duration-200 flex items-center justify-center text-sm">
+            <i class="pi pi-refresh mr-2 text-xs"></i>
             Limpar
           </button>
         </div>
@@ -131,25 +132,25 @@
     <!-- Results -->
     <div *ngIf="!((isLoading$ | async))">
       <!-- No Results -->
-      <div *ngIf="filteredLessons$.length === 0" class="text-center py-12">
-        <i class="pi pi-calendar-times text-6xl text-neutral-300 mb-4"></i>
-        <h3 class="text-xl font-semibold text-neutral-600 mb-2">Nenhuma aula encontrada</h3>
-        <p class="text-neutral-500">Tente ajustar os filtros para encontrar suas aulas.</p>
+      <div *ngIf="filteredLessons$.length === 0" class="text-center py-8 sm:py-12">
+        <i class="pi pi-calendar-times text-5xl sm:text-6xl text-neutral-300 mb-3 sm:mb-4"></i>
+        <h3 class="text-lg sm:text-xl font-semibold text-neutral-600 mb-2">Nenhuma aula encontrada</h3>
+        <p class="text-neutral-500 text-sm sm:text-base">Tente ajustar os filtros para encontrar suas aulas.</p>
       </div>
 
       <!-- Lessons List -->
-      <div *ngIf="filteredLessons$.length > 0" class="space-y-4">
+      <div *ngIf="filteredLessons$.length > 0" class="space-y-3 sm:space-y-4">
         <div *ngFor="let lesson of getPaginatedLessons()"
-             class="bg-white border border-neutral-200 rounded-lg p-4 hover:shadow-md transition-shadow duration-200">
+             class="bg-white border border-neutral-200 rounded-lg p-3 sm:p-4 hover:shadow-md transition-shadow duration-200">
 
           <!-- Lesson Header -->
-          <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-3">
+          <div class="flex flex-col gap-2 mb-3">
             <div class="flex-1">
-              <h4 class="text-lg font-semibold text-primary mb-1">{{ lesson.title }}</h4>
-              <p class="text-sm text-neutral-600" *ngIf="lesson.description">{{ lesson.description }}</p>
+              <h4 class="text-base sm:text-lg font-semibold text-primary mb-1">{{ lesson.title }}</h4>
+              <p class="text-xs sm:text-sm text-neutral-600 line-clamp-2" *ngIf="lesson.description">{{ lesson.description }}</p>
             </div>
-            <div class="mt-2 md:mt-0">
-              <span class="px-3 py-1 rounded-full text-xs font-semibold border"
+            <div>
+              <span class="px-2 sm:px-3 py-1 rounded-full text-[10px] sm:text-xs font-semibold border inline-block"
                     [ngClass]="getStatusColorClass(lesson.status)">
                 {{ getStatusLabel(lesson.status) }}
               </span>
@@ -157,52 +158,52 @@
           </div>
 
           <!-- Lesson Details -->
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 text-xs sm:text-sm">
             <!-- Date & Time -->
-            <div class="flex items-center">
-              <i class="pi pi-calendar text-primary mr-2"></i>
-              <div>
+            <div class="flex items-start gap-2">
+              <i class="pi pi-calendar text-primary text-sm flex-shrink-0 mt-0.5"></i>
+              <div class="min-w-0">
                 <div class="font-medium">{{ formatDate(lesson.startTime) }}</div>
-                <div class="text-neutral-600">{{ formatTime(lesson.startTime) }} - {{ formatTime(lesson.endTime) }}</div>
+                <div class="text-neutral-600 truncate">{{ formatTime(lesson.startTime) }} - {{ formatTime(lesson.endTime) }}</div>
               </div>
             </div>
 
             <!-- Teacher -->
-            <div class="flex items-center" *ngIf="lesson.teacher">
-              <i class="pi pi-user text-primary mr-2"></i>
-              <div>
-                <div class="font-medium">{{ lesson.teacher.name }}</div>
+            <div class="flex items-start gap-2" *ngIf="lesson.teacher">
+              <i class="pi pi-user text-primary text-sm flex-shrink-0 mt-0.5"></i>
+              <div class="min-w-0">
+                <div class="font-medium truncate">{{ lesson.teacher.name }}</div>
                 <div class="text-neutral-600">Professor(a)</div>
               </div>
             </div>
 
             <!-- Location -->
-            <div class="flex items-center">
-              <i class="pi" [ngClass]="lesson.online ? 'pi-video' : 'pi-home'" class="text-primary mr-2"></i>
-              <div>
-                <div class="font-medium" *ngIf="lesson.online">Online</div>
-                <div class="font-medium" *ngIf="!lesson.online && lesson.center">{{ lesson.center.name }}</div>
+            <div class="flex items-start gap-2">
+              <i class="pi" [ngClass]="lesson.online ? 'pi-video' : 'pi-home'" class="text-primary text-sm flex-shrink-0 mt-0.5"></i>
+              <div class="min-w-0">
+                <div class="font-medium truncate" *ngIf="lesson.online">Online</div>
+                <div class="font-medium truncate" *ngIf="!lesson.online && lesson.center">{{ lesson.center.name }}</div>
                 <div class="text-neutral-600" *ngIf="lesson.online">Aula virtual</div>
                 <div class="text-neutral-600" *ngIf="!lesson.online">Presencial</div>
               </div>
             </div>
 
             <!-- Actions -->
-            <div class="flex items-center justify-end">
+            <div class="flex items-center sm:justify-end">
               <a [routerLink]="['/lessons', lesson.id]"
-                 class="bg-primary-500 hover:bg-primary-600 text-white px-3 py-1 rounded text-xs transition-colors duration-200">
+                 class="bg-primary-500 hover:bg-primary-600 text-white px-3 py-1.5 sm:py-1 rounded text-xs transition-colors duration-200 w-full sm:w-auto text-center">
                 Ver Detalhes
               </a>
             </div>
           </div>
 
           <!-- Online Link (if applicable) -->
-          <div *ngIf="lesson.online && lesson.onlineLink" class="mt-3 pt-3 border-t border-neutral-100">
+          <div *ngIf="lesson.online && lesson.onlineLink" class="mt-2 sm:mt-3 pt-2 sm:pt-3 border-t border-neutral-100">
             <a [href]="lesson.onlineLink"
                target="_blank"
                rel="noopener noreferrer"
-               class="text-primary-600 hover:text-primary-700 text-sm font-medium flex items-center">
-              <i class="pi pi-external-link mr-1"></i>
+               class="text-primary-600 hover:text-primary-700 text-xs sm:text-sm font-medium flex items-center">
+              <i class="pi pi-external-link mr-1 text-xs"></i>
               Acessar link da aula
             </a>
           </div>
@@ -210,14 +211,14 @@
       </div>
 
       <!-- Pagination -->
-      <div *ngIf="totalPages > 1" class="mt-8 flex justify-center">
-        <nav class="flex items-center space-x-2">
+      <div *ngIf="totalPages > 1" class="mt-6 sm:mt-8 flex justify-center">
+        <nav class="flex items-center gap-1.5 sm:gap-2">
           <!-- Previous Button -->
           <button
             (click)="changePage(currentPage - 1)"
             [disabled]="currentPage === 1"
-            class="px-3 py-2 text-sm font-medium text-neutral-500 bg-white border border-neutral-300 rounded-lg hover:bg-neutral-50 disabled:opacity-50 disabled:cursor-not-allowed">
-            <i class="pi pi-chevron-left"></i>
+            class="px-2.5 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-neutral-500 bg-white border border-neutral-300 rounded-lg hover:bg-neutral-50 disabled:opacity-50 disabled:cursor-not-allowed">
+            <i class="pi pi-chevron-left text-xs"></i>
           </button>
 
           <!-- Page Numbers -->
@@ -225,8 +226,8 @@
             *ngFor="let page of getPageNumbers()"
             (click)="changePage(page)"
             [class]="page === currentPage
-              ? 'px-3 py-2 text-sm font-medium text-white bg-primary-500 border border-primary-500 rounded-lg'
-              : 'px-3 py-2 text-sm font-medium text-neutral-700 bg-white border border-neutral-300 rounded-lg hover:bg-neutral-50'">
+              ? 'px-2.5 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-white bg-primary-500 border border-primary-500 rounded-lg'
+              : 'px-2.5 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-neutral-700 bg-white border border-neutral-300 rounded-lg hover:bg-neutral-50'">
             {{ page }}
           </button>
 
@@ -234,8 +235,8 @@
           <button
             (click)="changePage(currentPage + 1)"
             [disabled]="currentPage === totalPages"
-            class="px-3 py-2 text-sm font-medium text-neutral-500 bg-white border border-neutral-300 rounded-lg hover:bg-neutral-50 disabled:opacity-50 disabled:cursor-not-allowed">
-            <i class="pi pi-chevron-right"></i>
+            class="px-2.5 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-neutral-500 bg-white border border-neutral-300 rounded-lg hover:bg-neutral-50 disabled:opacity-50 disabled:cursor-not-allowed">
+            <i class="pi pi-chevron-right text-xs"></i>
           </button>
         </nav>
       </div>
